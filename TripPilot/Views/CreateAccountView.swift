@@ -14,9 +14,9 @@ import UIKit
 struct CreateAccountView: View {
     @Environment(\.dismiss) private var dismiss
     
-    @State private var fullName: String = "Elena Vance"
-    @State private var email: String = "elena.vance@icloud.com"
-    @State private var password: String = "Explorer2025#"
+    @State private var fullName: String = ""
+    @State private var email: String = ""
+    @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
     @State private var isBiometricEnabled: Bool = true
     @State private var agreeToTerms: Bool = true
@@ -55,25 +55,8 @@ struct CreateAccountView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    // MARK: - Top Navigation Header
+                    // MARK: - Top Navigation Header (Back button removed)
                     HStack {
-                        Button(action: {
-                            dismiss()
-                        }) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.white)
-                                .frame(width: 40, height: 40)
-                                .background(containerMid)
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                )
-                        }
-                        
-                        Spacer()
-                        
                         // Glowing Insignia Badge
                         ZStack {
                             Circle()
@@ -219,7 +202,7 @@ struct CreateAccountView: View {
                                     .font(.system(size: 16))
                                     .foregroundColor(Color(white: 0.5))
                                 
-                                TextField("", text: $fullName)
+                                TextField("First and last name", text: $fullName)
                                     .font(.system(size: 14))
                                     .foregroundColor(.white)
                             }
@@ -246,7 +229,7 @@ struct CreateAccountView: View {
                                     .font(.system(size: 16))
                                     .foregroundColor(Color(white: 0.5))
                                 
-                                TextField("", text: $email)
+                                TextField("name@example.com", text: $email)
                                     .font(.system(size: 14))
                                     .foregroundColor(.white)
                                     #if os(iOS)
@@ -279,7 +262,7 @@ struct CreateAccountView: View {
                                     .foregroundColor(Color(white: 0.5))
                                 
                                 if isPasswordVisible {
-                                    TextField("", text: $password)
+                                    TextField("Minimum 8 characters", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
                                         #if os(iOS)
@@ -287,7 +270,7 @@ struct CreateAccountView: View {
                                         .autocorrectionDisabled()
                                         #endif
                                 } else {
-                                    SecureField("", text: $password)
+                                    SecureField("Minimum 8 characters", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
                                         #if os(iOS)
@@ -324,11 +307,11 @@ struct CreateAccountView: View {
                                     
                                     HStack(spacing: 4) {
                                         Circle()
-                                            .fill(primaryCyan)
+                                            .fill(password.count >= 8 ? primaryCyan : Color.gray)
                                             .frame(width: 5, height: 5)
-                                        Text("Strong")
+                                        Text(password.count >= 8 ? "Strong" : (password.isEmpty ? "Enter Password" : "Fair"))
                                             .font(.system(size: 11, weight: .bold, design: .rounded))
-                                            .foregroundColor(primaryCyan)
+                                            .foregroundColor(password.count >= 8 ? primaryCyan : Color(white: 0.6))
                                     }
                                 }
                                 
@@ -336,16 +319,16 @@ struct CreateAccountView: View {
                                 HStack(spacing: 5) {
                                     ForEach(0..<4) { index in
                                         Capsule()
-                                            .fill(index < 3 ? primaryCyan : primaryCyan.opacity(0.75))
+                                            .fill(password.count >= (index + 1) * 2 ? primaryCyan : containerHigh)
                                             .frame(height: 4)
                                     }
                                 }
                                 
                                 // Rule Badges
                                 HStack(spacing: 6) {
-                                    strengthBadge(text: "8+ chars")
-                                    strengthBadge(text: "1 number")
-                                    strengthBadge(text: "1 symbol")
+                                    strengthBadge(text: "8+ chars", isMet: password.count >= 8)
+                                    strengthBadge(text: "1 number", isMet: password.contains(where: { $0.isNumber }))
+                                    strengthBadge(text: "1 symbol", isMet: password.contains(where: { !$0.isLetter && !$0.isNumber }))
                                 }
                                 .padding(.top, 2)
                             }
@@ -477,14 +460,14 @@ struct CreateAccountView: View {
         .preferredColorScheme(.dark)
     }
     
-    private func strengthBadge(text: String) -> some View {
+    private func strengthBadge(text: String, isMet: Bool) -> some View {
         HStack(spacing: 4) {
-            Image(systemName: "checkmark")
+            Image(systemName: isMet ? "checkmark" : "circle")
                 .font(.system(size: 9, weight: .bold))
             Text(text)
                 .font(.system(size: 10, weight: .semibold, design: .rounded))
         }
-        .foregroundColor(primaryCyan)
+        .foregroundColor(isMet ? primaryCyan : Color(white: 0.5))
         .padding(.horizontal, 8)
         .padding(.vertical, 3)
         .background(containerHigh)

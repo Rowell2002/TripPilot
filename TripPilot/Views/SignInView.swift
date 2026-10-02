@@ -12,8 +12,8 @@ import UIKit
 #endif
 
 struct SignInView: View {
-    @State private var email: String = "alexander.vance@icloud.com"
-    @State private var password: String = "Explorer2025#"
+    @State private var email: String = ""
+    @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
     @State private var isFaceIdEnabled: Bool = true
     @State private var navigateToCreateAccount: Bool = false
@@ -51,7 +51,7 @@ struct SignInView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    // MARK: - Top Navigation Bar (Back button removed)
+                    // MARK: - Top Navigation Bar
                     HStack {
                         Spacer()
                         
@@ -170,32 +170,20 @@ struct SignInView: View {
                     
                     // MARK: - Input Form
                     VStack(spacing: 16) {
-                        // Email Field (Tick mark removed)
+                        // Email Field
                         VStack(alignment: .leading, spacing: 6) {
-                            HStack {
-                                Text("EMAIL ADDRESS")
-                                    .font(.system(size: 11, weight: .bold, design: .rounded))
-                                    .foregroundColor(Color(white: 0.55))
-                                    .tracking(0.5)
-                                
-                                Spacer()
-                                
-                                HStack(spacing: 3) {
-                                    Image(systemName: "key.fill")
-                                        .font(.system(size: 10))
-                                    Text("Autofill")
-                                        .font(.system(size: 11, weight: .bold, design: .rounded))
-                                }
-                                .foregroundColor(primaryBlue)
-                            }
-                            .padding(.horizontal, 4)
+                            Text("EMAIL ADDRESS")
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .foregroundColor(Color(white: 0.55))
+                                .tracking(0.5)
+                                .padding(.horizontal, 4)
                             
                             HStack(spacing: 12) {
                                 Image(systemName: "envelope.fill")
                                     .font(.system(size: 16))
                                     .foregroundColor(Color(white: 0.5))
                                 
-                                TextField("", text: $email)
+                                TextField("name@icloud.com", text: $email)
                                     .font(.system(size: 14))
                                     .foregroundColor(.white)
                                     #if os(iOS)
@@ -238,7 +226,7 @@ struct SignInView: View {
                                     .foregroundColor(Color(white: 0.5))
                                 
                                 if isPasswordVisible {
-                                    TextField("", text: $password)
+                                    TextField("Enter password", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
                                         #if os(iOS)
@@ -246,7 +234,7 @@ struct SignInView: View {
                                         .autocorrectionDisabled()
                                         #endif
                                 } else {
-                                    SecureField("", text: $password)
+                                    SecureField("Enter password", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
                                         #if os(iOS)
