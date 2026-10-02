@@ -13,9 +13,10 @@ import UIKit
 
 struct SignInView: View {
     @State private var email: String = "alexander.vance@icloud.com"
-    @State private var password: String = "••••••••••••"
+    @State private var password: String = "Explorer2025#"
     @State private var isPasswordVisible: Bool = false
     @State private var isFaceIdEnabled: Bool = true
+    @State private var navigateToCreateAccount: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -50,21 +51,8 @@ struct SignInView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    // MARK: - Top Navigation Bar
+                    // MARK: - Top Navigation Bar (Back button removed)
                     HStack {
-                        Button(action: {}) {
-                            Image(systemName: "chevron.left")
-                                .font(.system(size: 16, weight: .semibold))
-                                .foregroundColor(.white)
-                                .frame(width: 40, height: 40)
-                                .background(containerHigh)
-                                .clipShape(Circle())
-                                .overlay(
-                                    Circle()
-                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                )
-                        }
-                        
                         Spacer()
                         
                         Button(action: {}) {
@@ -182,7 +170,7 @@ struct SignInView: View {
                     
                     // MARK: - Input Form
                     VStack(spacing: 16) {
-                        // Email Field
+                        // Email Field (Tick mark removed)
                         VStack(alignment: .leading, spacing: 6) {
                             HStack {
                                 Text("EMAIL ADDRESS")
@@ -212,12 +200,9 @@ struct SignInView: View {
                                     .foregroundColor(.white)
                                     #if os(iOS)
                                     .textInputAutocapitalization(.never)
+                                    .autocorrectionDisabled()
                                     .keyboardType(.emailAddress)
                                     #endif
-                                
-                                Image(systemName: "checkmark.seal.fill")
-                                    .font(.system(size: 16))
-                                    .foregroundColor(primaryCyan)
                             }
                             .padding(.horizontal, 16)
                             .frame(height: 52)
@@ -256,10 +241,18 @@ struct SignInView: View {
                                     TextField("", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
+                                        #if os(iOS)
+                                        .textInputAutocapitalization(.never)
+                                        .autocorrectionDisabled()
+                                        #endif
                                 } else {
                                     SecureField("", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
+                                        #if os(iOS)
+                                        .textInputAutocapitalization(.never)
+                                        .autocorrectionDisabled()
+                                        #endif
                                 }
                                 
                                 Button(action: {
@@ -267,7 +260,7 @@ struct SignInView: View {
                                 }) {
                                     Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
                                         .font(.system(size: 15))
-                                        .foregroundColor(Color(white: 0.5))
+                                        .foregroundColor(isPasswordVisible ? primaryCyan : Color(white: 0.5))
                                 }
                             }
                             .padding(.horizontal, 16)
@@ -381,13 +374,15 @@ struct SignInView: View {
                     )
                     .padding(.top, 24)
                     
-                    // MARK: - Bottom Account Switch
+                    // MARK: - Bottom Account Switch (Linked to CreateAccountView)
                     HStack(spacing: 4) {
                         Text("Don't have an account?")
                             .font(.system(size: 14))
                             .foregroundColor(Color(white: 0.55))
                         
-                        Button(action: {}) {
+                        Button(action: {
+                            navigateToCreateAccount = true
+                        }) {
                             Text("Create Account")
                                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundColor(primaryBlue)
@@ -398,10 +393,15 @@ struct SignInView: View {
                 }
             }
         }
+        .navigationDestination(isPresented: $navigateToCreateAccount) {
+            CreateAccountView()
+        }
         .preferredColorScheme(.dark)
     }
 }
 
 #Preview {
-    SignInView()
+    NavigationStack {
+        SignInView()
+    }
 }

@@ -12,6 +12,8 @@ import UIKit
 #endif
 
 struct CreateAccountView: View {
+    @Environment(\.dismiss) private var dismiss
+    
     @State private var fullName: String = "Elena Vance"
     @State private var email: String = "elena.vance@icloud.com"
     @State private var password: String = "Explorer2025#"
@@ -55,7 +57,9 @@ struct CreateAccountView: View {
                 VStack(spacing: 0) {
                     // MARK: - Top Navigation Header
                     HStack {
-                        Button(action: {}) {
+                        Button(action: {
+                            dismiss()
+                        }) {
                             Image(systemName: "chevron.left")
                                 .font(.system(size: 16, weight: .semibold))
                                 .foregroundColor(.white)
@@ -247,18 +251,9 @@ struct CreateAccountView: View {
                                     .foregroundColor(.white)
                                     #if os(iOS)
                                     .textInputAutocapitalization(.never)
+                                    .autocorrectionDisabled()
                                     .keyboardType(.emailAddress)
                                     #endif
-                                
-                                ZStack {
-                                    Circle()
-                                        .fill(primaryCyan.opacity(0.18))
-                                        .frame(width: 24, height: 24)
-                                    
-                                    Image(systemName: "checkmark")
-                                        .font(.system(size: 11, weight: .bold))
-                                        .foregroundColor(primaryCyan)
-                                }
                             }
                             .padding(.horizontal, 16)
                             .frame(height: 50)
@@ -287,10 +282,18 @@ struct CreateAccountView: View {
                                     TextField("", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
+                                        #if os(iOS)
+                                        .textInputAutocapitalization(.never)
+                                        .autocorrectionDisabled()
+                                        #endif
                                 } else {
                                     SecureField("", text: $password)
                                         .font(.system(size: 14))
                                         .foregroundColor(.white)
+                                        #if os(iOS)
+                                        .textInputAutocapitalization(.never)
+                                        .autocorrectionDisabled()
+                                        #endif
                                 }
                                 
                                 Button(action: {
@@ -298,7 +301,7 @@ struct CreateAccountView: View {
                                 }) {
                                     Image(systemName: isPasswordVisible ? "eye.fill" : "eye.slash.fill")
                                         .font(.system(size: 15))
-                                        .foregroundColor(Color(white: 0.5))
+                                        .foregroundColor(isPasswordVisible ? primaryCyan : Color(white: 0.5))
                                 }
                             }
                             .padding(.horizontal, 16)
@@ -451,13 +454,15 @@ struct CreateAccountView: View {
                     }
                     .padding(.horizontal, 20)
                     
-                    // MARK: - Bottom Existing User Link
+                    // MARK: - Bottom Existing User Link (Navigates back to SignIn)
                     HStack(spacing: 4) {
                         Text("Already have an account?")
                             .font(.system(size: 14))
                             .foregroundColor(Color(white: 0.55))
                         
-                        Button(action: {}) {
+                        Button(action: {
+                            dismiss()
+                        }) {
                             Text("Sign In")
                                 .font(.system(size: 14, weight: .semibold, design: .rounded))
                                 .foregroundColor(primaryBlue)
@@ -468,6 +473,7 @@ struct CreateAccountView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
     }
     
@@ -487,5 +493,7 @@ struct CreateAccountView: View {
 }
 
 #Preview {
-    CreateAccountView()
+    NavigationStack {
+        CreateAccountView()
+    }
 }
