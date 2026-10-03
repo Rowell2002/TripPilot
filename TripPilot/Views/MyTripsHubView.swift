@@ -16,7 +16,7 @@ struct MyTripsHubView: View {
     @State private var searchText: String = ""
     @State private var selectedFilter: TripFilter = .all
     @State private var selectedSegment: TripSegment = .activeAndUpcoming
-    @State private var selectedTab: BottomNavTab = .trips
+    @State private var selectedTab: AppTab = .trips
     @State private var isLivePulsing: Bool = false
     @State private var activeNotice: String? = nil
     @State private var showPlanJourneySheet: Bool = false
@@ -45,24 +45,6 @@ struct MyTripsHubView: View {
     enum TripSegment: String {
         case activeAndUpcoming = "Active & Upcoming"
         case pastJourneys = "Past Journeys (8)"
-    }
-    
-    enum BottomNavTab: String, CaseIterable {
-        case home = "Home"
-        case trips = "Trips"
-        case map = "Map"
-        case budget = "Budget"
-        case profile = "Profile"
-        
-        var icon: String {
-            switch self {
-            case .home: return "house.fill"
-            case .trips: return "suitcase.rolling.fill"
-            case .map: return "map.fill"
-            case .budget: return "wallet.pass.fill"
-            case .profile: return "person.crop.circle.fill"
-            }
-        }
     }
     
     var body: some View {
@@ -123,9 +105,13 @@ struct MyTripsHubView: View {
             }
             
             // MARK: - Floating Glassmorphic Bottom Tab Bar
-            floatingBottomTabBar
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
+            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
+                if tab == .home {
+                    dismiss()
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
@@ -1121,44 +1107,6 @@ struct MyTripsHubView: View {
             .shadow(color: skyBlue.opacity(0.35), radius: 14, y: 4)
         }
         .padding(.top, 4)
-    }
-    
-    // MARK: - Floating Glassmorphic Bottom Tab Bar
-    private var floatingBottomTabBar: some View {
-        HStack(spacing: 0) {
-            ForEach(BottomNavTab.allCases, id: \.self) { tab in
-                Button(action: {
-                    if tab == .home {
-                        dismiss()
-                    } else {
-                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                            selectedTab = tab
-                        }
-                    }
-                }) {
-                    VStack(spacing: 3) {
-                        Image(systemName: tab.icon)
-                            .font(.system(size: selectedTab == tab ? 18 : 16, weight: selectedTab == tab ? .bold : .medium))
-                            .foregroundColor(selectedTab == tab ? skyBlue : textMuted)
-                        
-                        Text(tab.rawValue)
-                            .font(.system(size: 10, weight: selectedTab == tab ? .bold : .medium, design: .rounded))
-                            .foregroundColor(selectedTab == tab ? skyBlue : textMuted)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                }
-            }
-        }
-        .padding(.horizontal, 8)
-        .background(surfaceContainerLowest.opacity(0.85))
-        .background(.ultraThinMaterial)
-        .clipShape(Capsule())
-        .overlay(
-            Capsule()
-                .stroke(outlineVariant, lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.6), radius: 18, y: 8)
     }
     
     // MARK: - Helper Notification Banner

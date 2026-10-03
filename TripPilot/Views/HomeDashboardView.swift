@@ -13,7 +13,7 @@ import UIKit
 
 struct HomeDashboardView: View {
     @Environment(\.dismiss) private var dismiss
-    @State private var selectedTab: DashboardTab = .home
+    @State private var selectedTab: AppTab = .home
     @State private var isLivePulsing: Bool = false
     @State private var showBoardingPassModal: Bool = false
     @State private var showFlyoverMapModal: Bool = false
@@ -30,24 +30,6 @@ struct HomeDashboardView: View {
     private let slateLight = Color(red: 226/255, green: 232/255, blue: 240/255)       // slate-200
     private let slateMuted = Color(red: 148/255, green: 163/255, blue: 184/255)       // slate-400
     private let slateDark = Color(red: 30/255, green: 41/255, blue: 59/255)           // #1e293b
-    
-    enum DashboardTab: String, CaseIterable {
-        case home = "Home"
-        case itinerary = "Itinerary"
-        case map = "Map"
-        case budget = "Budget"
-        case profile = "Profile"
-        
-        var iconName: String {
-            switch self {
-            case .home: return "safari.fill"
-            case .itinerary: return "calendar.badge.clock"
-            case .map: return "map.fill"
-            case .budget: return "chart.pie.fill"
-            case .profile: return "person.crop.circle.fill"
-            }
-        }
-    }
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -112,9 +94,13 @@ struct HomeDashboardView: View {
             }
             
             // MARK: - 8. Floating Glassmorphic Bottom Tab Bar
-            floatingBottomTabBar
-                .padding(.horizontal, 20)
-                .padding(.bottom, 8)
+            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
+                if tab == .trips {
+                    navigateToMyTrips = true
+                }
+            }
+            .padding(.horizontal, 20)
+            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
@@ -1120,40 +1106,6 @@ struct HomeDashboardView: View {
                     .stroke(containerBorder, lineWidth: 1)
             )
         }
-    }
-    
-    // MARK: - 8. Floating Glassmorphic Bottom Tab Bar
-    private var floatingBottomTabBar: some View {
-        HStack(spacing: 0) {
-            ForEach(DashboardTab.allCases, id: \.self) { tab in
-                Button(action: {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                        selectedTab = tab
-                    }
-                }) {
-                    VStack(spacing: 3) {
-                        Image(systemName: tab.iconName)
-                            .font(.system(size: selectedTab == tab ? 18 : 16, weight: selectedTab == tab ? .bold : .medium))
-                            .foregroundColor(selectedTab == tab ? skyBlue : slateMuted)
-                        
-                        Text(tab.rawValue)
-                            .font(.system(size: 10, weight: selectedTab == tab ? .bold : .medium, design: .rounded))
-                            .foregroundColor(selectedTab == tab ? skyBlue : slateMuted)
-                    }
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 10)
-                }
-            }
-        }
-        .padding(.horizontal, 8)
-        .background(surfaceDark.opacity(0.88))
-        .background(.ultraThinMaterial)
-        .clipShape(Capsule())
-        .overlay(
-            Capsule()
-                .stroke(Color.white.opacity(0.12), lineWidth: 1)
-        )
-        .shadow(color: Color.black.opacity(0.6), radius: 18, y: 8)
     }
     
     // MARK: - Helper Notification Banner
