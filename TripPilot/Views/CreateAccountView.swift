@@ -20,6 +20,7 @@ struct CreateAccountView: View {
     @State private var isPasswordVisible: Bool = false
     @State private var isBiometricEnabled: Bool = true
     @State private var agreeToTerms: Bool = true
+    @State private var navigateToHome: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -413,7 +414,9 @@ struct CreateAccountView: View {
                         .padding(.top, 2)
                         
                         // Primary CTA Button
-                        Button(action: {}) {
+                        Button(action: {
+                            navigateToHome = true
+                        }) {
                             HStack(spacing: 8) {
                                 Text("Create Free Account")
                                     .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -455,6 +458,9 @@ struct CreateAccountView: View {
                     .padding(.bottom, 36)
                 }
             }
+        }
+        .navigationDestination(isPresented: $navigateToHome) {
+            HomeDashboardView()
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)

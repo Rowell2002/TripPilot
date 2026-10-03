@@ -17,6 +17,7 @@ struct SignInView: View {
     @State private var isPasswordVisible: Bool = false
     @State private var isFaceIdEnabled: Bool = true
     @State private var navigateToCreateAccount: Bool = false
+    @State private var navigateToHome: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -318,7 +319,9 @@ struct SignInView: View {
                         .padding(.top, 4)
                         
                         // Primary Action Button
-                        Button(action: {}) {
+                        Button(action: {
+                            navigateToHome = true
+                        }) {
                             HStack(spacing: 8) {
                                 Text("Sign In to TripPilot")
                                     .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -383,6 +386,9 @@ struct SignInView: View {
         }
         .navigationDestination(isPresented: $navigateToCreateAccount) {
             CreateAccountView()
+        }
+        .navigationDestination(isPresented: $navigateToHome) {
+            HomeDashboardView()
         }
         .preferredColorScheme(.dark)
     }
