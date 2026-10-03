@@ -18,6 +18,7 @@ struct HomeDashboardView: View {
     @State private var showBoardingPassModal: Bool = false
     @State private var showFlyoverMapModal: Bool = false
     @State private var activeUtilityNotice: String? = nil
+    @State private var navigateToMyTrips: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16 / #000000
@@ -84,7 +85,12 @@ struct HomeDashboardView: View {
                     greetingWeatherSection
                     
                     // MARK: - 3. Hero Upcoming Trip Card ("Autumn in Japan")
-                    heroTripCard
+                    Button(action: {
+                        navigateToMyTrips = true
+                    }) {
+                        heroTripCard
+                    }
+                    .buttonStyle(.plain)
                     
                     // MARK: - 4. Today's Live Itinerary Timeline Widget
                     todayScheduleWidget
@@ -122,6 +128,9 @@ struct HomeDashboardView: View {
         }
         .sheet(isPresented: $showFlyoverMapModal) {
             flyoverMapModalView
+        }
+        .navigationDestination(isPresented: $navigateToMyTrips) {
+            MyTripsHubView()
         }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {
