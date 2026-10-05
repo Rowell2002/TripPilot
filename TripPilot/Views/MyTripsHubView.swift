@@ -21,6 +21,7 @@ struct MyTripsHubView: View {
     @State private var activeNotice: String? = nil
     @State private var showPlanJourneySheet: Bool = false
     @State private var showItinerarySheet: Bool = false
+    @State private var navigateToDailyItinerary: Bool = false
     
     init(selectedSegment: TripSegment = .activeAndUpcoming) {
         self._selectedSegment = State(initialValue: selectedSegment)
@@ -124,10 +125,15 @@ struct MyTripsHubView: View {
             FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
                 if tab == .home {
                     dismiss()
+                } else if tab == .itinerary {
+                    navigateToDailyItinerary = true
                 }
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
+        }
+        .navigationDestination(isPresented: $navigateToDailyItinerary) {
+            DailyItineraryView()
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
@@ -626,7 +632,7 @@ struct MyTripsHubView: View {
                     // Quick Access CTAs (3 buttons)
                     HStack(spacing: 8) {
                         Button(action: {
-                            showItinerarySheet = true
+                            navigateToDailyItinerary = true
                         }) {
                             HStack(spacing: 6) {
                                 Image(systemName: "calendar")

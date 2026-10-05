@@ -19,6 +19,7 @@ struct HomeDashboardView: View {
     @State private var showFlyoverMapModal: Bool = false
     @State private var activeUtilityNotice: String? = nil
     @State private var navigateToMyTrips: Bool = false
+    @State private var navigateToItinerary: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16 / #000000
@@ -95,8 +96,8 @@ struct HomeDashboardView: View {
             
             // MARK: - 8. Floating Glassmorphic Bottom Tab Bar
             FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .trips {
-                    navigateToMyTrips = true
+                if tab == .itinerary {
+                    navigateToItinerary = true
                 }
             }
             .padding(.horizontal, 20)
@@ -117,6 +118,9 @@ struct HomeDashboardView: View {
         }
         .navigationDestination(isPresented: $navigateToMyTrips) {
             MyTripsHubView()
+        }
+        .navigationDestination(isPresented: $navigateToItinerary) {
+            DailyItineraryView()
         }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {

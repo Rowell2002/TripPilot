@@ -9,17 +9,19 @@ import SwiftUI
 
 enum AppTab: String, CaseIterable, Identifiable {
     case home = "Home"
-    case trips = "Trips"
+    case itinerary = "Itinerary"
     case map = "Map"
     case budget = "Budget"
     case profile = "Profile"
+    
+    static let trips = AppTab.itinerary
     
     var id: String { rawValue }
     
     var iconName: String {
         switch self {
         case .home: return "house.fill"
-        case .trips: return "suitcase.rolling.fill"
+        case .itinerary: return "calendar"
         case .map: return "map.fill"
         case .budget: return "wallet.pass.fill"
         case .profile: return "person.crop.circle.fill"

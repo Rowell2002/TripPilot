@@ -21,6 +21,7 @@ struct PastJourneysView: View {
     @State private var showPassportSheet: Bool = false
     @State private var showStorySheet: Bool = false
     @State private var selectedStoryTitle: String = ""
+    @State private var navigateToDailyItinerary: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -108,10 +109,15 @@ struct PastJourneysView: View {
             FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
                 if tab == .home {
                     dismiss()
+                } else if tab == .itinerary {
+                    navigateToDailyItinerary = true
                 }
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
+        }
+        .navigationDestination(isPresented: $navigateToDailyItinerary) {
+            DailyItineraryView()
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
