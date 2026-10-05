@@ -21,6 +21,12 @@ struct MyTripsHubView: View {
     @State private var activeNotice: String? = nil
     @State private var showPlanJourneySheet: Bool = false
     @State private var showItinerarySheet: Bool = false
+    @State private var navigateToDailyItinerary: Bool = false
+    @State private var navigateToTripGenerator: Bool = false
+    
+    init(selectedSegment: TripSegment = .activeAndUpcoming) {
+        self._selectedSegment = State(initialValue: selectedSegment)
+    }
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -48,6 +54,18 @@ struct MyTripsHubView: View {
     }
     
     var body: some View {
+        Group {
+            if selectedSegment == .activeAndUpcoming {
+                activeAndUpcomingContentView
+            } else {
+                PastJourneysView(selectedSegment: $selectedSegment)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .preferredColorScheme(.dark)
+    }
+    
+    private var activeAndUpcomingContentView: some View {
         ZStack(alignment: .bottom) {
             // Background
             darkBackground
@@ -108,13 +126,19 @@ struct MyTripsHubView: View {
             FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
                 if tab == .home {
                     dismiss()
+                } else if tab == .itinerary {
+                    navigateToDailyItinerary = true
                 }
             }
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
         }
-        .navigationBarBackButtonHidden(true)
-        .preferredColorScheme(.dark)
+        .navigationDestination(isPresented: $navigateToDailyItinerary) {
+            DailyItineraryView()
+        }
+        .fullScreenCover(isPresented: $navigateToTripGenerator) {
+            TripGeneratorWizardView()
+        }
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 isLivePulsing = true
@@ -612,7 +636,7 @@ struct MyTripsHubView: View {
                     // Quick Access CTAs (3 buttons)
                     HStack(spacing: 8) {
                         Button(action: {
-                            showItinerarySheet = true
+                            navigateToDailyItinerary = true
                         }) {
                             HStack(spacing: 6) {
                                 Image(systemName: "calendar")
@@ -1085,7 +1109,7 @@ struct MyTripsHubView: View {
     // MARK: - Plan New Journey Primary Button
     private var planNewJourneyButton: some View {
         Button(action: {
-            showPlanJourneySheet = true
+            navigateToTripGenerator = true
         }) {
             HStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")
