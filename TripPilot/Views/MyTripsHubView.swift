@@ -22,6 +22,10 @@ struct MyTripsHubView: View {
     @State private var showPlanJourneySheet: Bool = false
     @State private var showItinerarySheet: Bool = false
     
+    init(selectedSegment: TripSegment = .activeAndUpcoming) {
+        self._selectedSegment = State(initialValue: selectedSegment)
+    }
+    
     // Stitch Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255) // #0a0e16
@@ -48,6 +52,18 @@ struct MyTripsHubView: View {
     }
     
     var body: some View {
+        Group {
+            if selectedSegment == .activeAndUpcoming {
+                activeAndUpcomingContentView
+            } else {
+                PastJourneysView(selectedSegment: $selectedSegment)
+            }
+        }
+        .navigationBarBackButtonHidden(true)
+        .preferredColorScheme(.dark)
+    }
+    
+    private var activeAndUpcomingContentView: some View {
         ZStack(alignment: .bottom) {
             // Background
             darkBackground
@@ -113,8 +129,6 @@ struct MyTripsHubView: View {
             .padding(.horizontal, 20)
             .padding(.bottom, 8)
         }
-        .navigationBarBackButtonHidden(true)
-        .preferredColorScheme(.dark)
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 isLivePulsing = true
