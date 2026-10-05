@@ -22,6 +22,7 @@ struct MyTripsHubView: View {
     @State private var showPlanJourneySheet: Bool = false
     @State private var showItinerarySheet: Bool = false
     @State private var navigateToDailyItinerary: Bool = false
+    @State private var navigateToTripGenerator: Bool = false
     
     init(selectedSegment: TripSegment = .activeAndUpcoming) {
         self._selectedSegment = State(initialValue: selectedSegment)
@@ -134,6 +135,9 @@ struct MyTripsHubView: View {
         }
         .navigationDestination(isPresented: $navigateToDailyItinerary) {
             DailyItineraryView()
+        }
+        .fullScreenCover(isPresented: $navigateToTripGenerator) {
+            TripGeneratorWizardView()
         }
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
@@ -1105,7 +1109,7 @@ struct MyTripsHubView: View {
     // MARK: - Plan New Journey Primary Button
     private var planNewJourneyButton: some View {
         Button(action: {
-            showPlanJourneySheet = true
+            navigateToTripGenerator = true
         }) {
             HStack(spacing: 8) {
                 Image(systemName: "plus.circle.fill")
