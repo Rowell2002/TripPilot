@@ -20,6 +20,7 @@ struct HomeDashboardView: View {
     @State private var activeUtilityNotice: String? = nil
     @State private var navigateToMyTrips: Bool = false
     @State private var navigateToItinerary: Bool = false
+    @State private var navigateToInteractiveMap: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16 / #000000
@@ -98,6 +99,8 @@ struct HomeDashboardView: View {
             FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
                 if tab == .itinerary {
                     navigateToItinerary = true
+                } else if tab == .map {
+                    navigateToInteractiveMap = true
                 }
             }
             .padding(.horizontal, 20)
@@ -121,6 +124,9 @@ struct HomeDashboardView: View {
         }
         .navigationDestination(isPresented: $navigateToItinerary) {
             DailyItineraryView()
+        }
+        .navigationDestination(isPresented: $navigateToInteractiveMap) {
+            InteractiveMapView()
         }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {
@@ -811,7 +817,7 @@ struct HomeDashboardView: View {
             
             // Interactive Map Visual Container
             Button(action: {
-                showFlyoverMapModal = true
+                navigateToInteractiveMap = true
             }) {
                 ZStack(alignment: .bottom) {
                     // Map Background Image / Stylized Dark Map

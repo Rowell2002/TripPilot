@@ -22,6 +22,7 @@ struct PastJourneysView: View {
     @State private var showStorySheet: Bool = false
     @State private var selectedStoryTitle: String = ""
     @State private var navigateToDailyItinerary: Bool = false
+    @State private var navigateToInteractiveMap: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -111,6 +112,8 @@ struct PastJourneysView: View {
                     dismiss()
                 } else if tab == .itinerary {
                     navigateToDailyItinerary = true
+                } else if tab == .map {
+                    navigateToInteractiveMap = true
                 }
             }
             .padding(.horizontal, 20)
@@ -118,6 +121,9 @@ struct PastJourneysView: View {
         }
         .navigationDestination(isPresented: $navigateToDailyItinerary) {
             DailyItineraryView()
+        }
+        .navigationDestination(isPresented: $navigateToInteractiveMap) {
+            InteractiveMapView()
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
