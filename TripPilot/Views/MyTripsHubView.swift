@@ -23,6 +23,7 @@ struct MyTripsHubView: View {
     @State private var showItinerarySheet: Bool = false
     @State private var navigateToDailyItinerary: Bool = false
     @State private var navigateToTripGenerator: Bool = false
+    @State private var navigateToInteractiveMap: Bool = false
     
     init(selectedSegment: TripSegment = .activeAndUpcoming) {
         self._selectedSegment = State(initialValue: selectedSegment)
@@ -128,6 +129,8 @@ struct MyTripsHubView: View {
                     dismiss()
                 } else if tab == .itinerary {
                     navigateToDailyItinerary = true
+                } else if tab == .map {
+                    navigateToInteractiveMap = true
                 }
             }
             .padding(.horizontal, 20)
@@ -135,6 +138,9 @@ struct MyTripsHubView: View {
         }
         .navigationDestination(isPresented: $navigateToDailyItinerary) {
             DailyItineraryView()
+        }
+        .navigationDestination(isPresented: $navigateToInteractiveMap) {
+            InteractiveMapView()
         }
         .fullScreenCover(isPresented: $navigateToTripGenerator) {
             TripGeneratorWizardView()
