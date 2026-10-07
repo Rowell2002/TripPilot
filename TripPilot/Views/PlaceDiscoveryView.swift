@@ -301,6 +301,18 @@ struct PlaceDiscoveryView: View {
     // MARK: - Fixed Top Header Bar
     private var fixedTopHeaderBar: some View {
         HStack(spacing: 12) {
+            // Back Button
+            Button(action: {
+                dismiss()
+            }) {
+                Image(systemName: "chevron.left")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(textOnSurface)
+                    .frame(width: 34, height: 34)
+                    .background(surfaceContainerHigh.opacity(0.7))
+                    .clipShape(Circle())
+            }
+            
             // Brand Logo & Title
             HStack(spacing: 8) {
                 ZStack {
