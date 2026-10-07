@@ -21,6 +21,7 @@ struct HomeDashboardView: View {
     @State private var navigateToMyTrips: Bool = false
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToInteractiveMap: Bool = false
+    @State private var navigateToPlaceDiscovery: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16 / #000000
@@ -127,6 +128,9 @@ struct HomeDashboardView: View {
         }
         .navigationDestination(isPresented: $navigateToInteractiveMap) {
             InteractiveMapView()
+        }
+        .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
+            PlaceDiscoveryView()
         }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {
@@ -614,7 +618,7 @@ struct HomeDashboardView: View {
                 Spacer()
                 
                 Button(action: {
-                    triggerNotice("📅 Opening Complete 12-Day Trip Timeline")
+                    navigateToItinerary = true
                 }) {
                     HStack(spacing: 3) {
                         Text("Timeline")
@@ -977,57 +981,62 @@ struct HomeDashboardView: View {
                     .stroke(containerBorder, lineWidth: 1)
             )
             
-            // Card 2: Bookmarks & Saved Spots
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text("BOOKMARKS")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(slateMuted)
-                        .tracking(0.6)
+            // Card 2: Bookmarks & Saved Spots (Tap to open Place Discovery)
+            Button(action: {
+                navigateToPlaceDiscovery = true
+            }) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("BOOKMARKS")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .foregroundColor(slateMuted)
+                            .tracking(0.6)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "bookmark.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(primaryCyan)
+                    }
                     
-                    Spacer()
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("28")
+                            .font(.system(size: 24, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        
+                        Text("Spots Saved in Tokyo")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(slateMuted)
+                    }
                     
-                    Image(systemName: "bookmark.fill")
-                        .font(.system(size: 14))
-                        .foregroundColor(primaryCyan)
+                    // Overlapping Emoji Stack
+                    HStack(spacing: -6) {
+                        emojiPill(emoji: "🍜", color: skyBlue)
+                        emojiPill(emoji: "🏯", color: primaryCyan)
+                        emojiPill(emoji: "☕", color: Color.orange)
+                        
+                        Text("+25")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .foregroundColor(slateLight)
+                            .frame(width: 24, height: 24)
+                            .background(slateDark)
+                            .clipShape(Circle())
+                            .overlay(
+                                Circle()
+                                    .stroke(surfaceDark, lineWidth: 1.5)
+                            )
+                    }
                 }
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("28")
-                        .font(.system(size: 24, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Text("Spots Saved in Tokyo")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(slateMuted)
-                }
-                
-                // Overlapping Emoji Stack
-                HStack(spacing: -6) {
-                    emojiPill(emoji: "🍜", color: skyBlue)
-                    emojiPill(emoji: "🏯", color: primaryCyan)
-                    emojiPill(emoji: "☕", color: Color.orange)
-                    
-                    Text("+25")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(slateLight)
-                        .frame(width: 24, height: 24)
-                        .background(slateDark)
-                        .clipShape(Circle())
-                        .overlay(
-                            Circle()
-                                .stroke(surfaceDark, lineWidth: 1.5)
-                        )
-                }
+                .padding(14)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(surfaceDark)
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(containerBorder, lineWidth: 1)
+                )
             }
-            .padding(14)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(surfaceDark)
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(containerBorder, lineWidth: 1)
-            )
+            .buttonStyle(.plain)
         }
     }
     

@@ -76,6 +76,7 @@ struct InteractiveMapView: View {
     @State private var toastMessage: String? = nil
     @State private var navigateToHome: Bool = false
     @State private var navigateToItinerary: Bool = false
+    @State private var navigateToPlaceDiscovery: Bool = false
     @State private var showDirectionsSheet: Bool = false
     @State private var mapZoomLevel: CGFloat = 1.0
     
@@ -125,6 +126,9 @@ struct InteractiveMapView: View {
         .preferredColorScheme(.dark)
         .navigationDestination(isPresented: $navigateToItinerary) {
             DailyItineraryView()
+        }
+        .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
+            PlaceDiscoveryView()
         }
         .overlay(alignment: .top) {
             if let toast = toastMessage {
@@ -499,8 +503,12 @@ struct InteractiveMapView: View {
                         HStack(spacing: 8) {
                             ForEach(MapFilter.allCases) { filter in
                                 Button(action: {
-                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                        selectedFilter = filter
+                                    if filter == .discover {
+                                        navigateToPlaceDiscovery = true
+                                    } else {
+                                        withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                                            selectedFilter = filter
+                                        }
                                     }
                                 }) {
                                     HStack(spacing: 6) {
@@ -968,7 +976,7 @@ struct InteractiveMapView: View {
                 
                 // Tertiary: Discover Places Nearby
                 Button(action: {
-                    triggerToast("Searching 24 attractions within 500m")
+                    navigateToPlaceDiscovery = true
                 }) {
                     HStack(spacing: 6) {
                         Image(systemName: "location.north.line.fill")

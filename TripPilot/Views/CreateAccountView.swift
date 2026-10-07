@@ -56,8 +56,24 @@ struct CreateAccountView: View {
             
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    // MARK: - Top Navigation Header (Back button removed)
+                    // MARK: - Top Navigation Header
                     HStack {
+                        // Back Button
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.white)
+                                .frame(width: 38, height: 38)
+                                .background(containerMid)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                                )
+                        }
+                        
                         // Glowing Insignia Badge
                         ZStack {
                             Circle()
