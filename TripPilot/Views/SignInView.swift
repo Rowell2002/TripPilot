@@ -115,7 +115,9 @@ struct SignInView: View {
                     // MARK: - Social SSO Buttons
                     VStack(spacing: 12) {
                         // Apple Sign In Button
-                        Button(action: {}) {
+                        Button(action: {
+                            navigateToHome = true
+                        }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "apple.logo")
                                     .font(.system(size: 18))
@@ -131,7 +133,9 @@ struct SignInView: View {
                         }
                         
                         // Google Sign In Button
-                        Button(action: {}) {
+                        Button(action: {
+                            navigateToHome = true
+                        }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "g.circle.fill")
                                     .font(.system(size: 18))

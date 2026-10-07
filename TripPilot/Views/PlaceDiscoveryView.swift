@@ -99,6 +99,7 @@ struct PlaceDiscoveryView: View {
     @State private var addedPlaceTitles: Set<String> = []
     @State private var navigateToMap: Bool = false
     @State private var navigateToItinerary: Bool = false
+    @State private var navigateToPlaceDetail: Bool = false
     
     // Mock Data
     private let editorPicks: [EditorPickItem] = [
@@ -248,14 +249,15 @@ struct PlaceDiscoveryView: View {
                 // Fixed Header Bar (Top)
                 VStack(spacing: 0) {
                     fixedTopHeaderBar
-                    Spacer()
                 }
-                .frame(width: UIScreen.main.bounds.width)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
                 .ignoresSafeArea(edges: .top)
                 
                 // Shared Floating Glassmorphic Bottom Navigation Bar
                 FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                    if tab == .itinerary {
+                    if tab == .home {
+                        dismiss()
+                    } else if tab == .itinerary {
                         navigateToItinerary = true
                     } else if tab == .map {
                         navigateToMap = true
@@ -272,6 +274,9 @@ struct PlaceDiscoveryView: View {
             }
             .navigationDestination(isPresented: $navigateToItinerary) {
                 DailyItineraryView()
+            }
+            .navigationDestination(isPresented: $navigateToPlaceDetail) {
+                PlaceDetailView()
             }
             .overlay(alignment: .top) {
                 if let notice = activeNotice {
@@ -516,7 +521,12 @@ struct PlaceDiscoveryView: View {
             ScrollView(.horizontal, showsIndicators: false) {
                 HStack(spacing: 14) {
                     ForEach(editorPicks) { pick in
-                        editorPickCard(pick)
+                        Button(action: {
+                            navigateToPlaceDetail = true
+                        }) {
+                            editorPickCard(pick)
+                        }
+                        .buttonStyle(.plain)
                     }
                 }
             }
