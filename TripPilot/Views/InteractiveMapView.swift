@@ -77,6 +77,7 @@ struct InteractiveMapView: View {
     @State private var navigateToHome: Bool = false
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToPlaceDiscovery: Bool = false
+    @State private var navigateToBudget: Bool = false
     @State private var showDirectionsSheet: Bool = false
     @State private var mapZoomLevel: CGFloat = 1.0
     
@@ -117,6 +118,8 @@ struct InteractiveMapView: View {
                     dismiss()
                 } else if tab == .itinerary {
                     navigateToItinerary = true
+                } else if tab == .budget {
+                    navigateToBudget = true
                 }
             }
             .padding(.horizontal, 20)
@@ -129,6 +132,9 @@ struct InteractiveMapView: View {
         }
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
+        }
+        .navigationDestination(isPresented: $navigateToBudget) {
+            BudgetExpensesView()
         }
         .overlay(alignment: .top) {
             if let toast = toastMessage {

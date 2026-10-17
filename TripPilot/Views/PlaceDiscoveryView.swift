@@ -100,6 +100,7 @@ struct PlaceDiscoveryView: View {
     @State private var navigateToMap: Bool = false
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToPlaceDetail: Bool = false
+    @State private var navigateToBudget: Bool = false
     
     // Mock Data
     private let editorPicks: [EditorPickItem] = [
@@ -261,6 +262,8 @@ struct PlaceDiscoveryView: View {
                         navigateToItinerary = true
                     } else if tab == .map {
                         navigateToMap = true
+                    } else if tab == .budget {
+                        navigateToBudget = true
                     }
                 }
                 .padding(.horizontal, 20)
@@ -277,6 +280,9 @@ struct PlaceDiscoveryView: View {
             }
             .navigationDestination(isPresented: $navigateToPlaceDetail) {
                 PlaceDetailView()
+            }
+            .navigationDestination(isPresented: $navigateToBudget) {
+                BudgetExpensesView()
             }
             .overlay(alignment: .top) {
                 if let notice = activeNotice {

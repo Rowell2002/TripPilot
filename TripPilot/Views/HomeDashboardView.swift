@@ -22,6 +22,7 @@ struct HomeDashboardView: View {
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToPlaceDiscovery: Bool = false
+    @State private var navigateToBudget: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16 / #000000
@@ -102,6 +103,8 @@ struct HomeDashboardView: View {
                     navigateToItinerary = true
                 } else if tab == .map {
                     navigateToInteractiveMap = true
+                } else if tab == .budget {
+                    navigateToBudget = true
                 }
             }
             .padding(.horizontal, 20)
@@ -131,6 +134,9 @@ struct HomeDashboardView: View {
         }
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
+        }
+        .navigationDestination(isPresented: $navigateToBudget) {
+            BudgetExpensesView()
         }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {
@@ -916,70 +922,75 @@ struct HomeDashboardView: View {
     // MARK: - 6. Travel Statistics & Quick Budget 2-Column Grid
     private var statsAndBudgetGrid: some View {
         HStack(spacing: 12) {
-            // Card 1: Trip Budget Progress
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text("TRIP BUDGET")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(slateMuted)
-                        .tracking(0.6)
-                    
-                    Spacer()
-                    
-                    Image(systemName: "wallet.pass.fill")
-                        .font(.system(size: 14))
-                        .foregroundColor(skyBlue)
-                }
-                
-                HStack(spacing: 10) {
-                    // Circular Ring Progress
-                    ZStack {
-                        Circle()
-                            .stroke(slateDark, lineWidth: 4)
-                            .frame(width: 44, height: 44)
-                        
-                        Circle()
-                            .trim(from: 0, to: 0.71)
-                            .stroke(skyBlue, style: StrokeStyle(lineWidth: 4, lineCap: .round))
-                            .frame(width: 44, height: 44)
-                            .rotationEffect(.degrees(-90))
-                        
-                        Text("71%")
+            // Card 1: Trip Budget Progress (Tap to open Budget & Expenses)
+            Button(action: {
+                navigateToBudget = true
+            }) {
+                VStack(alignment: .leading, spacing: 10) {
+                    HStack {
+                        Text("TRIP BUDGET")
                             .font(.system(size: 10, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                            .foregroundColor(slateMuted)
+                            .tracking(0.6)
+                        
+                        Spacer()
+                        
+                        Image(systemName: "wallet.pass.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(skyBlue)
                     }
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("$4,250")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                    HStack(spacing: 10) {
+                        // Circular Ring Progress
+                        ZStack {
+                            Circle()
+                                .stroke(slateDark, lineWidth: 4)
+                                .frame(width: 44, height: 44)
+                            
+                            Circle()
+                                .trim(from: 0, to: 0.71)
+                                .stroke(skyBlue, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                .frame(width: 44, height: 44)
+                                .rotationEffect(.degrees(-90))
+                            
+                            Text("71%")
+                                .font(.system(size: 10, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                        }
                         
-                        Text("of $6,000 cap")
-                            .font(.system(size: 10, weight: .medium))
-                            .foregroundColor(slateMuted)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("$4,250")
+                                .font(.system(size: 16, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                            
+                            Text("of $6,000 cap")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor(slateMuted)
+                        }
                     }
+                    
+                    Text("$1,750 remaining")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .foregroundColor(primaryCyan)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                        .background(surfaceCard)
+                        .clipShape(Capsule())
+                        .overlay(
+                            Capsule()
+                                .stroke(Color.white.opacity(0.06), lineWidth: 1)
+                        )
                 }
-                
-                Text("$1,750 remaining")
-                    .font(.system(size: 10, weight: .bold, design: .rounded))
-                    .foregroundColor(primaryCyan)
-                    .frame(maxWidth: .infinity)
-                    .padding(.vertical, 4)
-                    .background(surfaceCard)
-                    .clipShape(Capsule())
-                    .overlay(
-                        Capsule()
-                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                    )
+                .padding(14)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(surfaceDark)
+                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 18, style: .continuous)
+                        .stroke(containerBorder, lineWidth: 1)
+                )
             }
-            .padding(14)
-            .frame(maxWidth: .infinity, alignment: .leading)
-            .background(surfaceDark)
-            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 18, style: .continuous)
-                    .stroke(containerBorder, lineWidth: 1)
-            )
+            .buttonStyle(.plain)
             
             // Card 2: Bookmarks & Saved Spots (Tap to open Place Discovery)
             Button(action: {

@@ -24,6 +24,7 @@ struct DailyItineraryView: View {
     @State private var isFlightPulsing: Bool = false
     @State private var isAudioPlaying: Bool = true
     @State private var navigateToInteractiveMap: Bool = false
+    @State private var navigateToBudget: Bool = false
     
     // Stitch Theme Colors
     private let darkBackground = Color(red: 11/255, green: 15/255, blue: 23/255)       // #0b0f17
@@ -107,6 +108,8 @@ struct DailyItineraryView: View {
                     dismiss()
                 } else if tab == .map {
                     navigateToInteractiveMap = true
+                } else if tab == .budget {
+                    navigateToBudget = true
                 }
             }
             .padding(.horizontal, 20)
@@ -136,6 +139,9 @@ struct DailyItineraryView: View {
         }
         .navigationDestination(isPresented: $navigateToInteractiveMap) {
             InteractiveMapView()
+        }
+        .navigationDestination(isPresented: $navigateToBudget) {
+            BudgetExpensesView()
         }
         .overlay(alignment: .top) {
             if let notice = activeNotice {
