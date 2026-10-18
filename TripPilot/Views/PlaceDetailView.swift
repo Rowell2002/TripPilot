@@ -1,11 +1,3 @@
-//
-//  PlaceDetailView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: a063f37918b24f258bfd8fe61eb19c7a
-//  Title: TripPilot - Place Detail & Booking (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -67,7 +59,7 @@ enum BookingTimeSlot: String, CaseIterable, Identifiable {
 struct PlaceDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
-    // Stitch Theme Palette
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)            // #0f131c
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255)  // #0a0e16
     private let surfaceContainerLow = Color(red: 24/255, green: 28/255, blue: 36/255)   // #181c24

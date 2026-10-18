@@ -1,11 +1,3 @@
-//
-//  PlaceDiscoveryView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 3528925142de42cda942075ba194dd05
-//  Title: TripPilot - Place Directory & Discovery (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -74,7 +66,7 @@ struct SmartCollectionItem: Identifiable {
 struct PlaceDiscoveryView: View {
     @Environment(\.dismiss) private var dismiss
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)            // #0f131c
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255)  // #0a0e16
     private let surfaceContainerLow = Color(red: 24/255, green: 28/255, blue: 36/255)   // #181c24
@@ -101,6 +93,7 @@ struct PlaceDiscoveryView: View {
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToPlaceDetail: Bool = false
     @State private var navigateToBudget: Bool = false
+    @State private var navigateToProfile: Bool = false
     
     // Mock Data
     private let editorPicks: [EditorPickItem] = [
@@ -264,6 +257,8 @@ struct PlaceDiscoveryView: View {
                         navigateToMap = true
                     } else if tab == .budget {
                         navigateToBudget = true
+                    } else if tab == .profile {
+                        navigateToProfile = true
                     }
                 }
                 .padding(.horizontal, 20)
@@ -283,6 +278,9 @@ struct PlaceDiscoveryView: View {
             }
             .navigationDestination(isPresented: $navigateToBudget) {
                 BudgetExpensesView()
+            }
+            .navigationDestination(isPresented: $navigateToProfile) {
+                SettingsProfileView()
             }
             .overlay(alignment: .top) {
                 if let notice = activeNotice {

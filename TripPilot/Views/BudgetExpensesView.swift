@@ -1,11 +1,3 @@
-//
-//  BudgetExpensesView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: c4b607b59f554c17a088880ccbe58731
-//  Title: TripPilot - Budget & Expenses (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -45,7 +37,7 @@ struct BudgetCategoryEnvelope: Identifiable {
 struct BudgetExpensesView: View {
     @Environment(\.dismiss) private var dismiss
     
-    // Stitch Theme Palette
+    // Theme Colors
     private let darkBackground = Color(red: 0/255, green: 0/255, blue: 0/255)                  // #000000
     private let surfaceContainerLowest = Color(red: 11/255, green: 15/255, blue: 23/255)     // #0b0f17
     private let surfaceContainerLow = Color(red: 17/255, green: 24/255, blue: 39/255)        // #111827
@@ -80,6 +72,7 @@ struct BudgetExpensesView: View {
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToMap: Bool = false
     @State private var navigateToReceiptScanner: Bool = false
+    @State private var navigateToProfile: Bool = false
     
     // Donut chart hover/selection
     @State private var selectedDonutIndex: Int? = nil
@@ -241,6 +234,8 @@ struct BudgetExpensesView: View {
                     navigateToItinerary = true
                 } else if tab == .map {
                     navigateToMap = true
+                } else if tab == .profile {
+                    navigateToProfile = true
                 }
             }
             .padding(.horizontal, 20)
@@ -262,6 +257,9 @@ struct BudgetExpensesView: View {
         }
         .navigationDestination(isPresented: $navigateToReceiptScanner) {
             ReceiptScannerExpenseLoggerView()
+        }
+        .navigationDestination(isPresented: $navigateToProfile) {
+            SettingsProfileView()
         }
         .sheet(isPresented: $showLogExpenseSheet) {
             logExpenseModalSheet

@@ -1,11 +1,3 @@
-//
-//  ReceiptScannerExpenseLoggerView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 6285c49dee6f45938eeb09d3dedc0ef7
-//  Title: TripPilot - Receipt Scanner & Expense Logger (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -36,7 +28,7 @@ enum ExpenseCategoryOption: String, CaseIterable, Identifiable {
 struct ReceiptScannerExpenseLoggerView: View {
     @Environment(\.dismiss) private var dismiss
     
-    // Stitch Dark Theme Tokens
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)            // #0f131c
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255)   // #0a0e16
     private let surfaceContainerLow = Color(red: 24/255, green: 28/255, blue: 36/255)      // #181c24

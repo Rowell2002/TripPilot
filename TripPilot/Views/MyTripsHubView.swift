@@ -1,11 +1,3 @@
-//
-//  MyTripsHubView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 47d0bae51dee43a8abbaea8844fbffd9
-//  Title: TripPilot - My Trips Hub (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -25,12 +17,13 @@ struct MyTripsHubView: View {
     @State private var navigateToTripGenerator: Bool = false
     @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToBudget: Bool = false
+    @State private var navigateToProfile: Bool = false
     
     init(selectedSegment: TripSegment = .activeAndUpcoming) {
         self._selectedSegment = State(initialValue: selectedSegment)
     }
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255) // #0a0e16
     private let surfaceContainerLow = Color(red: 24/255, green: 28/255, blue: 36/255)  // #181c24
@@ -134,6 +127,8 @@ struct MyTripsHubView: View {
                     navigateToInteractiveMap = true
                 } else if tab == .budget {
                     navigateToBudget = true
+                } else if tab == .profile {
+                    navigateToProfile = true
                 }
             }
             .padding(.horizontal, 20)
@@ -147,6 +142,9 @@ struct MyTripsHubView: View {
         }
         .navigationDestination(isPresented: $navigateToBudget) {
             BudgetExpensesView()
+        }
+        .navigationDestination(isPresented: $navigateToProfile) {
+            SettingsProfileView()
         }
         .fullScreenCover(isPresented: $navigateToTripGenerator) {
             TripGeneratorWizardView()

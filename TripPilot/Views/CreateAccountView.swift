@@ -1,11 +1,3 @@
-//
-//  CreateAccountView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 83f964fc1e964b0790260621f3c04005
-//  Title: TripPilot - Create Account (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -22,7 +14,7 @@ struct CreateAccountView: View {
     @State private var agreeToTerms: Bool = true
     @State private var navigateToHome: Bool = false
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let containerLow = Color(red: 24/255, green: 28/255, blue: 36/255)         // #181c24
     private let containerMid = Color(red: 28/255, green: 32/255, blue: 40/255)         // #1c2028

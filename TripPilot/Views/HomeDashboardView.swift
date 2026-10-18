@@ -1,11 +1,3 @@
-//
-//  HomeDashboardView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: f3fd16dc7489464189dc3fccc51d45f0
-//  Title: TripPilot - Home Dashboard (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -23,8 +15,9 @@ struct HomeDashboardView: View {
     @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToPlaceDiscovery: Bool = false
     @State private var navigateToBudget: Bool = false
+    @State private var navigateToProfile: Bool = false
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16 / #000000
     private let surfaceDark = Color(red: 17/255, green: 24/255, blue: 39/255)          // #111827
     private let surfaceCard = Color(red: 22/255, green: 31/255, blue: 48/255)          // #161f30
@@ -105,6 +98,8 @@ struct HomeDashboardView: View {
                     navigateToInteractiveMap = true
                 } else if tab == .budget {
                     navigateToBudget = true
+                } else if tab == .profile {
+                    navigateToProfile = true
                 }
             }
             .padding(.horizontal, 20)
@@ -137,6 +132,9 @@ struct HomeDashboardView: View {
         }
         .navigationDestination(isPresented: $navigateToBudget) {
             BudgetExpensesView()
+        }
+        .navigationDestination(isPresented: $navigateToProfile) {
+            SettingsProfileView()
         }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {
@@ -244,7 +242,7 @@ struct HomeDashboardView: View {
                 }
                 
                 Button(action: {
-                    triggerNotice("👤 Elena's Traveler Profile (Frequent Flyer Diamond)")
+                    navigateToProfile = true
                 }) {
                     ZStack {
                         Circle()

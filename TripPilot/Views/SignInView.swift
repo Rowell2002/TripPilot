@@ -1,11 +1,3 @@
-//
-//  SignInView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: e9cd43944833403f875e23d488998c34
-//  Title: TripPilot - Sign In (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -19,7 +11,7 @@ struct SignInView: View {
     @State private var navigateToCreateAccount: Bool = false
     @State private var navigateToHome: Bool = false
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let containerLow = Color(red: 24/255, green: 28/255, blue: 36/255)         // #181c24
     private let containerHigh = Color(red: 38/255, green: 42/255, blue: 51/255)        // #262a33

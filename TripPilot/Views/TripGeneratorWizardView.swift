@@ -1,11 +1,3 @@
-//
-//  TripGeneratorWizardView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 8d8a4efc2be2494cb71a61d7922d5b19
-//  Title: TripPilot - Trip Generator Wizard (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -99,7 +91,7 @@ struct QuickDestination: Identifiable {
 struct TripGeneratorWizardView: View {
     @Environment(\.dismiss) private var dismiss
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)            // #0f131c
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255)  // #0a0e16
     private let surfaceContainerLow = Color(red: 24/255, green: 28/255, blue: 36/255)   // #181c24
