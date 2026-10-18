@@ -57,6 +57,7 @@ struct SettingsProfileView: View {
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToMap: Bool = false
     @State private var navigateToBudget: Bool = false
+    @State private var navigateToAnalytics: Bool = false
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -191,6 +192,9 @@ struct SettingsProfileView: View {
         }
         .navigationDestination(isPresented: $navigateToBudget) {
             BudgetExpensesView()
+        }
+        .navigationDestination(isPresented: $navigateToAnalytics) {
+            TravelAnalyticsMilestonesView()
         }
     }
     
@@ -385,58 +389,74 @@ struct SettingsProfileView: View {
                 }
             }
             
-            // Travel Stats Row
-            HStack(spacing: 0) {
-                // Trips
-                VStack(spacing: 2) {
-                    Text("8")
-                        .font(.system(size: 20, weight: .heavy, design: .rounded))
-                        .foregroundColor(textOnSurface)
+            // Travel Stats Row - Clickable to Travel Analytics & Milestones
+            Button(action: {
+                triggerHapticFeedback()
+                navigateToAnalytics = true
+            }) {
+                HStack(spacing: 0) {
+                    // Trips
+                    VStack(spacing: 2) {
+                        Text("8")
+                            .font(.system(size: 20, weight: .heavy, design: .rounded))
+                            .foregroundColor(textOnSurface)
+                        
+                        Text("TRIPS")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .foregroundColor(textVariant)
+                            .tracking(0.6)
+                    }
+                    .frame(maxWidth: .infinity)
                     
-                    Text("TRIPS")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(textVariant)
-                        .tracking(0.6)
-                }
-                .frame(maxWidth: .infinity)
-                
-                Divider()
-                    .background(surfaceContainerHighest.opacity(0.5))
-                    .frame(height: 28)
-                
-                // Countries
-                VStack(spacing: 2) {
-                    Text("18")
-                        .font(.system(size: 20, weight: .heavy, design: .rounded))
-                        .foregroundColor(secondaryMint)
+                    Divider()
+                        .background(surfaceContainerHighest.opacity(0.5))
+                        .frame(height: 28)
                     
-                    Text("COUNTRIES")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(textVariant)
-                        .tracking(0.6)
-                }
-                .frame(maxWidth: .infinity)
-                
-                Divider()
-                    .background(surfaceContainerHighest.opacity(0.5))
-                    .frame(height: 28)
-                
-                // Saved
-                VStack(spacing: 2) {
-                    Text("324")
-                        .font(.system(size: 20, weight: .heavy, design: .rounded))
-                        .foregroundColor(primarySky)
+                    // Countries
+                    VStack(spacing: 2) {
+                        Text("18")
+                            .font(.system(size: 20, weight: .heavy, design: .rounded))
+                            .foregroundColor(secondaryMint)
+                        
+                        Text("COUNTRIES")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .foregroundColor(textVariant)
+                            .tracking(0.6)
+                    }
+                    .frame(maxWidth: .infinity)
                     
-                    Text("SAVED")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(textVariant)
-                        .tracking(0.6)
+                    Divider()
+                        .background(surfaceContainerHighest.opacity(0.5))
+                        .frame(height: 28)
+                    
+                    // Saved
+                    VStack(spacing: 2) {
+                        Text("324")
+                            .font(.system(size: 20, weight: .heavy, design: .rounded))
+                            .foregroundColor(primarySky)
+                        
+                        Text("SAVED")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                            .foregroundColor(textVariant)
+                            .tracking(0.6)
+                    }
+                    .frame(maxWidth: .infinity)
+                    
+                    // Arrow Indicator
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 11, weight: .bold))
+                        .foregroundColor(primarySky.opacity(0.8))
+                        .padding(.trailing, 10)
                 }
-                .frame(maxWidth: .infinity)
+                .padding(.vertical, 12)
+                .background(surfaceContainerLow.opacity(0.7))
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(primarySky.opacity(0.18), lineWidth: 1)
+                )
             }
-            .padding(.vertical, 12)
-            .background(surfaceContainerLow.opacity(0.7))
-            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(18)
         .background(surfaceContainer)

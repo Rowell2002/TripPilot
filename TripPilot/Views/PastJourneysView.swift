@@ -17,6 +17,7 @@ struct PastJourneysView: View {
     @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToBudget: Bool = false
     @State private var navigateToProfile: Bool = false
+    @State private var navigateToAnalytics: Bool = false
     
     // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -128,6 +129,9 @@ struct PastJourneysView: View {
         }
         .navigationDestination(isPresented: $navigateToProfile) {
             SettingsProfileView()
+        }
+        .navigationDestination(isPresented: $navigateToAnalytics) {
+            TravelAnalyticsMilestonesView()
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
@@ -472,7 +476,8 @@ struct PastJourneysView: View {
                 Spacer()
                 
                 Button(action: {
-                    showPassportSheet = true
+                    triggerNotice("Loading Travel Analytics & Milestones...")
+                    navigateToAnalytics = true
                 }) {
                     HStack(spacing: 4) {
                         Text("View Passport & Badges")
@@ -493,6 +498,11 @@ struct PastJourneysView: View {
                 .stroke(outlineVariant, lineWidth: 1)
         )
         .shadow(color: Color.black.opacity(0.4), radius: 12, y: 4)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            triggerNotice("Loading Travel Analytics & Milestones...")
+            navigateToAnalytics = true
+        }
     }
     
     private func passportStatBlock(value: String, label: String) -> some View {
