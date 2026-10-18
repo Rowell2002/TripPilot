@@ -79,6 +79,7 @@ struct BudgetExpensesView: View {
     @State private var navigateToHome: Bool = false
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToMap: Bool = false
+    @State private var navigateToReceiptScanner: Bool = false
     
     // Donut chart hover/selection
     @State private var selectedDonutIndex: Int? = nil
@@ -258,6 +259,9 @@ struct BudgetExpensesView: View {
         }
         .navigationDestination(isPresented: $navigateToMap) {
             InteractiveMapView()
+        }
+        .navigationDestination(isPresented: $navigateToReceiptScanner) {
+            ReceiptScannerExpenseLoggerView()
         }
         .sheet(isPresented: $showLogExpenseSheet) {
             logExpenseModalSheet
@@ -686,7 +690,7 @@ struct BudgetExpensesView: View {
         HStack(spacing: 12) {
             // Log Expense Primary CTA (2/3 width)
             Button(action: {
-                showLogExpenseSheet = true
+                navigateToReceiptScanner = true
             }) {
                 HStack(spacing: 8) {
                     Image(systemName: "camera.fill")
