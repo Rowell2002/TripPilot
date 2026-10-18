@@ -1,0 +1,30 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+Icon
+._*
+.Spotlight-V100
+.Trashes
+
+# Xcode
+build/
+DerivedData/
+*.moved-aside
+*.xcuserstate
+*.xcbkptlist
+xcuserdata/
+
+# Swift Package Manager
+.build/
+.swiftpm/
+
+# Backup and temporary files
+*.backup
+*.bak
+*~
+
+# Firebase Secrets (Public Repo Protection)
+GoogleService-Info.plist
+**/GoogleService-Info.plist
+

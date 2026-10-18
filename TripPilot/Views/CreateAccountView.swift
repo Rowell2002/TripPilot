@@ -1,11 +1,3 @@
-//
-//  CreateAccountView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 83f964fc1e964b0790260621f3c04005
-//  Title: TripPilot - Create Account (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -13,6 +5,7 @@ import UIKit
 
 struct CreateAccountView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     
     @State private var fullName: String = ""
     @State private var email: String = ""
@@ -22,7 +15,7 @@ struct CreateAccountView: View {
     @State private var agreeToTerms: Bool = true
     @State private var navigateToHome: Bool = false
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let containerLow = Color(red: 24/255, green: 28/255, blue: 36/255)         // #181c24
     private let containerMid = Color(red: 28/255, green: 32/255, blue: 40/255)         // #1c2028
@@ -148,7 +141,14 @@ struct CreateAccountView: View {
                     // MARK: - Social SSO Stack
                     VStack(spacing: 12) {
                         // Apple Sign Up Button
-                        Button(action: {}) {
+                        Button(action: {
+                            Task {
+                                await authViewModel.signInWithApple()
+                                if authViewModel.isAuthenticated {
+                                    navigateToHome = true
+                                }
+                            }
+                        }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "apple.logo")
                                     .font(.system(size: 18))
@@ -162,9 +162,17 @@ struct CreateAccountView: View {
                             .clipShape(Capsule())
                             .shadow(color: Color.white.opacity(0.12), radius: 6, y: 2)
                         }
+                        .disabled(authViewModel.isLoading)
                         
                         // Google Sign Up Button
-                        Button(action: {}) {
+                        Button(action: {
+                            Task {
+                                await authViewModel.signInWithGoogle()
+                                if authViewModel.isAuthenticated {
+                                    navigateToHome = true
+                                }
+                            }
+                        }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "g.circle.fill")
                                     .font(.system(size: 18))
@@ -182,6 +190,7 @@ struct CreateAccountView: View {
                                     .stroke(Color.white.opacity(0.1), lineWidth: 1)
                             )
                         }
+                        .disabled(authViewModel.isLoading)
                     }
                     .padding(.horizontal, 20)
                     
@@ -477,6 +486,30 @@ struct CreateAccountView: View {
         }
         .navigationDestination(isPresented: $navigateToHome) {
             HomeDashboardView()
+        }
+        .overlay {
+            if authViewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: primaryCyan))
+                            .scaleEffect(1.2)
+                        Text("Creating account...")
+                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .foregroundColor(.white)
+                    }
+                    .padding(24)
+                    .background(containerLow)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                }
+            }
+        }
+        .alert("Authentication Error", isPresented: $authViewModel.showErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(authViewModel.errorMessage ?? "An unknown authentication error occurred.")
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)

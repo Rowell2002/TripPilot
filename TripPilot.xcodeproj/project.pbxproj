@@ -6,14 +6,21 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		4AC940AD932E96FC4D9416A8 /* GoogleSignIn in Frameworks */ = {isa = PBXBuildFile; productRef = 5662F1DE8A78E3DE289E7C64 /* GoogleSignIn */; };
+		86DEE5100FEF1061602BBA14 /* FirebaseCore in Frameworks */ = {isa = PBXBuildFile; productRef = 3BF45072B37CB416C569EB70 /* FirebaseCore */; };
+		D52F4B8FAA08E5A4740740C8 /* FirebaseAuth in Frameworks */ = {isa = PBXBuildFile; productRef = F935E1860AAC9296C9F60A5E /* FirebaseAuth */; };
+		F301763C102B45E1525F8601 /* GoogleSignInSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 3F179305437565D33F0D38CF /* GoogleSignInSwift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
-		64E853BE2FD53E720074F769 /* TripPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "TripPilot.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		64E853BE2FD53E720074F769 /* TripPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		64E853C02FD53E720074F769 /* TripPilot */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "TripPilot";
+			path = TripPilot;
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -23,6 +30,10 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				86DEE5100FEF1061602BBA14 /* FirebaseCore in Frameworks */,
+				D52F4B8FAA08E5A4740740C8 /* FirebaseAuth in Frameworks */,
+				4AC940AD932E96FC4D9416A8 /* GoogleSignIn in Frameworks */,
+				F301763C102B45E1525F8601 /* GoogleSignInSwift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -63,10 +74,14 @@
 			fileSystemSynchronizedGroups = (
 				64E853C02FD53E720074F769 /* TripPilot */,
 			);
-			name = "TripPilot";
+			name = TripPilot;
 			packageProductDependencies = (
+				3BF45072B37CB416C569EB70 /* FirebaseCore */,
+				F935E1860AAC9296C9F60A5E /* FirebaseAuth */,
+				5662F1DE8A78E3DE289E7C64 /* GoogleSignIn */,
+				3F179305437565D33F0D38CF /* GoogleSignInSwift */,
 			);
-			productName = "TripPilot";
+			productName = TripPilot;
 			productReference = 64E853BE2FD53E720074F769 /* TripPilot.app */;
 			productType = "com.apple.product-type.application";
 		};
@@ -94,6 +109,10 @@
 			);
 			mainGroup = 64E853B52FD53E720074F769;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				B1E7E5A6E4F016B3707324CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				CC4AAD50E1FBAC650742EC76 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 64E853BF2FD53E720074F769 /* Products */;
 			projectDirPath = "";
@@ -249,11 +268,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TripPilot/TripPilot.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H8CNBKAZ8T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We record your location when you complete a game session to show it on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -265,7 +286,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "NIBM.TripPilot";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NIBM.TripPilot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -282,11 +306,13 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = TripPilot/TripPilot.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = H8CNBKAZ8T;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We record your location when you complete a game session to show it on the map.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
@@ -298,7 +324,10 @@
 					"@executable_path/Frameworks",
 				);
 				MARKETING_VERSION = 1.0;
-				PRODUCT_BUNDLE_IDENTIFIER = "NIBM.TripPilot";
+				OTHER_LDFLAGS = (
+					"-ObjC",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = NIBM.TripPilot;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
@@ -332,6 +361,48 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		B1E7E5A6E4F016B3707324CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 11.0.0;
+			};
+		};
+		CC4AAD50E1FBAC650742EC76 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/google/GoogleSignIn-iOS";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		3BF45072B37CB416C569EB70 /* FirebaseCore */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B1E7E5A6E4F016B3707324CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseCore;
+		};
+		3F179305437565D33F0D38CF /* GoogleSignInSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC4AAD50E1FBAC650742EC76 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignInSwift;
+		};
+		5662F1DE8A78E3DE289E7C64 /* GoogleSignIn */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = CC4AAD50E1FBAC650742EC76 /* XCRemoteSwiftPackageReference "GoogleSignIn-iOS" */;
+			productName = GoogleSignIn;
+		};
+		F935E1860AAC9296C9F60A5E /* FirebaseAuth */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = B1E7E5A6E4F016B3707324CA /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */;
+			productName = FirebaseAuth;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 64E853B62FD53E720074F769 /* Project object */;
 }

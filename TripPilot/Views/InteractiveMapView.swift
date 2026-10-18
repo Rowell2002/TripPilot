@@ -1,11 +1,3 @@
-//
-//  InteractiveMapView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 72ae9a3bc3434720bcbd164a83d68cdf
-//  Title: TripPilot - Interactive Map (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -47,7 +39,7 @@ enum MapFilter: String, CaseIterable, Identifiable {
 struct InteractiveMapView: View {
     @Environment(\.dismiss) private var dismiss
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)            // #0f131c
     private let mapCanvasBg = Color(red: 10/255, green: 14/255, blue: 22/255)             // #0a0e16
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255)  // #0a0e16
@@ -77,6 +69,8 @@ struct InteractiveMapView: View {
     @State private var navigateToHome: Bool = false
     @State private var navigateToItinerary: Bool = false
     @State private var navigateToPlaceDiscovery: Bool = false
+    @State private var navigateToBudget: Bool = false
+    @State private var navigateToProfile: Bool = false
     @State private var showDirectionsSheet: Bool = false
     @State private var mapZoomLevel: CGFloat = 1.0
     
@@ -117,6 +111,10 @@ struct InteractiveMapView: View {
                     dismiss()
                 } else if tab == .itinerary {
                     navigateToItinerary = true
+                } else if tab == .budget {
+                    navigateToBudget = true
+                } else if tab == .profile {
+                    navigateToProfile = true
                 }
             }
             .padding(.horizontal, 20)
@@ -129,6 +127,12 @@ struct InteractiveMapView: View {
         }
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
+        }
+        .navigationDestination(isPresented: $navigateToBudget) {
+            BudgetExpensesView()
+        }
+        .navigationDestination(isPresented: $navigateToProfile) {
+            SettingsProfileView()
         }
         .overlay(alignment: .top) {
             if let toast = toastMessage {

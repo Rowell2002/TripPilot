@@ -1,11 +1,3 @@
-//
-//  DailyItineraryView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: a156ef00d4304ea1ba8677c957f33173
-//  Title: TripPilot - Daily Itinerary (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -24,8 +16,10 @@ struct DailyItineraryView: View {
     @State private var isFlightPulsing: Bool = false
     @State private var isAudioPlaying: Bool = true
     @State private var navigateToInteractiveMap: Bool = false
+    @State private var navigateToBudget: Bool = false
+    @State private var navigateToProfile: Bool = false
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 11/255, green: 15/255, blue: 23/255)       // #0b0f17
     private let surfaceContainerLowest = Color(red: 17/255, green: 24/255, blue: 39/255) // #111827
     private let surfaceContainerLow = Color(red: 22/255, green: 32/255, blue: 50/255)    // #162032
@@ -107,6 +101,10 @@ struct DailyItineraryView: View {
                     dismiss()
                 } else if tab == .map {
                     navigateToInteractiveMap = true
+                } else if tab == .budget {
+                    navigateToBudget = true
+                } else if tab == .profile {
+                    navigateToProfile = true
                 }
             }
             .padding(.horizontal, 20)
@@ -136,6 +134,12 @@ struct DailyItineraryView: View {
         }
         .navigationDestination(isPresented: $navigateToInteractiveMap) {
             InteractiveMapView()
+        }
+        .navigationDestination(isPresented: $navigateToBudget) {
+            BudgetExpensesView()
+        }
+        .navigationDestination(isPresented: $navigateToProfile) {
+            SettingsProfileView()
         }
         .overlay(alignment: .top) {
             if let notice = activeNotice {

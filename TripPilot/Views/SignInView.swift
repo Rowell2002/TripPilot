@@ -1,17 +1,10 @@
-//
-//  SignInView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: e9cd43944833403f875e23d488998c34
-//  Title: TripPilot - Sign In (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
 #endif
 
 struct SignInView: View {
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
@@ -19,7 +12,7 @@ struct SignInView: View {
     @State private var navigateToCreateAccount: Bool = false
     @State private var navigateToHome: Bool = false
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let containerLow = Color(red: 24/255, green: 28/255, blue: 36/255)         // #181c24
     private let containerHigh = Color(red: 38/255, green: 42/255, blue: 51/255)        // #262a33
@@ -116,7 +109,12 @@ struct SignInView: View {
                     VStack(spacing: 12) {
                         // Apple Sign In Button
                         Button(action: {
-                            navigateToHome = true
+                            Task {
+                                await authViewModel.signInWithApple()
+                                if authViewModel.isAuthenticated {
+                                    navigateToHome = true
+                                }
+                            }
                         }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "apple.logo")
@@ -131,10 +129,16 @@ struct SignInView: View {
                             .clipShape(Capsule())
                             .shadow(color: Color.white.opacity(0.15), radius: 6, y: 2)
                         }
+                        .disabled(authViewModel.isLoading)
                         
                         // Google Sign In Button
                         Button(action: {
-                            navigateToHome = true
+                            Task {
+                                await authViewModel.signInWithGoogle()
+                                if authViewModel.isAuthenticated {
+                                    navigateToHome = true
+                                }
+                            }
                         }) {
                             HStack(spacing: 10) {
                                 Image(systemName: "g.circle.fill")
@@ -153,6 +157,7 @@ struct SignInView: View {
                                     .stroke(Color.white.opacity(0.1), lineWidth: 1)
                             )
                         }
+                        .disabled(authViewModel.isLoading)
                     }
                     .padding(.horizontal, 20)
                     
@@ -393,6 +398,30 @@ struct SignInView: View {
         }
         .navigationDestination(isPresented: $navigateToHome) {
             HomeDashboardView()
+        }
+        .overlay {
+            if authViewModel.isLoading {
+                ZStack {
+                    Color.black.opacity(0.4)
+                        .ignoresSafeArea()
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: primaryCyan))
+                            .scaleEffect(1.2)
+                        Text("Authenticating...")
+                            .font(.system(size: 13, weight: .medium, design: .rounded))
+                            .foregroundColor(.white)
+                    }
+                    .padding(24)
+                    .background(containerLow)
+                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                }
+            }
+        }
+        .alert("Authentication Error", isPresented: $authViewModel.showErrorAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(authViewModel.errorMessage ?? "An unknown authentication error occurred.")
         }
         .preferredColorScheme(.dark)
     }

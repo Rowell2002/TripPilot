@@ -1,11 +1,3 @@
-//
-//  PastJourneysView.swift
-//  TripPilot
-//
-//  Generated from Stitch Screen: 294b4de162394d7595302169ee012048
-//  Title: TripPilot - Past Journeys (Dark Mode)
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit
@@ -23,8 +15,11 @@ struct PastJourneysView: View {
     @State private var selectedStoryTitle: String = ""
     @State private var navigateToDailyItinerary: Bool = false
     @State private var navigateToInteractiveMap: Bool = false
+    @State private var navigateToBudget: Bool = false
+    @State private var navigateToProfile: Bool = false
+    @State private var navigateToAnalytics: Bool = false
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255) // #0a0e16
     private let surfaceContainerLow = Color(red: 24/255, green: 28/255, blue: 36/255)  // #181c24
@@ -114,6 +109,10 @@ struct PastJourneysView: View {
                     navigateToDailyItinerary = true
                 } else if tab == .map {
                     navigateToInteractiveMap = true
+                } else if tab == .budget {
+                    navigateToBudget = true
+                } else if tab == .profile {
+                    navigateToProfile = true
                 }
             }
             .padding(.horizontal, 20)
@@ -124,6 +123,15 @@ struct PastJourneysView: View {
         }
         .navigationDestination(isPresented: $navigateToInteractiveMap) {
             InteractiveMapView()
+        }
+        .navigationDestination(isPresented: $navigateToBudget) {
+            BudgetExpensesView()
+        }
+        .navigationDestination(isPresented: $navigateToProfile) {
+            SettingsProfileView()
+        }
+        .navigationDestination(isPresented: $navigateToAnalytics) {
+            TravelAnalyticsMilestonesView()
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
@@ -468,7 +476,8 @@ struct PastJourneysView: View {
                 Spacer()
                 
                 Button(action: {
-                    showPassportSheet = true
+                    triggerNotice("Loading Travel Analytics & Milestones...")
+                    navigateToAnalytics = true
                 }) {
                     HStack(spacing: 4) {
                         Text("View Passport & Badges")
@@ -489,6 +498,11 @@ struct PastJourneysView: View {
                 .stroke(outlineVariant, lineWidth: 1)
         )
         .shadow(color: Color.black.opacity(0.4), radius: 12, y: 4)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            triggerNotice("Loading Travel Analytics & Milestones...")
+            navigateToAnalytics = true
+        }
     }
     
     private func passportStatBlock(value: String, label: String) -> some View {

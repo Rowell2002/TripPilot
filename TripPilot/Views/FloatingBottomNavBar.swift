@@ -1,10 +1,3 @@
-//
-//  FloatingBottomNavBar.swift
-//  TripPilot
-//
-//  Reusable Floating Glassmorphic Bottom Navigation Bar
-//
-
 import SwiftUI
 
 enum AppTab: String, CaseIterable, Identifiable {
@@ -33,7 +26,7 @@ struct FloatingBottomNavBar: View {
     @Binding var selectedTab: AppTab
     var onTabSelected: ((AppTab) -> Void)? = nil
     
-    // Stitch Theme Colors
+    // Theme Colors
     private let skyBlue = Color(red: 56/255, green: 189/255, blue: 248/255)
     private let textMuted = Color(red: 135/255, green: 146/255, blue: 154/255)
     private let surfaceBackground = Color(red: 10/255, green: 14/255, blue: 22/255)
