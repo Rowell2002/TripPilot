@@ -1,4 +1,5 @@
 import SwiftUI
+import PDFKit
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -57,6 +58,9 @@ struct TravelAnalyticsMilestonesView: View {
     @State private var showExportSheet: Bool = false
     @State private var showAllBadgesSheet: Bool = false
     @State private var feedbackNotice: String? = nil
+    @State private var exportedPDFURL: URL? = nil
+    @State private var showShareSheet: Bool = false
+    @State private var generatedPDFData: Data? = nil
     
     // Bottom Tab Bar State
     @State private var selectedTab: AppTab = .profile
@@ -1088,12 +1092,17 @@ struct TravelAnalyticsMilestonesView: View {
         ZStack {
             darkBackground.ignoresSafeArea()
             
-            VStack(spacing: 20) {
+            VStack(spacing: 16) {
                 // Header
                 HStack {
-                    Text("Export Travel Passport")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(textOnSurface)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Travel Passport (PDF)")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(textOnSurface)
+                        Text("Live PDFKit Preview • ICAO 9303 Compliance")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(primarySky)
+                    }
                     
                     Spacer()
                     
@@ -1103,65 +1112,73 @@ struct TravelAnalyticsMilestonesView: View {
                     .font(.system(size: 14, weight: .bold))
                     .foregroundColor(primarySky)
                 }
-                .padding(.top, 24)
+                .padding(.top, 20)
                 .padding(.horizontal, 20)
                 
-                // Passport Preview Document Card
-                VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("OFFICIAL TRAVEL DOSSIER")
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(primarySky)
-                            
-                            Text("Elena Vance • 2024 Review")
-                                .font(.system(size: 16, weight: .bold, design: .rounded))
-                                .foregroundColor(textOnSurface)
-                        }
-                        
-                        Spacer()
-                        
-                        Image(systemName: "doc.text.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(primarySky)
+                // Live PDFKit Document Preview
+                if let pdfData = generatedPDFData {
+                    PDFKitRepresentedView(data: pdfData)
+                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 16, style: .continuous)
+                                .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                        )
+                        .shadow(color: Color.black.opacity(0.4), radius: 14, y: 6)
+                        .padding(.horizontal, 20)
+                } else {
+                    VStack(spacing: 12) {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: primarySky))
+                        Text("Rendering Vector PDF...")
+                            .font(.system(size: 12, weight: .medium, design: .rounded))
+                            .foregroundColor(textMuted)
                     }
-                    
-                    Divider().background(Color.white.opacity(0.1))
-                    
-                    VStack(alignment: .leading, spacing: 8) {
-                        Text("• 18 Countries Verified (ICAO 9303 Compliance)")
-                        Text("• 128,450 km Flown Across 8 Global Itineraries")
-                        Text("• Gold Standard Carbon Offset Verified: 100%")
-                        Text("• 24 Unlocked Milestone Badges Included")
-                    }
-                    .font(.system(size: 12, weight: .medium, design: .rounded))
-                    .foregroundColor(textVariant)
-                    
-                    Spacer().frame(height: 10)
-                    
-                    Button(action: {
-                        triggerHapticFeedback()
-                        showExportSheet = false
-                        showToast("Passport PDF exported to Files")
-                    }) {
-                        Text("Save PDF to Files / Share")
-                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(red: 0/255, green: 30/255, blue: 44/255))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 44)
-                            .background(primarySky)
-                            .clipShape(Capsule())
-                    }
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
-                .padding(20)
-                .background(surfaceContainer)
-                .clipShape(RoundedRectangle(cornerRadius: 20))
-                .padding(.horizontal, 20)
                 
-                Spacer()
+                // Export CTA Button
+                Button(action: {
+                    triggerHapticFeedback()
+                    if let url = PassportPDFGenerator.shared.exportTemporaryPDF() {
+                        exportedPDFURL = url
+                        showShareSheet = true
+                    }
+                }) {
+                    HStack(spacing: 8) {
+                        Image(systemName: "square.and.arrow.up.fill")
+                            .font(.system(size: 15, weight: .bold))
+                        Text("Save PDF to Files / Share")
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(Color(red: 0/255, green: 30/255, blue: 44/255))
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 50)
+                    .background(
+                        LinearGradient(
+                            colors: [primarySky, Color(red: 2/255, green: 132/255, blue: 199/255)],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        )
+                    )
+                    .clipShape(Capsule())
+                    .shadow(color: primarySky.opacity(0.35), radius: 10, y: 4)
+                }
+                .padding(.horizontal, 20)
+                .padding(.bottom, 16)
             }
         }
-        .presentationDetents([.medium, .large])
+        .onAppear {
+            if generatedPDFData == nil {
+                generatedPDFData = PassportPDFGenerator.shared.generatePDF()
+            }
+        }
+        .sheet(isPresented: $showShareSheet) {
+            if let url = exportedPDFURL {
+                ShareSheet(items: [url]) {
+                    showToast("Passport PDF saved successfully!")
+                }
+            }
+        }
     }
     
     private var allBadgesModalView: some View {
