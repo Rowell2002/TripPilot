@@ -1325,6 +1325,13 @@ struct LogExpenseSheet: View {
     
     private let categories = ["Dining", "Transit", "Culture", "Lodging", "Shopping"]
     
+    private var isFormValid: Bool {
+        guard let amount = Double(amountText.replacingOccurrences(of: ",", with: ".")), amount > 0 else {
+            return false
+        }
+        return !merchantName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+    }
+    
     var body: some View {
         NavigationStack {
             ZStack {
@@ -1422,8 +1429,13 @@ struct LogExpenseSheet: View {
                         
                         // Save Button
                         Button(action: {
-                            let amount = Double(amountText) ?? 24.50
-                            let title = merchantName.isEmpty ? "Tokyo Cafe & Dining" : merchantName
+                            guard let amount = Double(amountText.replacingOccurrences(of: ",", with: ".")), amount > 0 else { return }
+                            let title = merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
+                            guard !title.isEmpty else { return }
+                            
+                            let amountUSD = isUSD ? amount : (amount / 152.40)
+                            let amountJPY = isUSD ? Int(amount * 152.40) : Int(amount)
+                            
                             let newExp = ExpenseTransaction(
                                 title: title,
                                 subtitle: "Logged in Tokyo",
@@ -1432,8 +1444,8 @@ struct LogExpenseSheet: View {
                                 iconName: "fork.knife",
                                 timeAgo: "Just now",
                                 location: location,
-                                amountUSD: amount,
-                                amountJPY: Int(amount * 152.40)
+                                amountUSD: amountUSD,
+                                amountJPY: amountJPY
                             )
                             onSave(newExp)
                             dismiss()
@@ -1444,15 +1456,22 @@ struct LogExpenseSheet: View {
                                 .frame(maxWidth: .infinity)
                                 .frame(height: 52)
                                 .background(
+                                    isFormValid ?
                                     LinearGradient(
                                         colors: [Color(red: 2/255, green: 132/255, blue: 199/255), Color(red: 56/255, green: 189/255, blue: 248/255)],
+                                        startPoint: .leading,
+                                        endPoint: .trailing
+                                    ) :
+                                    LinearGradient(
+                                        colors: [Color.gray.opacity(0.3), Color.gray.opacity(0.3)],
                                         startPoint: .leading,
                                         endPoint: .trailing
                                     )
                                 )
                                 .clipShape(Capsule())
-                                .shadow(color: Color(red: 56/255, green: 189/255, blue: 248/255).opacity(0.35), radius: 10, y: 4)
+                                .shadow(color: isFormValid ? Color(red: 56/255, green: 189/255, blue: 248/255).opacity(0.35) : .clear, radius: 10, y: 4)
                         }
+                        .disabled(!isFormValid)
                         .padding(.top, 10)
                     }
                     .padding(20)

@@ -151,8 +151,13 @@ struct ReceiptScannerExpenseLoggerView: View {
         .alert("Edit Merchant Name", isPresented: $isEditingMerchant) {
             TextField("Merchant", text: $newMerchantInput)
             Button("Save") {
-                merchantName = newMerchantInput
-                showToast("Merchant updated")
+                let trimmed = newMerchantInput.trimmingCharacters(in: .whitespacesAndNewlines)
+                if !trimmed.isEmpty {
+                    merchantName = trimmed
+                    showToast("Merchant updated")
+                } else {
+                    showToast("Merchant name cannot be blank")
+                }
             }
             Button("Cancel", role: .cancel) { }
         }

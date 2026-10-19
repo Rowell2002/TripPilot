@@ -7,6 +7,7 @@ import Foundation
 import UIKit
 import CryptoKit
 import AuthenticationServices
+import FirebaseCore
 import FirebaseAuth
 import GoogleSignIn
 
@@ -26,7 +27,7 @@ public final class AuthenticationService: NSObject {
     @MainActor
     public func signInWithApple() async throws -> AuthDataResult {
         guard let windowScene = UIApplication.shared.connectedScenes.first as? UIWindowScene,
-              let rootViewController = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController else {
+              let _ = windowScene.windows.first(where: { $0.isKeyWindow })?.rootViewController else {
             throw NSError(domain: "AuthenticationService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to find key window root view controller"])
         }
         
@@ -57,16 +58,49 @@ public final class AuthenticationService: NSObject {
             throw NSError(domain: "AuthenticationService", code: -1, userInfo: [NSLocalizedDescriptionKey: "Unable to find key window root view controller"])
         }
         
+        // Ensure GIDSignIn has clientID configured before presenting
+        if GIDSignIn.sharedInstance.configuration == nil {
+            if let clientID = FirebaseApp.app()?.options.clientID {
+                GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
+            } else if let path = Bundle.main.path(forResource: "GoogleService-Info", ofType: "plist"),
+                      let plist = NSDictionary(contentsOfFile: path),
+                      let clientID = plist["CLIENT_ID"] as? String {
+                GIDSignIn.sharedInstance.configuration = GIDConfiguration(clientID: clientID)
+            } else {
+                throw NSError(domain: "AuthenticationService", code: -2, userInfo: [NSLocalizedDescriptionKey: "Google Client ID not found. Please ensure GoogleService-Info.plist has CLIENT_ID."])
+            }
+        }
+        
         let signInResult = try await GIDSignIn.sharedInstance.signIn(withPresenting: rootViewController)
         
         guard let idToken = signInResult.user.idToken?.tokenString else {
-            throw NSError(domain: "AuthenticationService", code: -2, userInfo: [NSLocalizedDescriptionKey: "Google Sign-In failed to retrieve ID token."])
+            throw NSError(domain: "AuthenticationService", code: -3, userInfo: [NSLocalizedDescriptionKey: "Google Sign-In failed to retrieve ID token."])
         }
         
         let accessToken = signInResult.user.accessToken.tokenString
         let credential = GoogleAuthProvider.credential(withIDToken: idToken, accessToken: accessToken)
         
         return try await Auth.auth().signIn(with: credential)
+    }
+    
+    // MARK: - Email & Password Authentication
+    
+    public func signInWithEmail(email: String, password: String) async throws -> AuthDataResult {
+        return try await Auth.auth().signIn(withEmail: email, password: password)
+    }
+    
+    public func createUserWithEmail(email: String, password: String, fullName: String) async throws -> AuthDataResult {
+        let authResult = try await Auth.auth().createUser(withEmail: email, password: password)
+        if !fullName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            let changeRequest = authResult.user.createProfileChangeRequest()
+            changeRequest.displayName = fullName.trimmingCharacters(in: .whitespacesAndNewlines)
+            try await changeRequest.commitChanges()
+        }
+        return authResult
+    }
+    
+    public func sendPasswordReset(email: String) async throws {
+        try await Auth.auth().sendPasswordReset(withEmail: email)
     }
     
     // MARK: - Sign Out
