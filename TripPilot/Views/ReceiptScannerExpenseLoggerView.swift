@@ -52,10 +52,10 @@ struct ReceiptScannerExpenseLoggerView: View {
     @State private var selectedCategory: ExpenseCategoryOption = .dining
     @State private var isSplitEnabled: Bool = true
     @State private var isAutoHoldActive: Bool = true
-    @State private var merchantName: String = "Sushi Yoshitake Ginza"
-    @State private var expenseNotes: String = "Omakase celebratory dinner with Marcus • counter seats"
+    @State private var merchantName: String = "Ministry of Crab Colombo"
+    @State private var expenseNotes: String = "Fresh Sri Lankan lagoon crab dinner with Marcus • Dutch Hospital"
     @State private var isEditingMerchant: Bool = false
-    @State private var newMerchantInput: String = "Sushi Yoshitake Ginza"
+    @State private var newMerchantInput: String = "Ministry of Crab Colombo"
     @State private var isSaved: Bool = false
     @State private var feedbackBannerText: String? = nil
     
@@ -100,8 +100,8 @@ struct ReceiptScannerExpenseLoggerView: View {
                     // MARK: - 4. Split with Travelers Card
                     splitWithTravelersCard
                     
-                    // MARK: - 5. Japan Tax-Free Eligible Card
-                    japanTaxFreeCard
+                    // MARK: - 5. Tourist VAT Refund Card
+                    touristVatRefundCard
                     
                     // MARK: - 6. Trip Notes Card
                     tripNotesCard
@@ -252,7 +252,7 @@ struct ReceiptScannerExpenseLoggerView: View {
             Text("•")
                 .foregroundColor(outlineVariant)
             
-            Text("Autumn in Japan")
+            Text("Sri Lanka Island Tour 🇱🇰")
                 .font(.system(size: 12, weight: .medium, design: .rounded))
                 .foregroundColor(textVariant)
                 .lineLimit(1)
@@ -286,7 +286,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                 .fill(surfaceContainerLowest)
                 .aspectRatio(4/3, contentMode: .fit)
                 .overlay(
-                    // Simulated Japanese Restaurant Receipt Pattern
+                    // Simulated Sri Lankan Restaurant Receipt Pattern
                     ZStack {
                         // Subtle Paper Receipt simulation
                         RoundedRectangle(cornerRadius: 16)
@@ -304,42 +304,42 @@ struct ReceiptScannerExpenseLoggerView: View {
                             .overlay(
                                 VStack(alignment: .leading, spacing: 6) {
                                     HStack {
-                                        Text("すきやばし 次郎 銀座店")
+                                        Text("MINISTRY OF CRAB • COLOMBO")
                                             .font(.system(size: 13, weight: .bold, design: .monospaced))
                                             .foregroundColor(.white.opacity(0.45))
                                         Spacer()
-                                        Text("領収証 No. 8832")
+                                        Text("RECEIPT #LK-8832")
                                             .font(.system(size: 10, weight: .medium, design: .monospaced))
                                             .foregroundColor(.white.opacity(0.35))
                                     }
                                     Divider().background(Color.white.opacity(0.1))
                                     
                                     HStack {
-                                        Text("おまかせコース (2名)")
+                                        Text("Colossal Chili Crab & Bread")
                                             .font(.system(size: 11, weight: .regular, design: .monospaced))
                                             .foregroundColor(.white.opacity(0.4))
                                         Spacer()
-                                        Text("¥32,728")
+                                        Text("Rs. 26,000")
                                             .font(.system(size: 11, weight: .medium, design: .monospaced))
                                             .foregroundColor(.white.opacity(0.4))
                                     }
                                     
                                     HStack {
-                                        Text("消費税 10% 対象")
+                                        Text("VAT & Service Charge (10%)")
                                             .font(.system(size: 10, weight: .regular, design: .monospaced))
                                             .foregroundColor(.white.opacity(0.3))
                                         Spacer()
-                                        Text("¥3,272")
+                                        Text("Rs. 2,975")
                                             .font(.system(size: 10, weight: .medium, design: .monospaced))
                                             .foregroundColor(.white.opacity(0.3))
                                     }
                                     
                                     HStack {
-                                        Text("合計 (税込)")
+                                        Text("TOTAL AMOUNT (LKR)")
                                             .font(.system(size: 12, weight: .bold, design: .monospaced))
                                             .foregroundColor(primaryTint.opacity(0.75))
                                         Spacer()
-                                        Text("¥36,000")
+                                        Text("Rs. 28,975")
                                             .font(.system(size: 13, weight: .bold, design: .monospaced))
                                             .foregroundColor(primaryTint.opacity(0.85))
                                     }
@@ -434,11 +434,11 @@ struct ReceiptScannerExpenseLoggerView: View {
                             .foregroundColor(textOnSurface)
                     }
                     
-                    Text("¥36,000 Total")
+                    Text("Rs. 28,975 Total")
                         .font(.system(size: 20, weight: .heavy, design: .rounded))
                         .foregroundColor(textOnSurface)
                     
-                    Text("Tax 10% (¥3,272) Included • Cash")
+                    Text("Tax & Service Charge Included • Card")
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundColor(textVariant)
                 }
@@ -561,7 +561,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                     }
                     
                     HStack(alignment: .firstTextBaseline, spacing: 6) {
-                        Text("$236.22")
+                        Text("$95.00")
                             .font(.system(size: 34, weight: .heavy, design: .rounded))
                             .foregroundColor(primarySky)
                         
@@ -570,7 +570,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                             .foregroundColor(textVariant)
                     }
                     
-                    Text("Equivalent to **¥36,000 JPY** at spot rate")
+                    Text("Equivalent to **Rs. 28,975 LKR** at spot rate")
                         .font(.system(size: 12, weight: .regular, design: .rounded))
                         .foregroundColor(textVariant)
                 }
@@ -583,7 +583,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundColor(textVariant)
                     
-                    Text("1$ = 152.40¥")
+                    Text("1$ = 305.00 Rs.")
                         .font(.system(size: 12, weight: .bold, design: .monospaced))
                         .foregroundColor(secondaryMint)
                 }
@@ -711,7 +711,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Text("Day 3 • Tokyo")
+                        Text("Day 1 • Colombo")
                             .font(.system(size: 11, weight: .bold, design: .rounded))
                             .foregroundColor(primarySky)
                     }
@@ -829,11 +829,11 @@ struct ReceiptScannerExpenseLoggerView: View {
                         Spacer()
                         
                         VStack(alignment: .trailing, spacing: 2) {
-                            Text("$118.11")
+                            Text("$47.50")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
                                 .foregroundColor(textOnSurface)
                             
-                            Text("¥18,000")
+                            Text("Rs. 14,487")
                                 .font(.system(size: 11, weight: .medium, design: .monospaced))
                                 .foregroundColor(textVariant)
                         }
@@ -891,11 +891,11 @@ struct ReceiptScannerExpenseLoggerView: View {
                         Spacer()
                         
                         VStack(alignment: .trailing, spacing: 2) {
-                            Text("+$118.11")
+                            Text("+$47.50")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
                                 .foregroundColor(secondaryMint)
                             
-                            Text("¥18,000")
+                            Text("Rs. 14,487")
                                 .font(.system(size: 11, weight: .medium, design: .monospaced))
                                 .foregroundColor(textVariant)
                         }
@@ -975,8 +975,8 @@ struct ReceiptScannerExpenseLoggerView: View {
         )
     }
     
-    // MARK: - 6. Japan Tax-Free Eligible Card
-    private var japanTaxFreeCard: some View {
+    // MARK: - 6. Tourist VAT Refund Card
+    private var touristVatRefundCard: some View {
         HStack(spacing: 12) {
             ZStack {
                 Circle()
@@ -990,11 +990,11 @@ struct ReceiptScannerExpenseLoggerView: View {
             
             VStack(alignment: .leading, spacing: 3) {
                 HStack(spacing: 6) {
-                    Text("Japan Tax-Free Eligible")
+                    Text("Tourist VAT Refund Eligible 🇱🇰")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(textOnSurface)
                     
-                    Text("10% SAVE")
+                    Text("15% SAVE")
                         .font(.system(size: 10, weight: .heavy, design: .rounded))
                         .foregroundColor(secondaryMint)
                         .padding(.horizontal, 6)
@@ -1003,7 +1003,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                 }
                 
-                Text("QR export ready for Haneda Airport customs scan")
+                Text("QR export ready for Colombo BIA Airport customs counter")
                     .font(.system(size: 11, weight: .regular, design: .rounded))
                     .foregroundColor(textVariant)
                     .lineLimit(1)
@@ -1107,7 +1107,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                     .font(.system(size: 11, weight: .bold))
                     .foregroundColor(secondaryMint)
                 
-                Text("Auto-synced with Autumn in Japan ledger • Ledger ID #JP-994")
+                Text("Auto-synced with Sri Lanka Island Tour ledger • Ledger ID #LK-994")
                     .font(.system(size: 10, weight: .medium, design: .rounded))
                     .foregroundColor(textVariant)
                     .lineLimit(1)

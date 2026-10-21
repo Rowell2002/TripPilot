@@ -18,6 +18,7 @@ struct MyTripsHubView: View {
     @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToBudget: Bool = false
     @State private var navigateToProfile: Bool = false
+    @ObservedObject private var tripManager = TripManager.shared
     
     init(selectedSegment: TripSegment = .activeAndUpcoming) {
         self._selectedSegment = State(initialValue: selectedSegment)
@@ -480,7 +481,7 @@ struct MyTripsHubView: View {
                     .tracking(1.0)
             }
             
-            // Hero Card: Autumn in Japan
+            // Hero Card: Active Sri Lanka Expedition
             VStack(spacing: 0) {
                 // Image Header with Scrim
                 ZStack(alignment: .bottomLeading) {
@@ -543,7 +544,7 @@ struct MyTripsHubView: View {
                                 Image(systemName: "cloud.sun.fill")
                                     .font(.system(size: 12))
                                     .foregroundColor(skyBlue)
-                                Text("18°C Kyoto")
+                                Text("29°C Colombo")
                                     .font(.system(size: 11, weight: .semibold, design: .rounded))
                                     .foregroundColor(.white)
                             }
@@ -563,12 +564,12 @@ struct MyTripsHubView: View {
                     
                     // Destination Headline
                     VStack(alignment: .leading, spacing: 3) {
-                        Text("EAST ASIA • GRAND TOUR")
+                        Text("SRI LANKA • GRAND EXPEDITION")
                             .font(.system(size: 10.5, weight: .bold, design: .rounded))
                             .foregroundColor(skyBlue)
                             .tracking(0.8)
                         
-                        Text("Autumn in Japan 🍁")
+                        Text(tripManager.currentTrip.title.isEmpty ? "Ceylon Heritage & Wildlife 🇱🇰" : tripManager.currentTrip.title)
                             .font(.system(size: 22, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                         
@@ -576,7 +577,7 @@ struct MyTripsHubView: View {
                             Image(systemName: "location.fill")
                                 .font(.system(size: 12))
                                 .foregroundColor(skyBlue)
-                            Text("Tokyo, Hakone & Kyoto")
+                            Text(tripManager.currentTrip.destination.isEmpty ? "Sigiriya, Kandy & Ella" : tripManager.currentTrip.destination)
                                 .font(.system(size: 12, weight: .medium))
                                 .foregroundColor(Color(white: 0.75))
                         }
@@ -588,9 +589,9 @@ struct MyTripsHubView: View {
                 // Key Stats Ribbon (3 columns)
                 VStack(spacing: 12) {
                     HStack(spacing: 8) {
-                        statRibbonColumn(icon: "map.fill", iconColor: skyBlue, value: "14", label: "STOPS PLANNED")
+                        statRibbonColumn(icon: "map.fill", iconColor: skyBlue, value: "\(tripManager.currentTrip.days.reduce(0) { $0 + $1.stops.count })", label: "STOPS PLANNED")
                         statRibbonColumn(icon: "dollarsign.circle.fill", iconColor: primaryCyan, value: "$2,319", label: "BUDGET LEFT")
-                        statRibbonColumn(icon: "person.2.fill", iconColor: Color(red: 175/255, green: 207/255, blue: 255/255), value: "3", label: "COMPANIONS")
+                        statRibbonColumn(icon: "person.2.fill", iconColor: Color(red: 175/255, green: 207/255, blue: 255/255), value: "\(tripManager.currentTrip.companion.capitalized)", label: "TRAVELER")
                     }
                     
                     // Current Up-Next Micro Card
@@ -604,18 +605,18 @@ struct MyTripsHubView: View {
                                         .stroke(skyBlue.opacity(0.4), lineWidth: 1)
                                 )
                             
-                            Image(systemName: "tram.fill")
+                            Image(systemName: "ticket.fill")
                                 .font(.system(size: 16))
                                 .foregroundColor(skyBlue)
                         }
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("NEXT UP • 14:10")
+                            Text("NEXT UP • 08:30")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
                                 .foregroundColor(skyBlue)
                                 .tracking(0.5)
                             
-                            Text("Shinkansen Nozomi 311 to Kyoto")
+                            Text(tripManager.currentTrip.days.first?.stops.first?.title ?? "Sigiriya UNESCO Ancient Citadel")
                                 .font(.system(size: 13, weight: .semibold, design: .rounded))
                                 .foregroundColor(.white)
                                 .lineLimit(1)
@@ -623,7 +624,7 @@ struct MyTripsHubView: View {
                         
                         Spacer()
                         
-                        Text("Car 7 • Seat 14A")
+                        Text("Pass LK-SIG-9082")
                             .font(.system(size: 10.5, weight: .bold, design: .rounded))
                             .foregroundColor(Color(red: 123/255, green: 208/255, blue: 255/255))
                             .padding(.horizontal, 8)
@@ -663,7 +664,7 @@ struct MyTripsHubView: View {
                         }
                         
                         Button(action: {
-                            triggerNotice("🗺️ Opening Live Interactive Map of Tokyo & Kyoto")
+                            triggerNotice("🗺️ Opening Live Interactive Map of Sri Lanka")
                         }) {
                             HStack(spacing: 5) {
                                 Image(systemName: "location.north.circle.fill")
@@ -806,7 +807,7 @@ struct MyTripsHubView: View {
                 // Trip Details
                 VStack(alignment: .leading, spacing: 4) {
                     HStack {
-                        Text("Amalfi & Capri 🍋")
+                        Text("Galle Fort & Surf Coast 🌊")
                             .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundColor(textOnSurface)
                             .lineLimit(1)
@@ -835,7 +836,7 @@ struct MyTripsHubView: View {
                             Image(systemName: "airplane")
                                 .font(.system(size: 9))
                                 .foregroundColor(skyBlue)
-                            Text("ITA Airways")
+                            Text("SriLankan UL 504")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                                 .foregroundColor(textOnSurface)
                         }
@@ -848,7 +849,7 @@ struct MyTripsHubView: View {
                             Image(systemName: "bed.double.fill")
                                 .font(.system(size: 9))
                                 .foregroundColor(primaryCyan)
-                            Text("4 Stays")
+                            Text("4 Heritage Villas")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                                 .foregroundColor(textOnSurface)
                         }
@@ -943,7 +944,7 @@ struct MyTripsHubView: View {
             // Details
             VStack(alignment: .leading, spacing: 4) {
                 HStack {
-                    Text("Swiss Alps Escape ❄️")
+                    Text("Highland Tea Country & Waterfalls 🍃")
                         .font(.system(size: 15, weight: .bold, design: .rounded))
                         .foregroundColor(textOnSurface)
                         .lineLimit(1)
@@ -972,7 +973,7 @@ struct MyTripsHubView: View {
                         Image(systemName: "checkmark")
                             .font(.system(size: 9, weight: .bold))
                             .foregroundColor(primaryCyan)
-                        Text("Zermatt Ski Pass linked")
+                        Text("Nine Arches Blue Train linked")
                             .font(.system(size: 11))
                             .foregroundColor(textOnSurface)
                     }
@@ -981,7 +982,7 @@ struct MyTripsHubView: View {
                         Image(systemName: "clock.fill")
                             .font(.system(size: 9))
                             .foregroundColor(skyBlue)
-                        Text("Glacier Express pending")
+                        Text("Pedro Tea Estate tasting pending")
                             .font(.system(size: 11))
                             .foregroundColor(textMuted)
                     }
@@ -1217,7 +1218,7 @@ struct MyTripsHubView: View {
             
             VStack(spacing: 20) {
                 HStack {
-                    Text("Autumn in Japan 🍁 Itinerary")
+                    Text("\(tripManager.currentTrip.title.isEmpty ? "Sri Lanka Expedition" : tripManager.currentTrip.title) Itinerary")
                         .font(.system(size: 17, weight: .bold, design: .rounded))
                         .foregroundColor(textOnSurface)
                     
@@ -1234,15 +1235,15 @@ struct MyTripsHubView: View {
                 
                 ScrollView {
                     VStack(alignment: .leading, spacing: 12) {
-                        Text("Day 3 • Tokyo → Kyoto")
+                        Text("Day 1 • Colombo → Sigiriya")
                             .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundColor(primaryCyan)
                         
                         VStack(spacing: 8) {
-                            itineraryRow(time: "10:30", title: "Flight JL 006 (SFO → HND)", status: "Completed")
-                            itineraryRow(time: "14:10", title: "Shinkansen Nozomi 311 to Kyoto", status: "Boarding")
-                            itineraryRow(time: "17:00", title: "Check-in at Hoshinoya Kyoto", status: "Confirmed")
-                            itineraryRow(time: "19:30", title: "Gion Kaiseki Dinner Reservation", status: "Confirmed")
+                            itineraryRow(time: "08:30", title: "Flight UL 504 Arrive CMB Colombo", status: "Completed")
+                            itineraryRow(time: "11:30", title: "Central Expressway to Sigiriya", status: "In Transit")
+                            itineraryRow(time: "15:00", title: "Check-in at Heritance Kandalama", status: "Confirmed")
+                            itineraryRow(time: "16:30", title: "Sigiriya Rock Fortress Sunset Tour", status: "Scheduled")
                         }
                     }
                     .padding(.horizontal, 20)

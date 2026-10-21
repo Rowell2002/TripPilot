@@ -19,21 +19,21 @@ public struct PassportPDFData {
     
     public static let standard = PassportPDFData(
         travelerName: "Elena Vance",
-        passportNumber: "TP-9824-ICAO",
+        passportNumber: "LK-9824-CEYLON",
         year: "2024",
-        countriesCount: 18,
-        distanceKm: "128,450 km",
+        countriesCount: 1,
+        distanceKm: "4,850 km",
         itinerariesCount: 8,
         carbonOffset: "100% Certified Offset",
         verifiedDestinations: [
-            "Japan (Tokyo, Kyoto, Osaka)",
-            "Switzerland (Zurich, Zermatt)",
-            "France (Paris, Provence)",
-            "Italy (Rome, Florence, Amalfi)",
-            "Sri Lanka (Colombo, Kandy, Galle)",
-            "Norway (Oslo, Tromsø)",
-            "Canada (Vancouver, Banff)",
-            "United Kingdom (London, Edinburgh)"
+            "Sigiriya Rock Fortress (UNESCO Citadel)",
+            "Kandy (Temple of the Sacred Tooth Relic)",
+            "Ella (Nine Arches Bridge & Tea Country)",
+            "Galle Fort (Dutch UNESCO Maritime Ramparts)",
+            "Yala National Park (Block 1 Leopard Safari)",
+            "Mirissa & Weligama (Blue Whales & Surf)",
+            "Nuwara Eliya (Pedro Ceylon Tea Estates)",
+            "Colombo (Pettah Heritage & Galle Face Green)"
         ],
         badgesUnlocked: 24
     )

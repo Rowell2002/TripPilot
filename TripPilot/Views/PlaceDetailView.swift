@@ -3,61 +3,58 @@ import SwiftUI
 import UIKit
 #endif
 
-// MARK: - Models
-struct HeroSlide: Identifiable {
-    let id: Int
-    let imageUrl: String
-    let caption: String
-}
-
+// MARK: - Models for Booking
 enum BookingDate: String, CaseIterable, Identifiable {
     case today = "Today"
     case tomorrow = "Tomorrow"
-    case sunday = "Sunday"
+    case upcoming = "In 2 Days"
     
     var id: String { rawValue }
     
     var dateString: String {
         switch self {
-        case .today: return "Oct 18"
-        case .tomorrow: return "Oct 19"
-        case .sunday: return "Oct 20"
+        case .today: return "Today"
+        case .tomorrow: return "Tomorrow"
+        case .upcoming: return "Day After"
         }
     }
     
     var statusText: String {
         switch self {
-        case .today: return "Sold Out"
+        case .today: return "Fast Track"
         case .tomorrow: return "Available"
-        case .sunday: return "Selling Fast"
+        case .upcoming: return "Optimal Flow"
         }
-    }
-    
-    var isSoldOut: Bool {
-        self == .today
     }
 }
 
 enum BookingTimeSlot: String, CaseIterable, Identifiable {
-    case slot1530 = "15:30"
-    case slot1700 = "17:00"
-    case slot1830 = "18:30"
-    case slot1945 = "19:45"
+    case morning = "07:30 AM"
+    case midDay = "10:00 AM"
+    case goldenHour = "03:30 PM"
+    case sunset = "05:15 PM"
     
     var id: String { rawValue }
     
     var tag: String {
         switch self {
-        case .slot1530: return "3 passes left"
-        case .slot1700: return "Sunset Special"
-        case .slot1830: return "Optimal flow"
-        case .slot1945: return "Night silence"
+        case .morning: return "Cool breeze"
+        case .midDay: return "Quiet slot"
+        case .goldenHour: return "Golden hour"
+        case .sunset: return "Sunset view"
         }
     }
 }
 
 struct PlaceDetailView: View {
     @Environment(\.dismiss) private var dismiss
+    
+    // Injected Sri Lanka place data
+    let place: SriLankaPlace
+    
+    init(place: SriLankaPlace = SriLankaDataService.shared.places[0]) {
+        self.place = place
+    }
     
     // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)            // #0f131c
@@ -69,6 +66,7 @@ struct PlaceDetailView: View {
     private let primaryCyan = Color(red: 142/255, green: 213/255, blue: 255/255)         // #8ed5ff
     private let primaryContainer = Color(red: 56/255, green: 189/255, blue: 248/255)    // #38bdf8
     private let secondaryMint = Color(red: 68/255, green: 226/255, blue: 205/255)       // #44e2cd
+    private let amberGold = Color(red: 251/255, green: 191/255, blue: 36/255)          // #fbbf24
     private let errorCoral = Color(red: 255/255, green: 180/255, blue: 171/255)         // #ffb4ab
     private let textOnSurface = Color(red: 255/255, green: 255/255, blue: 255/255)      // #ffffff
     private let textOnSurfaceVariant = Color(red: 148/255, green: 163/255, blue: 184/255) // #94a3b8
@@ -78,52 +76,45 @@ struct PlaceDetailView: View {
     // Interactive State
     @State private var currentSlide: Int = 0
     @State private var selectedDate: BookingDate = .tomorrow
-    @State private var selectedSlot: BookingTimeSlot = .slot1700
+    @State private var selectedSlot: BookingTimeSlot = .morning
     @State private var adultCount: Int = 2
-    @State private var youthCount: Int = 0
+    @State private var childCount: Int = 0
     @State private var includeAudioGuide: Bool = true
     @State private var isAddedToItinerary: Bool = false
     @State private var isBooked: Bool = false
     @State private var isBookingProcessing: Bool = false
     @State private var toastNotice: String? = nil
     @State private var show360PreviewModal: Bool = false
+    @State private var showCurrencyInLKR: Bool = false
     
-    // Price Constants
-    private let adultPrice: Double = 38.0
-    private let youthPrice: Double = 24.0
-    private let guidePrice: Double = 4.0
+    private var adultPriceUSD: Double {
+        Double(place.entranceFeeUSD)
+    }
     
-    private var totalPrice: Double {
-        let base = (Double(adultCount) * adultPrice) + (Double(youthCount) * youthPrice)
-        let guide = includeAudioGuide ? guidePrice : 0.0
+    private var childPriceUSD: Double {
+        Double(place.entranceFeeUSD) * 0.5
+    }
+    
+    private var guidePriceUSD: Double {
+        5.0
+    }
+    
+    private var totalPriceUSD: Double {
+        let base = (Double(adultCount) * adultPriceUSD) + (Double(childCount) * childPriceUSD)
+        let guide = includeAudioGuide ? guidePriceUSD : 0.0
         return base + guide
     }
     
-    private var ticketSummaryText: String {
-        let totalPasses = adultCount + youthCount
-        let passLabel = totalPasses == 1 ? "Pass" : "Passes"
-        let guideLabel = includeAudioGuide ? " + Guide" : ""
-        return "(\(totalPasses) \(passLabel)\(guideLabel))"
+    private var totalPriceLKR: Int {
+        Int(totalPriceUSD * 305)
     }
     
-    // Hero Slides Data
-    private let heroSlides: [HeroSlide] = [
-        HeroSlide(
-            id: 0,
-            imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDGOXwGg1nV_y2QI0DAPD29_mlK1_JjcunlrCGDx8PNbLu0qAdtJ3JkHkKuwudt97F0eqpVEOGfbD-6MgiMnkFFExTFlqkAKZ0xKf3ITgH6JG_7NF73S5_qlBf_O6NG-dg69H4cluvbjcOkBju3YxYPg_VAgn3tFcqJKwIVUJsVJFeGg6hiUQPvDSCBKdDTAu6KpTNEgrVPObDoEctn5vo9oZeBjYuA3wmQePAQw3vkoW5JQvED-pJlPA",
-            caption: "Cascading digital water falls & crystal refractions"
-        ),
-        HeroSlide(
-            id: 1,
-            imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuDPv2JsNk_xDLNB41can2LS2FznBhFI-I_MtFrlA5NTM1eWrNJNQk_oSifHmGy3fBS76FdzKPY1zXpZdIPlRlwbPxEIxPMcb1VTNWXxjiYIHAH4Zjv3SRQFsmIMSFenaOXmfXNhRhN2lUbKtteSna8QdQnJe9WgEFmjSH2Tty0VJK1BHNRUqZ0Xu6JvY9q0PdP_xZ4jUtGqzpZt3DXVqN-05pLW9AgQBPDuqcCy-JzAKiscI_Mquf82Qg",
-            caption: "Forest of Resonating Lamps infinity mirrors"
-        ),
-        HeroSlide(
-            id: 2,
-            imageUrl: "https://lh3.googleusercontent.com/aida-public/AB6AXuAtV_eNuDPP9Uj6mxytoEXKENrQfrBenvwwAZVPVXgmAhXI0RDYiN6iJQEhB6QRHwANjRMfai_rwH4R4lruhz6eggMJfu2JOpbU0xLZj2wL1oBiHBKWut-MXxo3I6NM8Vluz_4gsAbh9d9KLz04jpu_59tWZNARnBk9FUayk-fcqTZyvyTsss2bJcQLOr3GG9tzXxme-JIkAjvbPbWYtim7J4J3KblWKyfB-PY4iP26IBw28dXSUdgnhw",
-            caption: "EN TEA HOUSE blooming digital matcha tea"
-        )
-    ]
+    private var ticketSummaryText: String {
+        let totalPasses = adultCount + childCount
+        let passLabel = totalPasses == 1 ? "Visitor" : "Visitors"
+        let guideLabel = includeAudioGuide ? " + AI Guide" : ""
+        return "(\(totalPasses) \(passLabel)\(guideLabel))"
+    }
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -134,33 +125,32 @@ struct PlaceDetailView: View {
             // Scrollable Content
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 0) {
-                    // Spacer for top translucent header
-                    Spacer()
-                        .frame(height: 60)
+                    Spacer().frame(height: 60)
                     
-                    // MARK: - 1. Hero Experience Carousel
+                    // 1. Hero Experience Carousel
                     heroCarouselSection
                     
-                    // Content Sections in Card Layout
+                    // Content Sections
                     VStack(alignment: .leading, spacing: 20) {
-                        // MARK: - 2. Place Header & Status Badges
+                        // 2. Place Header & Status Badges
                         placeHeaderSection
                         
-                        // MARK: - 3. Visitor Intelligence Matrix
+                        // 3. Visitor Intelligence Matrix
                         visitorIntelligenceSection
                         
-                        // MARK: - 4. Editorial Overview & Highlight Chambers
+                        // 4. Experience Overview & Highlights
                         editorialExperienceSection
                         
-                        // MARK: - 5. Ticket & Booking Engine
+                        // 5. Authentic Reviews & Ratings
+                        reviewsSection
+                        
+                        // 6. Ticket & Heritage Pass Engine
                         ticketBookingSection
                         
-                        // MARK: - 6. Transit & Arrival Section
+                        // 7. Transit & Arrival Directions
                         transitArrivalSection
                         
-                        // Bottom buffer for sticky checkout bar
-                        Spacer()
-                            .frame(height: 120)
+                        Spacer().frame(height: 120)
                     }
                     .frame(width: UIScreen.main.bounds.width - 32, alignment: .leading)
                     .padding(.horizontal, 16)
@@ -169,26 +159,26 @@ struct PlaceDetailView: View {
                 .frame(width: UIScreen.main.bounds.width)
             }
             
-            // MARK: - Fixed Top Translucent Header
+            // Fixed Top Header
             VStack(spacing: 0) {
                 topHeaderBar
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
             
-            // MARK: - Sticky Instant Checkout Bar (Bottom)
+            // Sticky Instant Checkout Bar
             stickyCheckoutBar
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .preferredColorScheme(.dark)
-        .alert("360° LiDAR Spatial Preview", isPresented: $show360PreviewModal) {
-            Button("Launch Full VR", role: .none) {
-                triggerToast("Launching 360° LiDAR chamber preview...")
+        .alert("360° Island Panorama", isPresented: $show360PreviewModal) {
+            Button("Launch Full View", role: .none) {
+                triggerToast("Launching 360° LiDAR view for \(place.name)...")
             }
             Button("Dismiss", role: .cancel) { }
         } message: {
-            Text("Experience the Borderless Crystal Chamber in immersive spatial 3D audio and real-time ray-traced lighting.")
+            Text("Immerse yourself in aerial drone captures and spatial surround nature audio of \(place.name).")
         }
         .overlay(alignment: .top) {
             if let toast = toastNotice {
@@ -213,7 +203,6 @@ struct PlaceDetailView: View {
     // MARK: - Top Header Bar
     private var topHeaderBar: some View {
         HStack(spacing: 12) {
-            // Back Button
             Button(action: {
                 dismiss()
             }) {
@@ -225,32 +214,31 @@ struct PlaceDetailView: View {
                     .clipShape(Circle())
             }
             
-            // Brand Logo & Screen Title
             HStack(spacing: 8) {
                 ZStack {
                     Circle()
                         .fill(primaryContainer.opacity(0.2))
                         .frame(width: 30, height: 30)
-                    Image(systemName: "airplane")
+                    Image(systemName: "safari.fill")
                         .font(.system(size: 13, weight: .bold))
                         .foregroundColor(primaryContainer)
                 }
                 
                 VStack(alignment: .leading, spacing: 1) {
-                    Text("TripPilot")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                    Text("TripPilot Sri Lanka 🇱🇰")
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
                         .foregroundColor(primaryCyan)
-                    Text("Place Detail & Booking")
+                    Text(place.region)
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundColor(textOnSurfaceVariant)
+                        .lineLimit(1)
                 }
             }
             
             Spacer()
             
-            // Share Action
             Button(action: {
-                triggerToast("Place booking link copied to clipboard")
+                triggerToast("Place details & map coordinates copied")
             }) {
                 Image(systemName: "square.and.arrow.up")
                     .font(.system(size: 15, weight: .semibold))
@@ -259,22 +247,6 @@ struct PlaceDetailView: View {
                     .background(surfaceContainerHigh.opacity(0.6))
                     .clipShape(Circle())
             }
-            
-            // Avatar
-            AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida/AEtjO1VG20ezXOFcscUPX5J7lUFzSYH2YKZ90oH7xJub8CsIfL_lM7zNOwOH3bHTteMEpXi3kxGlLn1ENRaUfiw5SuQaIMzalnWhFcG_80hdjDljdrld0USRi6S_nu1Fsc6WbOS2U3KSbzqrS_mfZUbfDu45b6tWEMW3xH9WaypWg15TlwDzyJdZaT_zC-ETJgRiAsDmc2y8yq8cw4yA3Fikc0zkiThcW0sxug3iinQ4RJT45vU4jj9cgrWaNQzm")) { phase in
-                if let image = phase.image {
-                    image
-                        .resizable()
-                        .aspectRatio(contentMode: .fill)
-                } else {
-                    Circle().fill(surfaceContainerHigh)
-                }
-            }
-            .frame(width: 32, height: 32)
-            .clipShape(Circle())
-            .overlay(
-                Circle().stroke(primaryContainer.opacity(0.4), lineWidth: 1.5)
-            )
         }
         .padding(.horizontal, 16)
         .padding(.top, 50)
@@ -291,11 +263,10 @@ struct PlaceDetailView: View {
     // MARK: - 1. Hero Carousel Section
     private var heroCarouselSection: some View {
         ZStack(alignment: .bottom) {
-            // Paging Image Container
             TabView(selection: $currentSlide) {
-                ForEach(heroSlides) { slide in
+                ForEach(0..<place.imageUrls.count, id: \.self) { idx in
                     ZStack(alignment: .bottom) {
-                        AsyncImage(url: URL(string: slide.imageUrl)) { phase in
+                        AsyncImage(url: URL(string: place.imageUrls[idx])) { phase in
                             if let image = phase.image {
                                 image
                                     .resizable()
@@ -307,29 +278,27 @@ struct PlaceDetailView: View {
                         .frame(width: UIScreen.main.bounds.width, height: 330)
                         .clipped()
                         
-                        // Scrim Gradients
                         LinearGradient(
-                            colors: [darkBackground, darkBackground.opacity(0.3), Color.black.opacity(0.6)],
+                            colors: [darkBackground, darkBackground.opacity(0.2), Color.black.opacity(0.6)],
                             startPoint: .bottom,
                             endPoint: .top
                         )
                     }
-                    .tag(slide.id)
+                    .tag(idx)
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
             .frame(width: UIScreen.main.bounds.width, height: 330)
             
-            // Top Badges Over Scrim
+            // Top Badges
             VStack {
                 HStack {
-                    // Live Availability Pill
                     HStack(spacing: 6) {
                         Circle()
-                            .fill(primaryContainer)
+                            .fill(secondaryMint)
                             .frame(width: 7, height: 7)
-                            .shadow(color: primaryContainer, radius: 4)
-                        Text("LIVE AVAILABILITY")
+                            .shadow(color: secondaryMint, radius: 4)
+                        Text(place.isUNESCO ? "UNESCO HERITAGE SITE" : "VERIFIED SRI LANKA")
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .tracking(0.6)
                             .foregroundColor(.white)
@@ -338,20 +307,17 @@ struct PlaceDetailView: View {
                     .padding(.vertical, 5)
                     .background(darkBackground.opacity(0.75))
                     .clipShape(Capsule())
-                    .overlay(
-                        Capsule().stroke(outlineVariant, lineWidth: 1)
-                    )
+                    .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
                     
                     Spacer()
                     
-                    // 360° Preview Button
                     Button(action: {
                         show360PreviewModal = true
                     }) {
                         HStack(spacing: 5) {
                             Image(systemName: "view.3d")
                                 .font(.system(size: 13, weight: .bold))
-                            Text("360° Preview")
+                            Text("360° Drone")
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
                         }
                         .foregroundColor(primaryContainer)
@@ -359,9 +325,7 @@ struct PlaceDetailView: View {
                         .padding(.vertical, 5)
                         .background(darkBackground.opacity(0.75))
                         .clipShape(Capsule())
-                        .overlay(
-                            Capsule().stroke(outlineVariant, lineWidth: 1)
-                        )
+                        .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
                     }
                 }
                 .padding(.horizontal, 16)
@@ -370,11 +334,10 @@ struct PlaceDetailView: View {
                 Spacer()
             }
             
-            // Bottom Controls: Pagination Dots + Curated Angles
+            // Carousel Dots
             HStack {
-                // Carousel dots
                 HStack(spacing: 5) {
-                    ForEach(0..<heroSlides.count, id: \.self) { idx in
+                    ForEach(0..<place.imageUrls.count, id: \.self) { idx in
                         Capsule()
                             .fill(currentSlide == idx ? primaryContainer : Color.white.opacity(0.3))
                             .frame(width: currentSlide == idx ? 16 : 6, height: 6)
@@ -385,18 +348,14 @@ struct PlaceDetailView: View {
                 .padding(.vertical, 5)
                 .background(surfaceContainerLowest.opacity(0.85))
                 .clipShape(Capsule())
-                .overlay(
-                    Capsule().stroke(outlineVariant, lineWidth: 1)
-                )
                 
                 Spacer()
                 
-                // Angle badge
                 HStack(spacing: 4) {
-                    Image(systemName: "photo.on.rectangle.angled")
+                    Image(systemName: "camera.fill")
                         .font(.system(size: 11))
                         .foregroundColor(primaryContainer)
-                    Text("32 Curated Angles")
+                    Text("\(place.imageUrls.count) Verified Photos")
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                         .foregroundColor(textOnSurfaceVariant)
                 }
@@ -404,9 +363,6 @@ struct PlaceDetailView: View {
                 .padding(.vertical, 5)
                 .background(surfaceContainerLowest.opacity(0.85))
                 .clipShape(Capsule())
-                .overlay(
-                    Capsule().stroke(outlineVariant, lineWidth: 1)
-                )
             }
             .padding(.horizontal, 16)
             .padding(.bottom, 12)
@@ -414,20 +370,19 @@ struct PlaceDetailView: View {
         .frame(width: UIScreen.main.bounds.width, height: 330)
     }
     
-    // MARK: - 2. Place Header & Status Badges
+    // MARK: - 2. Place Header
     private var placeHeaderSection: some View {
         VStack(alignment: .leading, spacing: 10) {
-            // Badges row
             HStack(spacing: 8) {
                 // Star Rating
                 HStack(spacing: 4) {
                     Image(systemName: "star.fill")
                         .font(.system(size: 11))
-                        .foregroundColor(Color(red: 251/255, green: 191/255, blue: 36/255))
-                    Text("4.9")
+                        .foregroundColor(amberGold)
+                    Text(String(format: "%.1f", place.rating))
                         .font(.system(size: 13, weight: .heavy, design: .rounded))
                         .foregroundColor(.white)
-                    Text("(42k)")
+                    Text("(\(place.reviewCount))")
                         .font(.system(size: 11))
                         .foregroundColor(textDim)
                 }
@@ -435,69 +390,49 @@ struct PlaceDetailView: View {
                 .padding(.vertical, 4)
                 .background(surfaceContainerLow)
                 .clipShape(Capsule())
-                .overlay(
-                    Capsule().stroke(outlineVariant, lineWidth: 1)
-                )
                 
-                // AI Editor's Choice
-                HStack(spacing: 4) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 11))
-                        .foregroundColor(primaryContainer)
-                    Text("AI Editor's Choice")
-                        .font(.system(size: 11, weight: .bold, design: .rounded))
-                        .foregroundColor(primaryCyan)
-                }
-                .padding(.horizontal, 9)
-                .padding(.vertical, 4)
-                .background(primaryContainer.opacity(0.15))
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule().stroke(primaryContainer.opacity(0.3), lineWidth: 1)
-                )
+                // Category Chip
+                Text(place.category.rawValue)
+                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                    .foregroundColor(primaryCyan)
+                    .padding(.horizontal, 9)
+                    .padding(.vertical, 4)
+                    .background(primaryContainer.opacity(0.15))
+                    .clipShape(Capsule())
                 
-                // UNESCO Partner
-                HStack(spacing: 4) {
-                    Image(systemName: "checkmark.seal.fill")
-                        .font(.system(size: 11))
-                        .foregroundColor(secondaryMint)
-                    Text("UNESCO Digital")
+                if place.isUNESCO {
+                    Text("UNESCO World Heritage")
                         .font(.system(size: 11, weight: .bold, design: .rounded))
                         .foregroundColor(secondaryMint)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 4)
+                        .background(secondaryMint.opacity(0.15))
+                        .clipShape(Capsule())
                 }
-                .padding(.horizontal, 9)
-                .padding(.vertical, 4)
-                .background(secondaryMint.opacity(0.15))
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule().stroke(secondaryMint.opacity(0.3), lineWidth: 1)
-                )
             }
             
-            // Title & Location
             VStack(alignment: .leading, spacing: 4) {
-                Text("teamLab Borderless")
-                    .font(.system(size: 28, weight: .heavy, design: .rounded))
+                Text(place.name)
+                    .font(.system(size: 26, weight: .heavy, design: .rounded))
                     .foregroundColor(.white)
                 
-                Text("MORI Building Digital Art Museum • Azabudai Hills, Minato City, Tokyo")
+                Text(place.region)
                     .font(.system(size: 13, weight: .medium, design: .rounded))
                     .foregroundColor(textOnSurfaceVariant)
             }
         }
     }
     
-    // MARK: - 3. Visitor Intelligence Matrix
+    // MARK: - 3. Visitor Intelligence
     private var visitorIntelligenceSection: some View {
         VStack(spacing: 12) {
-            // Header
             HStack {
                 HStack(spacing: 8) {
                     ZStack {
                         Circle()
                             .fill(secondaryMint.opacity(0.15))
                             .frame(width: 32, height: 32)
-                        Image(systemName: "chart.xyaxis.line")
+                        Image(systemName: "leaf.fill")
                             .font(.system(size: 14, weight: .bold))
                             .foregroundColor(secondaryMint)
                     }
@@ -506,7 +441,7 @@ struct PlaceDetailView: View {
                         Text("Visitor Intelligence")
                             .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
-                        Text("Live telemetry powered by TripPilot Radar")
+                        Text("Live Sri Lanka seasonal telemetry")
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundColor(textDim)
                     }
@@ -514,375 +449,319 @@ struct PlaceDetailView: View {
                 
                 Spacer()
                 
-                Text("LIVE")
+                Text("OPTIMAL")
                     .font(.system(size: 10, weight: .heavy, design: .rounded))
                     .foregroundColor(secondaryMint)
                     .padding(.horizontal, 7)
                     .padding(.vertical, 3)
                     .background(secondaryMint.opacity(0.2))
                     .clipShape(Capsule())
-                    .overlay(
-                        Capsule().stroke(secondaryMint.opacity(0.4), lineWidth: 1)
-                    )
             }
             
-            // Metric Cards Grid
             HStack(spacing: 10) {
-                // Optimal Window
+                // Best Time
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 5) {
-                        Image(systemName: "sun.horizon.fill")
-                            .font(.system(size: 14))
+                        Image(systemName: "clock.fill")
+                            .font(.system(size: 13))
                             .foregroundColor(primaryContainer)
-                        Text("OPTIMAL WINDOW")
+                        Text("BEST TIME")
                             .font(.system(size: 9, weight: .bold, design: .rounded))
                             .foregroundColor(textDim)
                     }
-                    Text("17:00 – 19:30")
-                        .font(.system(size: 15, weight: .heavy, design: .rounded))
+                    Text(place.bestTimeToVisit)
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
-                    Text("Lowest queue lag")
-                        .font(.system(size: 11, weight: .medium, design: .rounded))
-                        .foregroundColor(secondaryMint)
+                        .lineLimit(2)
                 }
                 .padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(surfaceCard)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1)
-                )
                 
-                // Climate Factor
+                // Duration
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 5) {
-                        Image(systemName: "umbrella.fill")
-                            .font(.system(size: 14))
+                        Image(systemName: "hourglass")
+                            .font(.system(size: 13))
                             .foregroundColor(secondaryMint)
-                        Text("CLIMATE FACTOR")
+                        Text("DURATION")
                             .font(.system(size: 9, weight: .bold, design: .rounded))
                             .foregroundColor(textDim)
                     }
-                    Text("100% Rainproof")
-                        .font(.system(size: 15, weight: .heavy, design: .rounded))
+                    Text(place.recommendedDuration)
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
-                    Text("Subterranean climate")
-                        .font(.system(size: 11, weight: .medium, design: .rounded))
-                        .foregroundColor(textOnSurfaceVariant)
                 }
                 .padding(12)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(surfaceCard)
                 .clipShape(RoundedRectangle(cornerRadius: 12))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1)
-                )
             }
             
-            // Crowd Forecast Bar Graph
-            VStack(alignment: .leading, spacing: 10) {
-                HStack {
-                    Text("Hourly Density Flow")
-                        .font(.system(size: 13, weight: .semibold, design: .rounded))
-                        .foregroundColor(.white)
+            // Dress Code & Etiquette Notice
+            if let dressCode = place.dressCode {
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "tshirt.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(amberGold)
+                        .padding(.top, 2)
                     
-                    Spacer()
-                    
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(errorCoral)
-                            .frame(width: 5, height: 5)
-                        Text("Peak at 16:30")
-                            .font(.system(size: 11, weight: .semibold, design: .rounded))
-                            .foregroundColor(errorCoral)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Dress Code & Local Etiquette")
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        Text(dressCode)
+                            .font(.system(size: 11.5))
+                            .foregroundColor(textOnSurfaceVariant)
                     }
                 }
-                
-                // Bars
-                HStack(alignment: .bottom, spacing: 10) {
-                    densityBar(label: "10h", heightPercent: 0.40, color: primaryContainer.opacity(0.35))
-                    densityBar(label: "12h", heightPercent: 0.65, color: primaryContainer.opacity(0.50))
-                    densityBar(label: "14h", heightPercent: 0.80, color: primaryContainer.opacity(0.75))
-                    densityBar(label: "16h", heightPercent: 0.98, color: errorCoral, isPeak: true)
-                    densityBar(label: "18h", heightPercent: 0.50, color: secondaryMint, isTarget: true)
-                    densityBar(label: "20h", heightPercent: 0.30, color: primaryContainer.opacity(0.30))
-                }
-                .frame(height: 70)
+                .padding(12)
+                .background(surfaceCard)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
             }
-            .padding(12)
-            .background(surfaceCard)
-            .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1)
-            )
         }
         .padding(14)
         .background(surfaceContainerLow)
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1)
-        )
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
     }
     
-    private func densityBar(label: String, heightPercent: CGFloat, color: Color, isPeak: Bool = false, isTarget: Bool = false) -> some View {
-        VStack(spacing: 4) {
-            ZStack(alignment: .bottom) {
-                Capsule()
-                    .fill(Color.white.opacity(0.06))
-                    .frame(height: 52)
-                
-                Capsule()
-                    .fill(color)
-                    .frame(height: 52 * heightPercent)
-                    .shadow(color: isPeak ? errorCoral.opacity(0.5) : (isTarget ? secondaryMint.opacity(0.4) : .clear), radius: 6)
-            }
-            .frame(maxWidth: .infinity)
-            
-            Text(label)
-                .font(.system(size: 9, weight: isPeak || isTarget ? .bold : .medium, design: .rounded))
-                .foregroundColor(isPeak ? errorCoral : (isTarget ? secondaryMint : textDim))
-        }
-    }
-    
-    // MARK: - 4. Editorial Overview & Highlight Chambers
+    // MARK: - 4. Editorial Overview
     private var editorialExperienceSection: some View {
         VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                Text("The Experience")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Text("AI Overview")
-                    .font(.system(size: 11, weight: .semibold, design: .rounded))
-                    .foregroundColor(textOnSurfaceVariant)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(Color.white.opacity(0.08))
-                    .clipShape(Capsule())
-            }
+            Text("About This Destination")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
             
-            Text("Relocated to Azabudai Hills, teamLab Borderless is an interconnected universe of boundary-free digital art installations. Artworks transcend physical rooms, communicating with other creations, intertwining, and transforming in reaction to continuous visitor presence.")
-                .font(.system(size: 13, weight: .regular))
+            Text(place.description)
+                .font(.system(size: 13.5, weight: .regular))
                 .foregroundColor(textOnSurfaceVariant)
                 .lineSpacing(4)
             
-            // 3 Curated Highlight Chambers
+            // Key Highlights
             VStack(alignment: .leading, spacing: 8) {
-                Text("CURATED HIGHLIGHT CHAMBERS")
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                Text("KEY HIGHLIGHTS")
+                    .font(.system(size: 10.5, weight: .bold, design: .rounded))
                     .tracking(0.6)
                     .foregroundColor(.white)
                 
-                HStack(spacing: 8) {
-                    chamberCard(icon: "diamond.fill", iconColor: primaryContainer, title: "Infinite Crystal", subtitle: "Mirror refraction")
-                    chamberCard(icon: "lightbulb.fill", iconColor: secondaryMint, title: "Forest of Lamps", subtitle: "Murano glass")
-                    chamberCard(icon: "cup.and.saucer.fill", iconColor: primaryCyan, title: "EN Tea House", subtitle: "Digital bloom bowl")
-                }
-            }
-            
-            // Pro Planning Tips
-            HStack(alignment: .top, spacing: 10) {
-                Image(systemName: "lightbulb.max.fill")
-                    .font(.system(size: 16))
-                    .foregroundColor(primaryContainer)
-                    .padding(.top, 2)
-                
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Pro Planning Tips")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    Text("Pants and flat footwear are highly advised due to reflective mirrored floors. Free on-site luggage lockers handle daypacks.")
-                        .font(.system(size: 12))
-                        .foregroundColor(textOnSurfaceVariant)
-                        .lineSpacing(2)
+                ForEach(place.highlights, id: \.self) { highlight in
+                    HStack(spacing: 8) {
+                        Image(systemName: "checkmark.circle.fill")
+                            .font(.system(size: 13))
+                            .foregroundColor(secondaryMint)
+                        Text(highlight)
+                            .font(.system(size: 12.5, weight: .medium, design: .rounded))
+                            .foregroundColor(textOnSurface)
+                    }
                 }
             }
             .padding(12)
             .background(surfaceCard)
             .clipShape(RoundedRectangle(cornerRadius: 12))
-            .overlay(
-                RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1)
-            )
+            
+            // Visitor Tips
+            if !place.visitorTips.isEmpty {
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: "lightbulb.fill")
+                        .font(.system(size: 15))
+                        .foregroundColor(amberGold)
+                        .padding(.top, 2)
+                    
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("Insider Travel Tips")
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        ForEach(place.visitorTips, id: \.self) { tip in
+                            Text("• \(tip)")
+                                .font(.system(size: 12))
+                                .foregroundColor(textOnSurfaceVariant)
+                                .lineSpacing(2)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(surfaceCard)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+            }
         }
         .padding(14)
         .background(surfaceContainerLow)
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1)
-        )
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
     }
     
-    private func chamberCard(icon: String, iconColor: Color, title: String, subtitle: String) -> some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Image(systemName: icon)
-                .font(.system(size: 16))
-                .foregroundColor(iconColor)
-            Text(title)
-                .font(.system(size: 11, weight: .bold, design: .rounded))
-                .foregroundColor(.white)
-                .lineLimit(1)
-            Text(subtitle)
-                .font(.system(size: 9, weight: .medium, design: .rounded))
-                .foregroundColor(textDim)
-                .lineLimit(1)
-        }
-        .padding(10)
-        .frame(maxWidth: .infinity, alignment: .leading)
-        .background(surfaceCard)
-        .clipShape(RoundedRectangle(cornerRadius: 10))
-        .overlay(
-            RoundedRectangle(cornerRadius: 10).stroke(outlineVariant, lineWidth: 1)
-        )
-    }
-    
-    // MARK: - 5. Ticket & Booking Engine
-    private var ticketBookingSection: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            // Header
+    // MARK: - 5. Authentic Reviews & Ratings
+    private var reviewsSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("Select Entry & Tickets")
+                    Text("Visitor Reviews & Ratings")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
-                    Text("Direct pass with instantaneous mobile sync")
-                        .font(.system(size: 12, weight: .medium, design: .rounded))
+                    Text("Verified travelers & local explorers")
+                        .font(.system(size: 11.5, weight: .medium))
+                        .foregroundColor(textDim)
+                }
+                
+                Spacer()
+                
+                HStack(spacing: 4) {
+                    Image(systemName: "star.fill")
+                        .font(.system(size: 13))
+                        .foregroundColor(amberGold)
+                    Text(String(format: "%.1f", place.rating))
+                        .font(.system(size: 16, weight: .heavy, design: .rounded))
+                        .foregroundColor(.white)
+                }
+            }
+            
+            VStack(spacing: 10) {
+                ForEach(place.reviews) { review in
+                    VStack(alignment: .leading, spacing: 6) {
+                        HStack {
+                            Text(review.userName)
+                                .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                            
+                            Spacer()
+                            
+                            Text(review.date)
+                                .font(.system(size: 11))
+                                .foregroundColor(textDim)
+                        }
+                        
+                        HStack(spacing: 2) {
+                            ForEach(0..<5) { starIndex in
+                                Image(systemName: "star.fill")
+                                    .font(.system(size: 10))
+                                    .foregroundColor(Double(starIndex + 1) <= review.rating ? amberGold : Color.white.opacity(0.2))
+                            }
+                        }
+                        
+                        Text(review.comment)
+                            .font(.system(size: 12.5))
+                            .foregroundColor(textOnSurfaceVariant)
+                            .lineSpacing(2)
+                        
+                        HStack {
+                            Spacer()
+                            HStack(spacing: 4) {
+                                Image(systemName: "hand.thumbsup.fill")
+                                    .font(.system(size: 10))
+                                Text("\(review.helpfulCount) found helpful")
+                                    .font(.system(size: 10.5))
+                            }
+                            .foregroundColor(textDim)
+                        }
+                    }
+                    .padding(12)
+                    .background(surfaceCard)
+                    .clipShape(RoundedRectangle(cornerRadius: 12))
+                }
+            }
+        }
+        .padding(14)
+        .background(surfaceContainerLow)
+        .clipShape(RoundedRectangle(cornerRadius: 18))
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
+    }
+    
+    // MARK: - 6. Ticket & Heritage Pass Engine
+    private var ticketBookingSection: some View {
+        VStack(alignment: .leading, spacing: 14) {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("Entry Pass & Permits")
+                        .font(.system(size: 18, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                    Text("Official Central Cultural Fund & Wildlife Dept")
+                        .font(.system(size: 11.5, weight: .medium))
                         .foregroundColor(textOnSurfaceVariant)
                 }
                 
                 Spacer()
                 
-                ZStack {
-                    Circle()
-                        .fill(primaryContainer.opacity(0.15))
-                        .frame(width: 32, height: 32)
-                    Image(systemName: "ticket.fill")
-                        .font(.system(size: 14))
-                        .foregroundColor(primaryContainer)
+                Button(action: {
+                    showCurrencyInLKR.toggle()
+                }) {
+                    Text(showCurrencyInLKR ? "Rs. LKR" : "$ USD")
+                        .font(.system(size: 11, weight: .bold, design: .monospaced))
+                        .foregroundColor(secondaryMint)
+                        .padding(.horizontal, 9)
+                        .padding(.vertical, 4)
+                        .background(secondaryMint.opacity(0.15))
+                        .clipShape(Capsule())
                 }
             }
             
-            // Schedule Window
-            VStack(alignment: .leading, spacing: 8) {
-                Text("SCHEDULE WINDOW")
-                    .font(.system(size: 10, weight: .bold, design: .rounded))
-                    .tracking(0.6)
-                    .foregroundColor(textDim)
-                
-                HStack(spacing: 8) {
-                    ForEach(BookingDate.allCases) { date in
-                        Button(action: {
-                            if !date.isSoldOut {
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                    selectedDate = date
-                                }
-                            }
-                        }) {
-                            VStack(spacing: 2) {
-                                Text(date.rawValue.uppercased())
-                                    .font(.system(size: 9, weight: .bold, design: .rounded))
-                                    .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : textDim)
-                                Text(date.dateString)
-                                    .font(.system(size: 14, weight: .heavy, design: .rounded))
-                                    .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : .white)
-                                Text(date.statusText)
-                                    .font(.system(size: 9, weight: .bold, design: .rounded))
-                                    .foregroundColor(
-                                        date.isSoldOut ? errorCoral : (selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : primaryContainer)
-                                    )
-                            }
-                            .padding(.vertical, 8)
-                            .frame(maxWidth: .infinity)
-                            .background(
-                                selectedDate == date ? primaryContainer : surfaceCard
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10).stroke(selectedDate == date ? primaryContainer : outlineVariant, lineWidth: 1)
-                            )
-                            .shadow(color: selectedDate == date ? primaryContainer.opacity(0.35) : .clear, radius: 8)
+            // Date Selection
+            HStack(spacing: 8) {
+                ForEach(BookingDate.allCases) { date in
+                    Button(action: {
+                        withAnimation(.spring(response: 0.3)) {
+                            selectedDate = date
                         }
-                        .disabled(date.isSoldOut)
-                        .opacity(date.isSoldOut ? 0.6 : 1.0)
-                    }
-                }
-            }
-            
-            // Time Slot Selector
-            VStack(alignment: .leading, spacing: 8) {
-                HStack {
-                    Text("ENTRY TIME SLOT")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .tracking(0.6)
-                        .foregroundColor(textDim)
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 4) {
-                        Circle()
-                            .fill(secondaryMint)
-                            .frame(width: 5, height: 5)
-                        Text("4 slots open")
-                            .font(.system(size: 10, weight: .bold, design: .rounded))
-                            .foregroundColor(secondaryMint)
-                    }
-                }
-                
-                LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                    ForEach(BookingTimeSlot.allCases) { slot in
-                        Button(action: {
-                            withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
-                                selectedSlot = slot
-                            }
-                        }) {
-                            HStack {
-                                VStack(alignment: .leading, spacing: 2) {
-                                    Text(slot.rawValue)
-                                        .font(.system(size: 14, weight: .heavy, design: .rounded))
-                                        .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255) : .white)
-                                    Text(slot.tag)
-                                        .font(.system(size: 9, weight: .semibold, design: .rounded))
-                                        .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255).opacity(0.8) : textDim)
-                                }
-                                
-                                Spacer()
-                                
-                                Image(systemName: selectedSlot == slot ? "checkmark.circle.fill" : "clock")
-                                    .font(.system(size: 13, weight: .bold))
-                                    .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255) : textDim)
-                            }
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 8)
-                            .background(selectedSlot == slot ? primaryContainer : surfaceCard)
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10).stroke(selectedSlot == slot ? primaryContainer : outlineVariant, lineWidth: 1)
-                            )
-                            .shadow(color: selectedSlot == slot ? primaryContainer.opacity(0.3) : .clear, radius: 6)
+                    }) {
+                        VStack(spacing: 2) {
+                            Text(date.rawValue.uppercased())
+                                .font(.system(size: 9, weight: .bold))
+                                .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : textDim)
+                            Text(date.dateString)
+                                .font(.system(size: 13, weight: .heavy, design: .rounded))
+                                .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : .white)
+                            Text(date.statusText)
+                                .font(.system(size: 9, weight: .bold))
+                                .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : secondaryMint)
                         }
+                        .padding(.vertical, 8)
+                        .frame(maxWidth: .infinity)
+                        .background(selectedDate == date ? primaryContainer : surfaceCard)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
                     }
                 }
             }
             
-            // Pass Quantities
+            // Time Slots
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
+                ForEach(BookingTimeSlot.allCases) { slot in
+                    Button(action: {
+                        withAnimation(.spring(response: 0.3)) {
+                            selectedSlot = slot
+                        }
+                    }) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text(slot.rawValue)
+                                    .font(.system(size: 13.5, weight: .heavy, design: .rounded))
+                                    .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255) : .white)
+                                Text(slot.tag)
+                                    .font(.system(size: 9, weight: .semibold))
+                                    .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255).opacity(0.8) : textDim)
+                            }
+                            Spacer()
+                            Image(systemName: selectedSlot == slot ? "checkmark.circle.fill" : "clock")
+                                .font(.system(size: 12))
+                                .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255) : textDim)
+                        }
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 8)
+                        .background(selectedSlot == slot ? primaryContainer : surfaceCard)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    }
+                }
+            }
+            
+            // Ticket Quantities
             VStack(spacing: 8) {
                 // Adult
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        HStack(spacing: 5) {
-                            Text("Adult Pass")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Text("18+ yrs")
-                                .font(.system(size: 9, weight: .bold, design: .rounded))
-                                .foregroundColor(textOnSurfaceVariant)
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 2)
-                                .background(Color.white.opacity(0.08))
-                                .clipShape(Capsule())
-                        }
-                        Text("$38.00 / ¥5,800")
+                        Text("Adult Entry Pass")
+                            .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        Text(showCurrencyInLKR ? "Rs. \(place.entranceFeeLKR.formatted())" : "$\(place.entranceFeeUSD).00 USD")
                             .font(.system(size: 12, weight: .medium, design: .rounded))
                             .foregroundColor(textOnSurfaceVariant)
                     }
@@ -890,34 +769,24 @@ struct PlaceDetailView: View {
                     Spacer()
                     
                     HStack(spacing: 12) {
-                        Button(action: {
-                            if adultCount > 1 {
-                                adultCount -= 1
-                            }
-                        }) {
+                        Button(action: { if adultCount > 1 { adultCount -= 1 } }) {
                             Image(systemName: "minus")
-                                .font(.system(size: 12, weight: .bold))
+                                .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(.white)
-                                .frame(width: 30, height: 30)
+                                .frame(width: 28, height: 28)
                                 .background(Color.white.opacity(0.1))
                                 .clipShape(Circle())
                         }
-                        
                         Text("\(adultCount)")
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
-                            .frame(width: 20)
-                        
-                        Button(action: {
-                            adultCount += 1
-                        }) {
+                        Button(action: { adultCount += 1 }) {
                             Image(systemName: "plus")
-                                .font(.system(size: 12, weight: .bold))
-                                .foregroundColor(Color(red: 0/255, green: 40/255, blue: 60/255))
-                                .frame(width: 30, height: 30)
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(.black)
+                                .frame(width: 28, height: 28)
                                 .background(primaryContainer)
                                 .clipShape(Circle())
-                                .shadow(color: primaryContainer.opacity(0.4), radius: 6)
                         }
                     }
                 }
@@ -925,22 +794,13 @@ struct PlaceDetailView: View {
                 .background(surfaceCard)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 
-                // Youth
+                // Child
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        HStack(spacing: 5) {
-                            Text("Youth Pass")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Text("13–17 yrs")
-                                .font(.system(size: 9, weight: .bold, design: .rounded))
-                                .foregroundColor(textOnSurfaceVariant)
-                                .padding(.horizontal, 5)
-                                .padding(.vertical, 2)
-                                .background(Color.white.opacity(0.08))
-                                .clipShape(Capsule())
-                        }
-                        Text("$24.00")
+                        Text("Child Pass (Under 12)")
+                            .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        Text(showCurrencyInLKR ? "Rs. \((place.entranceFeeLKR / 2).formatted())" : "$\(place.entranceFeeUSD / 2).00 USD")
                             .font(.system(size: 12, weight: .medium, design: .rounded))
                             .foregroundColor(textOnSurfaceVariant)
                     }
@@ -948,31 +808,22 @@ struct PlaceDetailView: View {
                     Spacer()
                     
                     HStack(spacing: 12) {
-                        Button(action: {
-                            if youthCount > 0 {
-                                youthCount -= 1
-                            }
-                        }) {
+                        Button(action: { if childCount > 0 { childCount -= 1 } }) {
                             Image(systemName: "minus")
-                                .font(.system(size: 12, weight: .bold))
+                                .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(.white)
-                                .frame(width: 30, height: 30)
+                                .frame(width: 28, height: 28)
                                 .background(Color.white.opacity(0.1))
                                 .clipShape(Circle())
                         }
-                        
-                        Text("\(youthCount)")
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                        Text("\(childCount)")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
-                            .frame(width: 20)
-                        
-                        Button(action: {
-                            youthCount += 1
-                        }) {
+                        Button(action: { childCount += 1 }) {
                             Image(systemName: "plus")
-                                .font(.system(size: 12, weight: .bold))
+                                .font(.system(size: 11, weight: .bold))
                                 .foregroundColor(.white)
-                                .frame(width: 30, height: 30)
+                                .frame(width: 28, height: 28)
                                 .background(Color.white.opacity(0.1))
                                 .clipShape(Circle())
                         }
@@ -982,24 +833,18 @@ struct PlaceDetailView: View {
                 .background(surfaceCard)
                 .clipShape(RoundedRectangle(cornerRadius: 10))
                 
-                // Audio Guide Add-on
+                // Smart AI Spatial Audio Guide
                 Toggle(isOn: $includeAudioGuide) {
-                    HStack(spacing: 10) {
-                        ZStack {
-                            Circle()
-                                .fill(secondaryMint.opacity(0.15))
-                                .frame(width: 28, height: 28)
-                            Image(systemName: "headphones")
-                                .font(.system(size: 12))
-                                .foregroundColor(secondaryMint)
-                        }
-                        
+                    HStack(spacing: 8) {
+                        Image(systemName: "headphones")
+                            .font(.system(size: 14))
+                            .foregroundColor(secondaryMint)
                         VStack(alignment: .leading, spacing: 1) {
-                            Text("Smart Audio Spatial Guide")
+                            Text("AI Spatial Cultural Guide")
                                 .font(.system(size: 13, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
-                            Text("Binaural story narration (+$4.00)")
-                                .font(.system(size: 11))
+                            Text("English, Sinhala & Tamil narration (+$5)")
+                                .font(.system(size: 10.5))
                                 .foregroundColor(textOnSurfaceVariant)
                         }
                     }
@@ -1013,99 +858,52 @@ struct PlaceDetailView: View {
         .padding(14)
         .background(surfaceContainerLow)
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1)
-        )
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
     }
     
-    // MARK: - 6. Transit & Arrival Section
+    // MARK: - 7. Transit & Arrival
     private var transitArrivalSection: some View {
         VStack(alignment: .leading, spacing: 12) {
-            HStack {
-                Text("Transit & Arrival")
-                    .font(.system(size: 18, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
-                
-                Spacer()
-                
-                Text("Minato City")
-                    .font(.system(size: 11, weight: .semibold, design: .rounded))
-                    .foregroundColor(textOnSurfaceVariant)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(Color.white.opacity(0.08))
-                    .clipShape(Capsule())
-            }
+            Text("Location & Transit Access")
+                .font(.system(size: 18, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
             
-            // Map Box
-            ZStack(alignment: .bottom) {
-                AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuDQ4HJ1XVN5KJCd-FOpVGGCvyw_ERMYd2DhZ0QdEmeUZB2FW2pmqc999GDZ0YsymB9UnMKTNWEgS-vItz9QL9rAWOhhTsZ5zBCOOK5HCYf8n_07JtXQoxrpPAWLpZyafArQc_vBY9rS2tY84B7MYT5Yhpes1JsxkowYYyvD76sD-fXsqgVkvpP7jDHUUvLKkzo77fetBCpMi2eUJr1VsPciP9NPiw7_E0Wgvf4GHsDWh_DGa5RIHZtL7g")) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } else {
-                        Color(red: 20/255, green: 28/255, blue: 45/255)
-                    }
-                }
-                .frame(height: 120)
-                .clipped()
+            HStack(spacing: 8) {
+                Image(systemName: "mappin.and.ellipse")
+                    .font(.system(size: 16))
+                    .foregroundColor(secondaryMint)
                 
-                // Overlay Tag
-                HStack(spacing: 8) {
-                    ZStack {
-                        Circle()
-                            .fill(secondaryMint)
-                            .frame(width: 24, height: 24)
-                        Image(systemName: "tram.fill")
-                            .font(.system(size: 11))
-                            .foregroundColor(Color(red: 0/255, green: 40/255, blue: 30/255))
-                    }
-                    
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text("Kamiyacho Station (Hibiya Line)")
-                            .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        Text("Exit 5 provides direct subterranean concourse access")
-                            .font(.system(size: 10))
-                            .foregroundColor(textOnSurfaceVariant)
-                    }
-                    Spacer()
-                }
-                .padding(8)
-                .background(surfaceContainerLowest.opacity(0.92).background(.ultraThinMaterial))
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                .padding(6)
-            }
-            .frame(height: 120)
-            .clipShape(RoundedRectangle(cornerRadius: 14))
-            .overlay(
-                RoundedRectangle(cornerRadius: 14).stroke(outlineVariant, lineWidth: 1)
-            )
-            
-            // Commute detail + Add to Day button
-            HStack {
-                HStack(spacing: 6) {
-                    Image(systemName: "figure.walk")
-                        .font(.system(size: 14))
-                        .foregroundColor(primaryContainer)
-                    Text("8 min sheltered walk from station")
-                        .font(.system(size: 12, weight: .medium, design: .rounded))
-                        .foregroundColor(textOnSurfaceVariant)
+                VStack(alignment: .leading, spacing: 2) {
+                    Text(place.name)
+                        .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                    Text(String(format: "GPS: %.4f° N, %.4f° E", place.latitude, place.longitude))
+                        .font(.system(size: 11, design: .monospaced))
+                        .foregroundColor(textDim)
                 }
                 
                 Spacer()
                 
                 Button(action: {
-                    withAnimation(.spring(response: 0.3, dampingFraction: 0.7)) {
+                    withAnimation(.spring(response: 0.3)) {
                         isAddedToItinerary.toggle()
                     }
-                    triggerToast(isAddedToItinerary ? "Added to Day 3 itinerary!" : "Removed from Day 3")
+                    if isAddedToItinerary {
+                        TripManager.shared.addCustomStop(
+                            title: place.name,
+                            category: place.category.rawValue,
+                            notes: place.highlights.first ?? "Must-visit Sri Lanka landmark",
+                            entranceFeeLKR: place.entranceFeeLKR
+                        )
+                        triggerToast("Added \(place.name) to your active trip!")
+                    } else {
+                        triggerToast("Removed \(place.name) from itinerary")
+                    }
                 }) {
-                    HStack(spacing: 5) {
-                        Image(systemName: isAddedToItinerary ? "checkmark" : "calendar.badge.plus")
+                    HStack(spacing: 4) {
+                        Image(systemName: isAddedToItinerary ? "checkmark" : "plus.circle.fill")
                             .font(.system(size: 12, weight: .bold))
-                        Text(isAddedToItinerary ? "Added to Day 3" : "Add to Day 3")
+                        Text(isAddedToItinerary ? "In Itinerary" : "Add to Trip")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
                     }
                     .foregroundColor(isAddedToItinerary ? Color(red: 0/255, green: 40/255, blue: 30/255) : secondaryMint)
@@ -1113,18 +911,16 @@ struct PlaceDetailView: View {
                     .padding(.vertical, 7)
                     .background(isAddedToItinerary ? secondaryMint : secondaryMint.opacity(0.18))
                     .clipShape(Capsule())
-                    .overlay(
-                        Capsule().stroke(secondaryMint.opacity(0.4), lineWidth: 1)
-                    )
                 }
             }
+            .padding(12)
+            .background(surfaceCard)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
         }
         .padding(14)
         .background(surfaceContainerLow)
         .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(
-            RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1)
-        )
+        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
     }
     
     // MARK: - Sticky Instant Checkout Bar
@@ -1133,12 +929,17 @@ struct PlaceDetailView: View {
             Divider().background(outlineVariant)
             
             HStack(spacing: 14) {
-                // Price & Breakdown
                 VStack(alignment: .leading, spacing: 2) {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
-                        Text(String(format: "$%.2f", totalPrice))
-                            .font(.system(size: 20, weight: .heavy, design: .rounded))
-                            .foregroundColor(.white)
+                        if showCurrencyInLKR {
+                            Text("Rs. \(totalPriceLKR.formatted())")
+                                .font(.system(size: 18, weight: .heavy, design: .rounded))
+                                .foregroundColor(.white)
+                        } else {
+                            Text(String(format: "$%.2f", totalPriceUSD))
+                                .font(.system(size: 20, weight: .heavy, design: .rounded))
+                                .foregroundColor(.white)
+                        }
                         Text(ticketSummaryText)
                             .font(.system(size: 11, weight: .medium, design: .rounded))
                             .foregroundColor(textOnSurfaceVariant)
@@ -1148,7 +949,7 @@ struct PlaceDetailView: View {
                         Image(systemName: "bolt.fill")
                             .font(.system(size: 9))
                             .foregroundColor(secondaryMint)
-                        Text("Instant QR Pass in Wallet")
+                        Text("Instant LK Fast-Track QR")
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .foregroundColor(secondaryMint)
                     }
@@ -1156,7 +957,6 @@ struct PlaceDetailView: View {
                 
                 Spacer()
                 
-                // Apple Pay Button
                 Button(action: {
                     handleApplePay()
                 }) {
@@ -1206,7 +1006,7 @@ struct PlaceDetailView: View {
         DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
             isBookingProcessing = false
             isBooked = true
-            triggerToast("Booking confirmed! Apple Wallet Pass generated.")
+            triggerToast("Booking confirmed! Sri Lanka Digital Entry Pass generated.")
         }
     }
     

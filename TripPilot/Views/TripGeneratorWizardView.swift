@@ -55,17 +55,17 @@ enum BudgetTier: String, CaseIterable, Identifiable {
     
     var subtitle: String {
         switch self {
-        case .saver: return "Boutique hostels & local dining"
-        case .comfort: return "Design hotels, Michelin Bib Gourmand, Shinkansen Green Car"
-        case .luxury: return "5-star Onsen Ryokans, private guides"
+        case .saver: return "Boutique hostels, local trains & authentic rice & curry"
+        case .comfort: return "Heritage villas, 1st class scenic train & coastal seafood"
+        case .luxury: return "Tea Trails bungalows, private safari jeeps & luxury wellness"
         }
     }
     
     var pricePerDay: String {
         switch self {
-        case .saver: return "$120"
-        case .comfort: return "$280"
-        case .luxury: return "$650+"
+        case .saver: return "$65 / Rs 19,800"
+        case .comfort: return "$160 / Rs 48,800"
+        case .luxury: return "$380+ / Rs 115,000+"
         }
     }
     
@@ -107,50 +107,52 @@ struct TripGeneratorWizardView: View {
     private let outlineVariant = Color.white.opacity(0.12)
     
     // Interactive State
-    @State private var selectedDestination: String = "Tokyo & Kyoto"
-    @State private var destinationSubtitle: String = "Japan • Multi-City Transit (HSR)"
-    @State private var destinationFlag: String = "🇯🇵"
-    @State private var seasonText: String = "Autumn Foliage Peak Season"
-    @State private var seasonBadge: String = "Koyo Nov Peak"
+    @State private var selectedDestination: String = "Sigiriya & Ella Highlands"
+    @State private var destinationSubtitle: String = "Sri Lanka • Cultural Triangle to Hill Country"
+    @State private var destinationFlag: String = "🇱🇰"
+    @State private var seasonText: String = "Tropical Sunshine & Mountain Mist"
+    @State private var seasonBadge: String = "Year-Round Prime"
     
-    @State private var travelDatesText: String = "Oct 24 - Nov 04, 2025"
-    @State private var travelDurationText: String = "12 Days • 11 Nights"
-    @State private var weatherSummary: String = "Mild & Crisp • 18°C"
+    @State private var travelDatesText: String = "Upcoming 7 Days"
+    @State private var travelDaysCount: Int = 7
+    @State private var travelDurationText: String = "7 Days • 6 Nights"
+    @State private var weatherSummary: String = "Tropical Sunshine • 28°C"
     
     @State private var selectedCompanion: CompanionType = .couple
     @State private var selectedPace: RhythmPace = .balanced
     @State private var selectedBudget: BudgetTier = .comfort
     
     @State private var selectedTags: [String] = [
-        "🍜 Food & Street Eats",
-        "⛩️ Historic Shrines",
-        "📸 Photography",
-        "☕ Specialty Cafes",
-        "🌿 Nature & Onsens"
+        "🏰 UNESCO Heritage",
+        "🚂 Scenic Blue Train",
+        "🐘 Wildlife Safari",
+        "🍵 Ceylon Tea Trails",
+        "🍛 Spicy Kottu & Seafood"
     ]
     @State private var availableTags: [String] = [
-        "🛍️ Vintage Thrift",
-        "🎨 Contemporary Art",
-        "🍸 Hidden Speakeasies",
-        "🌸 Sakura Gardens",
-        "🏯 Samurai Heritage"
+        "🏄 Surfing & Coast",
+        "📸 Epic Viewpoints",
+        "🌿 Ayurveda & Spas",
+        "🛕 Ancient Temples",
+        "🛺 Tuk-Tuk Adventures"
     ]
     
+    @State private var customDestinationInput: String = ""
     @State private var showEditDatesSheet: Bool = false
     @State private var showTuneSheet: Bool = false
     @State private var isGenerating: Bool = false
     @State private var generationProgress: Double = 0.0
-    @State private var generationStage: String = "Analyzing destination DNA..."
+    @State private var generationStage: String = "Analyzing Sri Lanka destinations..."
     @State private var navigateToDailyItinerary: Bool = false
     @State private var activeToast: String? = nil
     @State private var isAiPulsing: Bool = false
     
-    // Quick suggestion destinations
+    // Quick suggestion destinations in Sri Lanka
     private let quickSuggestions: [QuickDestination] = [
-        QuickDestination(name: "Paris", flag: "🇫🇷", subtitle: "France • Romance & Cafés", season: "Mild Autumn", seasonTag: "Oct-Nov Best"),
-        QuickDestination(name: "Amalfi Coast", flag: "🇮🇹", subtitle: "Italy • Cliffside Escapes", season: "Shoulder Season Sun", seasonTag: "Crisp Views"),
-        QuickDestination(name: "Reykjavik", flag: "🇮🇸", subtitle: "Iceland • Northern Lights", season: "Aurora Borealis Season", seasonTag: "Peak Aurora"),
-        QuickDestination(name: "New York", flag: "🇺🇸", subtitle: "USA • Broadway & Skyline", season: "Fall Foliage in Central Park", seasonTag: "Crisp Fall")
+        QuickDestination(name: "Sigiriya & Cultural Triangle", flag: "🇱🇰", subtitle: "UNESCO Ancient Citadel & Rock Caves", season: "Tropical Dry Season", seasonTag: "Best Clear Skies"),
+        QuickDestination(name: "Ella & Hill Country", flag: "🇱🇰", subtitle: "Scenic Blue Train & Ceylon Tea Trails", season: "Cool Mountain Mist", seasonTag: "Year-Round Cool"),
+        QuickDestination(name: "Galle Fort & Southern Coast", flag: "🇱🇰", subtitle: "Living Dutch Fort & Ocean Ramparts", season: "Coastal Sunshine & Surfing", seasonTag: "Nov-Apr Peak"),
+        QuickDestination(name: "Yala Wildlife & Leopards", flag: "🇱🇰", subtitle: "Leopards, Elephants & Lagoon Safari", season: "Prime Wildlife Viewing", seasonTag: "Dry Season Best")
     ]
     
     var body: some View {
@@ -490,7 +492,7 @@ struct TripGeneratorWizardView: View {
                 
                 // Destination Discovery Visual Strip
                 HStack(spacing: 10) {
-                    // Photo 1: Tokyo Pagoda
+                    // Photo 1: Sigiriya Ancient Citadel
                     ZStack(alignment: .bottomLeading) {
                         AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuCrQTcPiDbYUvAVVwmrM19ubJHwtODGFMAL9b0YlRpZmxh75ZIY9eYHnn6MulTbcu7wFHCLX3zgKUoOqDywdFsKdGll8eIOGxk3ONR3XmK1uhNNkHq2P4w_Yya4GUw7czqkdDJLfMHa03vqpx1Psngp8Bx_Qj8EKtvHC3kUBhWfnqMtjry7aKsidJIvN4oe2_7XM0IjIxPmOBvJCTDohM8EOj5C5SxVWlSnVld9sul4SNq0GJvz7TuWsQ")) { phase in
                             if let image = phase.image {
@@ -510,7 +512,7 @@ struct TripGeneratorWizardView: View {
                             endPoint: .top
                         )
                         
-                        Text("Shinjuku Gyoen & Shibuya")
+                        Text("Sigiriya Ancient Citadel")
                             .font(.system(size: 11, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .shadow(radius: 2)
@@ -522,7 +524,7 @@ struct TripGeneratorWizardView: View {
                         RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1)
                     )
                     
-                    // Photo 2: Kyoto Bamboo Walkway
+                    // Photo 2: Ella Nine Arches Bridge
                     ZStack(alignment: .bottomLeading) {
                         AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuBqvnS2K6teESPcYvg5Aoxxb0zeWogwCUFiW-tJ3wULsjQCg5d4fojDC_X0JF-TVpJ-R-Jy-OPZA3Ht2B1KpzIqXST0R_59v2k3zCfFrAyQIMGyc8L7ogOfkTG9MVp3SNIq2FdJcytkn-AHch1TTwkWODkpIoV8MwpT6wpvUyJaTjdkUSlsfCaWhVq-D7u7vP4vehQkh6K5UCHd1jd_MeenwHoxdo68IFWdnzCG9ekyFwR960a007D-gg")) { phase in
                             if let image = phase.image {
@@ -542,7 +544,7 @@ struct TripGeneratorWizardView: View {
                             endPoint: .top
                         )
                         
-                        Text("Gion & Arashiyama Paths")
+                        Text("Ella Nine Arches Bridge")
                             .font(.system(size: 11, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                             .shadow(radius: 2)
@@ -1146,7 +1148,7 @@ struct TripGeneratorWizardView: View {
                 
                 VStack(spacing: 20) {
                     HStack {
-                        Text("Select Travel Window")
+                        Text("Select Trip Duration")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                         Spacer()
@@ -1160,17 +1162,36 @@ struct TripGeneratorWizardView: View {
                     .padding(.top, 20)
                     
                     VStack(alignment: .leading, spacing: 14) {
-                        Text("Choose Departure & Return Dates")
+                        Text("How many days will you explore Sri Lanka?")
                             .font(.system(size: 14, weight: .medium))
                             .foregroundColor(textOnSurfaceVariant)
                         
-                        DatePicker("Start Date", selection: .constant(Date()), displayedComponents: .date)
-                            .datePickerStyle(.graphical)
-                            .tint(primaryContainer)
-                            .colorScheme(.dark)
-                            .padding()
-                            .background(surfaceContainerLow)
-                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                        HStack(spacing: 10) {
+                            ForEach([3, 5, 7, 10, 14], id: \.self) { days in
+                                Button(action: {
+                                    travelDaysCount = days
+                                    travelDurationText = "\(days) Days • \(days - 1) Nights"
+                                    travelDatesText = "Next \(days) Days"
+                                }) {
+                                    Text("\(days)D")
+                                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                                        .foregroundColor(travelDaysCount == days ? .black : .white)
+                                        .frame(maxWidth: .infinity)
+                                        .frame(height: 44)
+                                        .background(travelDaysCount == days ? primaryContainer : surfaceContainerLow)
+                                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                                        .overlay(
+                                            RoundedRectangle(cornerRadius: 12)
+                                                .stroke(travelDaysCount == days ? primaryContainer : outlineVariant, lineWidth: 1)
+                                        )
+                                }
+                            }
+                        }
+                        
+                        Text("Trip Duration: \(travelDurationText)")
+                            .font(.system(size: 14, weight: .semibold, design: .rounded))
+                            .foregroundColor(primaryCyan)
+                            .padding(.top, 8)
                     }
                     .padding(.horizontal, 20)
                     
@@ -1178,7 +1199,7 @@ struct TripGeneratorWizardView: View {
                 }
             }
         }
-        .presentationDetents([.medium, .large])
+        .presentationDetents([.height(260)])
     }
     
     private var tuneDestinationSheetView: some View {
@@ -1186,66 +1207,113 @@ struct TripGeneratorWizardView: View {
             ZStack {
                 darkBackground.ignoresSafeArea()
                 
-                VStack(spacing: 20) {
-                    HStack {
-                        Text("Customize Target Destination")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        Spacer()
-                        Button("Done") {
-                            showTuneSheet = false
-                        }
-                        .foregroundColor(primaryContainer)
-                        .font(.system(size: 16, weight: .bold))
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    
-                    VStack(spacing: 12) {
-                        ForEach(quickSuggestions) { dest in
-                            Button(action: {
-                                selectedDestination = dest.name
-                                destinationFlag = dest.flag
-                                destinationSubtitle = dest.subtitle
-                                seasonText = dest.season
-                                seasonBadge = dest.seasonTag
+                ScrollView {
+                    VStack(spacing: 18) {
+                        HStack {
+                            Text("Customize Sri Lanka Destination")
+                                .font(.system(size: 18, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                            Spacer()
+                            Button("Done") {
                                 showTuneSheet = false
-                            }) {
-                                HStack(spacing: 12) {
-                                    Text(dest.flag)
-                                        .font(.system(size: 24))
-                                    VStack(alignment: .leading, spacing: 2) {
-                                        Text(dest.name)
-                                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                                            .foregroundColor(.white)
-                                        Text(dest.subtitle)
-                                            .font(.system(size: 12, weight: .medium))
-                                            .foregroundColor(textOnSurfaceVariant)
-                                    }
-                                    Spacer()
-                                    if selectedDestination == dest.name {
-                                        Image(systemName: "checkmark")
-                                            .foregroundColor(primaryContainer)
-                                            .font(.system(size: 14, weight: .bold))
+                            }
+                            .foregroundColor(primaryContainer)
+                            .font(.system(size: 16, weight: .bold))
+                        }
+                        .padding(.top, 16)
+                        
+                        // Custom Destination Input
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("ENTER ANY SRI LANKAN DESTINATION")
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .foregroundColor(textOnSurfaceVariant)
+                            
+                            HStack(spacing: 10) {
+                                Image(systemName: "magnifyingglass")
+                                    .foregroundColor(primaryContainer)
+                                
+                                TextField("e.g. Ella & Nine Arches, Yala Safari, Trincomalee", text: $customDestinationInput)
+                                    .font(.system(size: 14))
+                                    .foregroundColor(.white)
+                                
+                                if !customDestinationInput.isEmpty {
+                                    Button(action: {
+                                        selectedDestination = customDestinationInput
+                                        destinationSubtitle = "Sri Lanka • Custom Route"
+                                        destinationFlag = "🇱🇰"
+                                        seasonText = "Tropical Island Sunshine"
+                                        seasonBadge = "Custom Vibe"
+                                        showTuneSheet = false
+                                        triggerToast("Set to \(customDestinationInput)")
+                                    }) {
+                                        Text("Apply")
+                                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                                            .foregroundColor(.black)
+                                            .padding(.horizontal, 12)
+                                            .padding(.vertical, 6)
+                                            .background(primaryContainer)
+                                            .clipShape(Capsule())
                                     }
                                 }
-                                .padding()
-                                .background(surfaceContainerLow)
-                                .clipShape(RoundedRectangle(cornerRadius: 14))
-                                .overlay(
-                                    RoundedRectangle(cornerRadius: 14)
-                                        .stroke(selectedDestination == dest.name ? primaryContainer : outlineVariant, lineWidth: 1)
-                                )
+                            }
+                            .padding(12)
+                            .background(surfaceContainerLow)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1)
+                            )
+                        }
+                        
+                        // Quick Suggestions List
+                        VStack(alignment: .leading, spacing: 10) {
+                            Text("OR PICK A POPULAR SRI LANKAN ROUTE")
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .foregroundColor(textOnSurfaceVariant)
+                            
+                            ForEach(quickSuggestions) { dest in
+                                Button(action: {
+                                    selectedDestination = dest.name
+                                    destinationFlag = dest.flag
+                                    destinationSubtitle = dest.subtitle
+                                    seasonText = dest.season
+                                    seasonBadge = dest.seasonTag
+                                    showTuneSheet = false
+                                }) {
+                                    HStack(spacing: 12) {
+                                        Text(dest.flag)
+                                            .font(.system(size: 24))
+                                        VStack(alignment: .leading, spacing: 2) {
+                                            Text(dest.name)
+                                                .font(.system(size: 15, weight: .bold, design: .rounded))
+                                                .foregroundColor(.white)
+                                            Text(dest.subtitle)
+                                                .font(.system(size: 12, weight: .medium))
+                                                .foregroundColor(textOnSurfaceVariant)
+                                        }
+                                        Spacer()
+                                        if selectedDestination == dest.name {
+                                            Image(systemName: "checkmark")
+                                                .foregroundColor(primaryContainer)
+                                                .font(.system(size: 14, weight: .bold))
+                                        }
+                                    }
+                                    .padding(14)
+                                    .background(surfaceContainerLow)
+                                    .clipShape(RoundedRectangle(cornerRadius: 14))
+                                    .overlay(
+                                        RoundedRectangle(cornerRadius: 14)
+                                            .stroke(selectedDestination == dest.name ? primaryContainer : outlineVariant, lineWidth: 1)
+                                    )
+                                }
                             }
                         }
                     }
                     .padding(.horizontal, 20)
-                    
-                    Spacer()
+                    .padding(.bottom, 30)
                 }
             }
         }
-        .presentationDetents([.medium])
+        .presentationDetents([.medium, .large])
     }
     
     // MARK: - Actions
@@ -1270,25 +1338,36 @@ struct TripGeneratorWizardView: View {
         withAnimation {
             isGenerating = true
             generationProgress = 0.0
-            generationStage = "Analyzing travel companions & vibe DNA..."
+            generationStage = "Analyzing travel companions & vibe DNA in Sri Lanka..."
         }
         
-        Timer.scheduledTimer(withTimeInterval: 0.4, repeats: true) { timer in
+        Timer.scheduledTimer(withTimeInterval: 0.35, repeats: true) { timer in
             if generationProgress < 0.3 {
                 generationProgress += 0.1
-                generationStage = "Querying live weather & peak foliage in \(selectedDestination)..."
+                generationStage = "Mapping heritage citadels & scenic routes in \(selectedDestination)..."
             } else if generationProgress < 0.6 {
                 generationProgress += 0.15
-                generationStage = "Mapping Michelin spots & scenic walking hops..."
+                generationStage = "Scheduling Ceylon scenic trains & safari permits..."
             } else if generationProgress < 0.9 {
                 generationProgress += 0.15
-                generationStage = "Generating Shinkansen schedules & booking references..."
+                generationStage = "Curating authentic local feasting & tea tastings..."
             } else {
                 timer.invalidate()
                 generationProgress = 1.0
-                generationStage = "Done! Opening Daily Itinerary..."
+                generationStage = "Trip ready! Opening your Sri Lanka itinerary..."
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
+                // GENERATE REAL DYNAMIC TRIP ACCORDING TO USER INPUT
+                TripManager.shared.generateAndSetActiveTrip(
+                    destination: selectedDestination,
+                    durationDays: travelDaysCount,
+                    companion: selectedCompanion.rawValue,
+                    pace: selectedPace.rawValue,
+                    budget: selectedBudget.rawValue,
+                    tags: selectedTags,
+                    startDate: Date()
+                )
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation {
                         isGenerating = false
                         navigateToDailyItinerary = true

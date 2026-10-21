@@ -14,7 +14,7 @@ struct ExpenseTransaction: Identifiable {
     let timeAgo: String
     let location: String
     let amountUSD: Double
-    let amountJPY: Int
+    let amountLKR: Int
 }
 
 struct BudgetCategoryEnvelope: Identifiable {
@@ -25,8 +25,8 @@ struct BudgetCategoryEnvelope: Identifiable {
     let color: Color
     let spentUSD: Double
     let targetUSD: Double
-    let spentJPY: Int
-    let targetJPY: Int
+    let spentLKR: Int
+    let targetLKR: Int
     
     var progress: Double {
         min(spentUSD / targetUSD, 1.0)
@@ -55,7 +55,7 @@ struct BudgetExpensesView: View {
     private let outlineBorder = Color.white.opacity(0.08)
     
     // FX Rate
-    private let fxRate: Double = 152.40 // 1 USD = 152.40 JPY
+    private let fxRate: Double = 305.00 // 1 USD = 305 LKR (Central Bank of Sri Lanka)
     
     // Interactive State
     @State private var selectedTab: AppTab = .budget
@@ -80,48 +80,48 @@ struct BudgetExpensesView: View {
     // Sample Transactions
     @State private var transactions: [ExpenseTransaction] = [
         ExpenseTransaction(
-            title: "Sushi Yoshitake Omakase",
-            subtitle: "3 Michelin Star dinner experience",
+            title: "Ministry of Crab Dinner",
+            subtitle: "Sri Lankan giant lagoon crab feast",
             category: "Dining",
             categoryColor: Color(red: 245/255, green: 158/255, blue: 11/255),
             iconName: "fork.knife",
             timeAgo: "Today, 1:45 PM",
-            location: "Ginza, Tokyo",
-            amountUSD: 236.22,
-            amountJPY: 36000
+            location: "Old Dutch Hospital, Colombo",
+            amountUSD: 95.00,
+            amountLKR: 28975
         ),
         ExpenseTransaction(
-            title: "Shinkansen Bullet Train",
-            subtitle: "2 Reserved Seats Nozomi Express",
-            category: "Transit",
-            categoryColor: Color(red: 96/255, green: 165/255, blue: 250/255),
-            iconName: "tram.fill",
-            timeAgo: "Yesterday",
-            location: "Tokyo → Kyoto",
-            amountUSD: 186.35,
-            amountJPY: 28400
-        ),
-        ExpenseTransaction(
-            title: "Meiji Shrine Amulet & Pass",
-            subtitle: "Sacred inner garden entry",
+            title: "Sigiriya UNESCO CCF Pass",
+            subtitle: "Fast-track citadel ticket & museum entry",
             category: "Culture",
             categoryColor: Color(red: 52/255, green: 211/255, blue: 153/255),
             iconName: "sparkles",
             timeAgo: "Yesterday",
-            location: "Shibuya",
-            amountUSD: 20.99,
-            amountJPY: 3200
+            location: "Sigiriya, Central Province",
+            amountUSD: 36.00,
+            amountLKR: 10800
         ),
         ExpenseTransaction(
-            title: "7-Eleven Convenience Snack",
-            subtitle: "Onigiri, matcha latte & melon pan",
+            title: "Ella Scenic Blue Train",
+            subtitle: "Reserved Observation Saloon seat",
+            category: "Transit",
+            categoryColor: Color(red: 96/255, green: 165/255, blue: 250/255),
+            iconName: "tram.fill",
+            timeAgo: "Yesterday",
+            location: "Kandy → Ella Highlands",
+            amountUSD: 18.50,
+            amountLKR: 5640
+        ),
+        ExpenseTransaction(
+            title: "King Coconut & Egg Rotti",
+            subtitle: "Golden Thambili on the ramparts",
             category: "Snacks",
             categoryColor: Color(red: 245/255, green: 158/255, blue: 11/255),
             iconName: "bag.fill",
             timeAgo: "Oct 24",
-            location: "Otemachi",
-            amountUSD: 5.84,
-            amountJPY: 890
+            location: "Galle Fort, Southern Coast",
+            amountUSD: 3.50,
+            amountLKR: 1050
         )
     ]
     
@@ -129,33 +129,33 @@ struct BudgetExpensesView: View {
     private let categories: [BudgetCategoryEnvelope] = [
         BudgetCategoryEnvelope(
             name: "Food & Dining",
-            detail: "¥114,665 spent of ¥182,880",
+            detail: "Rs. 229,480 spent of Rs. 366,000",
             iconName: "fork.knife",
             color: Color(red: 245/255, green: 158/255, blue: 11/255),
             spentUSD: 752.40,
             targetUSD: 1200.00,
-            spentJPY: 114665,
-            targetJPY: 182880
+            spentLKR: 229480,
+            targetLKR: 366000
         ),
         BudgetCategoryEnvelope(
             name: "Flights & Transit",
-            detail: "Includes JR Shinkansen Pass",
+            detail: "Expressways & Scenic Railway Pass",
             iconName: "tram.fill",
             color: Color(red: 37/255, green: 99/255, blue: 235/255),
             spentUSD: 1588.00,
             targetUSD: 1600.00,
-            spentJPY: 242011,
-            targetJPY: 243840
+            spentLKR: 484340,
+            targetLKR: 488000
         ),
         BudgetCategoryEnvelope(
             name: "Accommodations",
-            detail: "Tokyo & Kyoto Ryokans",
+            detail: "Heritance Kandalama & Galle Fort Villas",
             iconName: "bed.double.fill",
             color: Color(red: 56/255, green: 189/255, blue: 248/255),
             spentUSD: 1340.00,
             targetUSD: 1800.00,
-            spentJPY: 204216,
-            targetJPY: 274320
+            spentLKR: 408700,
+            targetLKR: 549000
         )
     ]
     
@@ -332,7 +332,7 @@ struct BudgetExpensesView: View {
                 
                 // Notifications button
                 Button(action: {
-                    triggerNotice("🔔 FX alert: JPY weakened by +0.8% today")
+                    triggerNotice("🔔 FX alert: LKR stable at ~305 per USD today")
                 }) {
                     ZStack(alignment: .topTrailing) {
                         Circle()
@@ -429,7 +429,7 @@ struct BudgetExpensesView: View {
                         .font(.system(size: 12))
                         .foregroundColor(primarySky)
                     
-                    Text("Japan Autumn Tour")
+                    Text(TripManager.shared.currentTrip.title.isEmpty ? "Sri Lanka Island Tour 🇱🇰" : TripManager.shared.currentTrip.title)
                         .font(.system(size: 12, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
@@ -447,7 +447,7 @@ struct BudgetExpensesView: View {
                 
                 Spacer()
                 
-                Text("Oct 24 – Nov 04")
+                Text("Active Sri Lanka Journey")
                     .font(.system(size: 11, weight: .semibold, design: .rounded))
                     .foregroundColor(slateMuted)
                     .padding(.horizontal, 10)
@@ -480,7 +480,7 @@ struct BudgetExpensesView: View {
                     }
                 }) {
                     HStack(spacing: 6) {
-                        Text(isUSD ? "USD ($)" : "JPY (¥)")
+                        Text(isUSD ? "USD ($)" : "LKR (Rs.)")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(primarySky)
                         
@@ -488,7 +488,7 @@ struct BudgetExpensesView: View {
                             .font(.system(size: 10, weight: .bold))
                             .foregroundColor(slateMuted)
                         
-                        Text(isUSD ? "JPY (¥)" : "USD ($)")
+                        Text(isUSD ? "LKR (Rs.)" : "USD ($)")
                             .font(.system(size: 12, weight: .medium, design: .rounded))
                             .foregroundColor(slateMuted)
                     }
@@ -510,7 +510,7 @@ struct BudgetExpensesView: View {
                     .frame(width: 6, height: 6)
                     .shadow(color: secondaryMint, radius: 4)
                 
-                Text("1 USD = 152.40 JPY • Tokyo Mid-Market Live FX")
+                Text("1 USD = 305.00 LKR • Central Bank of Sri Lanka Live FX")
                     .font(.system(size: 11, weight: .medium, design: .rounded))
                     .foregroundColor(slateMuted)
             }
@@ -538,7 +538,7 @@ struct BudgetExpensesView: View {
                             .foregroundColor(slateMuted)
                             .tracking(0.6)
                         
-                        Text(isUSD ? "$2,319.50" : "¥353,492")
+                        Text(isUSD ? "$2,319.50" : "Rs. 707,450")
                             .font(.system(size: 36, weight: .heavy, design: .rounded))
                             .foregroundColor(.white)
                     }
@@ -603,7 +603,7 @@ struct BudgetExpensesView: View {
                         HStack(spacing: 2) {
                             Text("Spent:")
                                 .foregroundColor(slateMuted)
-                            Text(isUSD ? "$4,180.50" : "¥637,108")
+                            Text(isUSD ? "$4,180.50" : "Rs. 1,275,050")
                                 .foregroundColor(.white)
                                 .bold()
                         }
@@ -613,7 +613,7 @@ struct BudgetExpensesView: View {
                         HStack(spacing: 2) {
                             Text("Total Cap:")
                                 .foregroundColor(slateMuted)
-                            Text(isUSD ? "$6,500.00" : "¥990,600")
+                            Text(isUSD ? "$6,500.00" : "Rs. 1,982,500")
                                 .foregroundColor(.white)
                                 .bold()
                         }
@@ -638,7 +638,7 @@ struct BudgetExpensesView: View {
                     
                     VStack(alignment: .leading, spacing: 1) {
                         HStack(spacing: 4) {
-                            Text(isUSD ? "$289.90" : "¥44,180")
+                            Text(isUSD ? "$289.90" : "Rs. 88,420")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
                             
@@ -784,13 +784,13 @@ struct BudgetExpensesView: View {
                             .font(.system(size: 13, weight: .medium, design: .rounded))
                             .foregroundColor(.white)
                         
-                        Text(isUSD ? "$312.40" : "¥47,610")
+                        Text(isUSD ? "$312.40" : "Rs. 95,280")
                             .font(.system(size: 13, weight: .bold, design: .rounded))
                             .foregroundColor(secondaryMint)
                     }
                 }
                 
-                Text("Hotel Deposit • Ryokan Aman Tokyo")
+                Text("Hotel Deposit • Heritance Kandalama Dambulla")
                     .font(.system(size: 11, weight: .regular))
                     .foregroundColor(slateMuted)
             }
@@ -885,11 +885,11 @@ struct BudgetExpensesView: View {
                         .foregroundColor(slateMuted)
                         .tracking(0.8)
                     
-                    Text(isUSD ? "$4,180" : "¥637,100")
+                    Text(isUSD ? "$4,180" : "Rs. 1,275,000")
                         .font(.system(size: 22, weight: .heavy, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text(isUSD ? "JPY 637,100" : "USD $4,180")
+                    Text(isUSD ? "LKR 1,275,000" : "USD $4,180")
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .foregroundColor(secondaryMint)
                 }
@@ -1000,15 +1000,15 @@ struct BudgetExpensesView: View {
                 Spacer()
                 
                 VStack(alignment: .trailing, spacing: 2) {
-                    Text(isUSD ? String(format: "$%.2f", envelope.spentUSD) : String(format: "¥%d", envelope.spentJPY))
+                    Text(isUSD ? String(format: "$%.2f", envelope.spentUSD) : String(format: "Rs. %d", envelope.spentLKR))
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
                     let leftUSD = max(envelope.targetUSD - envelope.spentUSD, 0)
-                    let leftJPY = max(envelope.targetJPY - envelope.spentJPY, 0)
+                    let leftLKR = max(envelope.targetLKR - envelope.spentLKR, 0)
                     let isTight = envelope.progress > 0.95
                     
-                    Text(isUSD ? String(format: "$%.2f left", leftUSD) : String(format: "¥%d left", leftJPY))
+                    Text(isUSD ? String(format: "$%.2f left", leftUSD) : String(format: "Rs. %d left", leftLKR))
                         .font(.system(size: 10.5, weight: .bold, design: .rounded))
                         .foregroundColor(isTight ? Color.red.opacity(0.9) : secondaryMint)
                 }
@@ -1128,11 +1128,11 @@ struct BudgetExpensesView: View {
             Spacer()
             
             VStack(alignment: .trailing, spacing: 1) {
-                Text(isUSD ? String(format: "-$%.2f", item.amountUSD) : String(format: "-¥%d", item.amountJPY))
+                Text(isUSD ? String(format: "-$%.2f", item.amountUSD) : String(format: "-Rs. %d", item.amountLKR))
                     .font(.system(size: 13.5, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
                 
-                Text(isUSD ? String(format: "¥%d", item.amountJPY) : String(format: "$%.2f", item.amountUSD))
+                Text(isUSD ? String(format: "Rs. %d", item.amountLKR) : String(format: "$%.2f", item.amountUSD))
                     .font(.system(size: 10.5, weight: .medium, design: .rounded))
                     .foregroundColor(slateMuted)
             }
@@ -1321,7 +1321,7 @@ struct LogExpenseSheet: View {
     @State private var merchantName: String = ""
     @State private var amountText: String = ""
     @State private var selectedCategory: String = "Dining"
-    @State private var location: String = "Tokyo, Japan"
+    @State private var location: String = "Colombo, Sri Lanka"
     
     private let categories = ["Dining", "Transit", "Culture", "Lodging", "Shopping"]
     
@@ -1341,13 +1341,13 @@ struct LogExpenseSheet: View {
                     VStack(spacing: 20) {
                         // Amount Hero Input
                         VStack(spacing: 6) {
-                            Text(isUSD ? "AMOUNT (USD)" : "AMOUNT (JPY)")
+                            Text(isUSD ? "AMOUNT (USD)" : "AMOUNT (LKR)")
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
                                 .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
                                 .tracking(1)
                             
                             HStack(alignment: .firstTextBaseline, spacing: 4) {
-                                Text(isUSD ? "$" : "¥")
+                                Text(isUSD ? "$" : "Rs. ")
                                     .font(.system(size: 32, weight: .bold, design: .rounded))
                                     .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
                                 
@@ -1433,19 +1433,19 @@ struct LogExpenseSheet: View {
                             let title = merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
                             guard !title.isEmpty else { return }
                             
-                            let amountUSD = isUSD ? amount : (amount / 152.40)
-                            let amountJPY = isUSD ? Int(amount * 152.40) : Int(amount)
+                            let amountUSD = isUSD ? amount : (amount / 305.00)
+                            let amountLKR = isUSD ? Int(amount * 305.00) : Int(amount)
                             
                             let newExp = ExpenseTransaction(
                                 title: title,
-                                subtitle: "Logged in Tokyo",
+                                subtitle: "Logged in Sri Lanka",
                                 category: selectedCategory,
                                 categoryColor: Color(red: 245/255, green: 158/255, blue: 11/255),
                                 iconName: "fork.knife",
                                 timeAgo: "Just now",
                                 location: location,
                                 amountUSD: amountUSD,
-                                amountJPY: amountJPY
+                                amountLKR: amountLKR
                             )
                             onSave(newExp)
                             dismiss()
@@ -1522,7 +1522,7 @@ struct SplitBillSheet: View {
                             .font(.system(size: 48, weight: .heavy, design: .rounded))
                             .foregroundColor(Color(red: 68/255, green: 226/255, blue: 205/255))
                         
-                        Text(String(format: "JPY ¥%d per traveler", Int(perPersonAmount * 152.40)))
+                        Text(String(format: "LKR Rs. %d per traveler", Int(perPersonAmount * 305.00)))
                             .font(.system(size: 13, weight: .semibold, design: .rounded))
                             .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
                     }

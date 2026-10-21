@@ -744,7 +744,7 @@ struct SettingsProfileView: View {
                     title: "Offline Guides & Vector Maps",
                     value: "4.8 GB Used"
                 ) {
-                    showToast("Offline package: Japan, France & Italy downloaded")
+                    showToast("Offline package: Sri Lanka Island Pack (Sigiriya, Kandy, Galle & Highlands) downloaded")
                 }
             }
             .background(surfaceContainer)

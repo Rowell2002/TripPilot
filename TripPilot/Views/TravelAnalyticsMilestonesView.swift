@@ -6,8 +6,8 @@ import UIKit
 
 // MARK: - Timeframe Enum
 enum AnalyticsTimeframe: String, CaseIterable, Identifiable {
-    case japan = "Japan Trip"
-    case review2024 = "2024 Review"
+    case sriLanka = "Sri Lanka Expedition"
+    case recentTrip = "Active Itinerary"
     case allTime = "All-Time"
     
     var id: String { rawValue }
@@ -52,7 +52,7 @@ struct TravelAnalyticsMilestonesView: View {
     private let textMuted = Color(red: 135/255, green: 146/255, blue: 154/255)              // #87929a
     
     // State Variables
-    @State private var selectedTimeframe: AnalyticsTimeframe = .japan
+    @State private var selectedTimeframe: AnalyticsTimeframe = .sriLanka
     @State private var isLivePulsing: Bool = false
     @State private var ringsAnimated: Bool = false
     @State private var showExportSheet: Bool = false
@@ -72,9 +72,9 @@ struct TravelAnalyticsMilestonesView: View {
     // Milestones Data
     private let milestonesList: [MilestoneItem] = [
         MilestoneItem(
-            title: "Bullet Train Maestro",
-            subtitle: "Shinkansen logged >1,000 km across Honshu",
-            iconName: "train.side.front.car",
+            title: "Highland Railway Maestro",
+            subtitle: "Main Line Scenic Train >500 km across Ceylon tea hills",
+            iconName: "tram.fill",
             isUnlocked: true,
             statusText: "Unlocked",
             progress: nil,
@@ -82,8 +82,8 @@ struct TravelAnalyticsMilestonesView: View {
             iconBgColor: Color(red: 56/255, green: 189/255, blue: 248/255).opacity(0.12)
         ),
         MilestoneItem(
-            title: "Alpine Explorer",
-            subtitle: "Jungfraujoch summit cable-way link verified",
+            title: "UNESCO Citadel Summit",
+            subtitle: "Sigiriya Lion Rock ancient citadel climbed & verified",
             iconName: "mountain.2.fill",
             isUnlocked: true,
             statusText: "Unlocked",
@@ -92,8 +92,8 @@ struct TravelAnalyticsMilestonesView: View {
             iconBgColor: Color(red: 68/255, green: 226/255, blue: 205/255).opacity(0.12)
         ),
         MilestoneItem(
-            title: "Omakase Connoisseur",
-            subtitle: "5 Michelin-starred dining spots logged",
+            title: "Ceylon Crab Connoisseur",
+            subtitle: "Ministry of Crab & Galle Face street delicacies verified",
             iconName: "fork.knife",
             isUnlocked: true,
             statusText: "Unlocked",
@@ -102,8 +102,8 @@ struct TravelAnalyticsMilestonesView: View {
             iconBgColor: Color(red: 175/255, green: 207/255, blue: 255/255).opacity(0.12)
         ),
         MilestoneItem(
-            title: "Next: Island Hopper",
-            subtitle: "Amalfi Coast Ferries • 3 of 4 legs booked",
+            title: "Next: Southern Surf Bay",
+            subtitle: "Weligama & Mirissa blue whale safari • 3 of 4 legs booked",
             iconName: "sailboat.fill",
             isUnlocked: false,
             statusText: "In 48d",
@@ -690,7 +690,7 @@ struct TravelAnalyticsMilestonesView: View {
                         .font(.system(size: 11, weight: .medium, design: .rounded))
                         .foregroundColor(textVariant)
                     
-                    Text("Top: Tokyo • Zurich")
+                    Text("Top: Kandy • Galle Fort")
                         .font(.system(size: 10, weight: .semibold, design: .rounded))
                         .foregroundColor(textVariant)
                         .lineLimit(1)
