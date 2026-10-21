@@ -133,7 +133,7 @@ struct DailyItineraryView: View {
             daySettingsSheet
         }
         .navigationDestination(isPresented: $navigateToInteractiveMap) {
-            InteractiveMapView()
+            InteractiveMapView(initialDayIndex: selectedDateIndex)
         }
         .navigationDestination(isPresented: $navigateToBudget) {
             BudgetExpensesView()
@@ -506,6 +506,59 @@ struct DailyItineraryView: View {
                 metricCell(title: "REGION", value: currentDay.region, valueColor: .white)
                 metricCell(title: "PACE", value: tripManager.currentTrip.pace, valueColor: skyBlue)
             }
+            
+            // MapKit Interactive Exploration Button
+            Button(action: {
+                navigateToInteractiveMap = true
+            }) {
+                HStack(spacing: 10) {
+                    ZStack {
+                        Circle()
+                            .fill(Color(red: 251/255, green: 191/255, blue: 36/255).opacity(0.18))
+                            .frame(width: 32, height: 32)
+                        
+                        Image(systemName: "map.fill")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(Color(red: 251/255, green: 191/255, blue: 36/255))
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: 6) {
+                            Text("View Day Route & Dining on Map")
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                            
+                            Text("MapKit")
+                                .font(.system(size: 9.5, weight: .heavy, design: .rounded))
+                                .foregroundColor(Color(red: 251/255, green: 191/255, blue: 36/255))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color(red: 251/255, green: 191/255, blue: 36/255).opacity(0.15))
+                                .clipShape(Capsule())
+                        }
+                        
+                        Text("Breakfast spots, cafes, attractions, lunch & dinner with Apple Maps navigation")
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundColor(textMuted)
+                            .lineLimit(1)
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 9)
+                .background(surfaceContainerLow)
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(Color(red: 251/255, green: 191/255, blue: 36/255).opacity(0.25), lineWidth: 1)
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(16)
         .background(surfaceContainerLowest)

@@ -130,6 +130,9 @@ struct TripGeneratorWizardView: View {
         "🍛 Spicy Kottu & Seafood"
     ]
     @State private var availableTags: [String] = [
+        "☕ Ceylon Cafes & Breakfast",
+        "🍽️ Foodie & Fine Dining",
+        "🦀 Fresh Lagoon Seafood",
         "🏄 Surfing & Coast",
         "📸 Epic Viewpoints",
         "🌿 Ayurveda & Spas",

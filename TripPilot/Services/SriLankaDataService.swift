@@ -435,6 +435,447 @@ public final class SriLankaDataService {
                     helpfulCount: 78
                 )
             ]
+        ),
+        SriLankaPlace(
+            name: "Ministry of Crab",
+            sinhalaName: "මිනිස්ට්‍රි ඔෆ් ක්‍රැබ්",
+            district: "Colombo",
+            province: "Western Province",
+            category: .dining,
+            rating: 4.9,
+            reviewCount: "5.8k",
+            description: "World-renowned seafood temple founded by Chef Dharshan Munidasa and cricket legends Kumar Sangakkara & Mahela Jayawardene in a 400-year-old Dutch Hospital.",
+            highlights: [
+                "Lagoon Crab in Black Pepper Sauce",
+                "Garlic Chilli Prawns with Kade Bread",
+                "Claypot Crab Curry & Coconut Sambol"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "12:00 PM – 11:00 PM daily",
+            visitorTips: [
+                "Reserve at least 2–3 days in advance during high season.",
+                "Order the traditional Sri Lankan 'Kade Bread' to dip into the rich garlic pepper crab broth."
+            ],
+            dressCode: "Smart casual. No beachwear.",
+            latitude: 6.9332,
+            longitude: 79.8436,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80",
+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Evening Dinner (07:30 PM)",
+            badgeText: "Asia's 50 Best",
+            reviews: [
+                PlaceReview(
+                    userName: "Marcus Vance",
+                    userAvatar: "M",
+                    userCountry: "United Kingdom 🇬🇧",
+                    rating: 5.0,
+                    date: "3 days ago",
+                    comment: "The pepper crab was nothing short of life changing. The sweet lagoon crab meat with peppery heat and warm wood-fired bread is perfection.",
+                    helpfulCount: 64
+                )
+            ]
+        ),
+        SriLankaPlace(
+            name: "Upali's by Nawaloka",
+            sinhalaName: "උපාලිස් කැෆේ",
+            district: "Colombo",
+            province: "Western Province",
+            category: .cafe,
+            rating: 4.8,
+            reviewCount: "3.2k",
+            description: "Colombo's premier destination for authentic Sri Lankan breakfast and home-cooked heirloom curries opposite Viharamahadevi Park.",
+            highlights: [
+                "Steaming Egg Hoppers with Katta Sambol",
+                "Red Rice String Hoppers with Fish Ambul Thiyal",
+                "Kiribath (Milk Rice) with Lunu Miris & Jaggery"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "06:30 AM – 10:30 PM daily",
+            visitorTips: [
+                "Arrive around 07:30 AM for the freshest batch of crispy egg hoppers straight off the wok.",
+                "Pair your meal with a glass of fresh woodapple juice or hot ginger tea."
+            ],
+            dressCode: "Casual comfortable.",
+            latitude: 6.9147,
+            longitude: 79.8606,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Ceylon Breakfast (07:00 AM – 09:30 AM)",
+            badgeText: "Authentic Breakfast",
+            reviews: [
+                PlaceReview(
+                    userName: "Sanduni Fernando",
+                    userAvatar: "S",
+                    userCountry: "Sri Lanka 🇱🇰",
+                    rating: 5.0,
+                    date: "1 week ago",
+                    comment: "The most authentic Sri Lankan breakfast in the city. The egg hoppers are perfectly runny in the center and feather-crisp at the edges!",
+                    helpfulCount: 42
+                )
+            ]
+        ),
+        SriLankaPlace(
+            name: "Cafe Chill & Lounge",
+            sinhalaName: "කැෆේ චිල් ඇල්ල",
+            district: "Badulla",
+            province: "Uva Province",
+            category: .dining,
+            rating: 4.8,
+            reviewCount: "4.4k",
+            description: "Ella's iconic open-air bamboo lounge with vibrant backpacker energy, artisanal curries, wood-fired pizzas, and fresh tropical passionfruit mojitos.",
+            highlights: [
+                "Cheesy Chicken & Vegetable Kottu",
+                "Traditional Banana Leaf Lamprais",
+                "Fresh Passionfruit & Mint Smoothie Bowls"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "07:30 AM – Midnight daily",
+            visitorTips: [
+                "Head to the upper bamboo floor for mountain breeze and fairy-lit evening vibes.",
+                "Great spot for both hearty morning avocado toast and late-night music."
+            ],
+            dressCode: "Relaxed travel casual.",
+            latitude: 6.8687,
+            longitude: 81.0465,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Evening Vibes (06:30 PM – 10:00 PM)",
+            badgeText: "Highland Hangout",
+            reviews: [
+                PlaceReview(
+                    userName: "Liam O'Connor",
+                    userAvatar: "L",
+                    userCountry: "Ireland 🇮🇪",
+                    rating: 5.0,
+                    date: "4 days ago",
+                    comment: "Best vibe in Ella! The chicken kottu was heavenly after hiking Little Adam's Peak.",
+                    helpfulCount: 39
+                )
+            ]
+        ),
+        SriLankaPlace(
+            name: "Grand Hotel 1891 High Tea Room",
+            sinhalaName: "ග්‍රෑන්ඩ් හෝටලය හයි ටී",
+            district: "Nuwara Eliya",
+            province: "Central Province",
+            category: .cafe,
+            rating: 4.9,
+            reviewCount: "2.9k",
+            description: "Victorian colonial elegance offering the most celebrated High Tea experience in Little England amidst manicured rose gardens and Ceylon single-estate teas.",
+            highlights: [
+                "Three-tiered silver stand with warm Devon cream scones",
+                "Smoked salmon blinis & cucumber sandwiches",
+                "Single-Estate Nuwara Eliya Flowery Pekoe tasting"
+            ],
+            entryFeeLKR: 4500,
+            entryFeeUSD: 15.0,
+            openingHours: "03:00 PM – 06:00 PM daily",
+            visitorTips: [
+                "Book tea service between 03:30 PM and 04:30 PM to sit in the glass conservatory overlooking the mist.",
+                "Sample the rare Silver Tips white tea harvested only at dawn."
+            ],
+            dressCode: "Smart casual. Collared shirts recommended.",
+            latitude: 6.9697,
+            longitude: 80.7678,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Afternoon High Tea (03:30 PM – 05:30 PM)",
+            badgeText: "Heritage High Tea",
+            reviews: [
+                PlaceReview(
+                    userName: "Charlotte Bennett",
+                    userAvatar: "C",
+                    userCountry: "Australia 🇦🇺",
+                    rating: 5.0,
+                    date: "2 weeks ago",
+                    comment: "Stepping back in time. The warm scones with homemade strawberry jam and fresh cream in the cool mountain air is unforgettable.",
+                    helpfulCount: 51
+                )
+            ]
+        ),
+        SriLankaPlace(
+            name: "Poonie's Kitchen",
+            sinhalaName: "පූනීස් කිචන් ගාල්ල",
+            district: "Galle",
+            province: "Southern Province",
+            category: .cafe,
+            rating: 4.8,
+            reviewCount: "2.1k",
+            description: "Enchanting open-air courtyard garden oasis hidden on Pedlar's Street inside Galle Fort. Famous for organic Sri Lankan farmer ingredients and vibrant salad thali bowls.",
+            highlights: [
+                "Signature Thali Salad with Turmeric & Lemongrass Dressing",
+                "Chilled Golden Thambili (King Coconut) Coolers",
+                "Fresh Passionfruit and Mango Pavlova"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "10:00 AM – 05:00 PM (Closed Sundays)",
+            visitorTips: [
+                "Sit by the tranquil central goldfish pond under tropical banana trees.",
+                "Ideal sanctuary to cool down after walking Galle Fort's sunlit ramparts."
+            ],
+            dressCode: "Casual summer wear.",
+            latitude: 6.0270,
+            longitude: 80.2178,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Fort Lunch & Coffee (12:00 PM – 02:30 PM)",
+            badgeText: "Organic Courtyard",
+            reviews: [
+                PlaceReview(
+                    userName: "Emma Watson-Smith",
+                    userAvatar: "E",
+                    userCountry: "New Zealand 🇳🇿",
+                    rating: 5.0,
+                    date: "5 days ago",
+                    comment: "A hidden secret in the Fort! The salad thali was so fresh and colorful, and the king coconut cooler was so revitalizing.",
+                    helpfulCount: 36
+                )
+            ]
+        ),
+        
+        // 14. Pedlar's Inn Cafe, Galle Fort
+        SriLankaPlace(
+            name: "Pedlar's Inn Cafe & Gelato",
+            sinhalaName: "පෙඩ්ලර්ස් ඉන් කැෆේ (ගාල්ල)",
+            district: "Galle",
+            province: "Southern Province",
+            category: .cafe,
+            rating: 4.8,
+            reviewCount: "4.7k",
+            description: "The historical pioneer cafe of Galle Fort housed inside an 18th-century British colonial post office. Celebrated for artisanal Italian gelato, wood-fired seafood pizzas, iced Ceylon ginger teas, and fresh passionfruit spritzers.",
+            highlights: [
+                "Oldest & most iconic heritage cafe in Galle Fort",
+                "Homemade passionfruit & mango gelato",
+                "Spiced Ceylon cold brew coffee"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "08:30 AM – 10:00 PM daily",
+            visitorTips: [
+                "Perfect afternoon respite after walking the Fort ramparts.",
+                "Try their fresh lime and ginger soda with mint leaves."
+            ],
+            dressCode: "Smart casual / summer resort wear.",
+            latitude: 6.0268,
+            longitude: 80.2181,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Morning Coffee (09:00 AM) or Sunset Gelato (05:00 PM)",
+            badgeText: "Historic Post Office Cafe",
+            reviews: [
+                PlaceReview(
+                    userName: "Jessica Alba-Davies",
+                    userAvatar: "J",
+                    userCountry: "Australia 🇦🇺",
+                    rating: 5.0,
+                    date: "3 days ago",
+                    comment: "The atmosphere inside this colonial post office is unmatched. The homemade coconut gelato and cold brew coffee gave us the perfect midday energy boost.",
+                    helpfulCount: 42
+                )
+            ]
+        ),
+        
+        // 15. Salty Swamis Cafe & Surf, Weligama / Mirissa
+        SriLankaPlace(
+            name: "Salty Swamis Cafe & Surf",
+            sinhalaName: "සෝල්ටි ස්වාමිස් වෙරළ කැෆේ",
+            district: "Matara",
+            province: "Southern Province",
+            category: .cafe,
+            rating: 4.9,
+            reviewCount: "3.2k",
+            description: "Chic beachfront surf haven and specialty espresso bar overlooking Weligama Bay. Famed for Sri Lanka's best specialty flat whites, pink dragonfruit smoothie bowls, and sourdough avocado toasts.",
+            highlights: [
+                "Specialty single-origin Ceylon espresso & nitro cold brews",
+                "Organic oceanfront breakfast & sourdough tartines",
+                "Direct beach access with surf board rentals"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "07:30 AM – 04:30 PM daily",
+            visitorTips: [
+                "Arrive early before 9:00 AM for fresh sourdough loaves.",
+                "Grab a seat on the ocean-facing deck to watch morning surfers."
+            ],
+            dressCode: "Beach casual & sunglasses.",
+            latitude: 5.9698,
+            longitude: 80.4285,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Sunrise Breakfast & Surf (07:30 AM – 10:00 AM)",
+            badgeText: "Specialty Surf Cafe",
+            reviews: [
+                PlaceReview(
+                    userName: "Finnigan Meyer",
+                    userAvatar: "F",
+                    userCountry: "Germany 🇩🇪",
+                    rating: 5.0,
+                    date: "1 week ago",
+                    comment: "Best coffee on the southern coast of Sri Lanka! The smoothie bowl was fresh, beautifully arranged, and the surf vibe is 10/10.",
+                    helpfulCount: 51
+                )
+            ]
+        ),
+        
+        // 16. The Empire Cafe, Kandy
+        SriLankaPlace(
+            name: "The Empire Cafe",
+            sinhalaName: "එම්පයර් කැෆේ (මහනුවර)",
+            district: "Kandy",
+            province: "Central Province",
+            category: .cafe,
+            rating: 4.8,
+            reviewCount: "3.9k",
+            description: "Housed in a grand colonial arcade steps away from the sacred Temple of the Tooth. Offers a delightful fusion of Ceylon spices, vegan jackfruit curries, lemongrass tea, and house-made passionfruit cheesecakes.",
+            highlights: [
+                "Prime location directly across from Temple of the Tooth",
+                "Signature Jackfruit Curry & Coconut Roti",
+                "Spiced Ceylon chai and organic lemonades"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "08:30 AM – 08:30 PM daily",
+            visitorTips: [
+                "Take an outdoor arcade table to soak in the Kandy temple atmosphere.",
+                "Pair their spicy curries with freshly squeezed ginger lime juice."
+            ],
+            dressCode: "Modest casual (near sacred temple premises).",
+            latitude: 7.2936,
+            longitude: 80.6415,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Post-Temple Breakfast or Afternoon Tea (11:00 AM – 04:00 PM)",
+            badgeText: "Heritage Temple Cafe",
+            reviews: [
+                PlaceReview(
+                    userName: "Aarti Sengupta",
+                    userAvatar: "A",
+                    userCountry: "India 🇮🇳",
+                    rating: 5.0,
+                    date: "4 days ago",
+                    comment: "Visited right after the morning pooja at the Temple of the Tooth. The iced spiced chai and pumpkin curry were comforting and delicious.",
+                    helpfulCount: 68
+                )
+            ]
+        ),
+        
+        // 17. Barefoot Garden Cafe, Colombo
+        SriLankaPlace(
+            name: "Barefoot Garden Cafe & Gallery",
+            sinhalaName: "බෙයාර්ෆූට් උද්‍යාන කැෆේ",
+            district: "Colombo",
+            province: "Western Province",
+            category: .dining,
+            rating: 4.8,
+            reviewCount: "6.1k",
+            description: "A cultural institution in Colombo designed around an open-air frangipani courtyard by architect Barbara Sansoni. Renowned for its legendary Black Pork Curry, fresh lime granitas, handloom textiles, and Sunday jazz concerts.",
+            highlights: [
+                "Lush open-air frangipani and gravel courtyard",
+                "Famous Colombo Black Pork Curry with Yellow Rice",
+                "Artisan handloom textile boutique and art gallery"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "10:00 AM – 07:00 PM (Sundays 11:00 AM – 05:00 PM)",
+            visitorTips: [
+                "Visit on Sunday midday for live jazz in the courtyard.",
+                "Order the lime granita to cool off from Colombo heat."
+            ],
+            dressCode: "Casual chic.",
+            latitude: 6.8920,
+            longitude: 79.8563,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Lunch & Art Browsing (12:00 PM – 03:00 PM)",
+            badgeText: "Frangipani Courtyard",
+            reviews: [
+                PlaceReview(
+                    userName: "Oliver Trench",
+                    userAvatar: "O",
+                    userCountry: "United Kingdom 🇬🇧",
+                    rating: 5.0,
+                    date: "2 weeks ago",
+                    comment: "The black pork curry here is sensational, perfectly spiced with roasted Ceylon curry powder. The courtyard is a tranquil haven inside busy Colombo.",
+                    helpfulCount: 77
+                )
+            ]
+        ),
+        
+        // 18. Matey Hut, Ella
+        SriLankaPlace(
+            name: "Matey Hut Artisan Cooking",
+            sinhalaName: "මේටි හට් ඇල්ල",
+            district: "Badulla",
+            province: "Uva Province",
+            category: .food,
+            rating: 4.9,
+            reviewCount: "5.8k",
+            description: "A tiny wooden hut on the hillside of Ella celebrated across the island for authentic claypot cooking. Every claypot curry is cooked fresh to order with hand-scraped coconut milk, fragrant lemongrass, and heirloom spices.",
+            highlights: [
+                "Ranked Ella's #1 traditional Sri Lankan dining spot",
+                "Claypot pumpkin, cashew, and banana blossom curries",
+                "Crispy hot coconut rottis with fiery katta sambol"
+            ],
+            entryFeeLKR: 0,
+            entryFeeUSD: 0.0,
+            openingHours: "11:00 AM – 09:30 PM daily",
+            visitorTips: [
+                "Popular spot with limited tables; arrive at 11:45 AM or 6:30 PM.",
+                "Ask for the 5-curry sampler to taste seasonal vegetables."
+            ],
+            dressCode: "Mountain casual.",
+            latitude: 6.8715,
+            longitude: 81.0490,
+            imageUrls: [
+                "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=1200&q=80"
+            ],
+            audioGuideAvailable: false,
+            audioGuideDuration: nil,
+            bestTimeToVisit: "Lunch (12:00 PM) or Early Dinner (06:30 PM)",
+            badgeText: "Artisan Claypot Legend",
+            reviews: [
+                PlaceReview(
+                    userName: "Elena Rostova",
+                    userAvatar: "E",
+                    userCountry: "Canada 🇨🇦",
+                    rating: 5.0,
+                    date: "3 days ago",
+                    comment: "The coconut pumpkin curry and beetroot curry were the best meals I had in my entire 2 weeks in Sri Lanka! Unbelievably fresh and flavorful.",
+                    helpfulCount: 89
+                )
+            ]
         )
     ]
     
@@ -528,7 +969,8 @@ public final class SriLankaDataService {
                 destination: dest,
                 totalDays: daysCount,
                 pace: pace,
-                budget: budget
+                budget: budget,
+                tags: tags
             )
             generatedDays.append(dayData)
         }
@@ -571,38 +1013,94 @@ public final class SriLankaDataService {
         destination: String,
         totalDays: Int,
         pace: String,
-        budget: String
+        budget: String,
+        tags: [String]
     ) -> TripDay {
         let destLower = destination.lowercased()
+        let tagsJoined = tags.joined(separator: " ").lowercased()
+        let isFoodie = tagsJoined.contains("food") || tagsJoined.contains("kottu") || tagsJoined.contains("seafood") || tagsJoined.contains("cafe") || tagsJoined.contains("dining") || tagsJoined.contains("tea")
+        let isBeach = tagsJoined.contains("surf") || tagsJoined.contains("coast") || tagsJoined.contains("beach")
+        let isWildlife = tagsJoined.contains("safari") || tagsJoined.contains("wildlife") || tagsJoined.contains("leopard")
+        let isCultural = tagsJoined.contains("unesco") || tagsJoined.contains("heritage") || tagsJoined.contains("temple")
         
-        if destLower.contains("sigiriya") || destLower.contains("cultural") || destLower.contains("triangle") {
-            return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
-        } else if destLower.contains("ella") || destLower.contains("hill") || destLower.contains("tea") || destLower.contains("kandy") {
-            return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
-        } else if destLower.contains("galle") || destLower.contains("mirissa") || destLower.contains("coast") || destLower.contains("beach") {
-            return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
+        if destLower.contains("colombo") || destLower.contains("capital") {
+            return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+        } else if destLower.contains("kandy") {
+            return buildKandyHeritageDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+        } else if destLower.contains("sigiriya") || destLower.contains("cultural") || destLower.contains("triangle") || destLower.contains("dambulla") {
+            return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+        } else if destLower.contains("ella") || destLower.contains("hill") || destLower.contains("tea") || destLower.contains("nuwara eliya") {
+            return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+        } else if destLower.contains("galle") || destLower.contains("mirissa") || destLower.contains("coast") || destLower.contains("beach") || destLower.contains("weligama") {
+            return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
         } else if destLower.contains("yala") || destLower.contains("safari") || destLower.contains("wildlife") {
-            return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
+            return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
         } else {
-            // General Sri Lanka Grand Tour rotating across iconic regions
-            let modulo = (dayNumber - 1) % 4
-            switch modulo {
-            case 0: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
-            case 1: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
-            case 2: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
-            default: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString)
+            // Intelligent Grand Tour routing tailored to user purpose tags
+            if isFoodie {
+                // Focus on gastronomy hubs: Colombo crab/curries, Southern seafood/cafes, Hill country high tea/kottu, Sigiriya claypot feast
+                let rotation = (dayNumber - 1) % 4
+                switch rotation {
+                case 0: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 1: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 2: return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                }
+            } else if isBeach {
+                // Focus on coast, surf, and marine life
+                let rotation = (dayNumber - 1) % 3
+                switch rotation {
+                case 0: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 1: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                }
+            } else if isCultural {
+                // Focus on UNESCO citadels, temples, and hill heritage
+                let rotation = (dayNumber - 1) % 4
+                switch rotation {
+                case 0: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 1: return buildKandyHeritageDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 2: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                }
+            } else {
+                // Normal exploration trip: smoothly cycles all iconic Sri Lankan regions
+                let modulo = (dayNumber - 1) % 6
+                switch modulo {
+                case 0: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 1: return buildKandyHeritageDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 2: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 3: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 4: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                }
             }
         }
     }
     
-    private func buildCulturalTriangleDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String) -> TripDay {
+    private func buildCulturalTriangleDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
         let stops = [
             TripStop(
-                time: "06:30 AM",
-                title: "Dawn Climb: Sigiriya Lion Rock",
+                time: "07:30 AM",
+                title: "Ceylon Sunrise Breakfast & Fresh Coconut Roti",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Start the morning with steaming pol roti, lunu miris, tropical papaya, and fresh Ceylon ginger tea with dramatic views of Lion Rock.",
+                locationName: "Rithu Rock View Cafe, Sigiriya",
+                estimatedDuration: "1h 00m",
+                costLKR: 1800,
+                costUSD: 6.0,
+                highlight: "Sunrise over Lion Rock",
+                imageUrl: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9540,
+                longitude: 80.7550
+            ),
+            TripStop(
+                time: "08:45 AM",
+                title: "Sigiriya Lion Rock Sky Citadel Summit",
                 category: "Heritage",
                 icon: "mountain.2.fill",
-                description: "Ascend King Kashyapa's sky fortress at first light. Marvel at the 5th-century frescoes and panoramic jungle sunrise before the heat sets in.",
+                description: "Ascend King Kashyapa's 5th-century palace in the clouds. Walk past the Mirror Wall, marvel at celestial maiden frescoes, and climb through the giant Lion Paws.",
                 locationName: "Sigiriya Citadel, Matale",
                 estimatedDuration: "2h 30m",
                 costLKR: 11000,
@@ -610,24 +1108,28 @@ public final class SriLankaDataService {
                 highlight: "UNESCO 8th Wonder",
                 passRequired: true,
                 passName: "Sigiriya Heritage Pass",
-                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80"
+                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9570,
+                longitude: 80.7603
             ),
             TripStop(
-                time: "10:30 AM",
-                title: "Traditional Village Lunch & Lake Catamaran",
-                category: "Culture",
+                time: "12:30 PM",
+                title: "Wood-Fired Claypot Rice & 5-Curry Feast",
+                category: "Lunch & Dining",
                 icon: "fork.knife",
-                description: "Traditional Bullock cart ride followed by a serene catamaran canoe across a lotus-filled lake. Savor authentic clay-pot Rice & Curry cooked over wood fire.",
-                locationName: "Hiriwadunna Village, Habarana",
-                estimatedDuration: "2h 00m",
-                costLKR: 4500,
-                costUSD: 15.0,
-                highlight: "Authentic Claypot Feasting",
-                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80"
+                description: "Savor an heirloom lunch served on lotus leaves: fragrant red samba rice, jackfruit polus curry, devilled cashew, fresh dhal, and crispy poppadoms.",
+                locationName: "Pradeep Village Kitchen, Sigiriya",
+                estimatedDuration: "1h 30m",
+                costLKR: 3200,
+                costUSD: 10.5,
+                highlight: "Wood-Fired Claypot Feast",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9535,
+                longitude: 80.7580
             ),
             TripStop(
-                time: "02:30 PM",
-                title: "Dambulla Royal Cave Temple",
+                time: "02:45 PM",
+                title: "Dambulla Royal Cave Monasteries",
                 category: "Temples",
                 icon: "building.columns.fill",
                 description: "Explore 5 sacred cave sanctuaries filled with 150+ gilded Buddha statues and ancient Buddhist murals painted directly onto stone ceilings.",
@@ -638,20 +1140,39 @@ public final class SriLankaDataService {
                 highlight: "Ancient Cave Art",
                 passRequired: true,
                 passName: "Dambulla Sanctuary Pass",
-                imageUrl: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=800&q=80"
+                imageUrl: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.8567,
+                longitude: 80.6483
             ),
             TripStop(
-                time: "05:00 PM",
-                title: "Sunset at Pidurangala Rock Summit",
+                time: "05:15 PM",
+                title: "Golden Hour Sunset at Pidurangala Summit",
                 category: "Scenic",
                 icon: "sun.horizon.fill",
-                description: "Short adventurous climb through monastery ruins up onto the flat summit boulders for the world's most photogenic direct vista of Sigiriya Rock.",
-                locationName: "Pidurangala, Sigiriya",
+                description: "Climb through ancient monastery boulders for the island's most iconic sunset view, with the golden evening glow illuminating Sigiriya Citadel.",
+                locationName: "Pidurangala Rock, Sigiriya",
                 estimatedDuration: "1h 30m",
                 costLKR: 1000,
                 costUSD: 3.5,
-                highlight: "Golden Hour 360° Views",
-                imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80"
+                highlight: "Golden Hour 360° Panorama",
+                imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9655,
+                longitude: 80.7620
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Traditional Ceylon Dinner & Kithul Treacle Dessert",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Dine under lantern-lit bamboo canopies with spicy devilled prawns, fresh paratha roti, and creamy buffalo curd drizzled with organic kithul palm treacle.",
+                locationName: "Sigiriya Heritage Garden Dining",
+                estimatedDuration: "2h 00m",
+                costLKR: 5500,
+                costUSD: 18.0,
+                highlight: "Lantern-lit Garden Dining",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9520,
+                longitude: 80.7530
             )
         ]
         
@@ -660,7 +1181,7 @@ public final class SriLankaDataService {
             dayOfWeek: dayOfWeek,
             dayOfMonth: dayOfMonth,
             fullDateString: fullDateString,
-            title: "Royal Fortresses & Ancient Caves",
+            title: "Royal Fortresses & Village Feasting",
             region: "Sigiriya & Dambulla",
             weather: "Sunny & Warm",
             temperature: "29°C",
@@ -668,61 +1189,99 @@ public final class SriLankaDataService {
         )
     }
     
-    private func buildHillCountryDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String) -> TripDay {
+    private func buildHillCountryDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
         let stops = [
             TripStop(
-                time: "08:30 AM",
-                title: "Nine Arches Bridge Train Crossing",
+                time: "07:30 AM",
+                title: "Ella Morning Mist Bakery & Tropical Fruit Smoothie",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Crispy freshly baked butter croissants, local woodapple jam, avocado toast with poached eggs, and fresh highland Arabica coffee.",
+                locationName: "Ella Morning Ridge Cafe",
+                estimatedDuration: "1h 00m",
+                costLKR: 2200,
+                costUSD: 7.0,
+                highlight: "Misty Mountain Valley View",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8670,
+                longitude: 81.0450
+            ),
+            TripStop(
+                time: "08:45 AM",
+                title: "Nine Arches Bridge Morning Blue Train Crossing",
                 category: "Scenic",
                 icon: "tram.fill",
-                description: "Watch the famous Blue Train curve across the stone viaduct arches amidst rolling tea valleys. Sip fresh ginger tea at a hillside perch.",
+                description: "Watch the legendary vibrant Blue Train curve gracefully across the 1921 British stone arches amidst rolling tea valleys and morning mist.",
                 locationName: "Demodara, Ella",
                 estimatedDuration: "2h 00m",
                 costLKR: 0,
                 costUSD: 0.0,
                 highlight: "World-Famous Blue Train Spot",
-                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80"
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8768,
+                longitude: 81.0608
             ),
             TripStop(
-                time: "11:30 AM",
-                title: "Little Adam's Peak & Zip-line",
+                time: "12:15 PM",
+                title: "Matey Hut Artisan Rice & 5-Curry Lunch",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Ella's most beloved local eatery. Enjoy pumpkin coconut curry, sweet caramelized brinjal moju, fresh winged beans, and pol sambol.",
+                locationName: "Matey Hut, Ella",
+                estimatedDuration: "1h 30m",
+                costLKR: 2800,
+                costUSD: 9.0,
+                highlight: "Famous Artisan Claypot Curries",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8715,
+                longitude: 81.0490
+            ),
+            TripStop(
+                time: "02:30 PM",
+                title: "Little Adam's Peak Ridge Hike",
                 category: "Nature",
                 icon: "figure.hiking",
-                description: "Gentle panoramic hike through tea plantations to the panoramic peak overlooking Ella Gap and Ravana Falls. Optional Flying Ravana zip-line.",
-                locationName: "Ella Gap Ridge",
-                estimatedDuration: "2h 30m",
-                costLKR: 3000,
-                costUSD: 10.0,
-                highlight: "Panoramic Highland Ridge",
-                imageUrl: "https://images.unsplash.com/photo-1566296517009-440dfecddc71?auto=format&fit=crop&w=800&q=80"
-            ),
-            TripStop(
-                time: "03:00 PM",
-                title: "Pedro Estate Ceylon Tea Tasting",
-                category: "Food & Tea",
-                icon: "cup.and.saucer.fill",
-                description: "Tour the 1885 Victorian tea factory, observe the drying and rolling of leaves, and taste supreme Orange Pekoe tea overlooking the mist.",
-                locationName: "Nuwara Eliya Highlands",
-                estimatedDuration: "1h 45m",
-                costLKR: 1500,
-                costUSD: 5.0,
-                highlight: "Pure Ceylon Tea Plucking",
-                passRequired: true,
-                passName: "Highland Tea Tasting Pass",
-                imageUrl: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80"
-            ),
-            TripStop(
-                time: "06:30 PM",
-                title: "Cafe Chill & Kottu Feasting",
-                category: "Dining",
-                icon: "fork.knife",
-                description: "Relax at Ella's favorite open-air lounge. Order artisanal cheese & chicken Kottu Roti, fresh passion fruit mojitos, and wood-fired flatbreads.",
-                locationName: "Ella Main Street",
+                description: "Gentle panoramic walk through vibrant green tea estates to the summit overlooking Ella Rock, Ravana Falls, and southern plains.",
+                locationName: "Little Adam's Peak, Ella",
                 estimatedDuration: "2h 00m",
+                costLKR: 0,
+                costUSD: 0.0,
+                highlight: "360° Ella Gap Vista",
+                imageUrl: "https://images.unsplash.com/photo-1566296517009-440dfecddc71?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8625,
+                longitude: 81.0540
+            ),
+            TripStop(
+                time: "04:45 PM",
+                title: "Grand Hotel 1891 Victorian High Tea",
+                category: "High Tea & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Step into colonial splendor for afternoon high tea with warm scones, Devon cream, homemade strawberry jam, and single-estate Orange Pekoe.",
+                locationName: "Grand Hotel, Nuwara Eliya",
+                estimatedDuration: "1h 45m",
                 costLKR: 4500,
                 costUSD: 15.0,
-                highlight: "Sizzling Street Kottu",
-                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80"
+                highlight: "Heritage High Tea in Rose Garden",
+                passRequired: true,
+                passName: "Grand Hotel Tea Reservation",
+                imageUrl: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9697,
+                longitude: 80.7678
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Cafe Chill: Sizzling Cheese Kottu & Cocktails",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Unwind on the upper bamboo deck with Ella's best sizzling chicken cheese kottu, banana leaf lamprais, and passionfruit mojitos.",
+                locationName: "Cafe Chill, Ella Main Street",
+                estimatedDuration: "2h 30m",
+                costLKR: 5500,
+                costUSD: 18.0,
+                highlight: "Highland Night Vibes",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8687,
+                longitude: 81.0465
             )
         ]
         
@@ -731,7 +1290,7 @@ public final class SriLankaDataService {
             dayOfWeek: dayOfWeek,
             dayOfMonth: dayOfMonth,
             fullDateString: fullDateString,
-            title: "Misty Tea Ridges & Scenic Rails",
+            title: "Misty Rails, High Tea & Kottu",
             region: "Ella & Nuwara Eliya",
             weather: "Crisp & Misty",
             temperature: "19°C",
@@ -739,61 +1298,99 @@ public final class SriLankaDataService {
         )
     }
     
-    private func buildSouthernCoastDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String) -> TripDay {
+    private func buildSouthernCoastDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
         let stops = [
             TripStop(
-                time: "06:30 AM",
-                title: "Mirissa Blue Whale Watching Voyage",
+                time: "07:30 AM",
+                title: "Salty Swamis Cafe: Dragonfruit Bowl & Cold Brew",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Watch morning surfers while enjoying pink dragonfruit smoothie bowls, organic sourdough avocado toast, and specialty Ceylon espresso.",
+                locationName: "Salty Swamis Cafe, Weligama Bay",
+                estimatedDuration: "1h 00m",
+                costLKR: 2400,
+                costUSD: 8.0,
+                highlight: "Beachfront Ocean View Breakfast",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9698,
+                longitude: 80.4285
+            ),
+            TripStop(
+                time: "09:00 AM",
+                title: "Mirissa Blue Whale & Dolphin Catamaran Voyage",
                 category: "Wildlife",
                 icon: "water.waves",
-                description: "Board a twin-engine catamaran into the deep ocean trench off Mirissa to witness majestic Blue Whales, Sperm Whales, and pods of spinner dolphins.",
+                description: "Board a modern catamaran into the Indian Ocean canyon to witness majestic Blue Whales and playful spinner dolphins in their natural sanctuary.",
                 locationName: "Mirissa Fishery Harbour",
                 estimatedDuration: "3h 30m",
                 costLKR: 15000,
                 costUSD: 50.0,
-                highlight: "World's Largest Mammals",
+                highlight: "World's Largest Ocean Giants",
                 passRequired: true,
                 passName: "Marine Safari Permit",
-                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9482,
+                longitude: 80.4589
             ),
             TripStop(
-                time: "11:30 AM",
-                title: "Coconut Tree Hill & Secret Beach",
-                category: "Beach",
-                icon: "sun.max.fill",
-                description: "Stroll the red promontory shaded by tall curving coconut palms. Swim with wild green sea turtles in the sheltered reef cove.",
-                locationName: "Mirissa Coast",
-                estimatedDuration: "2h 00m",
-                costLKR: 0,
-                costUSD: 0.0,
-                highlight: "Iconic Palm Promontory",
-                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80"
+                time: "01:00 PM",
+                title: "Organic Courtyard Garden Lunch at Poonie's",
+                category: "Lunch & Cafe",
+                icon: "fork.knife",
+                description: "Escape the midday sun inside a tranquil courtyard garden. Order the signature thali salad bowl with turmeric dressing and iced lemongrass tea.",
+                locationName: "Poonie's Kitchen, Galle Fort",
+                estimatedDuration: "1h 30m",
+                costLKR: 3800,
+                costUSD: 12.5,
+                highlight: "Organic Oasis in Old Fort",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.0270,
+                longitude: 80.2178
             ),
             TripStop(
-                time: "03:30 PM",
-                title: "UNESCO Galle Dutch Fort Exploration",
+                time: "03:00 PM",
+                title: "UNESCO Galle Dutch Fort Historical Walk & Pedlar's Gelato",
                 category: "Heritage",
                 icon: "building.columns.fill",
-                description: "Wander through the cobblestone alleys of Church Street and Pedlar's Street. Explore 350-year-old Dutch villas, gem shops, and colonial ramparts.",
-                locationName: "Galle Fort, Southern Province",
-                estimatedDuration: "2h 30m",
-                costLKR: 0,
-                costUSD: 0.0,
-                highlight: "Colonial Living Citadel",
-                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80"
+                description: "Stroll down Church Street, Pedlar's Street, and Old Dutch hospital. Grab an artisan passionfruit gelato at Pedlar's Inn Cafe and explore 17th-century rampart cannons.",
+                locationName: "Galle Dutch Fort",
+                estimatedDuration: "2h 00m",
+                costLKR: 1200,
+                costUSD: 4.0,
+                highlight: "Living UNESCO Citadel & Gelato",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.0300,
+                longitude: 80.2170
             ),
             TripStop(
-                time: "06:00 PM",
-                title: "Sunset at Galle Lighthouse & Seafood Dining",
-                category: "Dining",
+                time: "05:30 PM",
+                title: "Sunset at Galle Fort White Lighthouse",
+                category: "Scenic",
+                icon: "sun.horizon.fill",
+                description: "Join locals and travelers sitting along the ancient granite ramparts watching the crimson sunset dip into the Indian Ocean by the iconic lighthouse.",
+                locationName: "Galle Lighthouse Point",
+                estimatedDuration: "1h 15m",
+                costLKR: 0,
+                costUSD: 0.0,
+                highlight: "Ocean Sunset from Ramparts",
+                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.0250,
+                longitude: 80.2185
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Oceanfront Seafood Feast & Jumbo Lagoon Crab",
+                category: "Dinner & Drinks",
                 icon: "fork.knife",
-                description: "Watch the sun dip into the Indian Ocean by the historic white lighthouse, followed by jumbo garlic prawns and lobster at Dutch Hospital Precinct.",
-                locationName: "Galle Lighthouse Ramparts",
-                estimatedDuration: "2h 00m",
+                description: "Waterfront candle-lit dinner featuring freshly caught jumbo garlic prawns, grilled yellowfin tuna steaks, coconut sambol, and chilled Lion Lager.",
+                locationName: "A Minute by Tuk Tuk, Dutch Hospital Galle",
+                estimatedDuration: "2h 15m",
                 costLKR: 8500,
                 costUSD: 28.0,
-                highlight: "Ocean Sunset & Fresh Seafood",
-                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80"
+                highlight: "Ocean Breeze Seafood Feast",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.0290,
+                longitude: 80.2165
             )
         ]
         
@@ -802,15 +1399,15 @@ public final class SriLankaDataService {
             dayOfWeek: dayOfWeek,
             dayOfMonth: dayOfMonth,
             fullDateString: fullDateString,
-            title: "Colonial Ramparts & Marine Wonders",
+            title: "Ocean Catamarans, Courtyards & Galle Fort",
             region: "Galle & Mirissa",
-            weather: "Tropical Breeze",
+            weather: "Tropical Ocean Breeze",
             temperature: "28°C",
             stops: stops
         )
     }
     
-    private func buildWildlifeSafariDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String) -> TripDay {
+    private func buildWildlifeSafariDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
         let stops = [
             TripStop(
                 time: "05:45 AM",
@@ -819,39 +1416,90 @@ public final class SriLankaDataService {
                 icon: "pawprint.fill",
                 description: "Enter Block 1 as the sun rises over the coastal scrub. Track the elusive Sri Lankan Leopard, sloth bears on rocky outcrops, and herds of spotted deer.",
                 locationName: "Yala National Park, Palatupana Gate",
-                estimatedDuration: "4h 30m",
+                estimatedDuration: "4h 00m",
                 costLKR: 13500,
                 costUSD: 45.0,
                 highlight: "Prime Leopard Encounter",
                 passRequired: true,
                 passName: "Yala Park Wildlife Permit",
-                imageUrl: "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80"
+                imageUrl: "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.3687,
+                longitude: 81.5200
             ),
             TripStop(
-                time: "12:00 PM",
-                title: "Udawalawe Elephant Transit Home",
+                time: "10:30 AM",
+                title: "Jungle Bush Breakfast & Fresh Ceylon Tea",
+                category: "Breakfast & Dining",
+                icon: "cup.and.saucer.fill",
+                description: "Picnic breakfast set up beside the Manik Ganga river: warm egg roti, pol sambol, fresh seasonal mangoes, bananas, and hot Ceylon tea.",
+                locationName: "Manik Ganga River Bank, Yala",
+                estimatedDuration: "1h 15m",
+                costLKR: 2500,
+                costUSD: 8.0,
+                highlight: "Riverside Jungle Breakfast",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.3550,
+                longitude: 81.5120
+            ),
+            TripStop(
+                time: "01:00 PM",
+                title: "Udawalawe Elephant Transit Home Milk Feeding",
                 category: "Conservation",
                 icon: "heart.fill",
-                description: "Observe rehabilitated orphaned baby elephants being bottle-fed milk by dedicated wildlife rangers before their release back into the wild.",
+                description: "Witness dozens of rescued orphaned baby elephants joyfully running in for their afternoon milk feeding before resting in the sanctuary.",
                 locationName: "Udawalawe Sanctuary",
                 estimatedDuration: "1h 30m",
                 costLKR: 2000,
                 costUSD: 6.5,
                 highlight: "Ethical Elephant Rescue",
-                imageUrl: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80"
+                imageUrl: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.4740,
+                longitude: 80.8870
             ),
             TripStop(
-                time: "04:30 PM",
-                title: "Bundala Salt Pan Flamingo Wetland",
+                time: "03:15 PM",
+                title: "Southern Buffalo Curd & Kithul Treacle Tasting",
+                category: "Cafe & Snack",
+                icon: "cup.and.saucer.fill",
+                description: "Stop by an artisan claypot stall in Tissamaharama for thick, creamy fresh water buffalo curd topped with sweet wild kithul palm nectar.",
+                locationName: "Tissamaharama Village Road",
+                estimatedDuration: "1h 00m",
+                costLKR: 1200,
+                costUSD: 4.0,
+                highlight: "Artisanal Claypot Buffalo Curd",
+                imageUrl: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.2810,
+                longitude: 81.2870
+            ),
+            TripStop(
+                time: "05:00 PM",
+                title: "Bundala UNESCO Salt Pan Flamingo Sunset",
                 category: "Nature",
                 icon: "bird.fill",
-                description: "Explore the coastal lagoons recognized by UNESCO as an international biosphere reserve. Spot thousands of migratory flamingos and sea eagles.",
+                description: "Explore the international biosphere reserve coastal lagoons at twilight. Spot thousands of greater flamingos, pelicans, and sea eagles.",
                 locationName: "Bundala Wetland Sanctuary",
-                estimatedDuration: "2h 00m",
+                estimatedDuration: "1h 45m",
                 costLKR: 3500,
                 costUSD: 11.5,
-                highlight: "UNESCO Biosphere Bird Haven",
-                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80"
+                highlight: "UNESCO Biosphere Bird Sanctuary",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.1950,
+                longitude: 81.2180
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Campfire Coastal Safari BBQ & Fresh Catch",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Gather around crackling beach logs under southern stars for charcoal-grilled reef fish, spicy devilled chicken skewers, and wood-fired flatbreads.",
+                locationName: "Palatupana Coastal Camp",
+                estimatedDuration: "2h 30m",
+                costLKR: 6500,
+                costUSD: 21.0,
+                highlight: "Campfire BBQ Under the Stars",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.3320,
+                longitude: 81.4280
             )
         ]
         
@@ -860,10 +1508,230 @@ public final class SriLankaDataService {
             dayOfWeek: dayOfWeek,
             dayOfMonth: dayOfMonth,
             fullDateString: fullDateString,
-            title: "Wild Leopards & Giant Elephant Herds",
+            title: "Wild Leopards, River Breakfast & Campfire BBQ",
             region: "Yala & Udawalawe",
             weather: "Sunny Savannah",
             temperature: "31°C",
+            stops: stops
+        )
+    }
+
+    private func buildColomboWesternCoastDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "08:00 AM",
+                title: "Barefoot Garden Cafe & Ceylon Spiced Coffee",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Start under shaded frangipani trees with steaming egg hoppers, spicy katta sambol, and fresh Ceylon highland coffee.",
+                locationName: "Barefoot Garden Cafe, Colombo 03",
+                estimatedDuration: "1h 15m",
+                costLKR: 2400,
+                costUSD: 8.0,
+                highlight: "Frangipani Courtyard Hoppers",
+                imageUrl: "https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8920,
+                longitude: 79.8563
+            ),
+            TripStop(
+                time: "09:30 AM",
+                title: "Gangaramaya Temple & Seema Malaka on Beira Lake",
+                category: "Culture",
+                icon: "building.columns.fill",
+                description: "Explore Colombo's most iconic Buddhist sanctuary featuring an eclectic museum, sacred Bodhi tree, and Geoffrey Bawa's floating temple on Beira Lake.",
+                locationName: "Gangaramaya Temple, Colombo 02",
+                estimatedDuration: "2h 00m",
+                costLKR: 1000,
+                costUSD: 3.5,
+                highlight: "Floating Island Temple Pavilion",
+                imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9167,
+                longitude: 79.8597
+            ),
+            TripStop(
+                time: "12:30 PM",
+                title: "Upali's by Nawaloka: Traditional Yellow Rice & Curries",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Enjoy an authentic Colombo midday feast: fragrant ghee yellow rice, spicy devilled prawn theldala, tender black pepper beef curry, and pol sambol.",
+                locationName: "Upali's, Opposite Viharamahadevi Park",
+                estimatedDuration: "1h 30m",
+                costLKR: 4200,
+                costUSD: 14.0,
+                highlight: "Legendary Colombo Rice & Curry",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9112,
+                longitude: 79.8601
+            ),
+            TripStop(
+                time: "02:30 PM",
+                title: "Colombo Lotus Tower Observation Deck",
+                category: "Scenic",
+                icon: "tower.control.fill",
+                description: "Take the high-speed elevator 350 meters above the capital for 360-degree panoramic views across Colombo harbor, Beira Lake, and the Indian Ocean coastline.",
+                locationName: "Lotus Tower, Colombo",
+                estimatedDuration: "1h 30m",
+                costLKR: 4500,
+                costUSD: 15.0,
+                highlight: "350m Sky Deck Panorama",
+                passRequired: true,
+                passName: "Lotus Tower Observation Pass",
+                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9271,
+                longitude: 79.8578
+            ),
+            TripStop(
+                time: "05:15 PM",
+                title: "Galle Face Green Ocean Breeze & Isso Vadai",
+                category: "Sunset & Street Food",
+                icon: "sun.horizon.fill",
+                description: "Walk the historic colonial ocean promenade at twilight. Savor crispy warm prawn isso vadai, fresh king coconut water, and kites flying in the sunset.",
+                locationName: "Galle Face Green Promenade",
+                estimatedDuration: "1h 45m",
+                costLKR: 1200,
+                costUSD: 4.0,
+                highlight: "Sunset Prawn Vadai by the Waves",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9234,
+                longitude: 79.8458
+            ),
+            TripStop(
+                time: "07:45 PM",
+                title: "Ministry of Crab: World-Famous Black Pepper Crab",
+                category: "Dinner & Fine Dining",
+                icon: "fork.knife",
+                description: "Dine at Sri Lanka's globally acclaimed flagship restaurant inside the 400-year-old Dutch Hospital. Feast on succulent wild Sri Lankan lagoon crab in crushed peppercorn sauce.",
+                locationName: "Ministry of Crab, Dutch Hospital Fort",
+                estimatedDuration: "2h 30m",
+                costLKR: 18500,
+                costUSD: 60.0,
+                highlight: "Asia's 50 Best Crab Experience",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9344,
+                longitude: 79.8436
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Capital Sky Towers, Street Bites & Lagoon Crab",
+            region: "Colombo & Western Coast",
+            weather: "Tropical Warm Sunshine",
+            temperature: "30°C",
+            stops: stops
+        )
+    }
+
+    private func buildKandyHeritageDay(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:30 AM",
+                title: "The Empire Cafe: Jackfruit Curry & Spiced Tea",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Dine on the colonial terrace overlooking Kandy Lake and temple grounds with vegan jackfruit curry, warm coconut roti, and iced cinnamon tea.",
+                locationName: "The Empire Cafe, Kandy Temple Arcade",
+                estimatedDuration: "1h 15m",
+                costLKR: 2500,
+                costUSD: 8.0,
+                highlight: "Colonial Arcade Terrace Breakfast",
+                imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.2936,
+                longitude: 80.6415
+            ),
+            TripStop(
+                time: "09:00 AM",
+                title: "Temple of the Sacred Tooth Relic (Sri Dalada Maligawa)",
+                category: "Heritage",
+                icon: "building.columns.fill",
+                description: "Witness the sacred morning Thevava ritual with resonant drumming and fragrant jasmine lotus offerings at Sri Lanka's spiritual heart.",
+                locationName: "Sri Dalada Maligawa, Kandy",
+                estimatedDuration: "2h 00m",
+                costLKR: 2000,
+                costUSD: 6.5,
+                highlight: "Sacred Tooth Golden Reliquary",
+                passRequired: true,
+                passName: "Temple of the Tooth Entry",
+                imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.2936,
+                longitude: 80.6413
+            ),
+            TripStop(
+                time: "12:15 PM",
+                title: "Balaji Dosai: Crisp Ghee Paper Roast & Sambar",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Kandy's most loved South Indian & Ceylon Tamil dining stop. Savor huge crispy ghee paper dosais, spiced potato masala, and rich coconut sambar.",
+                locationName: "Balaji Dosai, Colombo Street Kandy",
+                estimatedDuration: "1h 15m",
+                costLKR: 1800,
+                costUSD: 6.0,
+                highlight: "Giant Crispy Paper Dosai",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.2925,
+                longitude: 80.6358
+            ),
+            TripStop(
+                time: "02:00 PM",
+                title: "Royal Botanical Gardens Peradeniya Walk",
+                category: "Nature",
+                icon: "leaf.fill",
+                description: "Stroll beneath towering royal palm avenues, giant Javanese fig trees with sprawling buttress roots, and the national Orchid greenhouse.",
+                locationName: "Peradeniya Botanical Gardens",
+                estimatedDuration: "2h 15m",
+                costLKR: 3000,
+                costUSD: 10.0,
+                highlight: "Spectacular Orchid Sanctuary",
+                passRequired: true,
+                passName: "Botanical Garden Ticket",
+                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.2683,
+                longitude: 80.5966
+            ),
+            TripStop(
+                time: "05:00 PM",
+                title: "Arthur's Seat Kandy Lake Viewpoint Cafe",
+                category: "Sunset & Cafe",
+                icon: "sun.horizon.fill",
+                description: "Watch the golden evening reflection over Kandy Lake while sipping freshly brewed Ceylon Nuwara Eliya tea with warm ginger biscuits.",
+                locationName: "Arthur's Seat, Rajapihilla Mawatha",
+                estimatedDuration: "1h 15m",
+                costLKR: 1400,
+                costUSD: 4.5,
+                highlight: "Panoramic Lake Sunset View",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.2882,
+                longitude: 80.6450
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Royal Bar & Hotel: Heritage Spiced Lamprais",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Historic 19th-century colonial courtyard restaurant. Savor authentic Dutch-Burgher lamprais baked in banana leaf with frikkadels and prawn blachan.",
+                locationName: "Royal Bar, Raja Veediya, Kandy",
+                estimatedDuration: "2h 00m",
+                costLKR: 5800,
+                costUSD: 19.0,
+                highlight: "Colonial Courtyard Lamprais",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.2940,
+                longitude: 80.6385
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Sacred Tooth Relics, Royal Gardens & Lamprais",
+            region: "Kandy & Hill Heritage",
+            weather: "Pleasant & Breezy",
+            temperature: "24°C",
             stops: stops
         )
     }

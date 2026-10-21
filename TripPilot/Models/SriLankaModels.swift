@@ -17,6 +17,8 @@ public enum SriLankaCategory: String, CaseIterable, Identifiable {
     case beach = "Beaches & Coast"
     case food = "Ceylon Food & Tea"
     case culture = "Culture & Temples"
+    case dining = "Restaurants & Fine Dining"
+    case cafe = "Cafes & Ceylon Breakfast"
     
     public var id: String { rawValue }
     
@@ -27,7 +29,8 @@ public enum SriLankaCategory: String, CaseIterable, Identifiable {
         case .nature: return "leaf.fill"
         case .wildlife: return "pawprint.fill"
         case .beach: return "water.waves"
-        case .food: return "cup.and.saucer.fill"
+        case .food, .dining: return "fork.knife"
+        case .cafe: return "cup.and.saucer.fill"
         case .culture: return "sun.horizon.fill"
         }
     }
@@ -169,6 +172,8 @@ public struct TripStop: Identifiable, Hashable {
     public let passRequired: Bool
     public let passName: String?
     public let imageUrl: String
+    public let latitude: Double?
+    public let longitude: Double?
     
     public init(
         id: UUID = UUID(),
@@ -184,7 +189,9 @@ public struct TripStop: Identifiable, Hashable {
         highlight: String,
         passRequired: Bool = false,
         passName: String? = nil,
-        imageUrl: String
+        imageUrl: String,
+        latitude: Double? = nil,
+        longitude: Double? = nil
     ) {
         self.id = id
         self.time = time
@@ -200,11 +207,17 @@ public struct TripStop: Identifiable, Hashable {
         self.passRequired = passRequired
         self.passName = passName
         self.imageUrl = imageUrl
+        self.latitude = latitude
+        self.longitude = longitude
     }
     
     public var tag: String { category }
     public var categoryIcon: String { icon }
     public var isHighlight: Bool { !highlight.isEmpty }
+    public var coordinate: CLLocationCoordinate2D? {
+        guard let lat = latitude, let lon = longitude else { return nil }
+        return CLLocationCoordinate2D(latitude: lat, longitude: lon)
+    }
 }
 
 // MARK: - Trip Day Model
