@@ -34,6 +34,7 @@ struct SettingsProfileView: View {
     private let textOnSurface = Color(red: 223/255, green: 226/255, blue: 238/255)         // #dfe2ee
     private let textVariant = Color(red: 189/255, green: 200/255, blue: 209/255)           // #bdc8d1
     private let outlineVariant = Color(red: 62/255, green: 72/255, blue: 79/255)          // #3e484f
+    private let amberGold = Color(red: 251/255, green: 191/255, blue: 36/255)              // #fbbf24
     
     // Interactive State
     @State private var selectedTab: AppTab = .profile
@@ -51,6 +52,12 @@ struct SettingsProfileView: View {
     @State private var showPassportQRSheet: Bool = false
     @State private var showSignOutAlert: Bool = false
     @State private var feedbackNotice: String? = nil
+    
+    // Google Places API Configuration
+    @State private var showApiKeySheet: Bool = false
+    @State private var apiKeyInput: String = ""
+    @State private var apiTestStatus: String? = nil
+    @State private var isTestingApi: Bool = false
     
     // Navigation destinations
     @State private var navigateToHome: Bool = false
@@ -93,6 +100,9 @@ struct SettingsProfileView: View {
                     
                     // MARK: - 2. Group 1: Travel Preferences & AI Engine
                     travelPreferencesSection
+                    
+                    // MARK: - Places & Reviews API Integration
+                    placesApiSection
                     
                     // MARK: - 3. Group 2: Security & Biometrics
                     securityBiometricsSection
@@ -172,6 +182,9 @@ struct SettingsProfileView: View {
         }
         .sheet(isPresented: $showPassportQRSheet) {
             passportQRModalSheet
+        }
+        .sheet(isPresented: $showApiKeySheet) {
+            googlePlacesApiKeyModalSheet
         }
         .confirmationDialog("Sign Out of TripPilot?", isPresented: $showSignOutAlert, titleVisibility: .visible) {
             Button("Sign Out", role: .destructive) {
@@ -526,6 +539,82 @@ struct SettingsProfileView: View {
                     value: "USD ($) • km, °C"
                 ) {
                     showToast("Currency USD • Distance km • Temp °C")
+                }
+            }
+            .background(surfaceContainer)
+            .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+            .overlay(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .stroke(Color.white.opacity(0.06), lineWidth: 1)
+            )
+        }
+    }
+    
+    // MARK: - Places & Reviews API Integration
+    private var placesApiSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("PLACES & REVIEWS API")
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .foregroundColor(textVariant)
+                .tracking(0.6)
+                .padding(.horizontal, 4)
+            
+            VStack(spacing: 0) {
+                // Google Places API (New)
+                HStack(spacing: 12) {
+                    ZStack {
+                        Circle()
+                            .fill(primarySky.opacity(0.18))
+                            .frame(width: 32, height: 32)
+                        
+                        Image(systemName: "globe.asia.australia.fill")
+                            .font(.system(size: 15, weight: .medium))
+                            .foregroundColor(primarySky)
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Google Places API (New)")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                            .foregroundColor(textOnSurface)
+                        Text(GooglePlacesService.shared.hasCustomApiKey ? "Custom Key Active" : "Bundled Firebase Key")
+                            .font(.system(size: 11))
+                            .foregroundColor(textVariant)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        triggerHapticFeedback()
+                        apiKeyInput = GooglePlacesService.shared.hasCustomApiKey ? GooglePlacesService.shared.apiKey : ""
+                        apiTestStatus = nil
+                        showApiKeySheet = true
+                    }) {
+                        HStack(spacing: 4) {
+                            Text("Configure")
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                            Image(systemName: "chevron.right")
+                                .font(.system(size: 10, weight: .bold))
+                        }
+                        .foregroundColor(primarySky)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
+                        .background(primarySky.opacity(0.12))
+                        .clipShape(Capsule())
+                    }
+                }
+                .padding(14)
+                
+                rowDivider
+                
+                // Live Review Sync
+                settingRowButton(
+                    icon: "star.bubble.fill",
+                    iconColor: amberGold,
+                    iconBg: amberGold.opacity(0.18),
+                    title: "Live Traveler Reviews",
+                    value: "Active"
+                ) {
+                    showToast("Live ratings synced dynamically via Places API")
                 }
             }
             .background(surfaceContainer)
@@ -908,6 +997,170 @@ struct SettingsProfileView: View {
             }
         }
         .presentationDetents([.medium])
+        .presentationDragIndicator(.visible)
+    }
+    
+    // MARK: - Google Places API Configuration Sheet
+    private var googlePlacesApiKeyModalSheet: some View {
+        ZStack {
+            surfaceContainerLowest.ignoresSafeArea()
+            
+            VStack(spacing: 20) {
+                // Header
+                HStack {
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Google Places API (New)")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(textOnSurface)
+                        Text("Live ratings, reviews & place details")
+                            .font(.system(size: 12))
+                            .foregroundColor(textVariant)
+                    }
+                    
+                    Spacer()
+                    
+                    Button(action: {
+                        showApiKeySheet = false
+                    }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 24))
+                            .foregroundColor(textVariant)
+                    }
+                }
+                .padding(.horizontal, 20)
+                .padding(.top, 24)
+                
+                // Key Information Card
+                VStack(alignment: .leading, spacing: 14) {
+                    HStack {
+                        Text("ACTIVE KEY STATUS")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundColor(textVariant)
+                            .tracking(0.6)
+                        
+                        Spacer()
+                        
+                        Text(GooglePlacesService.shared.hasCustomApiKey ? "Custom Override" : "Bundled Firebase Key")
+                            .font(.system(size: 11, weight: .bold))
+                            .foregroundColor(primarySky)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 3)
+                            .background(primarySky.opacity(0.12))
+                            .clipShape(Capsule())
+                    }
+                    
+                    let key = GooglePlacesService.shared.apiKey
+                    let maskedKey = key.count > 10 ? String(key.prefix(6)) + "••••••••" + String(key.suffix(4)) : key
+                    Text(maskedKey)
+                        .font(.system(size: 13, weight: .medium, design: .monospaced))
+                        .foregroundColor(.white)
+                        .padding(10)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(surfaceContainerHighest)
+                        .clipShape(RoundedRectangle(cornerRadius: 10))
+                    
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Override with Custom API Key:")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(textOnSurface)
+                        
+                        TextField("Paste Google Cloud API key...", text: $apiKeyInput)
+                            .font(.system(size: 13, design: .monospaced))
+                            .padding(12)
+                            .background(surfaceContainerHighest)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(primarySky.opacity(apiKeyInput.isEmpty ? 0 : 0.4), lineWidth: 1)
+                            )
+                            .autocorrectionDisabled()
+                            .textInputAutocapitalization(.never)
+                    }
+                    
+                    if let status = apiTestStatus {
+                        HStack(spacing: 6) {
+                            Image(systemName: status.contains("Connected successfully") ? "checkmark.circle.fill" : "exclamationmark.triangle.fill")
+                                .font(.system(size: 12))
+                                .foregroundColor(status.contains("Connected successfully") ? secondaryMint : amberGold)
+                            Text(status)
+                                .font(.system(size: 11))
+                                .foregroundColor(status.contains("Connected successfully") ? secondaryMint : textVariant)
+                        }
+                        .padding(8)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                        .background(surfaceContainerHighest.opacity(0.6))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+                    
+                    HStack(spacing: 10) {
+                        Button(action: {
+                            Task {
+                                isTestingApi = true
+                                apiTestStatus = "Testing connection to Google Places API (New)..."
+                                let result = await GooglePlacesService.shared.testConnection()
+                                isTestingApi = false
+                                apiTestStatus = result.message
+                            }
+                        }) {
+                            HStack(spacing: 6) {
+                                if isTestingApi {
+                                    ProgressView().scaleEffect(0.7).tint(.white)
+                                } else {
+                                    Image(systemName: "antenna.radiowaves.left.and.right")
+                                        .font(.system(size: 12))
+                                }
+                                Text("Test Connection")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .padding(.vertical, 10)
+                            .background(surfaceContainerHighest)
+                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                        
+                        Button(action: {
+                            if !apiKeyInput.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                                GooglePlacesService.shared.apiKey = apiKeyInput
+                                showToast("Custom Google Places API key saved!")
+                            } else {
+                                GooglePlacesService.shared.resetToDefaultApiKey()
+                                showToast("Reset to bundled project key")
+                            }
+                            showApiKeySheet = false
+                        }) {
+                            Text("Save Key")
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                                .foregroundColor(surfaceContainerLowest)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 10)
+                                .background(primarySky)
+                                .clipShape(RoundedRectangle(cornerRadius: 10))
+                        }
+                    }
+                    
+                    if GooglePlacesService.shared.hasCustomApiKey {
+                        Button(action: {
+                            GooglePlacesService.shared.resetToDefaultApiKey()
+                            apiKeyInput = ""
+                            showToast("Reset to project bundled key")
+                        }) {
+                            Text("Reset to Bundled Project Key")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundColor(textVariant)
+                                .frame(maxWidth: .infinity)
+                        }
+                    }
+                }
+                .padding(18)
+                .background(surfaceContainer)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .padding(.horizontal, 20)
+                
+                Spacer()
+            }
+        }
+        .presentationDetents([.medium, .large])
         .presentationDragIndicator(.visible)
     }
     

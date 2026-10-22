@@ -52,35 +52,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "45 min immersive audio tour",
             bestTimeToVisit: "Sunrise (06:30 AM) or Late Afternoon (03:30 PM)",
             badgeText: "UNESCO 8th Wonder",
-            reviews: [
-                PlaceReview(
-                    userName: "Dr. Alistair Finch",
-                    userAvatar: "A",
-                    userCountry: "United Kingdom 🇬🇧",
-                    rating: 5.0,
-                    date: "2 days ago",
-                    comment: "The sheer engineering feat of building a palace atop this monolithic column 1,500 years ago is breathtaking. The frescoes are vibrant, and the summit vista over the jungle canopy is unmatched.",
-                    helpfulCount: 142
-                ),
-                PlaceReview(
-                    userName: "Chihiro Tanaka",
-                    userAvatar: "C",
-                    userCountry: "Japan 🇯🇵",
-                    rating: 5.0,
-                    date: "Last week",
-                    comment: "Climbed at 6:45 AM. The morning mist drifting over the emerald forests and surrounding lotus tanks was pure magic. Audio guide in TripPilot provided fascinating historical context.",
-                    helpfulCount: 98
-                ),
-                PlaceReview(
-                    userName: "Kasun Jayawardena",
-                    userAvatar: "K",
-                    userCountry: "Sri Lanka 🇱🇰",
-                    rating: 5.0,
-                    date: "3 weeks ago",
-                    comment: "Proud pride of our heritage. Take time at the Mirror Wall to read the poems written by travelers 1,000 years ago. A must-see treasure in our country.",
-                    helpfulCount: 215
-                )
-            ]
         ),
         
         // 2. Nine Arches Bridge, Ella
@@ -119,26 +90,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "20 min heritage story",
             bestTimeToVisit: "Morning Train Crossing at 09:15 AM or Golden Hour 05:00 PM",
             badgeText: "Viral Scenic Wonder",
-            reviews: [
-                PlaceReview(
-                    userName: "Emma Watson-Lee",
-                    userAvatar: "E",
-                    userCountry: "Australia 🇦🇺",
-                    rating: 5.0,
-                    date: "3 days ago",
-                    comment: "Standing on the tea terrace when the bright blue train whistled and curved along the arches was the highlight of our 2-week trip. Absolutely picturesque!",
-                    helpfulCount: 88
-                ),
-                PlaceReview(
-                    userName: "Matteo Rossi",
-                    userAvatar: "M",
-                    userCountry: "Italy 🇮🇹",
-                    rating: 5.0,
-                    date: "1 week ago",
-                    comment: "The walk through the forest from Ella village was lovely. Grab a fresh King Coconut from the local vendors near the tunnel.",
-                    helpfulCount: 64
-                )
-            ]
         ),
         
         // 3. Temple of the Sacred Tooth Relic (Sri Dalada Maligawa), Kandy
@@ -176,26 +127,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "35 min sacred pilgrimage guide",
             bestTimeToVisit: "Evening Thevava Pooja at 06:30 PM",
             badgeText: "Sacred UNESCO Landmark",
-            reviews: [
-                PlaceReview(
-                    userName: "Priya Sharma",
-                    userAvatar: "P",
-                    userCountry: "India 🇮🇳",
-                    rating: 5.0,
-                    date: "4 days ago",
-                    comment: "The spiritual ambiance during the evening drumming ceremony is otherworldly. The scent of sandalwood and jasmine fills the air. A deeply moving experience.",
-                    helpfulCount: 112
-                ),
-                PlaceReview(
-                    userName: "Laurent Mercier",
-                    userAvatar: "L",
-                    userCountry: "France 🇫🇷",
-                    rating: 4.8,
-                    date: "2 weeks ago",
-                    comment: "Beautiful architecture and rich history. Make sure to stroll around the tranquil Kandy Lake right after your visit.",
-                    helpfulCount: 75
-                )
-            ]
         ),
         
         // 4. Galle Dutch Fort & Lighthouse
@@ -233,17 +164,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "40 min maritime history walk",
             bestTimeToVisit: "Late Afternoon (04:30 PM) through Sunset",
             badgeText: "UNESCO Living Citadel",
-            reviews: [
-                PlaceReview(
-                    userName: "Sophia Martinez",
-                    userAvatar: "S",
-                    userCountry: "Spain 🇪🇸",
-                    rating: 5.0,
-                    date: "5 days ago",
-                    comment: "Walking along the old stone bastions while the Indian Ocean crashes below is unforgettable. Wonderful artisan shops and relaxed atmosphere.",
-                    helpfulCount: 94
-                )
-            ]
         ),
         
         // 5. Yala National Park Safari
@@ -281,17 +201,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "30 min wildlife safari field guide",
             bestTimeToVisit: "Dawn (06:00 AM) or Late Afternoon (03:00 PM)",
             badgeText: "Leopard Haven",
-            reviews: [
-                PlaceReview(
-                    userName: "Marcus Vance",
-                    userAvatar: "M",
-                    userCountry: "South Africa 🇿🇦",
-                    rating: 5.0,
-                    date: "1 week ago",
-                    comment: "We were blessed to spot a magnificent male leopard resting atop an elephant rock at Block 1 within 45 minutes of entering! Our driver was exceptional.",
-                    helpfulCount: 167
-                )
-            ]
         ),
         
         // 6. Pedro Tea Estate & Lovers Leap, Nuwara Eliya
@@ -329,17 +238,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "25 min Ceylon Tea story",
             bestTimeToVisit: "Morning (09:00 AM – 11:30 AM)",
             badgeText: "Ceylon Pure Origin",
-            reviews: [
-                PlaceReview(
-                    userName: "Hannah Schmidt",
-                    userAvatar: "H",
-                    userCountry: "Germany 🇩🇪",
-                    rating: 5.0,
-                    date: "6 days ago",
-                    comment: "The aroma of fermenting tea leaves as you enter the factory is unforgettable. The tasting session on the veranda overlooking the misty valley was serene.",
-                    helpfulCount: 52
-                )
-            ]
         ),
         
         // 7. Mirissa Coconut Tree Hill & Whale Point
@@ -377,17 +275,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "20 min marine eco-guide",
             bestTimeToVisit: "Sunrise (06:00 AM) or Sunset (05:45 PM)",
             badgeText: "Coastal Icon",
-            reviews: [
-                PlaceReview(
-                    userName: "Alexandre Dubois",
-                    userAvatar: "A",
-                    userCountry: "Canada 🇨🇦",
-                    rating: 5.0,
-                    date: "3 days ago",
-                    comment: "We saw three blue whales breaching just off the coast, and followed it up with a sunset drink at Coconut Tree Hill. Pure paradise.",
-                    helpfulCount: 89
-                )
-            ]
         ),
         
         // 8. Colombo Lotus Tower & Galle Face Green
@@ -424,17 +311,6 @@ public final class SriLankaDataService {
             audioGuideDuration: "30 min Colombo modern history",
             bestTimeToVisit: "Sunset (05:30 PM – 07:30 PM)",
             badgeText: "Modern Skyline",
-            reviews: [
-                PlaceReview(
-                    userName: "Tharindu Perera",
-                    userAvatar: "T",
-                    userCountry: "Sri Lanka 🇱🇰",
-                    rating: 5.0,
-                    date: "Yesterday",
-                    comment: "The 360 view from the top is unbelievable. You can see the whole Colombo port city, Beira lake, and on clear days even Adam's Peak in the distant horizon!",
-                    helpfulCount: 78
-                )
-            ]
         ),
         SriLankaPlace(
             name: "Ministry of Crab",
@@ -468,17 +344,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Evening Dinner (07:30 PM)",
             badgeText: "Asia's 50 Best",
-            reviews: [
-                PlaceReview(
-                    userName: "Marcus Vance",
-                    userAvatar: "M",
-                    userCountry: "United Kingdom 🇬🇧",
-                    rating: 5.0,
-                    date: "3 days ago",
-                    comment: "The pepper crab was nothing short of life changing. The sweet lagoon crab meat with peppery heat and warm wood-fired bread is perfection.",
-                    helpfulCount: 64
-                )
-            ]
         ),
         SriLankaPlace(
             name: "Upali's by Nawaloka",
@@ -511,17 +376,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Ceylon Breakfast (07:00 AM – 09:30 AM)",
             badgeText: "Authentic Breakfast",
-            reviews: [
-                PlaceReview(
-                    userName: "Sanduni Fernando",
-                    userAvatar: "S",
-                    userCountry: "Sri Lanka 🇱🇰",
-                    rating: 5.0,
-                    date: "1 week ago",
-                    comment: "The most authentic Sri Lankan breakfast in the city. The egg hoppers are perfectly runny in the center and feather-crisp at the edges!",
-                    helpfulCount: 42
-                )
-            ]
         ),
         SriLankaPlace(
             name: "Cafe Chill & Lounge",
@@ -554,17 +408,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Evening Vibes (06:30 PM – 10:00 PM)",
             badgeText: "Highland Hangout",
-            reviews: [
-                PlaceReview(
-                    userName: "Liam O'Connor",
-                    userAvatar: "L",
-                    userCountry: "Ireland 🇮🇪",
-                    rating: 5.0,
-                    date: "4 days ago",
-                    comment: "Best vibe in Ella! The chicken kottu was heavenly after hiking Little Adam's Peak.",
-                    helpfulCount: 39
-                )
-            ]
         ),
         SriLankaPlace(
             name: "Grand Hotel 1891 High Tea Room",
@@ -597,17 +440,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Afternoon High Tea (03:30 PM – 05:30 PM)",
             badgeText: "Heritage High Tea",
-            reviews: [
-                PlaceReview(
-                    userName: "Charlotte Bennett",
-                    userAvatar: "C",
-                    userCountry: "Australia 🇦🇺",
-                    rating: 5.0,
-                    date: "2 weeks ago",
-                    comment: "Stepping back in time. The warm scones with homemade strawberry jam and fresh cream in the cool mountain air is unforgettable.",
-                    helpfulCount: 51
-                )
-            ]
         ),
         SriLankaPlace(
             name: "Poonie's Kitchen",
@@ -640,17 +472,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Fort Lunch & Coffee (12:00 PM – 02:30 PM)",
             badgeText: "Organic Courtyard",
-            reviews: [
-                PlaceReview(
-                    userName: "Emma Watson-Smith",
-                    userAvatar: "E",
-                    userCountry: "New Zealand 🇳🇿",
-                    rating: 5.0,
-                    date: "5 days ago",
-                    comment: "A hidden secret in the Fort! The salad thali was so fresh and colorful, and the king coconut cooler was so revitalizing.",
-                    helpfulCount: 36
-                )
-            ]
         ),
         
         // 14. Pedlar's Inn Cafe, Galle Fort
@@ -685,17 +506,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Morning Coffee (09:00 AM) or Sunset Gelato (05:00 PM)",
             badgeText: "Historic Post Office Cafe",
-            reviews: [
-                PlaceReview(
-                    userName: "Jessica Alba-Davies",
-                    userAvatar: "J",
-                    userCountry: "Australia 🇦🇺",
-                    rating: 5.0,
-                    date: "3 days ago",
-                    comment: "The atmosphere inside this colonial post office is unmatched. The homemade coconut gelato and cold brew coffee gave us the perfect midday energy boost.",
-                    helpfulCount: 42
-                )
-            ]
         ),
         
         // 15. Salty Swamis Cafe & Surf, Weligama / Mirissa
@@ -730,17 +540,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Sunrise Breakfast & Surf (07:30 AM – 10:00 AM)",
             badgeText: "Specialty Surf Cafe",
-            reviews: [
-                PlaceReview(
-                    userName: "Finnigan Meyer",
-                    userAvatar: "F",
-                    userCountry: "Germany 🇩🇪",
-                    rating: 5.0,
-                    date: "1 week ago",
-                    comment: "Best coffee on the southern coast of Sri Lanka! The smoothie bowl was fresh, beautifully arranged, and the surf vibe is 10/10.",
-                    helpfulCount: 51
-                )
-            ]
         ),
         
         // 16. The Empire Cafe, Kandy
@@ -775,17 +574,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Post-Temple Breakfast or Afternoon Tea (11:00 AM – 04:00 PM)",
             badgeText: "Heritage Temple Cafe",
-            reviews: [
-                PlaceReview(
-                    userName: "Aarti Sengupta",
-                    userAvatar: "A",
-                    userCountry: "India 🇮🇳",
-                    rating: 5.0,
-                    date: "4 days ago",
-                    comment: "Visited right after the morning pooja at the Temple of the Tooth. The iced spiced chai and pumpkin curry were comforting and delicious.",
-                    helpfulCount: 68
-                )
-            ]
         ),
         
         // 17. Barefoot Garden Cafe, Colombo
@@ -820,17 +608,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Lunch & Art Browsing (12:00 PM – 03:00 PM)",
             badgeText: "Frangipani Courtyard",
-            reviews: [
-                PlaceReview(
-                    userName: "Oliver Trench",
-                    userAvatar: "O",
-                    userCountry: "United Kingdom 🇬🇧",
-                    rating: 5.0,
-                    date: "2 weeks ago",
-                    comment: "The black pork curry here is sensational, perfectly spiced with roasted Ceylon curry powder. The courtyard is a tranquil haven inside busy Colombo.",
-                    helpfulCount: 77
-                )
-            ]
         ),
         
         // 18. Matey Hut, Ella
@@ -865,17 +642,6 @@ public final class SriLankaDataService {
             audioGuideDuration: nil,
             bestTimeToVisit: "Lunch (12:00 PM) or Early Dinner (06:30 PM)",
             badgeText: "Artisan Claypot Legend",
-            reviews: [
-                PlaceReview(
-                    userName: "Elena Rostova",
-                    userAvatar: "E",
-                    userCountry: "Canada 🇨🇦",
-                    rating: 5.0,
-                    date: "3 days ago",
-                    comment: "The coconut pumpkin curry and beetroot curry were the best meals I had in my entire 2 weeks in Sri Lanka! Unbelievably fresh and flavorful.",
-                    helpfulCount: 89
-                )
-            ]
         )
     ]
     
