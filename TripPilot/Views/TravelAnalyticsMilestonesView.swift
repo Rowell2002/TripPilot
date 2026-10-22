@@ -559,7 +559,7 @@ struct TravelAnalyticsMilestonesView: View {
                     // Metric 2: Miles
                     ringMetricRow(
                         color: secondaryMint,
-                        title: "Flight Miles",
+                        title: "Distance Explored",
                         subtitle: "48.2k / 50k mi",
                         percentage: "96%"
                     )

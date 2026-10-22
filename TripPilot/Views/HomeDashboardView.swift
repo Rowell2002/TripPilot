@@ -9,7 +9,6 @@ struct HomeDashboardView: View {
     
     @State private var selectedTab: AppTab = .home
     @State private var isLivePulsing: Bool = false
-    @State private var showBoardingPassModal: Bool = false
     @State private var showFlyoverMapModal: Bool = false
     @State private var showTripWizardModal: Bool = false
     @State private var activeUtilityNotice: String? = nil
@@ -61,9 +60,7 @@ struct HomeDashboardView: View {
                     navigationHeaderSection
                         .padding(.top, 8)
                     
-                    // 1. Live Flight Status Floating Capsule
-                    liveFlightStatusCapsule
-                    
+
                     // 2. Personalized Greeting & Local Sri Lanka Weather
                     greetingWeatherSection
                     
@@ -108,9 +105,6 @@ struct HomeDashboardView: View {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 isLivePulsing = true
             }
-        }
-        .sheet(isPresented: $showBoardingPassModal) {
-            boardingPassModalView
         }
         .sheet(isPresented: $showFlyoverMapModal) {
             flyoverMapModalView
@@ -189,21 +183,6 @@ struct HomeDashboardView: View {
             
             Spacer()
             
-            // Quick Flight Capsule
-            HStack(spacing: 5) {
-                Image(systemName: "airplane.departure")
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(skyBlue)
-                
-                Text("UL 504 CMB")
-                    .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .foregroundColor(slateLight)
-            }
-            .padding(.horizontal, 9)
-            .padding(.vertical, 5)
-            .background(surfaceDark.opacity(0.9))
-            .clipShape(Capsule())
-            .overlay(Capsule().stroke(Color.white.opacity(0.12), lineWidth: 1))
             
             // Notification & Profile
             HStack(spacing: 10) {
@@ -251,73 +230,6 @@ struct HomeDashboardView: View {
                 }
             }
         }
-    }
-    
-    // MARK: - 1. Live Flight Status Capsule
-    private var liveFlightStatusCapsule: some View {
-        HStack(spacing: 12) {
-            ZStack {
-                Circle()
-                    .fill(skyBlue.opacity(isLivePulsing ? 0.35 : 0.15))
-                    .frame(width: 22, height: 22)
-                    .scaleEffect(isLivePulsing ? 1.3 : 0.9)
-                
-                Circle()
-                    .fill(skyBlue)
-                    .frame(width: 10, height: 10)
-                    .shadow(color: skyBlue, radius: 4)
-            }
-            .frame(width: 22, height: 22)
-            
-            VStack(alignment: .leading, spacing: 3) {
-                HStack(spacing: 6) {
-                    Text("UL 504")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Text("Gate 04")
-                        .font(.system(size: 11, weight: .semibold, design: .rounded))
-                        .foregroundColor(slateLight)
-                        .padding(.horizontal, 7)
-                        .padding(.vertical, 2)
-                        .background(Color.white.opacity(0.1))
-                        .clipShape(Capsule())
-                    
-                    Text("On Time")
-                        .font(.system(size: 11, weight: .bold, design: .rounded))
-                        .foregroundColor(primaryCyan)
-                }
-                
-                Text("En route to Colombo (CMB) • Bandaranaike Int'l")
-                    .font(.system(size: 12, weight: .medium))
-                    .foregroundColor(slateMuted)
-            }
-            
-            Spacer()
-            
-            Button(action: {
-                showBoardingPassModal = true
-            }) {
-                HStack(spacing: 4) {
-                    Image(systemName: "qrcode")
-                        .font(.system(size: 13, weight: .bold))
-                    Text("Pass")
-                        .font(.system(size: 12, weight: .bold, design: .rounded))
-                }
-                .foregroundColor(skyBlue)
-                .padding(.horizontal, 12)
-                .padding(.vertical, 7)
-                .background(skyBlue.opacity(0.15))
-                .clipShape(Capsule())
-                .overlay(Capsule().stroke(skyBlue.opacity(0.35), lineWidth: 1))
-            }
-        }
-        .padding(.horizontal, 16)
-        .padding(.vertical, 14)
-        .background(surfaceDark.opacity(0.95))
-        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 18, style: .continuous).stroke(containerBorder, lineWidth: 1))
-        .shadow(color: Color.black.opacity(0.4), radius: 12, y: 4)
     }
     
     // MARK: - 2. Greeting & Weather
@@ -945,114 +857,6 @@ struct HomeDashboardView: View {
     }
     
     // MARK: - Modals
-    private var boardingPassModalView: some View {
-        ZStack {
-            darkBackground.ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                HStack {
-                    Text("Digital Boarding Pass")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Spacer()
-                    
-                    Button("Done") {
-                        showBoardingPassModal = false
-                    }
-                    .foregroundColor(skyBlue)
-                    .font(.system(size: 15, weight: .bold))
-                }
-                .padding(.horizontal, 20)
-                .padding(.top, 20)
-                
-                VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading) {
-                            Text("LHR")
-                                .font(.system(size: 28, weight: .heavy, design: .rounded))
-                                .foregroundColor(.white)
-                            Text("London Heathrow")
-                                .font(.system(size: 12))
-                                .foregroundColor(slateMuted)
-                        }
-                        
-                        Spacer()
-                        
-                        Image(systemName: "airplane")
-                            .font(.system(size: 22))
-                            .foregroundColor(skyBlue)
-                        
-                        Spacer()
-                        
-                        VStack(alignment: .trailing) {
-                            Text("CMB")
-                                .font(.system(size: 28, weight: .heavy, design: .rounded))
-                                .foregroundColor(.white)
-                            Text("Colombo Int'l")
-                                .font(.system(size: 12))
-                                .foregroundColor(slateMuted)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 10)
-                    
-                    Divider().background(Color.white.opacity(0.1))
-                    
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("AIRLINE")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(slateMuted)
-                            Text("SriLankan UL 504")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(.white)
-                        }
-                        Spacer()
-                        VStack(alignment: .center, spacing: 2) {
-                            Text("GATE")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(slateMuted)
-                            Text("04")
-                                .font(.system(size: 15, weight: .bold))
-                                .foregroundColor(skyBlue)
-                        }
-                        Spacer()
-                        VStack(alignment: .trailing, spacing: 2) {
-                            Text("SEAT")
-                                .font(.system(size: 10, weight: .bold))
-                                .foregroundColor(slateMuted)
-                            Text("3K (Business)")
-                                .font(.system(size: 14, weight: .bold))
-                                .foregroundColor(primaryCyan)
-                        }
-                    }
-                    .padding(.horizontal, 20)
-                    
-                    Image(systemName: "qrcode")
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 140, height: 140)
-                        .foregroundColor(.white)
-                        .padding(.vertical, 16)
-                    
-                    Text("Apple Wallet Compatible • Pass Confirmed")
-                        .font(.system(size: 11, weight: .medium))
-                        .foregroundColor(slateMuted)
-                        .padding(.bottom, 10)
-                }
-                .padding(16)
-                .background(surfaceDark)
-                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-                .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(containerBorder, lineWidth: 1))
-                .padding(.horizontal, 20)
-                
-                Spacer()
-            }
-        }
-        .presentationDetents([.medium, .large])
-    }
-    
     private var flyoverMapModalView: some View {
         ZStack {
             darkBackground.ignoresSafeArea()

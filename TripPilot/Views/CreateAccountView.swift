@@ -121,7 +121,7 @@ struct CreateAccountView: View {
                                 .fill(primaryBlue)
                                 .frame(width: 6, height: 6)
                             
-                            Text("FLIGHT & ITINERARY CLOUD")
+                            Text("SMART TRAVEL ITINERARY")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
                                 .foregroundColor(primaryBlue)
                                 .tracking(0.8)

@@ -1023,56 +1023,97 @@ public final class SriLankaDataService {
         let isWildlife = tagsJoined.contains("safari") || tagsJoined.contains("wildlife") || tagsJoined.contains("leopard")
         let isCultural = tagsJoined.contains("unesco") || tagsJoined.contains("heritage") || tagsJoined.contains("temple")
         
-        if destLower.contains("colombo") || destLower.contains("capital") {
-            return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-        } else if destLower.contains("kandy") {
-            return buildKandyHeritageDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-        } else if destLower.contains("sigiriya") || destLower.contains("cultural") || destLower.contains("triangle") || destLower.contains("dambulla") {
-            return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-        } else if destLower.contains("ella") || destLower.contains("hill") || destLower.contains("tea") || destLower.contains("nuwara eliya") {
-            return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+        // Multi-day regional itinerary routing: every single day within a region is completely unique!
+        if destLower.contains("sigiriya") || destLower.contains("cultural") || destLower.contains("triangle") || destLower.contains("dambulla") {
+            let dayIndex = (dayNumber - 1) % 3
+            switch dayIndex {
+            case 0: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            case 1: return buildCulturalTriangleDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            default: return buildCulturalTriangleDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            }
+        } else if destLower.contains("ella") || destLower.contains("hill") || destLower.contains("nuwara eliya") {
+            let dayIndex = (dayNumber - 1) % 3
+            switch dayIndex {
+            case 0: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            case 1: return buildHillCountryDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            default: return buildHillCountryDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            }
         } else if destLower.contains("galle") || destLower.contains("mirissa") || destLower.contains("coast") || destLower.contains("beach") || destLower.contains("weligama") {
-            return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            let dayIndex = (dayNumber - 1) % 3
+            switch dayIndex {
+            case 0: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            case 1: return buildSouthernCoastDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            default: return buildSouthernCoastDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            }
         } else if destLower.contains("yala") || destLower.contains("safari") || destLower.contains("wildlife") {
-            return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            let dayIndex = (dayNumber - 1) % 3
+            switch dayIndex {
+            case 0: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            case 1: return buildWildlifeSafariDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            default: return buildWildlifeSafariDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            }
+        } else if destLower.contains("colombo") || destLower.contains("capital") {
+            let dayIndex = (dayNumber - 1) % 3
+            switch dayIndex {
+            case 0: return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            case 1: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            default: return buildSouthernCoastDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            }
+        } else if destLower.contains("kandy") {
+            let dayIndex = (dayNumber - 1) % 3
+            switch dayIndex {
+            case 0: return buildKandyHeritageDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            case 1: return buildHillCountryDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            default: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+            }
         } else {
-            // Intelligent Grand Tour routing tailored to user purpose tags
+            // Intelligent Island-wide Tour routing tailored to user purpose tags
             if isFoodie {
-                // Focus on gastronomy hubs: Colombo crab/curries, Southern seafood/cafes, Hill country high tea/kottu, Sigiriya claypot feast
-                let rotation = (dayNumber - 1) % 4
+                let rotation = (dayNumber - 1) % 6
                 switch rotation {
                 case 0: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 case 1: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 case 2: return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-                default: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 3: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 4: return buildSouthernCoastDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildHillCountryDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 }
             } else if isBeach {
-                // Focus on coast, surf, and marine life
-                let rotation = (dayNumber - 1) % 3
+                let rotation = (dayNumber - 1) % 4
                 switch rotation {
                 case 0: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-                case 1: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-                default: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 1: return buildSouthernCoastDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 2: return buildSouthernCoastDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 }
             } else if isCultural {
-                // Focus on UNESCO citadels, temples, and hill heritage
                 let rotation = (dayNumber - 1) % 4
                 switch rotation {
                 case 0: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 case 1: return buildKandyHeritageDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-                case 2: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-                default: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 2: return buildCulturalTriangleDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildCulturalTriangleDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                }
+            } else if isWildlife {
+                let rotation = (dayNumber - 1) % 4
+                switch rotation {
+                case 0: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 1: return buildWildlifeSafariDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 2: return buildWildlifeSafariDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildSouthernCoastDay3(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 }
             } else {
-                // Normal exploration trip: smoothly cycles all iconic Sri Lankan regions
-                let modulo = (dayNumber - 1) % 6
+                // Normal exploration trip: smoothly cycles all 8 iconic Sri Lankan highlights without repetition
+                let modulo = (dayNumber - 1) % 8
                 switch modulo {
                 case 0: return buildCulturalTriangleDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 case 1: return buildKandyHeritageDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 case 2: return buildHillCountryDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 case 3: return buildWildlifeSafariDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 case 4: return buildSouthernCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
-                default: return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 5: return buildColomboWesternCoastDay(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                case 6: return buildCulturalTriangleDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
+                default: return buildSouthernCoastDay2(dayNumber: dayNumber, dayOfWeek: dayOfWeek, dayOfMonth: dayOfMonth, fullDateString: fullDateString, tags: tags)
                 }
             }
         }
@@ -1732,6 +1773,886 @@ public final class SriLankaDataService {
             region: "Kandy & Hill Heritage",
             weather: "Pleasant & Breezy",
             temperature: "24°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Cultural Triangle Day 2: Caves & Minneriya Wild Elephants
+    private func buildCulturalTriangleDay2(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:30 AM",
+                title: "Mango Tree Garden Cafe: Traditional String Hoppers",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Steaming hot idiappa (string hoppers), spicy kithul treacle tea, fresh fish ambul thiyal, and fresh passionfruit juice in an open garden.",
+                locationName: "Mango Tree Cafe, Dambulla",
+                estimatedDuration: "1h 00m",
+                costLKR: 1900,
+                costUSD: 6.0,
+                highlight: "Fresh Garden String Hoppers",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.8720,
+                longitude: 80.6510
+            ),
+            TripStop(
+                time: "08:45 AM",
+                title: "Dambulla Royal Rock Cave Monasteries",
+                category: "Heritage",
+                icon: "building.columns.fill",
+                description: "Ascend the sacred granite rock to five magnificent cave sanctuaries adorned with 153 gilded Buddha statues and 2,100 square meters of ceiling murals.",
+                locationName: "Dambulla Rock Sanctuary",
+                estimatedDuration: "2h 00m",
+                costLKR: 2500,
+                costUSD: 8.0,
+                highlight: "Ancient Ceiling Frescoes & Golden Statues",
+                passRequired: true,
+                passName: "Dambulla Sanctuary Pass",
+                imageUrl: "https://images.unsplash.com/photo-1589182373726-e4f658ab50f0?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.8567,
+                longitude: 80.6483
+            ),
+            TripStop(
+                time: "12:15 PM",
+                title: "Gamgedara Waterlily Lakeside Fish Curry Lunch",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Overlooking blooming purple waterlilies, feast on fresh lake fish curry, fried sprats, pumpkin in coconut milk, and wood-fired papadums.",
+                locationName: "Gamgedara Lakeside Kitchen, Habarana",
+                estimatedDuration: "1h 30m",
+                costLKR: 3200,
+                costUSD: 10.5,
+                highlight: "Waterlily Pond Dining",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 8.0340,
+                longitude: 80.7510
+            ),
+            TripStop(
+                time: "02:30 PM",
+                title: "Minneriya National Park 'The Gathering' Elephant Safari",
+                category: "Wildlife",
+                icon: "pawprint.fill",
+                description: "Board a 4x4 open safari jeep to witness the world-famous Elephant Gathering: up to 300 wild Asian elephants socializing on the lush reservoir grasses.",
+                locationName: "Minneriya National Park Gate",
+                estimatedDuration: "3h 00m",
+                costLKR: 13000,
+                costUSD: 42.0,
+                highlight: "World's Largest Elephant Gathering",
+                passRequired: true,
+                passName: "Minneriya Wildlife Permit",
+                imageUrl: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
+                latitude: 8.0380,
+                longitude: 80.8250
+            ),
+            TripStop(
+                time: "05:45 PM",
+                title: "Habarana Lake Twilight Stroll & Fresh King Coconut",
+                category: "Scenic",
+                icon: "sun.horizon.fill",
+                description: "Peaceful lakeside walk as white egrets and cormorants return to their nests against the crimson reflection across Habarana ancient lake.",
+                locationName: "Habarana Lake Viewpoint",
+                estimatedDuration: "1h 15m",
+                costLKR: 600,
+                costUSD: 2.0,
+                highlight: "Tranquil Ancient Lake Sunset",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 8.0360,
+                longitude: 80.7580
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Aliya Open-Air Hearth Dinner & Live Kottu",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Dine under glowing lanterns with rhythmically chopped vegetable cheese kottu, devilled cashew curry, and fresh buffalo curd with wild kithul syrup.",
+                locationName: "Aliya Heritage Garden Dining",
+                estimatedDuration: "2h 00m",
+                costLKR: 5600,
+                costUSD: 18.0,
+                highlight: "Live Rhythmic Kottu Roti Show",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9620,
+                longitude: 80.7490
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Rock Sanctuaries & Minneriya Wild Elephants",
+            region: "Dambulla & Minneriya",
+            weather: "Warm & Breezy",
+            temperature: "30°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Cultural Triangle Day 3: Polonnaruwa & Artisan Crafts
+    private func buildCulturalTriangleDay3(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:30 AM",
+                title: "Ancient City Bakery: Coconut Roti & Ginger Chai",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Crispy freshly griddled pol roti with spicy caramelized onion lunu miris, fresh tropical fruits, and aromatic hot ginger tea.",
+                locationName: "Ancient City Cafe, Polonnaruwa",
+                estimatedDuration: "1h 00m",
+                costLKR: 1800,
+                costUSD: 6.0,
+                highlight: "Sunrise Breakfast by the Ruins",
+                imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9390,
+                longitude: 81.0020
+            ),
+            TripStop(
+                time: "08:45 AM",
+                title: "Polonnaruwa UNESCO Royal Palace & Gal Vihara by Bicycle",
+                category: "Heritage",
+                icon: "building.columns.fill",
+                description: "Cycle through the 12th-century medieval capital: King Parakramabahu's seven-story palace, the circular Vatadage relic house, and the awe-inspiring Gal Vihara granite Buddha statues.",
+                locationName: "Polonnaruwa Ancient City",
+                estimatedDuration: "3h 00m",
+                costLKR: 9500,
+                costUSD: 31.0,
+                highlight: "Gal Vihara Masterpiece Rock Carvings",
+                passRequired: true,
+                passName: "Polonnaruwa Heritage Pass",
+                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9403,
+                longitude: 81.0003
+            ),
+            TripStop(
+                time: "12:30 PM",
+                title: "Priyamali Gedara: 10-Curry Organic Lotus Leaf Feast",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Sri Lanka's most celebrated rural dining experience: unpolished red heirloom rice served on fresh green lotus leaves with 10 traditional organic curries and fried tank fish.",
+                locationName: "Priyamali Gedara, Polonnaruwa",
+                estimatedDuration: "1h 30m",
+                costLKR: 2800,
+                costUSD: 9.0,
+                highlight: "Heirloom Lotus Leaf Banquet",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9450,
+                longitude: 81.0120
+            ),
+            TripStop(
+                time: "02:30 PM",
+                title: "Traditional Woodcarving & Brass Artisan Guild",
+                category: "Culture",
+                icon: "paintbrush.fill",
+                description: "Discover ancient Ceylon woodcraft masteries: watch artisans hand-carve ebony elephants, devil dance masks, and cast polished brass oil lamps.",
+                locationName: "Polonnaruwa Artisan Guild",
+                estimatedDuration: "1h 45m",
+                costLKR: 1200,
+                costUSD: 4.0,
+                highlight: "Hand-Carved Mask & Brass Guild",
+                imageUrl: "https://images.unsplash.com/photo-1578662996442-48f60103fc96?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9370,
+                longitude: 81.0050
+            ),
+            TripStop(
+                time: "05:15 PM",
+                title: "Parakrama Samudra 'Sea of King Parakrama' Sunset",
+                category: "Scenic",
+                icon: "sun.horizon.fill",
+                description: "Watch the sun sink into Sri Lanka's largest ancient man-made inland sea, so vast that the opposite bank vanishes over the water horizon like the ocean.",
+                locationName: "Parakrama Samudra Bund",
+                estimatedDuration: "1h 30m",
+                costLKR: 0,
+                costUSD: 0.0,
+                highlight: "Inland Sea Ocean Horizon Sunset",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9310,
+                longitude: 80.9950
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Lakeside Claypot Dinner & Ceylon Spiced Punch",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Dine on the veranda beside the reservoir with sweet tamarind glazed freshwater prawns, flaky godamba roti, dhal, and refreshing tropical fruit punch.",
+                locationName: "Lake View Heritage Veranda",
+                estimatedDuration: "2h 00m",
+                costLKR: 5200,
+                costUSD: 17.0,
+                highlight: "Lakeside Veranda Dining",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.9350,
+                longitude: 80.9980
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Medieval Citadel Ruins, Artisan Guilds & Inland Seas",
+            region: "Polonnaruwa Ancient Kingdom",
+            weather: "Tropical Sunny",
+            temperature: "31°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Hill Country Day 2: Nuwara Eliya & Tea Masterclass
+    private func buildHillCountryDay2(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:30 AM",
+                title: "Damro Tea Lounge: Highland Breakfast & Strawberry Crepes",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Overlooking dramatic emerald tea valleys, enjoy freshly picked Nuwara Eliya strawberries, fluffy warm pancakes, and single-estate BOP tea.",
+                locationName: "Damro Labookellie Lounge",
+                estimatedDuration: "1h 15m",
+                costLKR: 2400,
+                costUSD: 8.0,
+                highlight: "Valley Vista Tea Lounge",
+                imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+                latitude: 7.0210,
+                longitude: 80.7250
+            ),
+            TripStop(
+                time: "09:15 AM",
+                title: "Pedro Tea Estate Guided Plucking & 1885 Factory Tour",
+                category: "Culture",
+                icon: "leaf.fill",
+                description: "Strap on a wicker tea-basket, walk with estate pluckers on misty slopes, and learn the orthodox Ceylon tea manufacturing process inside the historic 1885 factory.",
+                locationName: "Pedro Tea Estate, Nuwara Eliya",
+                estimatedDuration: "2h 15m",
+                costLKR: 2000,
+                costUSD: 6.5,
+                highlight: "Hands-on Ceylon Tea Plucking",
+                passRequired: true,
+                passName: "Pedro Estate Tour Ticket",
+                imageUrl: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9630,
+                longitude: 80.8030
+            ),
+            TripStop(
+                time: "12:15 PM",
+                title: "Grand Indian: Rich Butter Naan & Saffron Biryani",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Nuwara Eliya's premier culinary staple. Indulge in steaming tandoori garlic naans, creamy black lentil dal makhani, and aromatic chicken dum biryani.",
+                locationName: "Grand Indian, Nuwara Eliya",
+                estimatedDuration: "1h 30m",
+                costLKR: 4200,
+                costUSD: 14.0,
+                highlight: "Highland Tandoor Gourmet",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9680,
+                longitude: 80.7670
+            ),
+            TripStop(
+                time: "02:15 PM",
+                title: "Gregory Lake Alpine Promenade & Swan Pedal Boats",
+                category: "Scenic",
+                icon: "water.waves",
+                description: "Stroll along pine-fringed alpine lake paths in the cool mountain climate, pedal across calm waters, and admire Tudor-style colonial bungalows.",
+                locationName: "Lake Gregory, Nuwara Eliya",
+                estimatedDuration: "1h 45m",
+                costLKR: 1500,
+                costUSD: 5.0,
+                highlight: "Alpine Lake Mist & Pine Trees",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9535,
+                longitude: 80.7818
+            ),
+            TripStop(
+                time: "04:30 PM",
+                title: "Grand Hotel 1891 Victorian High Tea",
+                category: "High Tea & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Step into colonial splendor for afternoon high tea with warm scones, Devon cream, homemade strawberry jam, and single-estate Orange Pekoe.",
+                locationName: "Grand Hotel Rose Garden",
+                estimatedDuration: "1h 45m",
+                costLKR: 4500,
+                costUSD: 15.0,
+                highlight: "Victorian High Tea in Rose Gardens",
+                passRequired: true,
+                passName: "Grand Hotel Tea Reservation",
+                imageUrl: "https://images.unsplash.com/photo-1586861635167-e5223aadc9fe?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9697,
+                longitude: 80.7678
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "The Barn Hall: Stone Fireplace Dinner & Highland Roast",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Cozy up beside the roaring log fireplace in the crisp 16°C mountain air. Savor roasted pumpkin soup, rosemary highland lamb cutlets, and warm spiced bread pudding.",
+                locationName: "The Barn Hall, Nuwara Eliya",
+                estimatedDuration: "2h 15m",
+                costLKR: 6800,
+                costUSD: 22.0,
+                highlight: "Blazing Fireplace Highland Dinner",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.9660,
+                longitude: 80.7690
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Colonial High Tea, Tea Estates & Alpine Lakes",
+            region: "Nuwara Eliya (Little England)",
+            weather: "Crisp Mountain Mist",
+            temperature: "17°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Hill Country Day 3: Lipton's Seat & Diyaluma Cascades
+    private func buildHillCountryDay3(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:00 AM",
+                title: "Haputale Mountain Mist Bakery & Pour-over Coffee",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Crispy freshly baked cinnamon swirls, toasted sourdough with mountain honey, and rich pour-over highland Arabica coffee overlooking southern mountain valleys.",
+                locationName: "Haputale Ridge Cafe",
+                estimatedDuration: "1h 00m",
+                costLKR: 2000,
+                costUSD: 6.5,
+                highlight: "Southern Ridge Mountain Sunrise",
+                imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.7680,
+                longitude: 80.9520
+            ),
+            TripStop(
+                time: "08:30 AM",
+                title: "Lipton's Seat 360° Cloud Ridge Lookout",
+                category: "Scenic",
+                icon: "mountain.2.fill",
+                description: "Climb to Sir Thomas Lipton's historic lookout perched 1,970m high. On clear mornings, you can gaze across seven Sri Lankan provinces all the way to the southern coastline.",
+                locationName: "Lipton's Seat, Dambatenne",
+                estimatedDuration: "2h 30m",
+                costLKR: 1500,
+                costUSD: 5.0,
+                highlight: "360° Panoramic Viewpoint Across 7 Provinces",
+                imageUrl: "https://images.unsplash.com/photo-1566296517009-440dfecddc71?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.7820,
+                longitude: 81.0150
+            ),
+            TripStop(
+                time: "12:15 PM",
+                title: "Dambatenne Planter's Veranda Curry Lunch",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Authentic estate meal: fragrant red samba rice, village country chicken curry, jackfruit seeds in coconut cream, and crisp vegetable mallum.",
+                locationName: "Dambatenne Veranda, Haputale",
+                estimatedDuration: "1h 30m",
+                costLKR: 3000,
+                costUSD: 10.0,
+                highlight: "Estate Planter's Veranda Lunch",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.7740,
+                longitude: 81.0020
+            ),
+            TripStop(
+                time: "02:15 PM",
+                title: "Diyaluma Falls Upper Rock Infinity Pools",
+                category: "Nature",
+                icon: "water.waves",
+                description: "Hike through scenic lemongrass hills to the upper tiers of Sri Lanka's second-highest waterfall (220m). Swim in natural stone infinity rock pools carved into the cliff edge.",
+                locationName: "Diyaluma Falls, Koslanda",
+                estimatedDuration: "2h 45m",
+                costLKR: 1000,
+                costUSD: 3.5,
+                highlight: "Natural Clifftop Infinity Pool Swim",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.7320,
+                longitude: 81.0310
+            ),
+            TripStop(
+                time: "05:30 PM",
+                title: "Ella Gap Twilight Terrace & Passionfruit Cooler",
+                category: "Sunset & Cafe",
+                icon: "sun.horizon.fill",
+                description: "Watch dusk sweep across the grand Ella Gap as cool mountain breezes rustle through the tea trees and twilight lanterns light up Ella town.",
+                locationName: "Ella Gap Terrace Cafe",
+                estimatedDuration: "1h 15m",
+                costLKR: 1400,
+                costUSD: 4.5,
+                highlight: "Twilight Gap Viewpoint",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8650,
+                longitude: 81.0420
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Cafe One: Wood-Fired Roti & Live Acoustic Evening",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Relaxed highland vibes with wood-fired cheese and spicy chicken roties, grilled corn on the cob, craft ginger beer, and live acoustic music.",
+                locationName: "Cafe One, Ella Main Street",
+                estimatedDuration: "2h 15m",
+                costLKR: 4800,
+                costUSD: 16.0,
+                highlight: "Live Mountain Music & Artisan Roti",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.8690,
+                longitude: 81.0460
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Lipton's Cloud Peak, Waterfall Infinity Pools & Acoustic Nights",
+            region: "Haputale & Diyaluma",
+            weather: "Sunny & Mountain Breeze",
+            temperature: "21°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Southern Coast Day 2: Weligama Surfing & Mirissa Sunset
+    private func buildSouthernCoastDay2(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:30 AM",
+                title: "Salty Swamis Cafe: Pink Pitaya Bowl & Cold Brew",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Vibrant pink dragonfruit smoothie bowl topped with toasted chia seeds, shaved coconut, organic sourdough avocado toast, and single-origin cold brew.",
+                locationName: "Salty Swamis Cafe, Weligama Bay",
+                estimatedDuration: "1h 00m",
+                costLKR: 2400,
+                costUSD: 8.0,
+                highlight: "Surf Watchers Healthy Breakfast",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9698,
+                longitude: 80.4285
+            ),
+            TripStop(
+                time: "09:00 AM",
+                title: "Weligama Bay Gentle Waves Surf Clinic",
+                category: "Adventure",
+                icon: "figure.surfing",
+                description: "Two-hour guided beginner surf lesson in Weligama's sheltered sandy bay. Catch peeling warm waves with an ISA certified instructor.",
+                locationName: "Weligama Surf Point",
+                estimatedDuration: "2h 15m",
+                costLKR: 5500,
+                costUSD: 18.0,
+                highlight: "Ride Your First Sri Lankan Wave",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9720,
+                longitude: 80.4310
+            ),
+            TripStop(
+                time: "12:30 PM",
+                title: "Ceylon Sliders Rooftop Coastal Lunch",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Breezy coastal rooftop dining: fresh yellowfin tuna poke bowl, spicy fish tacos, lime coriander salsa, and iced watermelon mint juice.",
+                locationName: "Ceylon Sliders, Weligama",
+                estimatedDuration: "1h 30m",
+                costLKR: 3900,
+                costUSD: 13.0,
+                highlight: "Ocean Breeze Rooftop Poke & Tacos",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9735,
+                longitude: 80.4340
+            ),
+            TripStop(
+                time: "02:45 PM",
+                title: "Koggala Traditional Stilt Fishermen Cultural Heritage",
+                category: "Culture",
+                icon: "camera.fill",
+                description: "Meet iconic Southern fishermen balancing gracefully on slender wooden stilts (ritipanna) above crashing shallow coral reefs.",
+                locationName: "Koggala Stilt Fishermen Point",
+                estimatedDuration: "1h 30m",
+                costLKR: 1500,
+                costUSD: 5.0,
+                highlight: "Living Ceylon Maritime Heritage",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9920,
+                longitude: 80.3240
+            ),
+            TripStop(
+                time: "05:15 PM",
+                title: "Mirissa Coconut Tree Hill Golden Hour Sunset",
+                category: "Scenic",
+                icon: "sun.horizon.fill",
+                description: "Walk up the famous reddish clay mound crowned with leaning coconut palms overlooking the endless blue expanse of the Indian Ocean at sunset.",
+                locationName: "Coconut Tree Hill, Mirissa",
+                estimatedDuration: "1h 30m",
+                costLKR: 0,
+                costUSD: 0.0,
+                highlight: "Iconic Leaning Palm Sunset Promontory",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9442,
+                longitude: 80.4619
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Zephyr Beachfront Seafood BBQ & Torchlight Dinner",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Dine with your feet in the sand illuminated by tiki torches. Choose fresh red snapper, jumbo garlic butter prawns, and passionfruit mojitos.",
+                locationName: "Zephyr Beach Restaurant, Mirissa",
+                estimatedDuration: "2h 30m",
+                costLKR: 7800,
+                costUSD: 25.0,
+                highlight: "Feet-in-the-Sand Torchlit Feast",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9465,
+                longitude: 80.4570
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Weligama Waves, Stilt Fishermen & Coconut Hill",
+            region: "Weligama & Mirissa Coast",
+            weather: "Sunny Coastal Breeze",
+            temperature: "29°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Southern Coast Day 3: Whales, Secret Coves & Unawatuna
+    private func buildSouthernCoastDay3(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "06:30 AM",
+                title: "Mirissa Harbour Sunrise & Tropical King Coconut",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Watch multi-colored wooden fishing trawlers unload night catches while enjoying fresh king coconut water, sweet mini bananas, and warm roti.",
+                locationName: "Mirissa Fishery Harbour",
+                estimatedDuration: "0h 45m",
+                costLKR: 1200,
+                costUSD: 4.0,
+                highlight: "Harbour Sunrise Departure",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9482,
+                longitude: 80.4589
+            ),
+            TripStop(
+                time: "07:30 AM",
+                title: "Ethical Blue Whale & Spinner Dolphin Sailing Catamaran",
+                category: "Wildlife",
+                icon: "water.waves",
+                description: "Cruise into the deep Indian Ocean canyon aboard an eco-friendly sailing catamaran to witness migrating Blue Whales and super-pods of acrobatic spinner dolphins.",
+                locationName: "Mirissa Marine Sanctuary",
+                estimatedDuration: "3h 45m",
+                costLKR: 15000,
+                costUSD: 50.0,
+                highlight: "Majestic Blue Whales in the Wild",
+                passRequired: true,
+                passName: "Marine Sanctuary Pass",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9200,
+                longitude: 80.4600
+            ),
+            TripStop(
+                time: "12:30 PM",
+                title: "Secret Beach Secluded Cove Lunch & Fresh Calamari",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Tucked behind a lush jungle hill, this hidden cove boasts turquoise natural tidal pools. Enjoy grilled calamari with lime chili dip and iced coconut smoothies.",
+                locationName: "Secret Beach, Mirissa",
+                estimatedDuration: "2h 00m",
+                costLKR: 3800,
+                costUSD: 12.5,
+                highlight: "Hidden Cove & Natural Rock Pools",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 5.9450,
+                longitude: 80.4510
+            ),
+            TripStop(
+                time: "03:15 PM",
+                title: "Sea Turtle Rescue & Rehabilitation Sanctuary",
+                category: "Conservation",
+                icon: "heart.fill",
+                description: "Support ethical conservation efforts for rescued Green, Hawksbill, and Olive Ridley sea turtles, and learn about coastal nest protection programs.",
+                locationName: "Habaraduwa Turtle Sanctuary",
+                estimatedDuration: "1h 30m",
+                costLKR: 1500,
+                costUSD: 5.0,
+                highlight: "Rescued Sea Turtle Rehabilitation",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.0020,
+                longitude: 80.3010
+            ),
+            TripStop(
+                time: "05:15 PM",
+                title: "Japanese Peace Pagoda & Rumassala Sunset Panorama",
+                category: "Scenic",
+                icon: "sun.horizon.fill",
+                description: "Stand atop Rumassala headland by the pristine white pagoda, looking out across the entire crescent of Galle Bay and the historic fort ramparts in the sunset.",
+                locationName: "Japanese Peace Pagoda, Rumassala",
+                estimatedDuration: "1h 30m",
+                costLKR: 0,
+                costUSD: 0.0,
+                highlight: "Sunset Panorama Over Galle Bay",
+                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.0140,
+                longitude: 80.2450
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Kingfisher Beachfront Restaurant: Lemongrass Crab Curry",
+                category: "Dinner & Fine Dining",
+                icon: "fork.knife",
+                description: "Beachfront dining on Unawatuna sands. Feast on rich coconut lemongrass crab curry, garlic naan, grilled jumbo prawns, and chilled Sauvignon Blanc.",
+                locationName: "Kingfisher, Unawatuna Beach",
+                estimatedDuration: "2h 30m",
+                costLKR: 8900,
+                costUSD: 29.0,
+                highlight: "Signature Lemongrass Lagoon Crab",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.0090,
+                longitude: 80.2480
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Blue Whale Ocean Catamarans, Secret Coves & Unawatuna",
+            region: "Mirissa & Unawatuna",
+            weather: "Warm Ocean Breeze",
+            temperature: "28°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Wildlife Safari Day 2: Bundala Wetland Sanctuary
+    private func buildWildlifeSafariDay2(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:00 AM",
+                title: "Southern Village Hoppers & Katta Sambol",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Freshly made crispy egg hoppers, sweet coconut milk hoppers, spicy crushed chili katta sambol, and hot ginger milk tea.",
+                locationName: "Tissa Village Kitchen",
+                estimatedDuration: "1h 00m",
+                costLKR: 1800,
+                costUSD: 6.0,
+                highlight: "Authentic Southern Village Hoppers",
+                imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.2800,
+                longitude: 81.2850
+            ),
+            TripStop(
+                time: "08:30 AM",
+                title: "Bundala UNESCO Biosphere Flamingo & Wetland Safari",
+                category: "Wildlife",
+                icon: "bird.fill",
+                description: "4x4 safari through Ramsar coastal wetlands. Spot thousands of greater flamingos feeding in salt pans, giant pelicans, sea eagles, and mugger crocodiles.",
+                locationName: "Bundala National Park Gate",
+                estimatedDuration: "3h 30m",
+                costLKR: 9500,
+                costUSD: 31.0,
+                highlight: "Greater Flamingos & Coastal Biosphere",
+                passRequired: true,
+                passName: "Bundala Wildlife Permit",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.1950,
+                longitude: 81.2180
+            ),
+            TripStop(
+                time: "12:30 PM",
+                title: "Kirinda Lagoon Fresh Tiger Prawns & Red Rice",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Savor sweet wild tiger prawns sautéed in garlic, spicy tomato devilled sauce, dhal, and fresh coconut sambol with unpolished red country rice.",
+                locationName: "Kirinda Lagoon Rest, Kirinda",
+                estimatedDuration: "1h 30m",
+                costLKR: 3800,
+                costUSD: 12.5,
+                highlight: "Wild Lagoon Tiger Prawns",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.2150,
+                longitude: 81.3320
+            ),
+            TripStop(
+                time: "02:30 PM",
+                title: "Ancient Kirinda Ocean Clifftop Temple",
+                category: "Heritage",
+                icon: "building.columns.fill",
+                description: "Perched on dramatic black boulders battered by roaring southern waves, this ancient 2nd century BC shrine commemorates legendary Queen Viharamahadevi.",
+                locationName: "Kirinda Rock Viharaya",
+                estimatedDuration: "1h 45m",
+                costLKR: 500,
+                costUSD: 1.5,
+                highlight: "Ancient Clifftop Buddhist Shrine",
+                imageUrl: "https://images.unsplash.com/photo-1588598198321-9735fd52455b?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.2135,
+                longitude: 81.3360
+            ),
+            TripStop(
+                time: "05:15 PM",
+                title: "Palatupana Coastal Dunes Sunset Vista",
+                category: "Scenic",
+                icon: "sun.horizon.fill",
+                description: "Golden sand dunes rolling down into crashing Indian Ocean waves where sea eagles soar against pink and gold twilight skies.",
+                locationName: "Palatupana Coastal Dunes, Yala",
+                estimatedDuration: "1h 30m",
+                costLKR: 0,
+                costUSD: 0.0,
+                highlight: "Dramatic Coastal Dune Golden Hour",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.3320,
+                longitude: 81.4280
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Cinnamon Wild Safari Deck: Lantern-lit Bush BBQ",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Overlooking a natural crocodile lake, enjoy tender skewers of charcoal-grilled chicken, fresh reef fish, sweet roasted corn, and cold drinks under southern stars.",
+                locationName: "Cinnamon Wild Deck, Yala",
+                estimatedDuration: "2h 30m",
+                costLKR: 7200,
+                costUSD: 24.0,
+                highlight: "Over-Water Safari Deck Dinner",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.3380,
+                longitude: 81.4350
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Flamingo Wetlands, Ocean Temples & Coastal Sand Dunes",
+            region: "Bundala & Kirinda Coast",
+            weather: "Sunny Coastal Savannah",
+            temperature: "31°C",
+            stops: stops
+        )
+    }
+
+    // MARK: - Wildlife Safari Day 3: Udawalawe Elephant Herds
+    private func buildWildlifeSafariDay3(dayNumber: Int, dayOfWeek: String, dayOfMonth: String, fullDateString: String, tags: [String] = []) -> TripDay {
+        let stops = [
+            TripStop(
+                time: "07:30 AM",
+                title: "Walawe Riverbank Breakfast & Highland Coffee",
+                category: "Breakfast & Cafe",
+                icon: "cup.and.saucer.fill",
+                description: "Enjoy sweet tropical papaya, scrambled country eggs with warm roti, and steaming highland coffee overlooking the peaceful Walawe river.",
+                locationName: "Walawe River Cafe, Udawalawe",
+                estimatedDuration: "1h 00m",
+                costLKR: 2000,
+                costUSD: 6.5,
+                highlight: "Riverside Jungle Morning",
+                imageUrl: "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.4420,
+                longitude: 80.8920
+            ),
+            TripStop(
+                time: "09:00 AM",
+                title: "Udawalawe Elephant Transit Home Milk Feeding",
+                category: "Conservation",
+                icon: "heart.fill",
+                description: "Witness over 40 orphaned and injured baby elephants bounding playfully into the sanctuary yard for their morning milk feeding before rehabilitation.",
+                locationName: "Elephant Transit Home",
+                estimatedDuration: "1h 45m",
+                costLKR: 2000,
+                costUSD: 6.5,
+                highlight: "Rescued Baby Elephant Milk Feeding",
+                imageUrl: "https://images.unsplash.com/photo-1549366021-9f761d450615?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.4740,
+                longitude: 80.8870
+            ),
+            TripStop(
+                time: "11:30 AM",
+                title: "Grand Udawalawe Garden Organic Curry Feast",
+                category: "Lunch & Dining",
+                icon: "fork.knife",
+                description: "Heirloom country curries: spicy free-range chicken curry, creamy lotus root curry, crispy pol sambol, and sweet mango chutney.",
+                locationName: "Grand Udawalawe Restaurant",
+                estimatedDuration: "1h 30m",
+                costLKR: 3600,
+                costUSD: 12.0,
+                highlight: "Organic Garden-to-Table Curries",
+                imageUrl: "https://images.unsplash.com/photo-1546708973-b339540b5162?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.4450,
+                longitude: 80.8900
+            ),
+            TripStop(
+                time: "02:00 PM",
+                title: "Udawalawe Reservoir Elephant Herd Safari",
+                category: "Wildlife",
+                icon: "pawprint.fill",
+                description: "Afternoon 4x4 open jeep safari along the massive Udawalawe reservoir. Encounter family herds of 50+ wild elephants grazing peacefully with newborn calves.",
+                locationName: "Udawalawe National Park Gate",
+                estimatedDuration: "3h 00m",
+                costLKR: 11500,
+                costUSD: 38.0,
+                highlight: "Massive Wild Elephant Herds by the Water",
+                passRequired: true,
+                passName: "Udawalawe Wildlife Permit",
+                imageUrl: "https://images.unsplash.com/photo-1534177616072-ef7dc120449d?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.4780,
+                longitude: 80.8950
+            ),
+            TripStop(
+                time: "05:30 PM",
+                title: "Udawalawe Reservoir Dam Golden Sunset",
+                category: "Scenic",
+                icon: "sun.horizon.fill",
+                description: "Breathtaking sunset across the vast lake waters with mountain ranges in the distance and flocks of waterbirds soaring across the twilight sky.",
+                locationName: "Udawalawe Dam Viewpoint",
+                estimatedDuration: "1h 15m",
+                costLKR: 0,
+                costUSD: 0.0,
+                highlight: "Vast Reservoir Mountain Sunset",
+                imageUrl: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.4520,
+                longitude: 80.8980
+            ),
+            TripStop(
+                time: "07:30 PM",
+                title: "Kalu's Campfire Starlight Dinner & Spiced Tea",
+                category: "Dinner & Drinks",
+                icon: "fork.knife",
+                description: "Campfire dinner beneath a blanket of tropical stars: fragrant chicken biryani with mint sambol, wood-fired naan bread, and spiced hot ginger tea.",
+                locationName: "Kalu's Safari Camp, Udawalawe",
+                estimatedDuration: "2h 15m",
+                costLKR: 5400,
+                costUSD: 17.5,
+                highlight: "Campfire Biryani Under Southern Stars",
+                imageUrl: "https://images.unsplash.com/photo-1552465011-b4e21bf6e79a?auto=format&fit=crop&w=800&q=80",
+                latitude: 6.4400,
+                longitude: 80.8850
+            )
+        ]
+        
+        return TripDay(
+            dayNumber: dayNumber,
+            dayOfWeek: dayOfWeek,
+            dayOfMonth: dayOfMonth,
+            fullDateString: fullDateString,
+            title: "Udawalawe Elephant Herds, Rescued Calves & Reservoir Sunsets",
+            region: "Udawalawe Sanctuary",
+            weather: "Warm & Sunny",
+            temperature: "30°C",
             stops: stops
         )
     }

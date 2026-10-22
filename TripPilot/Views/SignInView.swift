@@ -102,7 +102,7 @@ struct SignInView: View {
                             .font(.system(size: 28, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                         
-                        Text("Enter your credentials or use biometric security to access your flight itineraries and travel journals.")
+                        Text("Enter your credentials or use biometric security to access your curated travel itineraries and journals.")
                             .font(.system(size: 13, weight: .regular))
                             .foregroundColor(Color(white: 0.65))
                             .multilineTextAlignment(.center)

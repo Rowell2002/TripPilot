@@ -43,7 +43,7 @@ struct SettingsProfileView: View {
     // Toggles
     @State private var isFaceIDEnabled: Bool = true
     @State private var isSecureEnclaveSyncEnabled: Bool = true
-    @State private var isFlightAlertsEnabled: Bool = true
+    @State private var isItineraryAlertsEnabled: Bool = true
     @State private var isGeofencedAudioEnabled: Bool = true
     @State private var isHapticFeedbackEnabled: Bool = true
     
@@ -603,14 +603,14 @@ struct SettingsProfileView: View {
                 .padding(.horizontal, 4)
             
             VStack(spacing: 0) {
-                // Flight Status & Gate Alerts
+                // Live Itinerary Alerts
                 settingToggleRow(
-                    icon: "airplane.circle.fill",
+                    icon: "bell.badge.fill",
                     iconColor: primarySky,
                     iconBg: primarySky.opacity(0.18),
-                    title: "Flight Status & Gate Alerts",
-                    subtitle: "Real-time terminal push triggers",
-                    isOn: $isFlightAlertsEnabled,
+                    title: "Live Itinerary & Route Alerts",
+                    subtitle: "Real-time updates on scheduled stops",
+                    isOn: $isItineraryAlertsEnabled,
                     tintColor: primarySky
                 )
                 
@@ -729,7 +729,7 @@ struct SettingsProfileView: View {
                     iconColor: secondaryMint,
                     iconBg: secondaryMint.opacity(0.18),
                     title: "Haptic Engine Feedback",
-                    subtitle: "Tactile taps on boarding pass scans",
+                    subtitle: "Tactile taps on itinerary actions",
                     isOn: $isHapticFeedbackEnabled,
                     tintColor: secondaryMint
                 )

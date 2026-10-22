@@ -3,49 +3,6 @@ import SwiftUI
 import UIKit
 #endif
 
-// MARK: - Models for Booking
-enum BookingDate: String, CaseIterable, Identifiable {
-    case today = "Today"
-    case tomorrow = "Tomorrow"
-    case upcoming = "In 2 Days"
-    
-    var id: String { rawValue }
-    
-    var dateString: String {
-        switch self {
-        case .today: return "Today"
-        case .tomorrow: return "Tomorrow"
-        case .upcoming: return "Day After"
-        }
-    }
-    
-    var statusText: String {
-        switch self {
-        case .today: return "Fast Track"
-        case .tomorrow: return "Available"
-        case .upcoming: return "Optimal Flow"
-        }
-    }
-}
-
-enum BookingTimeSlot: String, CaseIterable, Identifiable {
-    case morning = "07:30 AM"
-    case midDay = "10:00 AM"
-    case goldenHour = "03:30 PM"
-    case sunset = "05:15 PM"
-    
-    var id: String { rawValue }
-    
-    var tag: String {
-        switch self {
-        case .morning: return "Cool breeze"
-        case .midDay: return "Quiet slot"
-        case .goldenHour: return "Golden hour"
-        case .sunset: return "Sunset view"
-        }
-    }
-}
-
 struct PlaceDetailView: View {
     @Environment(\.dismiss) private var dismiss
     
@@ -75,46 +32,11 @@ struct PlaceDetailView: View {
     
     // Interactive State
     @State private var currentSlide: Int = 0
-    @State private var selectedDate: BookingDate = .tomorrow
-    @State private var selectedSlot: BookingTimeSlot = .morning
-    @State private var adultCount: Int = 2
-    @State private var childCount: Int = 0
     @State private var includeAudioGuide: Bool = true
     @State private var isAddedToItinerary: Bool = false
-    @State private var isBooked: Bool = false
-    @State private var isBookingProcessing: Bool = false
     @State private var toastNotice: String? = nil
     @State private var show360PreviewModal: Bool = false
     @State private var showCurrencyInLKR: Bool = false
-    
-    private var adultPriceUSD: Double {
-        Double(place.entranceFeeUSD)
-    }
-    
-    private var childPriceUSD: Double {
-        Double(place.entranceFeeUSD) * 0.5
-    }
-    
-    private var guidePriceUSD: Double {
-        5.0
-    }
-    
-    private var totalPriceUSD: Double {
-        let base = (Double(adultCount) * adultPriceUSD) + (Double(childCount) * childPriceUSD)
-        let guide = includeAudioGuide ? guidePriceUSD : 0.0
-        return base + guide
-    }
-    
-    private var totalPriceLKR: Int {
-        Int(totalPriceUSD * 305)
-    }
-    
-    private var ticketSummaryText: String {
-        let totalPasses = adultCount + childCount
-        let passLabel = totalPasses == 1 ? "Visitor" : "Visitors"
-        let guideLabel = includeAudioGuide ? " + AI Guide" : ""
-        return "(\(totalPasses) \(passLabel)\(guideLabel))"
-    }
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -144,9 +66,7 @@ struct PlaceDetailView: View {
                         // 5. Authentic Reviews & Ratings
                         reviewsSection
                         
-                        // 6. Ticket & Heritage Pass Engine
-                        ticketBookingSection
-                        
+
                         // 7. Transit & Arrival Directions
                         transitArrivalSection
                         
@@ -668,200 +588,7 @@ struct PlaceDetailView: View {
         .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
     }
     
-    // MARK: - 6. Ticket & Heritage Pass Engine
-    private var ticketBookingSection: some View {
-        VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
-                    Text("Entry Pass & Permits")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                    Text("Official Central Cultural Fund & Wildlife Dept")
-                        .font(.system(size: 11.5, weight: .medium))
-                        .foregroundColor(textOnSurfaceVariant)
-                }
-                
-                Spacer()
-                
-                Button(action: {
-                    showCurrencyInLKR.toggle()
-                }) {
-                    Text(showCurrencyInLKR ? "Rs. LKR" : "$ USD")
-                        .font(.system(size: 11, weight: .bold, design: .monospaced))
-                        .foregroundColor(secondaryMint)
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 4)
-                        .background(secondaryMint.opacity(0.15))
-                        .clipShape(Capsule())
-                }
-            }
-            
-            // Date Selection
-            HStack(spacing: 8) {
-                ForEach(BookingDate.allCases) { date in
-                    Button(action: {
-                        withAnimation(.spring(response: 0.3)) {
-                            selectedDate = date
-                        }
-                    }) {
-                        VStack(spacing: 2) {
-                            Text(date.rawValue.uppercased())
-                                .font(.system(size: 9, weight: .bold))
-                                .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : textDim)
-                            Text(date.dateString)
-                                .font(.system(size: 13, weight: .heavy, design: .rounded))
-                                .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : .white)
-                            Text(date.statusText)
-                                .font(.system(size: 9, weight: .bold))
-                                .foregroundColor(selectedDate == date ? Color(red: 0/255, green: 40/255, blue: 60/255) : secondaryMint)
-                        }
-                        .padding(.vertical, 8)
-                        .frame(maxWidth: .infinity)
-                        .background(selectedDate == date ? primaryContainer : surfaceCard)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                    }
-                }
-            }
-            
-            // Time Slots
-            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                ForEach(BookingTimeSlot.allCases) { slot in
-                    Button(action: {
-                        withAnimation(.spring(response: 0.3)) {
-                            selectedSlot = slot
-                        }
-                    }) {
-                        HStack {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text(slot.rawValue)
-                                    .font(.system(size: 13.5, weight: .heavy, design: .rounded))
-                                    .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255) : .white)
-                                Text(slot.tag)
-                                    .font(.system(size: 9, weight: .semibold))
-                                    .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255).opacity(0.8) : textDim)
-                            }
-                            Spacer()
-                            Image(systemName: selectedSlot == slot ? "checkmark.circle.fill" : "clock")
-                                .font(.system(size: 12))
-                                .foregroundColor(selectedSlot == slot ? Color(red: 0/255, green: 40/255, blue: 60/255) : textDim)
-                        }
-                        .padding(.horizontal, 10)
-                        .padding(.vertical, 8)
-                        .background(selectedSlot == slot ? primaryContainer : surfaceCard)
-                        .clipShape(RoundedRectangle(cornerRadius: 10))
-                    }
-                }
-            }
-            
-            // Ticket Quantities
-            VStack(spacing: 8) {
-                // Adult
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Adult Entry Pass")
-                            .font(.system(size: 13.5, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        Text(showCurrencyInLKR ? "Rs. \(place.entranceFeeLKR.formatted())" : "$\(place.entranceFeeUSD).00 USD")
-                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundColor(textOnSurfaceVariant)
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 12) {
-                        Button(action: { if adultCount > 1 { adultCount -= 1 } }) {
-                            Image(systemName: "minus")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 28, height: 28)
-                                .background(Color.white.opacity(0.1))
-                                .clipShape(Circle())
-                        }
-                        Text("\(adultCount)")
-                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        Button(action: { adultCount += 1 }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.black)
-                                .frame(width: 28, height: 28)
-                                .background(primaryContainer)
-                                .clipShape(Circle())
-                        }
-                    }
-                }
-                .padding(10)
-                .background(surfaceCard)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                
-                // Child
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Child Pass (Under 12)")
-                            .font(.system(size: 13.5, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        Text(showCurrencyInLKR ? "Rs. \((place.entranceFeeLKR / 2).formatted())" : "$\(place.entranceFeeUSD / 2).00 USD")
-                            .font(.system(size: 12, weight: .medium, design: .rounded))
-                            .foregroundColor(textOnSurfaceVariant)
-                    }
-                    
-                    Spacer()
-                    
-                    HStack(spacing: 12) {
-                        Button(action: { if childCount > 0 { childCount -= 1 } }) {
-                            Image(systemName: "minus")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 28, height: 28)
-                                .background(Color.white.opacity(0.1))
-                                .clipShape(Circle())
-                        }
-                        Text("\(childCount)")
-                            .font(.system(size: 14, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        Button(action: { childCount += 1 }) {
-                            Image(systemName: "plus")
-                                .font(.system(size: 11, weight: .bold))
-                                .foregroundColor(.white)
-                                .frame(width: 28, height: 28)
-                                .background(Color.white.opacity(0.1))
-                                .clipShape(Circle())
-                        }
-                    }
-                }
-                .padding(10)
-                .background(surfaceCard)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-                
-                // Smart AI Spatial Audio Guide
-                Toggle(isOn: $includeAudioGuide) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "headphones")
-                            .font(.system(size: 14))
-                            .foregroundColor(secondaryMint)
-                        VStack(alignment: .leading, spacing: 1) {
-                            Text("AI Spatial Cultural Guide")
-                                .font(.system(size: 13, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Text("English, Sinhala & Tamil narration (+$5)")
-                                .font(.system(size: 10.5))
-                                .foregroundColor(textOnSurfaceVariant)
-                        }
-                    }
-                }
-                .tint(primaryContainer)
-                .padding(10)
-                .background(surfaceCard)
-                .clipShape(RoundedRectangle(cornerRadius: 10))
-            }
-        }
-        .padding(14)
-        .background(surfaceContainerLow)
-        .clipShape(RoundedRectangle(cornerRadius: 18))
-        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
-    }
-    
-    // MARK: - 7. Transit & Arrival
+    // MARK: - 6. Transit & Arrival
     private var transitArrivalSection: some View {
         VStack(alignment: .leading, spacing: 12) {
             Text("Location & Transit Access")
@@ -923,71 +650,71 @@ struct PlaceDetailView: View {
         .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
     }
     
-    // MARK: - Sticky Instant Checkout Bar
+    // MARK: - Sticky Action Bar
     private var stickyCheckoutBar: some View {
         VStack(spacing: 0) {
             Divider().background(outlineVariant)
             
             HStack(spacing: 14) {
-                VStack(alignment: .leading, spacing: 2) {
+                VStack(alignment: .leading, spacing: 3) {
                     HStack(alignment: .firstTextBaseline, spacing: 4) {
                         if showCurrencyInLKR {
-                            Text("Rs. \(totalPriceLKR.formatted())")
+                            Text("Rs. \(place.entranceFeeLKR.formatted())")
                                 .font(.system(size: 18, weight: .heavy, design: .rounded))
                                 .foregroundColor(.white)
                         } else {
-                            Text(String(format: "$%.2f", totalPriceUSD))
-                                .font(.system(size: 20, weight: .heavy, design: .rounded))
+                            Text(String(format: "$%.0f USD", place.entranceFeeUSD))
+                                .font(.system(size: 19, weight: .heavy, design: .rounded))
                                 .foregroundColor(.white)
                         }
-                        Text(ticketSummaryText)
-                            .font(.system(size: 11, weight: .medium, design: .rounded))
-                            .foregroundColor(textOnSurfaceVariant)
+                        
+                        Button(action: {
+                            showCurrencyInLKR.toggle()
+                        }) {
+                            Text(showCurrencyInLKR ? "LKR" : "USD")
+                                .font(.system(size: 10, weight: .bold, design: .monospaced))
+                                .foregroundColor(secondaryMint)
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(secondaryMint.opacity(0.15))
+                                .clipShape(Capsule())
+                        }
                     }
                     
-                    HStack(spacing: 4) {
-                        Image(systemName: "bolt.fill")
-                            .font(.system(size: 9))
-                            .foregroundColor(secondaryMint)
-                        Text("Instant LK Fast-Track QR")
-                            .font(.system(size: 10, weight: .bold, design: .rounded))
-                            .foregroundColor(secondaryMint)
-                    }
+                    Text("Official sanctuary / entry info")
+                        .font(.system(size: 10, weight: .medium, design: .rounded))
+                        .foregroundColor(textOnSurfaceVariant)
                 }
                 
                 Spacer()
                 
                 Button(action: {
-                    handleApplePay()
-                }) {
-                    HStack(spacing: 5) {
-                        if isBookingProcessing {
-                            ProgressView()
-                                .progressViewStyle(CircularProgressViewStyle(tint: .black))
-                                .scaleEffect(0.8)
-                        } else if isBooked {
-                            Image(systemName: "checkmark.circle.fill")
-                                .font(.system(size: 15))
-                                .foregroundColor(Color(red: 0/255, green: 100/255, blue: 60/255))
-                            Text("Pass Issued")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.black)
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                        isAddedToItinerary.toggle()
+                        if isAddedToItinerary {
+                            triggerToast("Added \(place.name) to your active trip!")
                         } else {
-                            Text("Book with")
-                                .font(.system(size: 11, weight: .semibold, design: .rounded))
-                                .foregroundColor(.black.opacity(0.7))
-                            Text("Pay")
-                                .font(.system(size: 16, weight: .heavy, design: .rounded))
-                                .foregroundColor(.black)
+                            triggerToast("Removed from active trip")
                         }
                     }
-                    .frame(height: 48)
-                    .padding(.horizontal, 22)
-                    .background(Color.white)
+                }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: isAddedToItinerary ? "checkmark.circle.fill" : "plus.circle.fill")
+                            .font(.system(size: 14, weight: .bold))
+                        Text(isAddedToItinerary ? "In Itinerary" : "Add to Trip")
+                            .font(.system(size: 14, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(isAddedToItinerary ? .black : .white)
+                    .frame(height: 46)
+                    .padding(.horizontal, 20)
+                    .background(
+                        isAddedToItinerary ?
+                        LinearGradient(colors: [secondaryMint, Color(red: 45/255, green: 212/255, blue: 191/255)], startPoint: .leading, endPoint: .trailing) :
+                        LinearGradient(colors: [Color(red: 56/255, green: 189/255, blue: 248/255), Color(red: 2/255, green: 132/255, blue: 199/255)], startPoint: .leading, endPoint: .trailing)
+                    )
                     .clipShape(Capsule())
-                    .shadow(color: Color.white.opacity(0.2), radius: 10)
+                    .shadow(color: (isAddedToItinerary ? secondaryMint : Color(red: 56/255, green: 189/255, blue: 248/255)).opacity(0.3), radius: 8, y: 3)
                 }
-                .disabled(isBookingProcessing || isBooked)
             }
             .padding(.horizontal, 20)
             .padding(.top, 12)
@@ -1000,16 +727,6 @@ struct PlaceDetailView: View {
     }
     
     // MARK: - Actions
-    private func handleApplePay() {
-        isBookingProcessing = true
-        triggerToast("Authorizing Apple Pay with Face ID...")
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) {
-            isBookingProcessing = false
-            isBooked = true
-            triggerToast("Booking confirmed! Sri Lanka Digital Entry Pass generated.")
-        }
-    }
-    
     private func triggerToast(_ message: String) {
         withAnimation {
             toastNotice = message

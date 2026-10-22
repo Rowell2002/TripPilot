@@ -8,13 +8,11 @@ struct DailyItineraryView: View {
     @ObservedObject private var tripManager = TripManager.shared
     @State private var selectedTab: AppTab = .itinerary
     @State private var selectedDateIndex: Int = 0
-    @State private var showPassModal: Bool = false
     @State private var showAudioStoryModal: Bool = false
     @State private var showReorderModal: Bool = false
     @State private var showAddStopModal: Bool = false
     @State private var showDaySettingsModal: Bool = false
     @State private var activeNotice: String? = nil
-    @State private var isFlightPulsing: Bool = false
     @State private var isAudioPlaying: Bool = true
     @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToBudget: Bool = false
@@ -69,7 +67,7 @@ struct DailyItineraryView: View {
             // Scrollable Content
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
-                    // MARK: - Header Bar (Live flight chip + Logo + Actions)
+                    // MARK: - Header Bar (Logo & Actions)
                     headerSection
                         .padding(.top, 4)
                     
@@ -112,14 +110,6 @@ struct DailyItineraryView: View {
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) {
-                isFlightPulsing = true
-            }
-        }
-        .sheet(isPresented: $showPassModal) {
-            shibuyaSkyPassSheet
-        }
         .sheet(isPresented: $showAudioStoryModal) {
             audioStoryPlayerSheet
         }
@@ -164,29 +154,7 @@ struct DailyItineraryView: View {
     
     // MARK: - 1. Top Header Bar
     private var headerSection: some View {
-        VStack(spacing: 12) {
-            // Live Flight Status Capsule
-            HStack(spacing: 8) {
-                Image(systemName: "airplane.departure")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundColor(skyBlue)
-                    .scaleEffect(isFlightPulsing ? 1.15 : 0.9)
-                
-                Text("UL 504 • Colombo (CMB) In 2h 15m")
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
-                    .tracking(0.5)
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 5)
-            .background(surfaceContainerLow)
-            .clipShape(Capsule())
-            .overlay(
-                Capsule()
-                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
-            )
-            .shadow(color: Color.black.opacity(0.3), radius: 6, y: 2)
-            
+        VStack(spacing: 8) {
             // Brand & Navigation Controls
             HStack(alignment: .center, spacing: 12) {
                 // Back Button
@@ -248,7 +216,7 @@ struct DailyItineraryView: View {
                 // Right Actions: Notifications & Avatar
                 HStack(spacing: 10) {
                     Button(action: {
-                        triggerNotice("🔔 Gate 14 boarding starts in 1h 45m")
+                        triggerNotice("📍 Next scheduled stop: \(currentDay.stops.first?.title ?? "Sigiriya Lion Rock")")
                     }) {
                         ZStack(alignment: .topTrailing) {
                             Circle()
@@ -681,25 +649,7 @@ struct DailyItineraryView: View {
                             .stroke(Color.white.opacity(0.06), lineWidth: 1)
                     )
                     
-                    if stop.passRequired {
-                        Button(action: {
-                            showPassModal = true
-                        }) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "ticket.fill")
-                                    .font(.system(size: 12))
-                                Text(stop.passName ?? "View Digital Entry Pass")
-                                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                            }
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 38)
-                            .background(
-                                LinearGradient(colors: [skyBlue, royalBlue], startPoint: .leading, endPoint: .trailing)
-                            )
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
-                        }
-                    }
+
                 }
                 .padding(14)
                 .background(surfaceContainerLowest)
@@ -826,135 +776,6 @@ struct DailyItineraryView: View {
                 }
             }
         }
-    }
-    
-    // MARK: - Sheet 1: Sigiriya Digital Entry Pass
-    private var shibuyaSkyPassSheet: some View {
-        ZStack {
-            darkBackground.ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                Capsule()
-                    .fill(Color.white.opacity(0.2))
-                    .frame(width: 40, height: 4)
-                    .padding(.top, 12)
-                
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Digital Heritage Pass")
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        
-                        Text("Sigiriya UNESCO Fast-Track Entry")
-                            .font(.system(size: 13))
-                            .foregroundColor(skyBlue)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: { showPassModal = false }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(textMuted)
-                    }
-                }
-                .padding(.horizontal, 20)
-                
-                VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("BOOKING REFERENCE")
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(textMuted)
-                            Text("LK-SIG-9082")
-                                .font(.system(size: 16, weight: .bold, design: .monospaced))
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("VERIFIED")
-                            .font(.system(size: 11, weight: .heavy, design: .rounded))
-                            .foregroundColor(tealAccent)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(tealAccent.opacity(0.15))
-                            .clipShape(Capsule())
-                    }
-                    
-                    Divider().background(Color.white.opacity(0.1))
-                    
-                    VStack(spacing: 8) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .fill(Color.white)
-                                .frame(width: 200, height: 200)
-                            
-                            Image(systemName: "qrcode")
-                                .font(.system(size: 160))
-                                .foregroundColor(.black)
-                        }
-                        
-                        Text("Scan at Central Cultural Fund (CCF) Gate")
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(textMuted)
-                    }
-                    .padding(.vertical, 8)
-                    
-                    HStack(spacing: 20) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("TIME WINDOW")
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(textMuted)
-                            Text("07:00 - 10:30 AM")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        VStack(alignment: .trailing, spacing: 2) {
-                            Text("TRAVELER")
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(textMuted)
-                            Text("Chethana Rowell +1")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                    }
-                }
-                .padding(20)
-                .background(surfaceContainerLowest)
-                .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 22, style: .continuous)
-                        .stroke(skyBlue.opacity(0.3), lineWidth: 1)
-                )
-                .padding(.horizontal, 20)
-                
-                Button(action: {
-                    showPassModal = false
-                    triggerNotice("🎟️ Pass added to Apple Wallet")
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "wallet.pass.fill")
-                            .font(.system(size: 16))
-                        Text("Add to Apple Wallet")
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
-                    }
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .background(Color.white)
-                    .clipShape(Capsule())
-                    .padding(.horizontal, 20)
-                }
-                
-                Spacer()
-            }
-        }
-        .presentationDetents([.fraction(0.72)])
-        .preferredColorScheme(.dark)
     }
     
     // MARK: - Sheet 2: Sri Lanka Audio Story

@@ -605,7 +605,7 @@ struct MyTripsHubView: View {
                                         .stroke(skyBlue.opacity(0.4), lineWidth: 1)
                                 )
                             
-                            Image(systemName: "ticket.fill")
+                            Image(systemName: "clock.fill")
                                 .font(.system(size: 16))
                                 .foregroundColor(skyBlue)
                         }
@@ -1195,7 +1195,7 @@ struct MyTripsHubView: View {
                             Text("AI Travel Assistant")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
-                            Text("Describe your dream destination and TripPilot will build your flights, hotels, and daily itinerary.")
+                            Text("Describe your dream destination and TripPilot will build your hotels, dining, and daily itinerary.")
                                 .font(.system(size: 12))
                                 .foregroundColor(textMuted)
                         }
@@ -1240,7 +1240,7 @@ struct MyTripsHubView: View {
                             .foregroundColor(primaryCyan)
                         
                         VStack(spacing: 8) {
-                            itineraryRow(time: "08:30", title: "Flight UL 504 Arrive CMB Colombo", status: "Completed")
+                            itineraryRow(time: "08:30", title: "Arrive in Colombo & Hotel Transfer", status: "Completed")
                             itineraryRow(time: "11:30", title: "Central Expressway to Sigiriya", status: "In Transit")
                             itineraryRow(time: "15:00", title: "Check-in at Heritance Kandalama", status: "Confirmed")
                             itineraryRow(time: "16:30", title: "Sigiriya Rock Fortress Sunset Tour", status: "Scheduled")

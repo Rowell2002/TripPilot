@@ -851,7 +851,7 @@ struct TripGeneratorWizardView: View {
                 
                 Spacer()
                 
-                Text("Excl. international flights")
+                Text("Daily expenses & stays")
                     .font(.system(size: 12, weight: .medium))
                     .foregroundColor(textOnSurfaceVariant)
             }

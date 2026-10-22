@@ -60,7 +60,6 @@ struct BudgetExpensesView: View {
     // Interactive State
     @State private var selectedTab: AppTab = .budget
     @State private var isUSD: Bool = true
-    @State private var isFlightPulsing: Bool = false
     @State private var showLogExpenseSheet: Bool = false
     @State private var showSplitBillSheet: Bool = false
     @State private var showTripPickerSheet: Bool = false
@@ -91,8 +90,8 @@ struct BudgetExpensesView: View {
             amountLKR: 28975
         ),
         ExpenseTransaction(
-            title: "Sigiriya UNESCO CCF Pass",
-            subtitle: "Fast-track citadel ticket & museum entry",
+            title: "Sigiriya UNESCO Entry",
+            subtitle: "Ancient citadel & museum access",
             category: "Culture",
             categoryColor: Color(red: 52/255, green: 211/255, blue: 153/255),
             iconName: "sparkles",
@@ -138,7 +137,7 @@ struct BudgetExpensesView: View {
             targetLKR: 366000
         ),
         BudgetCategoryEnvelope(
-            name: "Flights & Transit",
+            name: "Transit & Transport",
             detail: "Expressways & Scenic Railway Pass",
             iconName: "tram.fill",
             color: Color(red: 37/255, green: 99/255, blue: 235/255),
@@ -246,7 +245,7 @@ struct BudgetExpensesView: View {
         .preferredColorScheme(.dark)
         .onAppear {
             withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) {
-                isFlightPulsing = true
+                
             }
         }
         .navigationDestination(isPresented: $navigateToItinerary) {
@@ -290,7 +289,7 @@ struct BudgetExpensesView: View {
     // MARK: - Top Header Bar
     private var topHeaderBar: some View {
         VStack(spacing: 6) {
-            // Status bar Flight Capsule Row
+            // Top Navigation Row
             HStack {
                 Button(action: {
                     dismiss()
@@ -308,15 +307,14 @@ struct BudgetExpensesView: View {
                 
                 Spacer()
                 
-                // Flight Status Chip
+                // Status Chip
                 HStack(spacing: 6) {
-                    Image(systemName: "airplane.departure")
-                        .font(.system(size: 12, weight: .bold))
+                    Image(systemName: "banknote.fill")
+                        .font(.system(size: 11, weight: .bold))
                         .foregroundColor(primarySky)
-                        .scaleEffect(isFlightPulsing ? 1.15 : 0.9)
                     
-                    Text("JL 005 • In 2h 15m")
-                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                    Text("EXPENSES OVERVIEW")
+                        .font(.system(size: 10.5, weight: .bold, design: .rounded))
                         .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
                         .tracking(0.5)
                 }
@@ -898,7 +896,7 @@ struct BudgetExpensesView: View {
             
             // Donut 2x2 Legend Grid
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                legendItem(title: "Flights & Rail", percent: "38%", color: royalBlue)
+                legendItem(title: "Transit & Rail", percent: "38%", color: royalBlue)
                 legendItem(title: "Lodging", percent: "32%", color: primarySky)
                 legendItem(title: "Food & Dining", percent: "18%", color: amberGold)
                 legendItem(title: "Culture & Passes", percent: "8%", color: emeraldGreen)
