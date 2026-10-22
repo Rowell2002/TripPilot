@@ -1,0 +1,1201 @@
+travelPurpose,travelPace,budgetTier,durationDays,travelerType,destinationName,destinationCategory,matchScore,recommendedHours,optimalTimeSlot
+Relaxation,Relaxed,Budget,5,Couple,Colombo Lotus Tower,Modern,0.61,2.5,Sunset
+Cultural,Packed,Luxury,2,Friends,Nine Arches Bridge,Nature,0.65,1.5,Morning
+Nature,Relaxed,Luxury,1,Couple,Heritage Cafe & Bistro Galle,Food,0.58,1.9,Evening
+Adventure,Moderate,Budget,3,Friends,Cafe Chill Ella,Food,0.64,1.5,Evening
+Nature,Moderate,Budget,2,Friends,Galle Dutch Fort,Cultural,0.64,3.0,Sunset
+Beach,Packed,Moderate,1,Friends,Galle Dutch Fort,Cultural,0.58,2.2,Sunset
+Food,Relaxed,Luxury,5,Family,Mirissa Coconut Tree Hill,Beach,0.61,2.5,Sunset
+Cultural,Packed,Budget,5,Solo,Colombo Lotus Tower,Modern,0.65,1.5,Sunset
+Food,Moderate,Moderate,7,Couple,Grand Hotel 1891 High Tea,Food,0.84,2.0,Afternoon
+Relaxation,Moderate,Luxury,2,Couple,Colombo Lotus Tower,Modern,0.66,2.0,Sunset
+Food,Moderate,Luxury,4,Family,Nine Arches Bridge,Nature,0.58,2.0,Morning
+Cultural,Moderate,Moderate,5,Solo,Mirissa Coconut Tree Hill,Beach,0.57,2.0,Sunset
+Adventure,Packed,Moderate,4,Friends,Barefoot Garden Cafe,Food,0.75,1.1,Midday
+Relaxation,Moderate,Budget,5,Couple,Colombo Lotus Tower,Modern,0.64,2.0,Sunset
+Adventure,Moderate,Luxury,10,Friends,Grand Hotel 1891 High Tea,Food,0.63,2.0,Afternoon
+Nature,Packed,Moderate,2,Solo,Galle Dutch Fort,Cultural,0.53,2.2,Sunset
+Nature,Packed,Moderate,2,Friends,Barefoot Garden Cafe,Food,0.74,1.1,Midday
+Food,Packed,Moderate,1,Solo,Ministry of Crab Colombo,Food,0.95,1.5,Evening
+Beach,Relaxed,Moderate,10,Couple,Ceylon Sliders Surf Cafe,Beach,0.82,1.9,Morning
+Relaxation,Packed,Moderate,3,Solo,Upalis Authentic Sri Lankan,Food,0.95,1.1,Midday
+Adventure,Packed,Budget,3,Family,Nuwara Eliya Tea Estates,Nature,0.75,2.2,Midday
+Adventure,Relaxed,Luxury,7,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.83,4.4,Morning
+Beach,Moderate,Budget,1,Couple,Temple of the Sacred Tooth Relic,Cultural,0.63,2.5,Morning
+Food,Relaxed,Luxury,3,Couple,Matey Hut Traditional Claypot,Food,0.93,1.9,Evening
+Nature,Moderate,Luxury,10,Couple,Mirissa Coconut Tree Hill,Beach,0.69,2.0,Sunset
+Food,Packed,Luxury,7,Friends,Ceylon Sliders Surf Cafe,Beach,0.66,1.1,Morning
+Nature,Relaxed,Moderate,1,Couple,Colombo Lotus Tower,Modern,0.7,2.5,Sunset
+Relaxation,Packed,Budget,4,Solo,Nine Arches Bridge,Nature,0.75,1.5,Morning
+Cultural,Packed,Budget,5,Friends,Mirissa Coconut Tree Hill,Beach,0.73,1.5,Sunset
+Relaxation,Packed,Luxury,14,Couple,Matey Hut Traditional Claypot,Food,0.9,1.1,Evening
+Nature,Relaxed,Budget,10,Family,Heritage Cafe & Bistro Galle,Food,0.54,1.9,Evening
+Relaxation,Relaxed,Luxury,2,Solo,Barefoot Garden Cafe,Food,0.81,1.9,Midday
+Cultural,Relaxed,Budget,4,Friends,Yala National Park Safari,Nature,0.4,5.6,Morning
+Beach,Moderate,Budget,2,Friends,Galle Dutch Fort,Cultural,0.62,3.0,Sunset
+Adventure,Relaxed,Budget,4,Couple,Heritage Cafe & Bistro Galle,Food,0.55,1.9,Evening
+Nature,Moderate,Budget,3,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.58,3.5,Morning
+Beach,Moderate,Moderate,10,Friends,Yala National Park Safari,Nature,0.53,4.5,Morning
+Nature,Relaxed,Luxury,1,Family,Nine Arches Bridge,Nature,0.87,2.5,Morning
+Food,Packed,Luxury,3,Solo,Temple of the Sacred Tooth Relic,Cultural,0.62,1.9,Morning
+Cultural,Packed,Budget,4,Friends,Galle Dutch Fort,Cultural,0.98,2.2,Sunset
+Adventure,Relaxed,Luxury,1,Solo,Heritage Cafe & Bistro Galle,Food,0.61,1.9,Evening
+Adventure,Packed,Moderate,5,Couple,Cafe Chill Ella,Food,0.61,1.1,Evening
+Food,Relaxed,Luxury,5,Friends,Cafe Chill Ella,Food,0.93,1.9,Evening
+Cultural,Relaxed,Moderate,2,Solo,Mirissa Coconut Tree Hill,Beach,0.55,2.5,Sunset
+Nature,Moderate,Budget,4,Family,Upalis Authentic Sri Lankan,Food,0.53,1.5,Midday
+Adventure,Packed,Moderate,1,Family,Galle Dutch Fort,Cultural,0.78,2.2,Sunset
+Nature,Moderate,Budget,2,Couple,Ministry of Crab Colombo,Food,0.34,2.0,Evening
+Nature,Packed,Moderate,4,Family,Matey Hut Traditional Claypot,Food,0.62,1.1,Evening
+Cultural,Relaxed,Luxury,10,Family,Nine Arches Bridge,Nature,0.57,2.5,Morning
+Nature,Packed,Moderate,3,Friends,Heritage Cafe & Bistro Galle,Food,0.73,1.1,Evening
+Cultural,Relaxed,Luxury,3,Solo,Grand Hotel 1891 High Tea,Food,0.65,2.5,Afternoon
+Nature,Moderate,Budget,1,Family,Grand Hotel 1891 High Tea,Food,0.37,2.0,Afternoon
+Cultural,Moderate,Budget,4,Solo,Grand Hotel 1891 High Tea,Food,0.37,2.0,Afternoon
+Food,Packed,Luxury,3,Couple,Nuwara Eliya Tea Estates,Nature,0.63,2.2,Midday
+Nature,Moderate,Budget,3,Family,Heritage Cafe & Bistro Galle,Food,0.57,1.5,Evening
+Relaxation,Relaxed,Moderate,3,Solo,Barefoot Garden Cafe,Food,0.87,1.9,Midday
+Food,Relaxed,Budget,14,Family,Upalis Authentic Sri Lankan,Food,0.87,1.9,Midday
+Nature,Relaxed,Budget,4,Friends,Cafe Chill Ella,Food,0.64,1.9,Evening
+Cultural,Moderate,Moderate,10,Family,Sigiriya Ancient Rock Fortress,Cultural,0.93,3.5,Morning
+Beach,Relaxed,Luxury,5,Solo,Galle Dutch Fort,Cultural,0.61,3.8,Sunset
+Beach,Packed,Moderate,10,Solo,Barefoot Garden Cafe,Food,0.75,1.1,Midday
+Nature,Moderate,Budget,10,Solo,Mirissa Coconut Tree Hill,Beach,0.64,2.0,Sunset
+Cultural,Packed,Moderate,7,Solo,Upalis Authentic Sri Lankan,Food,0.73,1.1,Midday
+Relaxation,Moderate,Moderate,10,Family,Yala National Park Safari,Nature,0.63,4.5,Morning
+Relaxation,Moderate,Luxury,3,Family,Barefoot Garden Cafe,Food,0.8,1.5,Midday
+Cultural,Moderate,Moderate,4,Friends,Cafe Chill Ella,Food,0.55,1.5,Evening
+Food,Packed,Budget,14,Couple,Temple of the Sacred Tooth Relic,Cultural,0.64,1.9,Morning
+Relaxation,Packed,Luxury,7,Solo,Colombo Lotus Tower,Modern,0.69,1.5,Sunset
+Nature,Relaxed,Budget,1,Solo,Colombo Lotus Tower,Modern,0.58,2.5,Sunset
+Adventure,Relaxed,Moderate,10,Couple,Barefoot Garden Cafe,Food,0.65,1.9,Midday
+Nature,Relaxed,Luxury,1,Solo,Heritage Cafe & Bistro Galle,Food,0.58,1.9,Evening
+Relaxation,Packed,Moderate,1,Couple,Galle Dutch Fort,Cultural,0.63,2.2,Sunset
+Food,Packed,Luxury,7,Friends,Heritage Cafe & Bistro Galle,Food,0.99,1.1,Evening
+Adventure,Moderate,Budget,14,Friends,Ministry of Crab Colombo,Food,0.37,2.0,Evening
+Relaxation,Moderate,Luxury,14,Couple,Ministry of Crab Colombo,Food,0.85,2.0,Evening
+Relaxation,Moderate,Budget,5,Family,Cafe Chill Ella,Food,0.87,1.5,Evening
+Cultural,Relaxed,Budget,4,Friends,Yala National Park Safari,Nature,0.41,5.6,Morning
+Cultural,Moderate,Moderate,7,Friends,Heritage Cafe & Bistro Galle,Food,0.62,1.5,Evening
+Food,Moderate,Luxury,1,Friends,Matey Hut Traditional Claypot,Food,0.87,1.5,Evening
+Beach,Moderate,Moderate,10,Couple,Matey Hut Traditional Claypot,Food,0.53,1.5,Evening
+Food,Moderate,Budget,10,Family,Barefoot Garden Cafe,Food,0.86,1.5,Midday
+Food,Relaxed,Luxury,1,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.63,4.4,Morning
+Food,Relaxed,Moderate,3,Solo,Ministry of Crab Colombo,Food,0.84,2.5,Evening
+Nature,Moderate,Moderate,7,Friends,Ministry of Crab Colombo,Food,0.57,2.0,Evening
+Food,Moderate,Budget,14,Solo,Nine Arches Bridge,Nature,0.68,2.0,Morning
+Beach,Relaxed,Luxury,2,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.68,4.4,Morning
+Nature,Relaxed,Luxury,3,Couple,Yala National Park Safari,Nature,0.99,5.6,Morning
+Cultural,Packed,Budget,14,Family,Grand Hotel 1891 High Tea,Food,0.41,1.5,Afternoon
+Adventure,Packed,Luxury,2,Couple,Upalis Authentic Sri Lankan,Food,0.66,1.1,Midday
+Cultural,Moderate,Luxury,10,Friends,Mirissa Coconut Tree Hill,Beach,0.57,2.0,Sunset
+Relaxation,Packed,Budget,2,Family,Galle Dutch Fort,Cultural,0.67,2.2,Sunset
+Adventure,Relaxed,Moderate,10,Family,Temple of the Sacred Tooth Relic,Cultural,0.75,3.1,Morning
+Beach,Relaxed,Moderate,14,Solo,Heritage Cafe & Bistro Galle,Food,0.68,1.9,Evening
+Relaxation,Moderate,Luxury,3,Friends,Nuwara Eliya Tea Estates,Nature,0.61,3.0,Midday
+Relaxation,Moderate,Luxury,14,Friends,Heritage Cafe & Bistro Galle,Food,0.82,1.5,Evening
+Adventure,Moderate,Moderate,4,Solo,Ministry of Crab Colombo,Food,0.57,2.0,Evening
+Nature,Moderate,Luxury,10,Family,Sigiriya Ancient Rock Fortress,Cultural,0.6,3.5,Morning
+Beach,Relaxed,Moderate,4,Family,Ministry of Crab Colombo,Food,0.54,2.5,Evening
+Adventure,Packed,Moderate,1,Couple,Temple of the Sacred Tooth Relic,Cultural,0.73,1.9,Morning
+Food,Moderate,Luxury,4,Friends,Matey Hut Traditional Claypot,Food,0.9,1.5,Evening
+Cultural,Relaxed,Moderate,4,Friends,Colombo Lotus Tower,Modern,0.64,2.5,Sunset
+Adventure,Moderate,Moderate,7,Friends,Cafe Chill Ella,Food,0.54,1.5,Evening
+Food,Moderate,Moderate,5,Couple,Galle Dutch Fort,Cultural,0.64,3.0,Sunset
+Beach,Relaxed,Luxury,3,Couple,Mirissa Coconut Tree Hill,Beach,0.99,2.5,Sunset
+Beach,Packed,Luxury,5,Solo,Mirissa Coconut Tree Hill,Beach,0.97,1.5,Sunset
+Beach,Relaxed,Moderate,1,Couple,Ministry of Crab Colombo,Food,0.52,2.5,Evening
+Cultural,Packed,Moderate,3,Friends,Galle Dutch Fort,Cultural,0.87,2.2,Sunset
+Adventure,Moderate,Moderate,14,Friends,Cafe Chill Ella,Food,0.53,1.5,Evening
+Cultural,Moderate,Moderate,2,Solo,Barefoot Garden Cafe,Food,0.65,1.5,Midday
+Adventure,Packed,Luxury,1,Couple,Yala National Park Safari,Nature,0.87,3.4,Morning
+Beach,Relaxed,Budget,2,Friends,Colombo Lotus Tower,Modern,0.57,2.5,Sunset
+Food,Moderate,Moderate,5,Friends,Upalis Authentic Sri Lankan,Food,0.95,1.5,Midday
+Cultural,Packed,Luxury,2,Couple,Mirissa Coconut Tree Hill,Beach,0.75,1.5,Sunset
+Cultural,Relaxed,Budget,3,Solo,Nuwara Eliya Tea Estates,Nature,0.52,3.8,Midday
+Food,Packed,Luxury,14,Family,Nine Arches Bridge,Nature,0.66,1.5,Morning
+Relaxation,Moderate,Luxury,14,Solo,Colombo Lotus Tower,Modern,0.63,2.0,Sunset
+Relaxation,Packed,Luxury,4,Friends,Galle Dutch Fort,Cultural,0.6,2.2,Sunset
+Relaxation,Relaxed,Moderate,3,Solo,Nine Arches Bridge,Nature,0.53,2.5,Morning
+Beach,Packed,Luxury,5,Friends,Galle Dutch Fort,Cultural,0.6,2.2,Sunset
+Beach,Packed,Moderate,5,Friends,Ceylon Sliders Surf Cafe,Beach,0.9,1.1,Morning
+Cultural,Moderate,Luxury,7,Family,Sigiriya Ancient Rock Fortress,Cultural,0.88,3.5,Morning
+Relaxation,Packed,Luxury,1,Family,Nine Arches Bridge,Nature,0.7,1.5,Morning
+Nature,Moderate,Luxury,14,Family,Nuwara Eliya Tea Estates,Nature,0.93,3.0,Midday
+Food,Packed,Moderate,2,Friends,Grand Hotel 1891 High Tea,Food,0.92,1.5,Afternoon
+Beach,Packed,Budget,3,Family,Heritage Cafe & Bistro Galle,Food,0.64,1.1,Evening
+Beach,Packed,Moderate,1,Friends,Temple of the Sacred Tooth Relic,Cultural,0.54,1.9,Morning
+Beach,Relaxed,Moderate,1,Friends,Heritage Cafe & Bistro Galle,Food,0.62,1.9,Evening
+Adventure,Moderate,Luxury,14,Friends,Nine Arches Bridge,Nature,0.78,2.0,Morning
+Adventure,Relaxed,Moderate,14,Friends,Galle Dutch Fort,Cultural,0.72,3.8,Sunset
+Relaxation,Packed,Budget,3,Family,Sigiriya Ancient Rock Fortress,Cultural,0.55,2.6,Morning
+Cultural,Relaxed,Budget,14,Solo,Yala National Park Safari,Nature,0.4,5.6,Morning
+Relaxation,Moderate,Luxury,5,Friends,Matey Hut Traditional Claypot,Food,0.83,1.5,Evening
+Nature,Moderate,Luxury,3,Friends,Mirissa Coconut Tree Hill,Beach,0.63,2.0,Sunset
+Adventure,Packed,Budget,2,Family,Heritage Cafe & Bistro Galle,Food,0.62,1.1,Evening
+Adventure,Moderate,Budget,5,Family,Matey Hut Traditional Claypot,Food,0.67,1.5,Evening
+Food,Packed,Moderate,7,Family,Barefoot Garden Cafe,Food,0.99,1.1,Midday
+Beach,Relaxed,Luxury,4,Friends,Colombo Lotus Tower,Modern,0.62,2.5,Sunset
+Food,Relaxed,Moderate,14,Friends,Barefoot Garden Cafe,Food,0.98,1.9,Midday
+Relaxation,Relaxed,Moderate,1,Couple,Cafe Chill Ella,Food,0.77,1.9,Evening
+Food,Relaxed,Luxury,14,Solo,Yala National Park Safari,Nature,0.69,5.6,Morning
+Relaxation,Relaxed,Budget,14,Family,Cafe Chill Ella,Food,0.86,1.9,Evening
+Food,Packed,Budget,7,Friends,Cafe Chill Ella,Food,0.99,1.1,Evening
+Food,Packed,Budget,2,Couple,Upalis Authentic Sri Lankan,Food,0.96,1.1,Midday
+Relaxation,Relaxed,Moderate,2,Solo,Ceylon Sliders Surf Cafe,Beach,0.73,1.9,Morning
+Beach,Relaxed,Budget,7,Solo,Upalis Authentic Sri Lankan,Food,0.54,1.9,Midday
+Food,Relaxed,Budget,10,Couple,Nuwara Eliya Tea Estates,Nature,0.53,3.8,Midday
+Adventure,Moderate,Luxury,4,Friends,Yala National Park Safari,Nature,0.83,4.5,Morning
+Relaxation,Moderate,Moderate,5,Solo,Ceylon Sliders Surf Cafe,Beach,0.77,1.5,Morning
+Relaxation,Packed,Budget,2,Friends,Grand Hotel 1891 High Tea,Food,0.66,1.5,Afternoon
+Beach,Packed,Moderate,5,Friends,Upalis Authentic Sri Lankan,Food,0.71,1.1,Midday
+Food,Moderate,Budget,4,Friends,Grand Hotel 1891 High Tea,Food,0.65,2.0,Afternoon
+Relaxation,Moderate,Budget,10,Family,Sigiriya Ancient Rock Fortress,Cultural,0.55,3.5,Morning
+Relaxation,Packed,Budget,14,Family,Colombo Lotus Tower,Modern,0.64,1.5,Sunset
+Beach,Relaxed,Luxury,4,Family,Yala National Park Safari,Nature,0.81,5.6,Morning
+Relaxation,Packed,Budget,5,Friends,Nine Arches Bridge,Nature,0.73,1.5,Morning
+Relaxation,Relaxed,Budget,5,Family,Heritage Cafe & Bistro Galle,Food,0.73,1.9,Evening
+Nature,Packed,Moderate,5,Couple,Ministry of Crab Colombo,Food,0.65,1.5,Evening
+Food,Moderate,Luxury,7,Solo,Ceylon Sliders Surf Cafe,Beach,0.63,1.5,Morning
+Nature,Relaxed,Luxury,10,Family,Temple of the Sacred Tooth Relic,Cultural,0.62,3.1,Morning
+Cultural,Moderate,Luxury,2,Friends,Grand Hotel 1891 High Tea,Food,0.66,2.0,Afternoon
+Relaxation,Moderate,Luxury,10,Family,Galle Dutch Fort,Cultural,0.61,3.0,Sunset
+Food,Relaxed,Luxury,7,Couple,Temple of the Sacred Tooth Relic,Cultural,0.61,3.1,Morning
+Food,Packed,Moderate,10,Solo,Yala National Park Safari,Nature,0.52,3.4,Morning
+Cultural,Moderate,Moderate,2,Solo,Colombo Lotus Tower,Modern,0.67,2.0,Sunset
+Nature,Moderate,Moderate,7,Friends,Yala National Park Safari,Nature,0.87,4.5,Morning
+Relaxation,Relaxed,Moderate,10,Family,Nine Arches Bridge,Nature,0.56,2.5,Morning
+Nature,Moderate,Moderate,4,Family,Galle Dutch Fort,Cultural,0.58,3.0,Sunset
+Beach,Packed,Luxury,7,Solo,Barefoot Garden Cafe,Food,0.67,1.1,Midday
+Cultural,Moderate,Budget,4,Solo,Nine Arches Bridge,Nature,0.67,2.0,Morning
+Nature,Relaxed,Luxury,4,Solo,Mirissa Coconut Tree Hill,Beach,0.61,2.5,Sunset
+Nature,Moderate,Budget,1,Family,Yala National Park Safari,Nature,0.78,4.5,Morning
+Adventure,Moderate,Budget,2,Solo,Yala National Park Safari,Nature,0.52,4.5,Morning
+Nature,Packed,Moderate,1,Couple,Ministry of Crab Colombo,Food,0.6,1.5,Evening
+Relaxation,Moderate,Luxury,2,Solo,Matey Hut Traditional Claypot,Food,0.8,1.5,Evening
+Beach,Packed,Luxury,2,Friends,Colombo Lotus Tower,Modern,0.71,1.5,Sunset
+Cultural,Packed,Luxury,5,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.87,2.6,Morning
+Food,Moderate,Moderate,2,Friends,Ceylon Sliders Surf Cafe,Beach,0.52,1.5,Morning
+Cultural,Moderate,Luxury,3,Solo,Yala National Park Safari,Nature,0.64,4.5,Morning
+Relaxation,Packed,Luxury,7,Friends,Upalis Authentic Sri Lankan,Food,0.88,1.1,Midday
+Adventure,Moderate,Budget,2,Couple,Heritage Cafe & Bistro Galle,Food,0.55,1.5,Evening
+Nature,Moderate,Moderate,14,Friends,Heritage Cafe & Bistro Galle,Food,0.66,1.5,Evening
+Beach,Moderate,Moderate,5,Family,Yala National Park Safari,Nature,0.66,4.5,Morning
+Food,Relaxed,Budget,2,Solo,Heritage Cafe & Bistro Galle,Food,0.83,1.9,Evening
+Relaxation,Moderate,Budget,1,Family,Galle Dutch Fort,Cultural,0.64,3.0,Sunset
+Relaxation,Moderate,Luxury,1,Family,Upalis Authentic Sri Lankan,Food,0.79,1.5,Midday
+Adventure,Packed,Budget,3,Friends,Colombo Lotus Tower,Modern,0.65,1.5,Sunset
+Beach,Packed,Moderate,2,Family,Colombo Lotus Tower,Modern,0.75,1.5,Sunset
+Adventure,Packed,Luxury,1,Family,Sigiriya Ancient Rock Fortress,Cultural,0.78,2.6,Morning
+Relaxation,Moderate,Moderate,7,Solo,Nuwara Eliya Tea Estates,Nature,0.67,3.0,Midday
+Adventure,Packed,Moderate,2,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.83,2.6,Morning
+Adventure,Relaxed,Moderate,10,Friends,Cafe Chill Ella,Food,0.53,1.9,Evening
+Beach,Packed,Moderate,2,Solo,Yala National Park Safari,Nature,0.53,3.4,Morning
+Adventure,Relaxed,Luxury,2,Family,Ceylon Sliders Surf Cafe,Beach,0.61,1.9,Morning
+Food,Packed,Moderate,10,Family,Mirissa Coconut Tree Hill,Beach,0.65,1.5,Sunset
+Cultural,Moderate,Moderate,2,Family,Matey Hut Traditional Claypot,Food,0.55,1.5,Evening
+Beach,Relaxed,Budget,10,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.58,4.4,Morning
+Nature,Relaxed,Moderate,5,Family,Galle Dutch Fort,Cultural,0.52,3.8,Sunset
+Relaxation,Moderate,Budget,3,Friends,Colombo Lotus Tower,Modern,0.55,2.0,Sunset
+Relaxation,Moderate,Budget,10,Solo,Heritage Cafe & Bistro Galle,Food,0.72,1.5,Evening
+Cultural,Moderate,Luxury,10,Friends,Heritage Cafe & Bistro Galle,Food,0.59,1.5,Evening
+Food,Relaxed,Moderate,3,Friends,Grand Hotel 1891 High Tea,Food,0.83,2.5,Afternoon
+Cultural,Relaxed,Moderate,10,Solo,Barefoot Garden Cafe,Food,0.67,1.9,Midday
+Relaxation,Moderate,Budget,7,Couple,Temple of the Sacred Tooth Relic,Cultural,0.65,2.5,Morning
+Cultural,Packed,Luxury,4,Family,Grand Hotel 1891 High Tea,Food,0.74,1.5,Afternoon
+Relaxation,Relaxed,Budget,2,Couple,Ministry of Crab Colombo,Food,0.53,2.5,Evening
+Adventure,Relaxed,Luxury,2,Couple,Matey Hut Traditional Claypot,Food,0.6,1.9,Evening
+Adventure,Packed,Moderate,7,Family,Yala National Park Safari,Nature,0.85,3.4,Morning
+Food,Moderate,Luxury,5,Family,Nine Arches Bridge,Nature,0.59,2.0,Morning
+Cultural,Moderate,Moderate,14,Solo,Nine Arches Bridge,Nature,0.54,2.0,Morning
+Beach,Relaxed,Luxury,2,Friends,Ceylon Sliders Surf Cafe,Beach,0.9,1.9,Morning
+Relaxation,Relaxed,Moderate,4,Family,Matey Hut Traditional Claypot,Food,0.75,1.9,Evening
+Cultural,Moderate,Budget,7,Solo,Nuwara Eliya Tea Estates,Nature,0.52,3.0,Midday
+Relaxation,Moderate,Moderate,3,Family,Grand Hotel 1891 High Tea,Food,0.78,2.0,Afternoon
+Food,Moderate,Moderate,1,Family,Temple of the Sacred Tooth Relic,Cultural,0.54,2.5,Morning
+Adventure,Packed,Moderate,5,Family,Yala National Park Safari,Nature,0.84,3.4,Morning
+Adventure,Packed,Budget,7,Family,Barefoot Garden Cafe,Food,0.61,1.1,Midday
+Relaxation,Relaxed,Moderate,10,Family,Yala National Park Safari,Nature,0.71,5.6,Morning
+Relaxation,Packed,Luxury,2,Friends,Grand Hotel 1891 High Tea,Food,0.9,1.5,Afternoon
+Beach,Relaxed,Budget,7,Friends,Mirissa Coconut Tree Hill,Beach,0.93,2.5,Sunset
+Nature,Relaxed,Budget,5,Solo,Nine Arches Bridge,Nature,0.96,2.5,Morning
+Adventure,Relaxed,Luxury,10,Couple,Nuwara Eliya Tea Estates,Nature,0.78,3.8,Midday
+Relaxation,Packed,Budget,14,Solo,Heritage Cafe & Bistro Galle,Food,0.82,1.1,Evening
+Relaxation,Relaxed,Moderate,5,Friends,Colombo Lotus Tower,Modern,0.65,2.5,Sunset
+Beach,Moderate,Budget,7,Friends,Ceylon Sliders Surf Cafe,Beach,0.97,1.5,Morning
+Food,Packed,Luxury,10,Couple,Mirissa Coconut Tree Hill,Beach,0.78,1.5,Sunset
+Nature,Moderate,Budget,14,Family,Galle Dutch Fort,Cultural,0.66,3.0,Sunset
+Adventure,Relaxed,Moderate,2,Couple,Ministry of Crab Colombo,Food,0.55,2.5,Evening
+Adventure,Relaxed,Moderate,2,Couple,Ceylon Sliders Surf Cafe,Beach,0.57,1.9,Morning
+Cultural,Moderate,Budget,10,Family,Colombo Lotus Tower,Modern,0.54,2.0,Sunset
+Cultural,Moderate,Budget,1,Family,Galle Dutch Fort,Cultural,0.97,3.0,Sunset
+Relaxation,Moderate,Budget,3,Solo,Upalis Authentic Sri Lankan,Food,0.78,1.5,Midday
+Food,Packed,Budget,14,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.57,2.6,Morning
+Cultural,Moderate,Budget,3,Friends,Galle Dutch Fort,Cultural,0.97,3.0,Sunset
+Nature,Moderate,Budget,1,Couple,Heritage Cafe & Bistro Galle,Food,0.56,1.5,Evening
+Adventure,Moderate,Budget,2,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.76,3.5,Morning
+Adventure,Relaxed,Luxury,3,Family,Heritage Cafe & Bistro Galle,Food,0.57,1.9,Evening
+Beach,Relaxed,Luxury,10,Couple,Temple of the Sacred Tooth Relic,Cultural,0.6,3.1,Morning
+Beach,Relaxed,Luxury,1,Friends,Matey Hut Traditional Claypot,Food,0.57,1.9,Evening
+Food,Moderate,Moderate,1,Family,Temple of the Sacred Tooth Relic,Cultural,0.54,2.5,Morning
+Relaxation,Packed,Luxury,2,Family,Yala National Park Safari,Nature,0.72,3.4,Morning
+Adventure,Moderate,Luxury,3,Friends,Matey Hut Traditional Claypot,Food,0.61,1.5,Evening
+Nature,Relaxed,Luxury,14,Solo,Upalis Authentic Sri Lankan,Food,0.58,1.9,Midday
+Nature,Relaxed,Moderate,5,Friends,Matey Hut Traditional Claypot,Food,0.54,1.9,Evening
+Relaxation,Relaxed,Moderate,7,Solo,Cafe Chill Ella,Food,0.74,1.9,Evening
+Beach,Moderate,Moderate,14,Friends,Cafe Chill Ella,Food,0.58,1.5,Evening
+Food,Packed,Moderate,7,Family,Temple of the Sacred Tooth Relic,Cultural,0.56,1.9,Morning
+Cultural,Moderate,Luxury,3,Family,Cafe Chill Ella,Food,0.58,1.5,Evening
+Beach,Packed,Moderate,5,Friends,Heritage Cafe & Bistro Galle,Food,0.71,1.1,Evening
+Food,Moderate,Moderate,1,Family,Heritage Cafe & Bistro Galle,Food,0.94,1.5,Evening
+Cultural,Relaxed,Luxury,10,Family,Nuwara Eliya Tea Estates,Nature,0.63,3.8,Midday
+Nature,Packed,Luxury,14,Solo,Yala National Park Safari,Nature,0.92,3.4,Morning
+Relaxation,Moderate,Moderate,10,Solo,Yala National Park Safari,Nature,0.56,4.5,Morning
+Beach,Moderate,Moderate,2,Couple,Grand Hotel 1891 High Tea,Food,0.54,2.0,Afternoon
+Relaxation,Moderate,Budget,2,Solo,Nuwara Eliya Tea Estates,Nature,0.55,3.0,Midday
+Food,Packed,Budget,5,Family,Ceylon Sliders Surf Cafe,Beach,0.71,1.1,Morning
+Adventure,Moderate,Luxury,14,Couple,Galle Dutch Fort,Cultural,0.86,3.0,Sunset
+Cultural,Moderate,Budget,14,Solo,Cafe Chill Ella,Food,0.66,1.5,Evening
+Relaxation,Relaxed,Luxury,5,Family,Nuwara Eliya Tea Estates,Nature,0.61,3.8,Midday
+Relaxation,Packed,Budget,7,Couple,Galle Dutch Fort,Cultural,0.76,2.2,Sunset
+Nature,Relaxed,Moderate,1,Family,Grand Hotel 1891 High Tea,Food,0.55,2.5,Afternoon
+Adventure,Relaxed,Luxury,2,Solo,Upalis Authentic Sri Lankan,Food,0.59,1.9,Midday
+Relaxation,Packed,Moderate,10,Friends,Temple of the Sacred Tooth Relic,Cultural,0.53,1.9,Morning
+Beach,Packed,Budget,14,Friends,Grand Hotel 1891 High Tea,Food,0.41,1.5,Afternoon
+Adventure,Packed,Luxury,3,Couple,Heritage Cafe & Bistro Galle,Food,0.68,1.1,Evening
+Cultural,Relaxed,Luxury,3,Family,Nuwara Eliya Tea Estates,Nature,0.58,3.8,Midday
+Relaxation,Relaxed,Moderate,5,Solo,Ministry of Crab Colombo,Food,0.73,2.5,Evening
+Adventure,Moderate,Budget,5,Solo,Nuwara Eliya Tea Estates,Nature,0.76,3.0,Midday
+Adventure,Relaxed,Budget,7,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.77,4.4,Morning
+Relaxation,Packed,Moderate,4,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.65,2.6,Morning
+Relaxation,Packed,Moderate,5,Friends,Colombo Lotus Tower,Modern,0.75,1.5,Sunset
+Relaxation,Moderate,Moderate,14,Solo,Nine Arches Bridge,Nature,0.53,2.0,Morning
+Food,Moderate,Moderate,4,Family,Yala National Park Safari,Nature,0.64,4.5,Morning
+Relaxation,Moderate,Luxury,7,Friends,Yala National Park Safari,Nature,0.67,4.5,Morning
+Adventure,Packed,Budget,7,Couple,Ceylon Sliders Surf Cafe,Beach,0.71,1.1,Morning
+Food,Relaxed,Budget,2,Solo,Upalis Authentic Sri Lankan,Food,0.88,1.9,Midday
+Adventure,Moderate,Budget,3,Family,Cafe Chill Ella,Food,0.63,1.5,Evening
+Nature,Moderate,Luxury,14,Friends,Upalis Authentic Sri Lankan,Food,0.6,1.5,Midday
+Cultural,Moderate,Luxury,14,Couple,Mirissa Coconut Tree Hill,Beach,0.69,2.0,Sunset
+Cultural,Relaxed,Moderate,14,Friends,Upalis Authentic Sri Lankan,Food,0.65,1.9,Midday
+Cultural,Moderate,Budget,5,Family,Barefoot Garden Cafe,Food,0.54,1.5,Midday
+Food,Relaxed,Luxury,4,Family,Upalis Authentic Sri Lankan,Food,0.87,1.9,Midday
+Adventure,Moderate,Luxury,5,Solo,Yala National Park Safari,Nature,0.88,4.5,Morning
+Food,Moderate,Moderate,7,Couple,Mirissa Coconut Tree Hill,Beach,0.64,2.0,Sunset
+Food,Packed,Budget,1,Solo,Yala National Park Safari,Nature,0.36,3.4,Morning
+Food,Packed,Moderate,3,Couple,Cafe Chill Ella,Food,0.96,1.1,Evening
+Beach,Relaxed,Moderate,5,Family,Matey Hut Traditional Claypot,Food,0.56,1.9,Evening
+Beach,Moderate,Budget,7,Family,Galle Dutch Fort,Cultural,0.68,3.0,Sunset
+Adventure,Moderate,Luxury,1,Friends,Ministry of Crab Colombo,Food,0.68,2.0,Evening
+Adventure,Packed,Budget,1,Friends,Nuwara Eliya Tea Estates,Nature,0.75,2.2,Midday
+Relaxation,Packed,Moderate,3,Couple,Nine Arches Bridge,Nature,0.63,1.5,Morning
+Relaxation,Relaxed,Budget,1,Friends,Cafe Chill Ella,Food,0.85,1.9,Evening
+Food,Packed,Budget,10,Friends,Nine Arches Bridge,Nature,0.74,1.5,Morning
+Adventure,Relaxed,Luxury,7,Friends,Barefoot Garden Cafe,Food,0.59,1.9,Midday
+Nature,Moderate,Luxury,7,Family,Ministry of Crab Colombo,Food,0.66,2.0,Evening
+Nature,Relaxed,Moderate,5,Couple,Upalis Authentic Sri Lankan,Food,0.67,1.9,Midday
+Relaxation,Relaxed,Luxury,14,Family,Matey Hut Traditional Claypot,Food,0.79,1.9,Evening
+Relaxation,Moderate,Moderate,2,Friends,Barefoot Garden Cafe,Food,0.87,1.5,Midday
+Nature,Moderate,Budget,5,Solo,Grand Hotel 1891 High Tea,Food,0.38,2.0,Afternoon
+Relaxation,Moderate,Luxury,14,Couple,Mirissa Coconut Tree Hill,Beach,0.9,2.0,Sunset
+Beach,Packed,Luxury,5,Couple,Galle Dutch Fort,Cultural,0.69,2.2,Sunset
+Adventure,Relaxed,Budget,1,Couple,Colombo Lotus Tower,Modern,0.6,2.5,Sunset
+Food,Moderate,Luxury,14,Solo,Yala National Park Safari,Nature,0.62,4.5,Morning
+Adventure,Relaxed,Moderate,14,Friends,Mirissa Coconut Tree Hill,Beach,0.57,2.5,Sunset
+Beach,Moderate,Moderate,1,Solo,Colombo Lotus Tower,Modern,0.65,2.0,Sunset
+Relaxation,Relaxed,Budget,10,Couple,Nine Arches Bridge,Nature,0.68,2.5,Morning
+Food,Moderate,Budget,5,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.54,3.5,Morning
+Adventure,Relaxed,Moderate,5,Friends,Matey Hut Traditional Claypot,Food,0.57,1.9,Evening
+Nature,Packed,Moderate,5,Couple,Galle Dutch Fort,Cultural,0.62,2.2,Sunset
+Relaxation,Moderate,Luxury,5,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.61,3.5,Morning
+Beach,Packed,Luxury,4,Couple,Barefoot Garden Cafe,Food,0.7,1.1,Midday
+Adventure,Moderate,Budget,10,Solo,Nuwara Eliya Tea Estates,Nature,0.78,3.0,Midday
+Food,Moderate,Budget,1,Family,Barefoot Garden Cafe,Food,0.83,1.5,Midday
+Beach,Moderate,Moderate,1,Family,Grand Hotel 1891 High Tea,Food,0.56,2.0,Afternoon
+Cultural,Packed,Budget,14,Family,Nuwara Eliya Tea Estates,Nature,0.54,2.2,Midday
+Adventure,Packed,Moderate,2,Family,Grand Hotel 1891 High Tea,Food,0.64,1.5,Afternoon
+Nature,Relaxed,Moderate,3,Friends,Grand Hotel 1891 High Tea,Food,0.54,2.5,Afternoon
+Adventure,Moderate,Luxury,4,Couple,Temple of the Sacred Tooth Relic,Cultural,0.8,2.5,Morning
+Adventure,Packed,Moderate,2,Solo,Nine Arches Bridge,Nature,0.85,1.5,Morning
+Adventure,Relaxed,Luxury,3,Couple,Cafe Chill Ella,Food,0.62,1.9,Evening
+Food,Relaxed,Luxury,4,Friends,Temple of the Sacred Tooth Relic,Cultural,0.62,3.1,Morning
+Food,Relaxed,Moderate,3,Friends,Ceylon Sliders Surf Cafe,Beach,0.55,1.9,Morning
+Adventure,Moderate,Luxury,5,Solo,Barefoot Garden Cafe,Food,0.59,1.5,Midday
+Cultural,Packed,Budget,2,Solo,Heritage Cafe & Bistro Galle,Food,0.62,1.1,Evening
+Cultural,Packed,Budget,2,Friends,Nine Arches Bridge,Nature,0.72,1.5,Morning
+Nature,Relaxed,Luxury,10,Family,Barefoot Garden Cafe,Food,0.6,1.9,Midday
+Food,Moderate,Budget,3,Family,Galle Dutch Fort,Cultural,0.63,3.0,Sunset
+Adventure,Moderate,Luxury,3,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.82,3.5,Morning
+Beach,Moderate,Luxury,10,Friends,Colombo Lotus Tower,Modern,0.58,2.0,Sunset
+Beach,Relaxed,Moderate,4,Solo,Nine Arches Bridge,Nature,0.57,2.5,Morning
+Food,Packed,Budget,4,Couple,Temple of the Sacred Tooth Relic,Cultural,0.63,1.9,Morning
+Cultural,Moderate,Luxury,1,Couple,Nine Arches Bridge,Nature,0.59,2.0,Morning
+Nature,Packed,Budget,1,Couple,Upalis Authentic Sri Lankan,Food,0.61,1.1,Midday
+Relaxation,Packed,Moderate,7,Couple,Upalis Authentic Sri Lankan,Food,0.95,1.1,Midday
+Relaxation,Packed,Budget,10,Family,Ministry of Crab Colombo,Food,0.6,1.5,Evening
+Adventure,Packed,Budget,10,Friends,Nine Arches Bridge,Nature,0.96,1.5,Morning
+Relaxation,Packed,Moderate,7,Friends,Heritage Cafe & Bistro Galle,Food,0.91,1.1,Evening
+Food,Relaxed,Luxury,14,Couple,Colombo Lotus Tower,Modern,0.67,2.5,Sunset
+Relaxation,Relaxed,Moderate,1,Friends,Heritage Cafe & Bistro Galle,Food,0.85,1.9,Evening
+Nature,Moderate,Budget,5,Couple,Cafe Chill Ella,Food,0.66,1.5,Evening
+Food,Moderate,Budget,4,Solo,Ministry of Crab Colombo,Food,0.64,2.0,Evening
+Adventure,Packed,Budget,2,Couple,Mirissa Coconut Tree Hill,Beach,0.81,1.5,Sunset
+Beach,Moderate,Budget,4,Couple,Galle Dutch Fort,Cultural,0.74,3.0,Sunset
+Food,Relaxed,Luxury,4,Friends,Colombo Lotus Tower,Modern,0.6,2.5,Sunset
+Beach,Moderate,Moderate,7,Family,Ministry of Crab Colombo,Food,0.54,2.0,Evening
+Food,Moderate,Budget,14,Family,Mirissa Coconut Tree Hill,Beach,0.64,2.0,Sunset
+Food,Relaxed,Luxury,4,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.64,4.4,Morning
+Adventure,Packed,Luxury,10,Family,Yala National Park Safari,Nature,0.93,3.4,Morning
+Nature,Moderate,Luxury,4,Friends,Cafe Chill Ella,Food,0.59,1.5,Evening
+Food,Packed,Luxury,14,Friends,Nuwara Eliya Tea Estates,Nature,0.61,2.2,Midday
+Beach,Relaxed,Budget,14,Couple,Nine Arches Bridge,Nature,0.65,2.5,Morning
+Cultural,Packed,Budget,1,Friends,Yala National Park Safari,Nature,0.37,3.4,Morning
+Nature,Relaxed,Luxury,3,Solo,Mirissa Coconut Tree Hill,Beach,0.6,2.5,Sunset
+Beach,Relaxed,Luxury,14,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.62,4.4,Morning
+Adventure,Moderate,Budget,1,Family,Upalis Authentic Sri Lankan,Food,0.52,1.5,Midday
+Relaxation,Packed,Moderate,3,Solo,Galle Dutch Fort,Cultural,0.55,2.2,Sunset
+Nature,Relaxed,Luxury,5,Family,Ministry of Crab Colombo,Food,0.67,2.5,Evening
+Cultural,Moderate,Moderate,14,Couple,Colombo Lotus Tower,Modern,0.72,2.0,Sunset
+Cultural,Packed,Luxury,1,Solo,Barefoot Garden Cafe,Food,0.67,1.1,Midday
+Adventure,Moderate,Budget,1,Couple,Temple of the Sacred Tooth Relic,Cultural,0.85,2.5,Morning
+Food,Packed,Moderate,2,Solo,Colombo Lotus Tower,Modern,0.71,1.5,Sunset
+Relaxation,Packed,Moderate,5,Solo,Temple of the Sacred Tooth Relic,Cultural,0.56,1.9,Morning
+Beach,Packed,Luxury,1,Couple,Cafe Chill Ella,Food,0.65,1.1,Evening
+Nature,Packed,Budget,10,Solo,Upalis Authentic Sri Lankan,Food,0.61,1.1,Midday
+Nature,Packed,Moderate,7,Friends,Yala National Park Safari,Nature,0.87,3.4,Morning
+Relaxation,Packed,Budget,7,Solo,Galle Dutch Fort,Cultural,0.65,2.2,Sunset
+Cultural,Moderate,Luxury,10,Family,Sigiriya Ancient Rock Fortress,Cultural,0.91,3.5,Morning
+Food,Moderate,Budget,7,Friends,Heritage Cafe & Bistro Galle,Food,0.83,1.5,Evening
+Adventure,Packed,Moderate,2,Family,Colombo Lotus Tower,Modern,0.74,1.5,Sunset
+Cultural,Moderate,Budget,10,Couple,Barefoot Garden Cafe,Food,0.54,1.5,Midday
+Cultural,Relaxed,Budget,5,Friends,Grand Hotel 1891 High Tea,Food,0.37,2.5,Afternoon
+Cultural,Relaxed,Budget,3,Friends,Ceylon Sliders Surf Cafe,Beach,0.65,1.9,Morning
+Adventure,Moderate,Budget,1,Solo,Grand Hotel 1891 High Tea,Food,0.35,2.0,Afternoon
+Adventure,Packed,Moderate,10,Solo,Upalis Authentic Sri Lankan,Food,0.72,1.1,Midday
+Cultural,Packed,Luxury,4,Couple,Barefoot Garden Cafe,Food,0.66,1.1,Midday
+Beach,Moderate,Moderate,14,Couple,Temple of the Sacred Tooth Relic,Cultural,0.53,2.5,Morning
+Beach,Moderate,Moderate,14,Solo,Grand Hotel 1891 High Tea,Food,0.54,2.0,Afternoon
+Nature,Packed,Luxury,14,Couple,Ceylon Sliders Surf Cafe,Beach,0.66,1.1,Morning
+Beach,Relaxed,Moderate,7,Friends,Cafe Chill Ella,Food,0.55,1.9,Evening
+Food,Packed,Luxury,3,Family,Cafe Chill Ella,Food,0.99,1.1,Evening
+Relaxation,Relaxed,Moderate,7,Couple,Barefoot Garden Cafe,Food,0.88,1.9,Midday
+Beach,Packed,Luxury,14,Couple,Cafe Chill Ella,Food,0.67,1.1,Evening
+Food,Moderate,Budget,4,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.58,3.5,Morning
+Food,Packed,Budget,14,Family,Temple of the Sacred Tooth Relic,Cultural,0.67,1.9,Morning
+Food,Packed,Moderate,3,Family,Colombo Lotus Tower,Modern,0.72,1.5,Sunset
+Nature,Packed,Moderate,10,Solo,Ceylon Sliders Surf Cafe,Beach,0.66,1.1,Morning
+Food,Packed,Moderate,10,Solo,Grand Hotel 1891 High Tea,Food,0.94,1.5,Afternoon
+Adventure,Packed,Luxury,2,Solo,Colombo Lotus Tower,Modern,0.69,1.5,Sunset
+Beach,Relaxed,Luxury,1,Friends,Cafe Chill Ella,Food,0.63,1.9,Evening
+Food,Relaxed,Budget,2,Family,Colombo Lotus Tower,Modern,0.55,2.5,Sunset
+Adventure,Packed,Luxury,4,Friends,Grand Hotel 1891 High Tea,Food,0.72,1.5,Afternoon
+Relaxation,Packed,Luxury,3,Family,Sigiriya Ancient Rock Fortress,Cultural,0.6,2.6,Morning
+Beach,Moderate,Budget,2,Couple,Grand Hotel 1891 High Tea,Food,0.34,2.0,Afternoon
+Food,Relaxed,Luxury,14,Family,Matey Hut Traditional Claypot,Food,0.88,1.9,Evening
+Relaxation,Packed,Moderate,7,Solo,Upalis Authentic Sri Lankan,Food,0.9,1.1,Midday
+Relaxation,Relaxed,Budget,7,Solo,Nuwara Eliya Tea Estates,Nature,0.58,3.8,Midday
+Relaxation,Relaxed,Luxury,3,Couple,Cafe Chill Ella,Food,0.8,1.9,Evening
+Food,Relaxed,Moderate,3,Couple,Heritage Cafe & Bistro Galle,Food,0.94,1.9,Evening
+Relaxation,Packed,Budget,14,Friends,Barefoot Garden Cafe,Food,0.8,1.1,Midday
+Nature,Relaxed,Moderate,2,Solo,Nuwara Eliya Tea Estates,Nature,0.94,3.8,Midday
+Nature,Moderate,Budget,5,Friends,Cafe Chill Ella,Food,0.66,1.5,Evening
+Adventure,Moderate,Luxury,2,Family,Grand Hotel 1891 High Tea,Food,0.67,2.0,Afternoon
+Adventure,Relaxed,Luxury,5,Solo,Yala National Park Safari,Nature,0.89,5.6,Morning
+Nature,Moderate,Budget,3,Family,Yala National Park Safari,Nature,0.75,4.5,Morning
+Food,Packed,Budget,10,Friends,Nuwara Eliya Tea Estates,Nature,0.55,2.2,Midday
+Adventure,Packed,Luxury,3,Couple,Matey Hut Traditional Claypot,Food,0.67,1.1,Evening
+Nature,Moderate,Moderate,1,Family,Sigiriya Ancient Rock Fortress,Cultural,0.65,3.5,Morning
+Nature,Moderate,Luxury,14,Friends,Matey Hut Traditional Claypot,Food,0.59,1.5,Evening
+Food,Moderate,Budget,2,Solo,Colombo Lotus Tower,Modern,0.54,2.0,Sunset
+Beach,Relaxed,Luxury,5,Couple,Ceylon Sliders Surf Cafe,Beach,0.9,1.9,Morning
+Food,Packed,Luxury,2,Solo,Ministry of Crab Colombo,Food,0.99,1.5,Evening
+Beach,Packed,Budget,14,Couple,Heritage Cafe & Bistro Galle,Food,0.61,1.1,Evening
+Relaxation,Relaxed,Moderate,1,Friends,Ministry of Crab Colombo,Food,0.74,2.5,Evening
+Cultural,Moderate,Budget,4,Couple,Grand Hotel 1891 High Tea,Food,0.37,2.0,Afternoon
+Adventure,Packed,Moderate,3,Couple,Mirissa Coconut Tree Hill,Beach,0.73,1.5,Sunset
+Cultural,Packed,Moderate,5,Couple,Cafe Chill Ella,Food,0.66,1.1,Evening
+Beach,Moderate,Luxury,5,Solo,Yala National Park Safari,Nature,0.68,4.5,Morning
+Food,Relaxed,Moderate,3,Couple,Colombo Lotus Tower,Modern,0.71,2.5,Sunset
+Beach,Relaxed,Luxury,10,Friends,Yala National Park Safari,Nature,0.7,5.6,Morning
+Beach,Packed,Moderate,10,Friends,Temple of the Sacred Tooth Relic,Cultural,0.56,1.9,Morning
+Cultural,Moderate,Luxury,5,Family,Ceylon Sliders Surf Cafe,Beach,0.63,1.5,Morning
+Beach,Packed,Budget,2,Friends,Grand Hotel 1891 High Tea,Food,0.45,1.5,Afternoon
+Adventure,Moderate,Budget,10,Couple,Matey Hut Traditional Claypot,Food,0.64,1.5,Evening
+Beach,Moderate,Luxury,3,Friends,Cafe Chill Ella,Food,0.62,1.5,Evening
+Cultural,Relaxed,Budget,14,Solo,Galle Dutch Fort,Cultural,0.98,3.8,Sunset
+Nature,Moderate,Moderate,1,Friends,Mirissa Coconut Tree Hill,Beach,0.58,2.0,Sunset
+Nature,Packed,Moderate,3,Family,Temple of the Sacred Tooth Relic,Cultural,0.56,1.9,Morning
+Beach,Relaxed,Moderate,3,Solo,Barefoot Garden Cafe,Food,0.66,1.9,Midday
+Relaxation,Packed,Budget,10,Solo,Galle Dutch Fort,Cultural,0.62,2.2,Sunset
+Food,Relaxed,Budget,4,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.57,4.4,Morning
+Beach,Relaxed,Moderate,3,Friends,Temple of the Sacred Tooth Relic,Cultural,0.53,3.1,Morning
+Cultural,Packed,Budget,2,Family,Grand Hotel 1891 High Tea,Food,0.45,1.5,Afternoon
+Nature,Moderate,Budget,3,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.56,3.5,Morning
+Nature,Moderate,Moderate,4,Couple,Heritage Cafe & Bistro Galle,Food,0.66,1.5,Evening
+Food,Relaxed,Budget,2,Couple,Galle Dutch Fort,Cultural,0.74,3.8,Sunset
+Food,Moderate,Moderate,7,Couple,Colombo Lotus Tower,Modern,0.72,2.0,Sunset
+Cultural,Relaxed,Luxury,5,Solo,Upalis Authentic Sri Lankan,Food,0.58,1.9,Midday
+Adventure,Packed,Budget,10,Family,Nine Arches Bridge,Nature,0.95,1.5,Morning
+Nature,Moderate,Moderate,2,Couple,Matey Hut Traditional Claypot,Food,0.56,1.5,Evening
+Cultural,Packed,Budget,7,Family,Yala National Park Safari,Nature,0.44,3.4,Morning
+Adventure,Moderate,Moderate,3,Friends,Temple of the Sacred Tooth Relic,Cultural,0.72,2.5,Morning
+Cultural,Relaxed,Moderate,4,Solo,Nine Arches Bridge,Nature,0.58,2.5,Morning
+Food,Packed,Moderate,10,Friends,Barefoot Garden Cafe,Food,0.99,1.1,Midday
+Adventure,Packed,Luxury,3,Family,Temple of the Sacred Tooth Relic,Cultural,0.79,1.9,Morning
+Adventure,Relaxed,Budget,7,Friends,Temple of the Sacred Tooth Relic,Cultural,0.84,3.1,Morning
+Food,Packed,Budget,1,Couple,Temple of the Sacred Tooth Relic,Cultural,0.68,1.9,Morning
+Cultural,Moderate,Luxury,1,Family,Nuwara Eliya Tea Estates,Nature,0.58,3.0,Midday
+Relaxation,Relaxed,Luxury,1,Couple,Matey Hut Traditional Claypot,Food,0.83,1.9,Evening
+Adventure,Packed,Luxury,5,Couple,Grand Hotel 1891 High Tea,Food,0.71,1.5,Afternoon
+Beach,Packed,Budget,1,Family,Heritage Cafe & Bistro Galle,Food,0.62,1.1,Evening
+Cultural,Moderate,Luxury,2,Friends,Ceylon Sliders Surf Cafe,Beach,0.6,1.5,Morning
+Cultural,Moderate,Luxury,3,Family,Nuwara Eliya Tea Estates,Nature,0.59,3.0,Midday
+Cultural,Packed,Luxury,2,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.87,2.6,Morning
+Cultural,Relaxed,Budget,14,Family,Barefoot Garden Cafe,Food,0.58,1.9,Midday
+Nature,Relaxed,Luxury,10,Couple,Cafe Chill Ella,Food,0.58,1.9,Evening
+Relaxation,Moderate,Moderate,2,Family,Galle Dutch Fort,Cultural,0.55,3.0,Sunset
+Cultural,Relaxed,Budget,1,Friends,Temple of the Sacred Tooth Relic,Cultural,0.97,3.1,Morning
+Beach,Moderate,Moderate,2,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.64,3.5,Morning
+Beach,Packed,Moderate,4,Friends,Grand Hotel 1891 High Tea,Food,0.64,1.5,Afternoon
+Food,Relaxed,Luxury,4,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.68,4.4,Morning
+Cultural,Relaxed,Luxury,7,Solo,Cafe Chill Ella,Food,0.57,1.9,Evening
+Relaxation,Moderate,Luxury,5,Solo,Mirissa Coconut Tree Hill,Beach,0.8,2.0,Sunset
+Nature,Moderate,Moderate,1,Couple,Ministry of Crab Colombo,Food,0.53,2.0,Evening
+Nature,Packed,Moderate,7,Friends,Temple of the Sacred Tooth Relic,Cultural,0.55,1.9,Morning
+Adventure,Relaxed,Luxury,10,Solo,Nine Arches Bridge,Nature,0.8,2.5,Morning
+Nature,Relaxed,Moderate,5,Family,Barefoot Garden Cafe,Food,0.66,1.9,Midday
+Relaxation,Moderate,Moderate,14,Family,Colombo Lotus Tower,Modern,0.62,2.0,Sunset
+Nature,Relaxed,Luxury,2,Couple,Galle Dutch Fort,Cultural,0.66,3.8,Sunset
+Food,Moderate,Moderate,2,Family,Mirissa Coconut Tree Hill,Beach,0.55,2.0,Sunset
+Food,Moderate,Budget,2,Couple,Upalis Authentic Sri Lankan,Food,0.87,1.5,Midday
+Relaxation,Packed,Budget,4,Family,Yala National Park Safari,Nature,0.43,3.4,Morning
+Nature,Moderate,Moderate,1,Family,Ministry of Crab Colombo,Food,0.57,2.0,Evening
+Nature,Relaxed,Moderate,14,Couple,Galle Dutch Fort,Cultural,0.63,3.8,Sunset
+Nature,Relaxed,Budget,1,Couple,Yala National Park Safari,Nature,0.68,5.6,Morning
+Food,Moderate,Luxury,2,Family,Temple of the Sacred Tooth Relic,Cultural,0.57,2.5,Morning
+Cultural,Relaxed,Luxury,14,Couple,Temple of the Sacred Tooth Relic,Cultural,0.92,3.1,Morning
+Beach,Relaxed,Budget,14,Solo,Nuwara Eliya Tea Estates,Nature,0.58,3.8,Midday
+Food,Packed,Moderate,14,Solo,Barefoot Garden Cafe,Food,0.99,1.1,Midday
+Nature,Moderate,Budget,3,Family,Ministry of Crab Colombo,Food,0.35,2.0,Evening
+Nature,Relaxed,Luxury,4,Family,Matey Hut Traditional Claypot,Food,0.59,1.9,Evening
+Adventure,Moderate,Budget,2,Family,Barefoot Garden Cafe,Food,0.53,1.5,Midday
+Nature,Packed,Luxury,4,Solo,Barefoot Garden Cafe,Food,0.7,1.1,Midday
+Beach,Moderate,Luxury,14,Family,Cafe Chill Ella,Food,0.59,1.5,Evening
+Nature,Relaxed,Moderate,4,Solo,Ministry of Crab Colombo,Food,0.52,2.5,Evening
+Food,Packed,Moderate,4,Couple,Galle Dutch Fort,Cultural,0.61,2.2,Sunset
+Nature,Moderate,Luxury,1,Couple,Barefoot Garden Cafe,Food,0.59,1.5,Midday
+Nature,Relaxed,Budget,7,Family,Sigiriya Ancient Rock Fortress,Cultural,0.61,4.4,Morning
+Beach,Packed,Luxury,3,Couple,Matey Hut Traditional Claypot,Food,0.68,1.1,Evening
+Nature,Moderate,Budget,2,Solo,Colombo Lotus Tower,Modern,0.56,2.0,Sunset
+Cultural,Packed,Moderate,1,Family,Mirissa Coconut Tree Hill,Beach,0.65,1.5,Sunset
+Beach,Packed,Budget,7,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.53,2.6,Morning
+Relaxation,Relaxed,Budget,7,Solo,Grand Hotel 1891 High Tea,Food,0.56,2.5,Afternoon
+Relaxation,Moderate,Luxury,2,Family,Upalis Authentic Sri Lankan,Food,0.79,1.5,Midday
+Nature,Packed,Moderate,14,Family,Nuwara Eliya Tea Estates,Nature,0.96,2.2,Midday
+Adventure,Packed,Luxury,7,Couple,Nuwara Eliya Tea Estates,Nature,0.79,2.2,Midday
+Relaxation,Packed,Moderate,3,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.68,2.6,Morning
+Adventure,Moderate,Luxury,1,Couple,Cafe Chill Ella,Food,0.63,1.5,Evening
+Adventure,Relaxed,Luxury,2,Friends,Yala National Park Safari,Nature,0.89,5.6,Morning
+Cultural,Relaxed,Moderate,7,Couple,Temple of the Sacred Tooth Relic,Cultural,0.87,3.1,Morning
+Relaxation,Packed,Luxury,7,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.59,2.6,Morning
+Nature,Packed,Budget,7,Family,Galle Dutch Fort,Cultural,0.66,2.2,Sunset
+Cultural,Moderate,Moderate,10,Couple,Heritage Cafe & Bistro Galle,Food,0.65,1.5,Evening
+Food,Moderate,Luxury,10,Solo,Matey Hut Traditional Claypot,Food,0.92,1.5,Evening
+Adventure,Packed,Luxury,4,Couple,Ceylon Sliders Surf Cafe,Beach,0.65,1.1,Morning
+Cultural,Moderate,Budget,7,Family,Galle Dutch Fort,Cultural,0.92,3.0,Sunset
+Nature,Moderate,Budget,2,Solo,Cafe Chill Ella,Food,0.66,1.5,Evening
+Adventure,Moderate,Luxury,1,Friends,Nuwara Eliya Tea Estates,Nature,0.81,3.0,Midday
+Food,Relaxed,Budget,2,Family,Mirissa Coconut Tree Hill,Beach,0.68,2.5,Sunset
+Food,Packed,Luxury,5,Family,Upalis Authentic Sri Lankan,Food,0.96,1.1,Midday
+Cultural,Moderate,Luxury,14,Couple,Nine Arches Bridge,Nature,0.59,2.0,Morning
+Food,Relaxed,Moderate,14,Couple,Galle Dutch Fort,Cultural,0.6,3.8,Sunset
+Nature,Packed,Moderate,2,Friends,Galle Dutch Fort,Cultural,0.54,2.2,Sunset
+Food,Moderate,Moderate,5,Solo,Barefoot Garden Cafe,Food,0.93,1.5,Midday
+Food,Moderate,Budget,14,Solo,Ministry of Crab Colombo,Food,0.65,2.0,Evening
+Beach,Relaxed,Moderate,1,Couple,Galle Dutch Fort,Cultural,0.61,3.8,Sunset
+Beach,Packed,Moderate,4,Solo,Barefoot Garden Cafe,Food,0.75,1.1,Midday
+Food,Packed,Luxury,14,Couple,Matey Hut Traditional Claypot,Food,0.97,1.1,Evening
+Food,Packed,Budget,3,Solo,Ceylon Sliders Surf Cafe,Beach,0.71,1.1,Morning
+Nature,Relaxed,Budget,3,Solo,Heritage Cafe & Bistro Galle,Food,0.52,1.9,Evening
+Relaxation,Moderate,Budget,3,Family,Cafe Chill Ella,Food,0.87,1.5,Evening
+Cultural,Relaxed,Moderate,10,Family,Ministry of Crab Colombo,Food,0.55,2.5,Evening
+Cultural,Packed,Luxury,10,Solo,Heritage Cafe & Bistro Galle,Food,0.66,1.1,Evening
+Adventure,Packed,Luxury,2,Solo,Galle Dutch Fort,Cultural,0.82,2.2,Sunset
+Adventure,Moderate,Moderate,5,Friends,Matey Hut Traditional Claypot,Food,0.55,1.5,Evening
+Food,Relaxed,Budget,5,Friends,Yala National Park Safari,Nature,0.41,5.6,Morning
+Relaxation,Packed,Moderate,1,Friends,Cafe Chill Ella,Food,0.84,1.1,Evening
+Cultural,Packed,Moderate,5,Family,Sigiriya Ancient Rock Fortress,Cultural,0.94,2.6,Morning
+Beach,Moderate,Moderate,14,Solo,Colombo Lotus Tower,Modern,0.63,2.0,Sunset
+Relaxation,Moderate,Moderate,5,Friends,Temple of the Sacred Tooth Relic,Cultural,0.53,2.5,Morning
+Nature,Moderate,Luxury,14,Family,Nine Arches Bridge,Nature,0.9,2.0,Morning
+Nature,Relaxed,Moderate,10,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.68,4.4,Morning
+Nature,Relaxed,Budget,1,Friends,Nine Arches Bridge,Nature,0.98,2.5,Morning
+Relaxation,Relaxed,Moderate,7,Friends,Barefoot Garden Cafe,Food,0.86,1.9,Midday
+Cultural,Packed,Budget,4,Family,Matey Hut Traditional Claypot,Food,0.74,1.1,Evening
+Nature,Moderate,Luxury,7,Family,Nuwara Eliya Tea Estates,Nature,0.92,3.0,Midday
+Beach,Packed,Luxury,2,Family,Sigiriya Ancient Rock Fortress,Cultural,0.59,2.6,Morning
+Nature,Packed,Budget,4,Couple,Mirissa Coconut Tree Hill,Beach,0.8,1.5,Sunset
+Food,Packed,Budget,1,Friends,Yala National Park Safari,Nature,0.36,3.4,Morning
+Adventure,Relaxed,Budget,5,Family,Ministry of Crab Colombo,Food,0.35,2.5,Evening
+Food,Moderate,Moderate,5,Couple,Ceylon Sliders Surf Cafe,Beach,0.54,1.5,Morning
+Adventure,Packed,Moderate,2,Solo,Grand Hotel 1891 High Tea,Food,0.63,1.5,Afternoon
+Adventure,Packed,Moderate,5,Solo,Matey Hut Traditional Claypot,Food,0.6,1.1,Evening
+Beach,Packed,Moderate,5,Family,Upalis Authentic Sri Lankan,Food,0.71,1.1,Midday
+Adventure,Relaxed,Budget,10,Family,Yala National Park Safari,Nature,0.71,5.6,Morning
+Relaxation,Moderate,Moderate,5,Friends,Barefoot Garden Cafe,Food,0.84,1.5,Midday
+Cultural,Packed,Luxury,4,Family,Colombo Lotus Tower,Modern,0.69,1.5,Sunset
+Relaxation,Moderate,Luxury,7,Family,Nuwara Eliya Tea Estates,Nature,0.62,3.0,Midday
+Adventure,Relaxed,Moderate,2,Friends,Yala National Park Safari,Nature,0.81,5.6,Morning
+Relaxation,Packed,Budget,7,Solo,Colombo Lotus Tower,Modern,0.62,1.5,Sunset
+Relaxation,Moderate,Moderate,7,Family,Ministry of Crab Colombo,Food,0.76,2.0,Evening
+Food,Relaxed,Moderate,1,Solo,Matey Hut Traditional Claypot,Food,0.87,1.9,Evening
+Adventure,Relaxed,Luxury,10,Family,Heritage Cafe & Bistro Galle,Food,0.57,1.9,Evening
+Nature,Relaxed,Budget,7,Friends,Ceylon Sliders Surf Cafe,Beach,0.63,1.9,Morning
+Relaxation,Relaxed,Budget,14,Family,Nuwara Eliya Tea Estates,Nature,0.54,3.8,Midday
+Cultural,Relaxed,Moderate,5,Couple,Nuwara Eliya Tea Estates,Nature,0.65,3.8,Midday
+Nature,Moderate,Budget,3,Friends,Heritage Cafe & Bistro Galle,Food,0.54,1.5,Evening
+Food,Moderate,Budget,1,Couple,Grand Hotel 1891 High Tea,Food,0.68,2.0,Afternoon
+Beach,Packed,Budget,1,Solo,Colombo Lotus Tower,Modern,0.61,1.5,Sunset
+Beach,Moderate,Budget,2,Friends,Upalis Authentic Sri Lankan,Food,0.53,1.5,Midday
+Cultural,Moderate,Moderate,14,Family,Heritage Cafe & Bistro Galle,Food,0.67,1.5,Evening
+Nature,Moderate,Moderate,7,Couple,Nuwara Eliya Tea Estates,Nature,0.98,3.0,Midday
+Food,Relaxed,Budget,4,Couple,Mirissa Coconut Tree Hill,Beach,0.74,2.5,Sunset
+Adventure,Packed,Budget,2,Family,Nine Arches Bridge,Nature,0.92,1.5,Morning
+Relaxation,Moderate,Luxury,1,Solo,Galle Dutch Fort,Cultural,0.61,3.0,Sunset
+Cultural,Relaxed,Luxury,2,Friends,Ceylon Sliders Surf Cafe,Beach,0.59,1.9,Morning
+Adventure,Moderate,Moderate,3,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.84,3.5,Morning
+Relaxation,Relaxed,Luxury,5,Couple,Heritage Cafe & Bistro Galle,Food,0.82,1.9,Evening
+Cultural,Packed,Luxury,2,Family,Galle Dutch Fort,Cultural,0.92,2.2,Sunset
+Food,Relaxed,Luxury,4,Family,Mirissa Coconut Tree Hill,Beach,0.59,2.5,Sunset
+Food,Moderate,Budget,1,Friends,Mirissa Coconut Tree Hill,Beach,0.66,2.0,Sunset
+Food,Moderate,Budget,1,Solo,Temple of the Sacred Tooth Relic,Cultural,0.67,2.5,Morning
+Adventure,Packed,Moderate,3,Solo,Temple of the Sacred Tooth Relic,Cultural,0.76,1.9,Morning
+Cultural,Moderate,Luxury,4,Friends,Upalis Authentic Sri Lankan,Food,0.59,1.5,Midday
+Cultural,Relaxed,Budget,1,Family,Grand Hotel 1891 High Tea,Food,0.37,2.5,Afternoon
+Beach,Moderate,Luxury,2,Solo,Nine Arches Bridge,Nature,0.57,2.0,Morning
+Nature,Packed,Luxury,3,Family,Grand Hotel 1891 High Tea,Food,0.75,1.5,Afternoon
+Adventure,Moderate,Luxury,2,Family,Cafe Chill Ella,Food,0.58,1.5,Evening
+Food,Moderate,Moderate,5,Friends,Matey Hut Traditional Claypot,Food,0.87,1.5,Evening
+Relaxation,Relaxed,Budget,3,Solo,Nuwara Eliya Tea Estates,Nature,0.53,3.8,Midday
+Adventure,Moderate,Luxury,14,Couple,Barefoot Garden Cafe,Food,0.62,1.5,Midday
+Adventure,Relaxed,Luxury,3,Friends,Matey Hut Traditional Claypot,Food,0.58,1.9,Evening
+Food,Moderate,Budget,2,Family,Cafe Chill Ella,Food,0.92,1.5,Evening
+Relaxation,Packed,Luxury,4,Family,Galle Dutch Fort,Cultural,0.6,2.2,Sunset
+Relaxation,Relaxed,Moderate,7,Friends,Yala National Park Safari,Nature,0.62,5.6,Morning
+Adventure,Packed,Budget,1,Couple,Matey Hut Traditional Claypot,Food,0.75,1.1,Evening
+Nature,Relaxed,Moderate,7,Couple,Cafe Chill Ella,Food,0.58,1.9,Evening
+Cultural,Packed,Budget,10,Friends,Colombo Lotus Tower,Modern,0.6,1.5,Sunset
+Food,Packed,Moderate,2,Friends,Ceylon Sliders Surf Cafe,Beach,0.62,1.1,Morning
+Food,Packed,Luxury,1,Solo,Barefoot Garden Cafe,Food,0.97,1.1,Midday
+Adventure,Packed,Budget,2,Family,Mirissa Coconut Tree Hill,Beach,0.74,1.5,Sunset
+Food,Moderate,Moderate,1,Couple,Ceylon Sliders Surf Cafe,Beach,0.54,1.5,Morning
+Adventure,Packed,Moderate,7,Friends,Galle Dutch Fort,Cultural,0.73,2.2,Sunset
+Relaxation,Relaxed,Budget,7,Family,Upalis Authentic Sri Lankan,Food,0.75,1.9,Midday
+Beach,Packed,Budget,1,Couple,Matey Hut Traditional Claypot,Food,0.71,1.1,Evening
+Relaxation,Packed,Luxury,10,Solo,Ministry of Crab Colombo,Food,0.94,1.5,Evening
+Nature,Relaxed,Moderate,4,Friends,Mirissa Coconut Tree Hill,Beach,0.56,2.5,Sunset
+Cultural,Moderate,Budget,2,Friends,Ceylon Sliders Surf Cafe,Beach,0.66,1.5,Morning
+Adventure,Relaxed,Moderate,1,Solo,Heritage Cafe & Bistro Galle,Food,0.67,1.9,Evening
+Food,Packed,Budget,3,Couple,Galle Dutch Fort,Cultural,0.72,2.2,Sunset
+Adventure,Packed,Moderate,10,Friends,Colombo Lotus Tower,Modern,0.72,1.5,Sunset
+Beach,Moderate,Moderate,3,Couple,Heritage Cafe & Bistro Galle,Food,0.66,1.5,Evening
+Relaxation,Packed,Moderate,7,Couple,Mirissa Coconut Tree Hill,Beach,0.89,1.5,Sunset
+Relaxation,Moderate,Luxury,7,Couple,Nuwara Eliya Tea Estates,Nature,0.6,3.0,Midday
+Relaxation,Packed,Moderate,2,Family,Matey Hut Traditional Claypot,Food,0.83,1.1,Evening
+Relaxation,Packed,Moderate,5,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.65,2.6,Morning
+Cultural,Moderate,Budget,1,Solo,Mirissa Coconut Tree Hill,Beach,0.64,2.0,Sunset
+Nature,Moderate,Luxury,5,Couple,Nine Arches Bridge,Nature,0.91,2.0,Morning
+Beach,Relaxed,Luxury,1,Family,Ceylon Sliders Surf Cafe,Beach,0.88,1.9,Morning
+Relaxation,Packed,Luxury,4,Friends,Colombo Lotus Tower,Modern,0.68,1.5,Sunset
+Relaxation,Moderate,Luxury,1,Friends,Barefoot Garden Cafe,Food,0.79,1.5,Midday
+Relaxation,Moderate,Luxury,1,Solo,Ministry of Crab Colombo,Food,0.83,2.0,Evening
+Food,Relaxed,Luxury,7,Couple,Mirissa Coconut Tree Hill,Beach,0.67,2.5,Sunset
+Nature,Packed,Budget,3,Couple,Galle Dutch Fort,Cultural,0.72,2.2,Sunset
+Food,Moderate,Luxury,5,Couple,Nuwara Eliya Tea Estates,Nature,0.61,3.0,Midday
+Beach,Relaxed,Moderate,14,Couple,Nine Arches Bridge,Nature,0.53,2.5,Morning
+Beach,Packed,Budget,5,Friends,Grand Hotel 1891 High Tea,Food,0.4,1.5,Afternoon
+Relaxation,Moderate,Luxury,4,Couple,Temple of the Sacred Tooth Relic,Cultural,0.62,2.5,Morning
+Nature,Moderate,Luxury,10,Solo,Grand Hotel 1891 High Tea,Food,0.63,2.0,Afternoon
+Nature,Packed,Moderate,7,Family,Upalis Authentic Sri Lankan,Food,0.71,1.1,Midday
+Adventure,Packed,Moderate,1,Solo,Grand Hotel 1891 High Tea,Food,0.63,1.5,Afternoon
+Relaxation,Packed,Luxury,4,Solo,Cafe Chill Ella,Food,0.87,1.1,Evening
+Cultural,Moderate,Moderate,5,Solo,Grand Hotel 1891 High Tea,Food,0.55,2.0,Afternoon
+Adventure,Moderate,Moderate,1,Family,Mirissa Coconut Tree Hill,Beach,0.54,2.0,Sunset
+Cultural,Relaxed,Budget,1,Solo,Mirissa Coconut Tree Hill,Beach,0.66,2.5,Sunset
+Nature,Packed,Moderate,2,Couple,Heritage Cafe & Bistro Galle,Food,0.74,1.1,Evening
+Cultural,Packed,Luxury,3,Solo,Ceylon Sliders Surf Cafe,Beach,0.69,1.1,Morning
+Cultural,Relaxed,Budget,1,Couple,Ministry of Crab Colombo,Food,0.35,2.5,Evening
+Adventure,Relaxed,Moderate,10,Friends,Ceylon Sliders Surf Cafe,Beach,0.56,1.9,Morning
+Food,Moderate,Budget,10,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.56,3.5,Morning
+Adventure,Relaxed,Luxury,1,Solo,Grand Hotel 1891 High Tea,Food,0.68,2.5,Afternoon
+Cultural,Moderate,Luxury,5,Solo,Upalis Authentic Sri Lankan,Food,0.62,1.5,Midday
+Food,Moderate,Moderate,1,Friends,Nuwara Eliya Tea Estates,Nature,0.65,3.0,Midday
+Nature,Packed,Moderate,5,Couple,Upalis Authentic Sri Lankan,Food,0.74,1.1,Midday
+Relaxation,Packed,Moderate,1,Couple,Galle Dutch Fort,Cultural,0.6,2.2,Sunset
+Adventure,Packed,Moderate,2,Family,Mirissa Coconut Tree Hill,Beach,0.64,1.5,Sunset
+Relaxation,Moderate,Budget,10,Couple,Nuwara Eliya Tea Estates,Nature,0.53,3.0,Midday
+Adventure,Moderate,Budget,2,Couple,Nine Arches Bridge,Nature,0.87,2.0,Morning
+Adventure,Moderate,Luxury,2,Family,Temple of the Sacred Tooth Relic,Cultural,0.79,2.5,Morning
+Nature,Packed,Luxury,14,Family,Grand Hotel 1891 High Tea,Food,0.71,1.5,Afternoon
+Relaxation,Relaxed,Budget,5,Solo,Mirissa Coconut Tree Hill,Beach,0.84,2.5,Sunset
+Food,Moderate,Luxury,5,Couple,Grand Hotel 1891 High Tea,Food,0.97,2.0,Afternoon
+Food,Relaxed,Budget,7,Couple,Colombo Lotus Tower,Modern,0.64,2.5,Sunset
+Relaxation,Moderate,Moderate,7,Couple,Cafe Chill Ella,Food,0.77,1.5,Evening
+Food,Moderate,Moderate,5,Friends,Galle Dutch Fort,Cultural,0.53,3.0,Sunset
+Adventure,Relaxed,Moderate,3,Couple,Ministry of Crab Colombo,Food,0.56,2.5,Evening
+Relaxation,Relaxed,Luxury,2,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.67,4.4,Morning
+Adventure,Moderate,Luxury,4,Solo,Ministry of Crab Colombo,Food,0.65,2.0,Evening
+Adventure,Moderate,Luxury,3,Family,Barefoot Garden Cafe,Food,0.58,1.5,Midday
+Adventure,Packed,Moderate,3,Friends,Temple of the Sacred Tooth Relic,Cultural,0.74,1.9,Morning
+Adventure,Relaxed,Luxury,4,Couple,Yala National Park Safari,Nature,0.9,5.6,Morning
+Nature,Packed,Luxury,3,Friends,Grand Hotel 1891 High Tea,Food,0.7,1.5,Afternoon
+Food,Relaxed,Budget,5,Family,Colombo Lotus Tower,Modern,0.52,2.5,Sunset
+Nature,Packed,Moderate,10,Friends,Ceylon Sliders Surf Cafe,Beach,0.65,1.1,Morning
+Cultural,Packed,Moderate,2,Family,Ministry of Crab Colombo,Food,0.63,1.5,Evening
+Adventure,Relaxed,Moderate,10,Family,Temple of the Sacred Tooth Relic,Cultural,0.75,3.1,Morning
+Food,Relaxed,Luxury,10,Family,Grand Hotel 1891 High Tea,Food,0.95,2.5,Afternoon
+Food,Packed,Budget,3,Friends,Nuwara Eliya Tea Estates,Nature,0.53,2.2,Midday
+Adventure,Packed,Moderate,4,Couple,Nuwara Eliya Tea Estates,Nature,0.83,2.2,Midday
+Adventure,Packed,Budget,4,Friends,Cafe Chill Ella,Food,0.74,1.1,Evening
+Food,Packed,Moderate,14,Couple,Nuwara Eliya Tea Estates,Nature,0.66,2.2,Midday
+Food,Relaxed,Budget,1,Couple,Nuwara Eliya Tea Estates,Nature,0.53,3.8,Midday
+Adventure,Relaxed,Luxury,3,Solo,Nuwara Eliya Tea Estates,Nature,0.79,3.8,Midday
+Nature,Packed,Moderate,1,Family,Temple of the Sacred Tooth Relic,Cultural,0.53,1.9,Morning
+Adventure,Moderate,Moderate,3,Couple,Heritage Cafe & Bistro Galle,Food,0.66,1.5,Evening
+Adventure,Relaxed,Luxury,5,Couple,Cafe Chill Ella,Food,0.63,1.9,Evening
+Adventure,Packed,Budget,4,Friends,Barefoot Garden Cafe,Food,0.61,1.1,Midday
+Cultural,Relaxed,Luxury,10,Couple,Galle Dutch Fort,Cultural,0.96,3.8,Sunset
+Adventure,Packed,Budget,2,Solo,Matey Hut Traditional Claypot,Food,0.74,1.1,Evening
+Adventure,Packed,Budget,10,Friends,Grand Hotel 1891 High Tea,Food,0.45,1.5,Afternoon
+Relaxation,Packed,Moderate,4,Friends,Barefoot Garden Cafe,Food,0.92,1.1,Midday
+Relaxation,Packed,Luxury,2,Friends,Yala National Park Safari,Nature,0.64,3.4,Morning
+Nature,Relaxed,Moderate,10,Family,Mirissa Coconut Tree Hill,Beach,0.52,2.5,Sunset
+Relaxation,Relaxed,Luxury,2,Solo,Barefoot Garden Cafe,Food,0.81,1.9,Midday
+Relaxation,Moderate,Moderate,7,Solo,Yala National Park Safari,Nature,0.55,4.5,Morning
+Adventure,Moderate,Moderate,10,Family,Ministry of Crab Colombo,Food,0.58,2.0,Evening
+Food,Relaxed,Moderate,14,Couple,Grand Hotel 1891 High Tea,Food,0.85,2.5,Afternoon
+Food,Moderate,Moderate,7,Friends,Yala National Park Safari,Nature,0.57,4.5,Morning
+Relaxation,Relaxed,Luxury,4,Friends,Nuwara Eliya Tea Estates,Nature,0.58,3.8,Midday
+Adventure,Moderate,Moderate,1,Couple,Barefoot Garden Cafe,Food,0.68,1.5,Midday
+Cultural,Relaxed,Budget,14,Friends,Temple of the Sacred Tooth Relic,Cultural,0.92,3.1,Morning
+Nature,Moderate,Budget,1,Friends,Barefoot Garden Cafe,Food,0.56,1.5,Midday
+Adventure,Moderate,Luxury,1,Couple,Matey Hut Traditional Claypot,Food,0.6,1.5,Evening
+Nature,Packed,Luxury,5,Couple,Nine Arches Bridge,Nature,0.99,1.5,Morning
+Adventure,Packed,Luxury,4,Couple,Nine Arches Bridge,Nature,0.87,1.5,Morning
+Relaxation,Relaxed,Budget,2,Family,Barefoot Garden Cafe,Food,0.74,1.9,Midday
+Food,Moderate,Luxury,4,Solo,Temple of the Sacred Tooth Relic,Cultural,0.63,2.5,Morning
+Adventure,Moderate,Luxury,7,Family,Ministry of Crab Colombo,Food,0.63,2.0,Evening
+Nature,Moderate,Moderate,1,Family,Nuwara Eliya Tea Estates,Nature,0.94,3.0,Midday
+Cultural,Packed,Budget,5,Family,Galle Dutch Fort,Cultural,0.97,2.2,Sunset
+Beach,Packed,Luxury,5,Friends,Barefoot Garden Cafe,Food,0.68,1.1,Midday
+Nature,Moderate,Moderate,14,Solo,Matey Hut Traditional Claypot,Food,0.53,1.5,Evening
+Cultural,Moderate,Luxury,4,Couple,Cafe Chill Ella,Food,0.59,1.5,Evening
+Beach,Packed,Luxury,1,Family,Colombo Lotus Tower,Modern,0.67,1.5,Sunset
+Food,Packed,Luxury,7,Solo,Nuwara Eliya Tea Estates,Nature,0.6,2.2,Midday
+Beach,Relaxed,Luxury,5,Couple,Mirissa Coconut Tree Hill,Beach,0.98,2.5,Sunset
+Nature,Relaxed,Luxury,4,Family,Mirissa Coconut Tree Hill,Beach,0.58,2.5,Sunset
+Nature,Packed,Moderate,3,Solo,Galle Dutch Fort,Cultural,0.58,2.2,Sunset
+Relaxation,Packed,Moderate,1,Solo,Matey Hut Traditional Claypot,Food,0.82,1.1,Evening
+Beach,Moderate,Luxury,5,Friends,Nuwara Eliya Tea Estates,Nature,0.63,3.0,Midday
+Adventure,Moderate,Moderate,4,Couple,Nine Arches Bridge,Nature,0.75,2.0,Morning
+Food,Moderate,Luxury,1,Family,Barefoot Garden Cafe,Food,0.92,1.5,Midday
+Nature,Moderate,Budget,14,Family,Sigiriya Ancient Rock Fortress,Cultural,0.52,3.5,Morning
+Nature,Moderate,Luxury,2,Family,Grand Hotel 1891 High Tea,Food,0.66,2.0,Afternoon
+Beach,Relaxed,Luxury,5,Couple,Ministry of Crab Colombo,Food,0.65,2.5,Evening
+Adventure,Moderate,Moderate,3,Friends,Heritage Cafe & Bistro Galle,Food,0.63,1.5,Evening
+Relaxation,Moderate,Moderate,10,Family,Ceylon Sliders Surf Cafe,Beach,0.73,1.5,Morning
+Nature,Packed,Luxury,4,Solo,Ministry of Crab Colombo,Food,0.75,1.5,Evening
+Adventure,Moderate,Moderate,4,Couple,Yala National Park Safari,Nature,0.75,4.5,Morning
+Cultural,Relaxed,Moderate,14,Couple,Cafe Chill Ella,Food,0.57,1.9,Evening
+Beach,Moderate,Luxury,1,Friends,Galle Dutch Fort,Cultural,0.61,3.0,Sunset
+Cultural,Relaxed,Moderate,14,Solo,Ceylon Sliders Surf Cafe,Beach,0.56,1.9,Morning
+Beach,Moderate,Moderate,5,Family,Sigiriya Ancient Rock Fortress,Cultural,0.64,3.5,Morning
+Beach,Packed,Luxury,4,Couple,Upalis Authentic Sri Lankan,Food,0.67,1.1,Midday
+Relaxation,Packed,Moderate,14,Solo,Barefoot Garden Cafe,Food,0.94,1.1,Midday
+Food,Packed,Budget,3,Family,Heritage Cafe & Bistro Galle,Food,0.94,1.1,Evening
+Adventure,Moderate,Budget,2,Couple,Cafe Chill Ella,Food,0.63,1.5,Evening
+Beach,Packed,Moderate,5,Friends,Ministry of Crab Colombo,Food,0.65,1.5,Evening
+Beach,Packed,Luxury,14,Friends,Nuwara Eliya Tea Estates,Nature,0.58,2.2,Midday
+Cultural,Relaxed,Luxury,4,Family,Temple of the Sacred Tooth Relic,Cultural,0.88,3.1,Morning
+Food,Relaxed,Budget,2,Friends,Nine Arches Bridge,Nature,0.62,2.5,Morning
+Food,Packed,Budget,2,Family,Yala National Park Safari,Nature,0.43,3.4,Morning
+Food,Moderate,Budget,4,Family,Ceylon Sliders Surf Cafe,Beach,0.66,1.5,Morning
+Nature,Packed,Budget,1,Solo,Grand Hotel 1891 High Tea,Food,0.45,1.5,Afternoon
+Beach,Moderate,Moderate,5,Friends,Yala National Park Safari,Nature,0.58,4.5,Morning
+Relaxation,Packed,Budget,14,Friends,Upalis Authentic Sri Lankan,Food,0.85,1.1,Midday
+Food,Packed,Budget,2,Friends,Upalis Authentic Sri Lankan,Food,0.92,1.1,Midday
+Beach,Relaxed,Moderate,1,Solo,Yala National Park Safari,Nature,0.59,5.6,Morning
+Food,Packed,Budget,14,Friends,Upalis Authentic Sri Lankan,Food,0.9,1.1,Midday
+Food,Moderate,Luxury,4,Solo,Grand Hotel 1891 High Tea,Food,0.93,2.0,Afternoon
+Adventure,Moderate,Moderate,4,Couple,Barefoot Garden Cafe,Food,0.67,1.5,Midday
+Nature,Moderate,Budget,10,Couple,Ministry of Crab Colombo,Food,0.34,2.0,Evening
+Relaxation,Packed,Moderate,10,Couple,Temple of the Sacred Tooth Relic,Cultural,0.53,1.9,Morning
+Beach,Relaxed,Luxury,14,Friends,Ministry of Crab Colombo,Food,0.66,2.5,Evening
+Food,Relaxed,Moderate,1,Couple,Nine Arches Bridge,Nature,0.58,2.5,Morning
+Cultural,Relaxed,Budget,5,Family,Yala National Park Safari,Nature,0.51,5.6,Morning
+Relaxation,Relaxed,Budget,2,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.6,4.4,Morning
+Beach,Moderate,Moderate,14,Family,Ceylon Sliders Surf Cafe,Beach,0.86,1.5,Morning
+Cultural,Moderate,Budget,3,Solo,Ministry of Crab Colombo,Food,0.37,2.0,Evening
+Cultural,Packed,Moderate,3,Couple,Ministry of Crab Colombo,Food,0.65,1.5,Evening
+Cultural,Relaxed,Luxury,4,Friends,Ceylon Sliders Surf Cafe,Beach,0.58,1.9,Morning
+Cultural,Relaxed,Moderate,2,Couple,Matey Hut Traditional Claypot,Food,0.54,1.9,Evening
+Beach,Moderate,Budget,1,Solo,Ministry of Crab Colombo,Food,0.35,2.0,Evening
+Beach,Relaxed,Moderate,1,Couple,Galle Dutch Fort,Cultural,0.61,3.8,Sunset
+Food,Moderate,Budget,3,Family,Galle Dutch Fort,Cultural,0.64,3.0,Sunset
+Nature,Relaxed,Budget,14,Couple,Grand Hotel 1891 High Tea,Food,0.37,2.5,Afternoon
+Nature,Relaxed,Moderate,2,Family,Nine Arches Bridge,Nature,0.82,2.5,Morning
+Relaxation,Relaxed,Luxury,2,Couple,Matey Hut Traditional Claypot,Food,0.78,1.9,Evening
+Adventure,Packed,Moderate,14,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.86,2.6,Morning
+Beach,Packed,Budget,5,Solo,Matey Hut Traditional Claypot,Food,0.74,1.1,Evening
+Adventure,Moderate,Luxury,14,Couple,Nuwara Eliya Tea Estates,Nature,0.8,3.0,Midday
+Beach,Packed,Moderate,5,Couple,Temple of the Sacred Tooth Relic,Cultural,0.55,1.9,Morning
+Food,Moderate,Moderate,7,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.67,3.5,Morning
+Adventure,Moderate,Luxury,3,Solo,Grand Hotel 1891 High Tea,Food,0.67,2.0,Afternoon
+Nature,Moderate,Luxury,2,Friends,Mirissa Coconut Tree Hill,Beach,0.6,2.0,Sunset
+Food,Packed,Budget,5,Family,Heritage Cafe & Bistro Galle,Food,0.94,1.1,Evening
+Cultural,Relaxed,Luxury,2,Solo,Yala National Park Safari,Nature,0.68,5.6,Morning
+Cultural,Relaxed,Budget,14,Couple,Galle Dutch Fort,Cultural,0.99,3.8,Sunset
+Relaxation,Moderate,Luxury,14,Family,Nine Arches Bridge,Nature,0.59,2.0,Morning
+Adventure,Packed,Budget,1,Couple,Matey Hut Traditional Claypot,Food,0.76,1.1,Evening
+Cultural,Moderate,Luxury,1,Family,Heritage Cafe & Bistro Galle,Food,0.62,1.5,Evening
+Relaxation,Relaxed,Luxury,5,Solo,Temple of the Sacred Tooth Relic,Cultural,0.62,3.1,Morning
+Cultural,Relaxed,Luxury,2,Solo,Colombo Lotus Tower,Modern,0.6,2.5,Sunset
+Nature,Relaxed,Luxury,4,Couple,Heritage Cafe & Bistro Galle,Food,0.61,1.9,Evening
+Relaxation,Packed,Moderate,14,Friends,Galle Dutch Fort,Cultural,0.53,2.2,Sunset
+Nature,Packed,Moderate,7,Couple,Ceylon Sliders Surf Cafe,Beach,0.66,1.1,Morning
+Beach,Packed,Moderate,7,Friends,Heritage Cafe & Bistro Galle,Food,0.75,1.1,Evening
+Beach,Packed,Budget,4,Friends,Ministry of Crab Colombo,Food,0.42,1.5,Evening
+Food,Moderate,Moderate,1,Solo,Upalis Authentic Sri Lankan,Food,0.96,1.5,Midday
+Adventure,Relaxed,Moderate,1,Family,Colombo Lotus Tower,Modern,0.63,2.5,Sunset
+Beach,Relaxed,Luxury,5,Couple,Galle Dutch Fort,Cultural,0.65,3.8,Sunset
+Beach,Relaxed,Budget,5,Family,Colombo Lotus Tower,Modern,0.53,2.5,Sunset
+Beach,Relaxed,Luxury,10,Couple,Temple of the Sacred Tooth Relic,Cultural,0.61,3.1,Morning
+Food,Relaxed,Moderate,2,Family,Nine Arches Bridge,Nature,0.56,2.5,Morning
+Adventure,Moderate,Budget,1,Family,Grand Hotel 1891 High Tea,Food,0.37,2.0,Afternoon
+Food,Moderate,Budget,4,Solo,Barefoot Garden Cafe,Food,0.82,1.5,Midday
+Adventure,Relaxed,Moderate,3,Family,Colombo Lotus Tower,Modern,0.63,2.5,Sunset
+Relaxation,Packed,Moderate,14,Solo,Colombo Lotus Tower,Modern,0.73,1.5,Sunset
+Food,Relaxed,Budget,7,Solo,Matey Hut Traditional Claypot,Food,0.95,1.9,Evening
+Cultural,Packed,Moderate,5,Solo,Barefoot Garden Cafe,Food,0.73,1.1,Midday
+Relaxation,Relaxed,Budget,14,Couple,Matey Hut Traditional Claypot,Food,0.84,1.9,Evening
+Adventure,Relaxed,Luxury,4,Couple,Temple of the Sacred Tooth Relic,Cultural,0.79,3.1,Morning
+Food,Moderate,Luxury,2,Solo,Heritage Cafe & Bistro Galle,Food,0.9,1.5,Evening
+Beach,Relaxed,Moderate,7,Solo,Upalis Authentic Sri Lankan,Food,0.63,1.9,Midday
+Beach,Packed,Moderate,3,Friends,Nine Arches Bridge,Nature,0.66,1.5,Morning
+Nature,Relaxed,Luxury,7,Couple,Temple of the Sacred Tooth Relic,Cultural,0.58,3.1,Morning
+Cultural,Relaxed,Luxury,3,Family,Sigiriya Ancient Rock Fortress,Cultural,0.94,4.4,Morning
+Cultural,Moderate,Moderate,14,Solo,Cafe Chill Ella,Food,0.53,1.5,Evening
+Adventure,Relaxed,Budget,5,Friends,Yala National Park Safari,Nature,0.61,5.6,Morning
+Relaxation,Relaxed,Moderate,1,Family,Nuwara Eliya Tea Estates,Nature,0.62,3.8,Midday
+Nature,Packed,Luxury,5,Solo,Ceylon Sliders Surf Cafe,Beach,0.69,1.1,Morning
+Cultural,Relaxed,Moderate,5,Family,Galle Dutch Fort,Cultural,0.82,3.8,Sunset
+Relaxation,Moderate,Budget,10,Solo,Cafe Chill Ella,Food,0.85,1.5,Evening
+Adventure,Packed,Budget,3,Couple,Ceylon Sliders Surf Cafe,Beach,0.73,1.1,Morning
+Relaxation,Relaxed,Budget,4,Family,Cafe Chill Ella,Food,0.85,1.9,Evening
+Relaxation,Relaxed,Budget,7,Family,Grand Hotel 1891 High Tea,Food,0.56,2.5,Afternoon
+Nature,Packed,Moderate,1,Family,Barefoot Garden Cafe,Food,0.75,1.1,Midday
+Cultural,Packed,Moderate,4,Couple,Cafe Chill Ella,Food,0.65,1.1,Evening
+Relaxation,Relaxed,Budget,10,Couple,Heritage Cafe & Bistro Galle,Food,0.73,1.9,Evening
+Nature,Moderate,Moderate,7,Friends,Yala National Park Safari,Nature,0.83,4.5,Morning
+Nature,Packed,Luxury,4,Couple,Upalis Authentic Sri Lankan,Food,0.69,1.1,Midday
+Adventure,Relaxed,Moderate,3,Couple,Cafe Chill Ella,Food,0.52,1.9,Evening
+Adventure,Packed,Budget,3,Family,Yala National Park Safari,Nature,0.66,3.4,Morning
+Beach,Moderate,Moderate,5,Friends,Ministry of Crab Colombo,Food,0.53,2.0,Evening
+Nature,Relaxed,Budget,3,Solo,Ministry of Crab Colombo,Food,0.36,2.5,Evening
+Adventure,Relaxed,Luxury,4,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.84,4.4,Morning
+Relaxation,Moderate,Budget,14,Family,Nuwara Eliya Tea Estates,Nature,0.57,3.0,Midday
+Food,Moderate,Budget,3,Couple,Colombo Lotus Tower,Modern,0.6,2.0,Sunset
+Cultural,Moderate,Moderate,4,Couple,Mirissa Coconut Tree Hill,Beach,0.6,2.0,Sunset
+Food,Packed,Moderate,7,Friends,Colombo Lotus Tower,Modern,0.73,1.5,Sunset
+Cultural,Packed,Luxury,10,Family,Barefoot Garden Cafe,Food,0.69,1.1,Midday
+Relaxation,Packed,Luxury,1,Solo,Ceylon Sliders Surf Cafe,Beach,0.88,1.1,Morning
+Cultural,Relaxed,Luxury,10,Solo,Barefoot Garden Cafe,Food,0.6,1.9,Midday
+Relaxation,Relaxed,Budget,5,Friends,Barefoot Garden Cafe,Food,0.77,1.9,Midday
+Beach,Moderate,Budget,10,Family,Nine Arches Bridge,Nature,0.66,2.0,Morning
+Nature,Moderate,Luxury,14,Solo,Galle Dutch Fort,Cultural,0.58,3.0,Sunset
+Adventure,Packed,Luxury,3,Friends,Heritage Cafe & Bistro Galle,Food,0.67,1.1,Evening
+Cultural,Relaxed,Moderate,4,Friends,Temple of the Sacred Tooth Relic,Cultural,0.84,3.1,Morning
+Relaxation,Packed,Luxury,3,Solo,Temple of the Sacred Tooth Relic,Cultural,0.58,1.9,Morning
+Food,Packed,Moderate,2,Friends,Nuwara Eliya Tea Estates,Nature,0.64,2.2,Midday
+Food,Relaxed,Budget,7,Couple,Nuwara Eliya Tea Estates,Nature,0.57,3.8,Midday
+Nature,Packed,Budget,10,Family,Upalis Authentic Sri Lankan,Food,0.64,1.1,Midday
+Food,Moderate,Luxury,3,Solo,Yala National Park Safari,Nature,0.68,4.5,Morning
+Cultural,Packed,Moderate,1,Friends,Matey Hut Traditional Claypot,Food,0.65,1.1,Evening
+Adventure,Relaxed,Luxury,14,Couple,Mirissa Coconut Tree Hill,Beach,0.69,2.5,Sunset
+Food,Moderate,Moderate,14,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.63,3.5,Morning
+Adventure,Moderate,Luxury,4,Solo,Nuwara Eliya Tea Estates,Nature,0.78,3.0,Midday
+Relaxation,Moderate,Budget,3,Solo,Upalis Authentic Sri Lankan,Food,0.74,1.5,Midday
+Cultural,Relaxed,Budget,10,Couple,Nuwara Eliya Tea Estates,Nature,0.56,3.8,Midday
+Adventure,Packed,Luxury,3,Friends,Grand Hotel 1891 High Tea,Food,0.76,1.5,Afternoon
+Cultural,Moderate,Moderate,7,Friends,Temple of the Sacred Tooth Relic,Cultural,0.87,2.5,Morning
+Adventure,Relaxed,Moderate,14,Couple,Galle Dutch Fort,Cultural,0.84,3.8,Sunset
+Beach,Moderate,Luxury,10,Couple,Mirissa Coconut Tree Hill,Beach,0.99,2.0,Sunset
+Cultural,Packed,Luxury,2,Friends,Upalis Authentic Sri Lankan,Food,0.68,1.1,Midday
+Beach,Moderate,Luxury,7,Couple,Matey Hut Traditional Claypot,Food,0.6,1.5,Evening
+Relaxation,Moderate,Moderate,3,Couple,Upalis Authentic Sri Lankan,Food,0.88,1.5,Midday
+Cultural,Relaxed,Budget,14,Solo,Mirissa Coconut Tree Hill,Beach,0.67,2.5,Sunset
+Food,Moderate,Budget,7,Family,Mirissa Coconut Tree Hill,Beach,0.62,2.0,Sunset
+Nature,Packed,Moderate,5,Solo,Upalis Authentic Sri Lankan,Food,0.72,1.1,Midday
+Adventure,Moderate,Budget,2,Family,Cafe Chill Ella,Food,0.64,1.5,Evening
+Adventure,Packed,Budget,3,Couple,Cafe Chill Ella,Food,0.75,1.1,Evening
+Relaxation,Moderate,Moderate,1,Couple,Matey Hut Traditional Claypot,Food,0.73,1.5,Evening
+Food,Packed,Moderate,14,Friends,Nine Arches Bridge,Nature,0.65,1.5,Morning
+Beach,Packed,Luxury,7,Solo,Mirissa Coconut Tree Hill,Beach,0.98,1.5,Sunset
+Beach,Moderate,Budget,3,Family,Sigiriya Ancient Rock Fortress,Cultural,0.54,3.5,Morning
+Food,Packed,Luxury,3,Friends,Nuwara Eliya Tea Estates,Nature,0.61,2.2,Midday
+Beach,Packed,Moderate,1,Family,Heritage Cafe & Bistro Galle,Food,0.71,1.1,Evening
+Nature,Moderate,Moderate,5,Couple,Upalis Authentic Sri Lankan,Food,0.63,1.5,Midday
+Beach,Relaxed,Budget,2,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.62,4.4,Morning
+Adventure,Relaxed,Budget,7,Friends,Upalis Authentic Sri Lankan,Food,0.57,1.9,Midday
+Nature,Relaxed,Luxury,3,Couple,Nine Arches Bridge,Nature,0.9,2.5,Morning
+Relaxation,Packed,Budget,1,Family,Nine Arches Bridge,Nature,0.74,1.5,Morning
+Adventure,Relaxed,Moderate,14,Solo,Galle Dutch Fort,Cultural,0.75,3.8,Sunset
+Relaxation,Packed,Moderate,1,Family,Mirissa Coconut Tree Hill,Beach,0.82,1.5,Sunset
+Nature,Moderate,Moderate,7,Friends,Galle Dutch Fort,Cultural,0.54,3.0,Sunset
+Nature,Moderate,Budget,1,Solo,Mirissa Coconut Tree Hill,Beach,0.65,2.0,Sunset
+Adventure,Moderate,Moderate,3,Family,Colombo Lotus Tower,Modern,0.63,2.0,Sunset
+Beach,Packed,Moderate,14,Solo,Yala National Park Safari,Nature,0.52,3.4,Morning
+Relaxation,Relaxed,Budget,10,Solo,Temple of the Sacred Tooth Relic,Cultural,0.65,3.1,Morning
+Nature,Packed,Luxury,14,Family,Upalis Authentic Sri Lankan,Food,0.67,1.1,Midday
+Nature,Packed,Luxury,2,Friends,Yala National Park Safari,Nature,0.93,3.4,Morning
+Relaxation,Moderate,Budget,14,Family,Ceylon Sliders Surf Cafe,Beach,0.85,1.5,Morning
+Nature,Relaxed,Luxury,5,Family,Barefoot Garden Cafe,Food,0.58,1.9,Midday
+Relaxation,Moderate,Moderate,14,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.62,3.5,Morning
+Cultural,Moderate,Moderate,14,Couple,Upalis Authentic Sri Lankan,Food,0.67,1.5,Midday
+Adventure,Packed,Budget,2,Friends,Galle Dutch Fort,Cultural,0.84,2.2,Sunset
+Relaxation,Relaxed,Moderate,14,Friends,Heritage Cafe & Bistro Galle,Food,0.83,1.9,Evening
+Nature,Packed,Budget,14,Friends,Temple of the Sacred Tooth Relic,Cultural,0.64,1.9,Morning
+Relaxation,Packed,Moderate,10,Family,Colombo Lotus Tower,Modern,0.71,1.5,Sunset
+Relaxation,Relaxed,Luxury,14,Solo,Ceylon Sliders Surf Cafe,Beach,0.79,1.9,Morning
+Cultural,Moderate,Budget,5,Friends,Temple of the Sacred Tooth Relic,Cultural,0.96,2.5,Morning
+Relaxation,Packed,Moderate,7,Friends,Nine Arches Bridge,Nature,0.61,1.5,Morning
+Nature,Packed,Luxury,1,Couple,Yala National Park Safari,Nature,0.95,3.4,Morning
+Beach,Moderate,Luxury,14,Couple,Mirissa Coconut Tree Hill,Beach,0.99,2.0,Sunset
+Beach,Moderate,Luxury,5,Friends,Grand Hotel 1891 High Tea,Food,0.68,2.0,Afternoon
+Adventure,Relaxed,Luxury,10,Couple,Upalis Authentic Sri Lankan,Food,0.57,1.9,Midday
+Adventure,Relaxed,Budget,7,Solo,Upalis Authentic Sri Lankan,Food,0.57,1.9,Midday
+Nature,Moderate,Luxury,10,Family,Barefoot Garden Cafe,Food,0.59,1.5,Midday
+Food,Packed,Budget,3,Friends,Yala National Park Safari,Nature,0.33,3.4,Morning
+Food,Moderate,Moderate,3,Family,Yala National Park Safari,Nature,0.63,4.5,Morning
+Cultural,Packed,Budget,3,Friends,Heritage Cafe & Bistro Galle,Food,0.66,1.1,Evening
+Nature,Relaxed,Budget,10,Friends,Heritage Cafe & Bistro Galle,Food,0.56,1.9,Evening
+Food,Packed,Moderate,14,Friends,Grand Hotel 1891 High Tea,Food,0.91,1.5,Afternoon
+Food,Packed,Budget,14,Couple,Ministry of Crab Colombo,Food,0.72,1.5,Evening
+Adventure,Packed,Moderate,1,Solo,Matey Hut Traditional Claypot,Food,0.64,1.1,Evening
+Cultural,Packed,Moderate,2,Couple,Ministry of Crab Colombo,Food,0.63,1.5,Evening
+Cultural,Packed,Luxury,2,Couple,Matey Hut Traditional Claypot,Food,0.69,1.1,Evening
+Relaxation,Packed,Budget,5,Solo,Cafe Chill Ella,Food,0.93,1.1,Evening
+Cultural,Moderate,Moderate,14,Family,Heritage Cafe & Bistro Galle,Food,0.64,1.5,Evening
+Beach,Moderate,Budget,1,Family,Ministry of Crab Colombo,Food,0.32,2.0,Evening
+Food,Packed,Budget,1,Family,Sigiriya Ancient Rock Fortress,Cultural,0.54,2.6,Morning
+Cultural,Relaxed,Luxury,2,Family,Ministry of Crab Colombo,Food,0.63,2.5,Evening
+Beach,Moderate,Moderate,1,Solo,Nuwara Eliya Tea Estates,Nature,0.67,3.0,Midday
+Relaxation,Relaxed,Luxury,14,Family,Nuwara Eliya Tea Estates,Nature,0.59,3.8,Midday
+Relaxation,Relaxed,Moderate,3,Solo,Cafe Chill Ella,Food,0.78,1.9,Evening
+Nature,Packed,Budget,14,Friends,Barefoot Garden Cafe,Food,0.61,1.1,Midday
+Food,Packed,Luxury,3,Couple,Grand Hotel 1891 High Tea,Food,0.99,1.5,Afternoon
+Beach,Relaxed,Budget,3,Friends,Barefoot Garden Cafe,Food,0.55,1.9,Midday
+Food,Packed,Luxury,4,Friends,Barefoot Garden Cafe,Food,0.98,1.1,Midday
+Nature,Packed,Moderate,1,Family,Ceylon Sliders Surf Cafe,Beach,0.62,1.1,Morning
+Beach,Packed,Luxury,1,Solo,Grand Hotel 1891 High Tea,Food,0.76,1.5,Afternoon
+Food,Packed,Luxury,5,Family,Ministry of Crab Colombo,Food,0.99,1.5,Evening
+Cultural,Moderate,Luxury,10,Friends,Colombo Lotus Tower,Modern,0.61,2.0,Sunset
+Adventure,Relaxed,Luxury,7,Couple,Cafe Chill Ella,Food,0.6,1.9,Evening
+Relaxation,Relaxed,Budget,1,Friends,Galle Dutch Fort,Cultural,0.65,3.8,Sunset
+Relaxation,Moderate,Moderate,4,Family,Ministry of Crab Colombo,Food,0.73,2.0,Evening
+Cultural,Packed,Budget,1,Couple,Galle Dutch Fort,Cultural,0.99,2.2,Sunset
+Cultural,Relaxed,Luxury,3,Friends,Nuwara Eliya Tea Estates,Nature,0.62,3.8,Midday
+Relaxation,Relaxed,Moderate,5,Friends,Temple of the Sacred Tooth Relic,Cultural,0.56,3.1,Morning
+Beach,Moderate,Luxury,7,Family,Nuwara Eliya Tea Estates,Nature,0.62,3.0,Midday
+Beach,Relaxed,Moderate,10,Family,Nine Arches Bridge,Nature,0.54,2.5,Morning
+Beach,Relaxed,Moderate,2,Friends,Mirissa Coconut Tree Hill,Beach,0.86,2.5,Sunset
+Nature,Packed,Moderate,2,Couple,Heritage Cafe & Bistro Galle,Food,0.71,1.1,Evening
+Relaxation,Relaxed,Moderate,5,Solo,Nine Arches Bridge,Nature,0.52,2.5,Morning
+Adventure,Packed,Moderate,14,Solo,Matey Hut Traditional Claypot,Food,0.61,1.1,Evening
+Relaxation,Relaxed,Budget,10,Family,Yala National Park Safari,Nature,0.51,5.6,Morning
+Food,Packed,Budget,14,Friends,Heritage Cafe & Bistro Galle,Food,0.92,1.1,Evening
+Relaxation,Relaxed,Luxury,4,Solo,Barefoot Garden Cafe,Food,0.83,1.9,Midday
+Food,Relaxed,Luxury,7,Family,Upalis Authentic Sri Lankan,Food,0.89,1.9,Midday
+Relaxation,Packed,Budget,7,Family,Temple of the Sacred Tooth Relic,Cultural,0.67,1.9,Morning
+Beach,Packed,Budget,3,Solo,Barefoot Garden Cafe,Food,0.64,1.1,Midday
+Beach,Packed,Moderate,2,Family,Matey Hut Traditional Claypot,Food,0.61,1.1,Evening
+Relaxation,Moderate,Luxury,4,Couple,Nine Arches Bridge,Nature,0.58,2.0,Morning
+Relaxation,Packed,Budget,14,Friends,Temple of the Sacred Tooth Relic,Cultural,0.67,1.9,Morning
+Relaxation,Moderate,Moderate,14,Solo,Nine Arches Bridge,Nature,0.54,2.0,Morning
+Beach,Packed,Budget,10,Solo,Mirissa Coconut Tree Hill,Beach,0.99,1.5,Sunset
+Relaxation,Packed,Moderate,3,Couple,Temple of the Sacred Tooth Relic,Cultural,0.52,1.9,Morning
+Nature,Moderate,Luxury,1,Friends,Nine Arches Bridge,Nature,0.88,2.0,Morning
+Relaxation,Relaxed,Budget,3,Solo,Upalis Authentic Sri Lankan,Food,0.77,1.9,Midday
+Cultural,Moderate,Luxury,3,Solo,Galle Dutch Fort,Cultural,0.88,3.0,Sunset
+Adventure,Packed,Budget,2,Couple,Heritage Cafe & Bistro Galle,Food,0.62,1.1,Evening
+Relaxation,Packed,Moderate,7,Solo,Yala National Park Safari,Nature,0.54,3.4,Morning
+Nature,Relaxed,Luxury,3,Family,Temple of the Sacred Tooth Relic,Cultural,0.58,3.1,Morning
+Nature,Moderate,Budget,7,Couple,Ceylon Sliders Surf Cafe,Beach,0.63,1.5,Morning
+Adventure,Relaxed,Budget,2,Friends,Nuwara Eliya Tea Estates,Nature,0.72,3.8,Midday
+Food,Relaxed,Budget,1,Couple,Temple of the Sacred Tooth Relic,Cultural,0.66,3.1,Morning
+Adventure,Moderate,Moderate,14,Couple,Mirissa Coconut Tree Hill,Beach,0.61,2.0,Sunset
+Beach,Packed,Moderate,10,Couple,Nuwara Eliya Tea Estates,Nature,0.66,2.2,Midday
+Cultural,Packed,Budget,14,Solo,Upalis Authentic Sri Lankan,Food,0.62,1.1,Midday
+Cultural,Packed,Budget,4,Solo,Galle Dutch Fort,Cultural,0.96,2.2,Sunset
+Adventure,Packed,Budget,14,Couple,Ministry of Crab Colombo,Food,0.4,1.5,Evening
+Cultural,Relaxed,Luxury,14,Friends,Nuwara Eliya Tea Estates,Nature,0.58,3.8,Midday
+Cultural,Relaxed,Luxury,7,Family,Mirissa Coconut Tree Hill,Beach,0.6,2.5,Sunset
+Beach,Packed,Moderate,1,Solo,Nine Arches Bridge,Nature,0.66,1.5,Morning
+Nature,Relaxed,Budget,14,Solo,Temple of the Sacred Tooth Relic,Cultural,0.67,3.1,Morning
+Relaxation,Moderate,Luxury,7,Friends,Mirissa Coconut Tree Hill,Beach,0.81,2.0,Sunset
+Beach,Relaxed,Budget,7,Couple,Galle Dutch Fort,Cultural,0.71,3.8,Sunset
+Food,Relaxed,Moderate,4,Solo,Matey Hut Traditional Claypot,Food,0.86,1.9,Evening
+Cultural,Moderate,Budget,4,Friends,Nuwara Eliya Tea Estates,Nature,0.54,3.0,Midday
+Nature,Moderate,Luxury,4,Family,Ministry of Crab Colombo,Food,0.63,2.0,Evening
+Nature,Relaxed,Luxury,1,Family,Yala National Park Safari,Nature,0.99,5.6,Morning
+Food,Moderate,Moderate,3,Family,Colombo Lotus Tower,Modern,0.67,2.0,Sunset
+Adventure,Relaxed,Luxury,3,Couple,Temple of the Sacred Tooth Relic,Cultural,0.79,3.1,Morning
+Adventure,Moderate,Budget,14,Friends,Ministry of Crab Colombo,Food,0.32,2.0,Evening
+Food,Packed,Budget,4,Family,Heritage Cafe & Bistro Galle,Food,0.93,1.1,Evening
+Adventure,Relaxed,Luxury,1,Friends,Nine Arches Bridge,Nature,0.77,2.5,Morning
+Food,Packed,Luxury,1,Friends,Barefoot Garden Cafe,Food,0.98,1.1,Midday
+Relaxation,Relaxed,Moderate,14,Couple,Temple of the Sacred Tooth Relic,Cultural,0.55,3.1,Morning
+Cultural,Packed,Luxury,10,Couple,Yala National Park Safari,Nature,0.64,3.4,Morning
+Nature,Packed,Budget,1,Friends,Upalis Authentic Sri Lankan,Food,0.61,1.1,Midday
+Food,Packed,Luxury,1,Friends,Ceylon Sliders Surf Cafe,Beach,0.7,1.1,Morning
+Relaxation,Moderate,Budget,7,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.57,3.5,Morning
+Cultural,Moderate,Luxury,7,Solo,Upalis Authentic Sri Lankan,Food,0.6,1.5,Midday
+Beach,Packed,Luxury,4,Solo,Cafe Chill Ella,Food,0.69,1.1,Evening
+Cultural,Packed,Luxury,7,Solo,Galle Dutch Fort,Cultural,0.89,2.2,Sunset
+Food,Packed,Budget,7,Family,Nuwara Eliya Tea Estates,Nature,0.56,2.2,Midday
+Relaxation,Relaxed,Luxury,4,Couple,Cafe Chill Ella,Food,0.78,1.9,Evening
+Cultural,Packed,Moderate,4,Couple,Cafe Chill Ella,Food,0.62,1.1,Evening
+Beach,Packed,Luxury,10,Family,Nine Arches Bridge,Nature,0.65,1.5,Morning
+Beach,Moderate,Moderate,2,Friends,Upalis Authentic Sri Lankan,Food,0.65,1.5,Midday
+Beach,Packed,Luxury,2,Couple,Ceylon Sliders Surf Cafe,Beach,0.96,1.1,Morning
+Food,Relaxed,Moderate,2,Solo,Nuwara Eliya Tea Estates,Nature,0.64,3.8,Midday
+Relaxation,Relaxed,Moderate,3,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.69,4.4,Morning
+Relaxation,Packed,Budget,14,Family,Heritage Cafe & Bistro Galle,Food,0.83,1.1,Evening
+Relaxation,Relaxed,Moderate,4,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.72,4.4,Morning
+Nature,Packed,Luxury,7,Friends,Cafe Chill Ella,Food,0.69,1.1,Evening
+Beach,Moderate,Luxury,14,Friends,Upalis Authentic Sri Lankan,Food,0.6,1.5,Midday
+Beach,Relaxed,Moderate,4,Friends,Grand Hotel 1891 High Tea,Food,0.58,2.5,Afternoon
+Cultural,Relaxed,Moderate,5,Friends,Nuwara Eliya Tea Estates,Nature,0.66,3.8,Midday
+Nature,Packed,Luxury,5,Couple,Nuwara Eliya Tea Estates,Nature,0.92,2.2,Midday
+Relaxation,Packed,Budget,3,Couple,Galle Dutch Fort,Cultural,0.7,2.2,Sunset
+Beach,Packed,Budget,14,Family,Grand Hotel 1891 High Tea,Food,0.41,1.5,Afternoon
+Adventure,Packed,Budget,7,Family,Yala National Park Safari,Nature,0.64,3.4,Morning
+Adventure,Relaxed,Luxury,5,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.84,4.4,Morning
+Food,Relaxed,Moderate,7,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.73,4.4,Morning
+Adventure,Packed,Moderate,5,Friends,Upalis Authentic Sri Lankan,Food,0.76,1.1,Midday
+Adventure,Packed,Budget,14,Family,Galle Dutch Fort,Cultural,0.86,2.2,Sunset
+Cultural,Relaxed,Luxury,2,Family,Sigiriya Ancient Rock Fortress,Cultural,0.94,4.4,Morning
+Nature,Moderate,Moderate,2,Family,Nine Arches Bridge,Nature,0.86,2.0,Morning
+Nature,Packed,Luxury,4,Family,Mirissa Coconut Tree Hill,Beach,0.65,1.5,Sunset
+Adventure,Moderate,Luxury,2,Friends,Mirissa Coconut Tree Hill,Beach,0.6,2.0,Sunset
+Adventure,Packed,Luxury,1,Family,Barefoot Garden Cafe,Food,0.66,1.1,Midday
+Food,Moderate,Moderate,7,Solo,Upalis Authentic Sri Lankan,Food,0.94,1.5,Midday
+Beach,Moderate,Luxury,2,Couple,Ceylon Sliders Surf Cafe,Beach,0.91,1.5,Morning
+Food,Moderate,Moderate,3,Friends,Heritage Cafe & Bistro Galle,Food,0.93,1.5,Evening
+Adventure,Packed,Budget,3,Couple,Upalis Authentic Sri Lankan,Food,0.63,1.1,Midday
+Adventure,Moderate,Budget,10,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.74,3.5,Morning
+Beach,Moderate,Budget,14,Couple,Mirissa Coconut Tree Hill,Beach,0.99,2.0,Sunset
+Food,Moderate,Luxury,14,Solo,Upalis Authentic Sri Lankan,Food,0.92,1.5,Midday
+Beach,Moderate,Luxury,14,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.62,3.5,Morning
+Nature,Moderate,Moderate,14,Solo,Upalis Authentic Sri Lankan,Food,0.65,1.5,Midday
+Food,Packed,Luxury,4,Solo,Galle Dutch Fort,Cultural,0.62,2.2,Sunset
+Food,Relaxed,Luxury,7,Friends,Heritage Cafe & Bistro Galle,Food,0.92,1.9,Evening
+Relaxation,Packed,Moderate,2,Family,Sigiriya Ancient Rock Fortress,Cultural,0.67,2.6,Morning
+Nature,Packed,Budget,3,Family,Ceylon Sliders Surf Cafe,Beach,0.75,1.1,Morning
+Nature,Moderate,Budget,1,Family,Grand Hotel 1891 High Tea,Food,0.35,2.0,Afternoon
+Beach,Relaxed,Moderate,5,Solo,Mirissa Coconut Tree Hill,Beach,0.87,2.5,Sunset
+Nature,Relaxed,Luxury,3,Family,Cafe Chill Ella,Food,0.62,1.9,Evening
+Relaxation,Moderate,Moderate,7,Solo,Grand Hotel 1891 High Tea,Food,0.77,2.0,Afternoon
+Cultural,Relaxed,Luxury,5,Family,Matey Hut Traditional Claypot,Food,0.59,1.9,Evening
+Nature,Relaxed,Budget,3,Couple,Mirissa Coconut Tree Hill,Beach,0.75,2.5,Sunset
+Adventure,Packed,Luxury,2,Friends,Ceylon Sliders Surf Cafe,Beach,0.7,1.1,Morning
+Cultural,Relaxed,Budget,14,Family,Upalis Authentic Sri Lankan,Food,0.56,1.9,Midday
+Nature,Moderate,Luxury,7,Couple,Upalis Authentic Sri Lankan,Food,0.57,1.5,Midday
+Cultural,Relaxed,Budget,3,Couple,Upalis Authentic Sri Lankan,Food,0.53,1.9,Midday
+Nature,Relaxed,Moderate,2,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.72,4.4,Morning
+Food,Relaxed,Budget,2,Solo,Nine Arches Bridge,Nature,0.65,2.5,Morning
+Beach,Relaxed,Budget,5,Solo,Galle Dutch Fort,Cultural,0.67,3.8,Sunset
+Adventure,Relaxed,Luxury,4,Couple,Grand Hotel 1891 High Tea,Food,0.62,2.5,Afternoon
+Nature,Packed,Moderate,7,Family,Nuwara Eliya Tea Estates,Nature,0.97,2.2,Midday
+Relaxation,Packed,Budget,2,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.55,2.6,Morning
+Relaxation,Relaxed,Moderate,3,Solo,Galle Dutch Fort,Cultural,0.58,3.8,Sunset
+Adventure,Packed,Moderate,7,Couple,Ceylon Sliders Surf Cafe,Beach,0.64,1.1,Morning
+Cultural,Relaxed,Moderate,10,Friends,Mirissa Coconut Tree Hill,Beach,0.55,2.5,Sunset
+Food,Relaxed,Moderate,2,Friends,Galle Dutch Fort,Cultural,0.55,3.8,Sunset
+Food,Moderate,Luxury,5,Solo,Temple of the Sacred Tooth Relic,Cultural,0.59,2.5,Morning
+Cultural,Moderate,Moderate,14,Family,Ceylon Sliders Surf Cafe,Beach,0.53,1.5,Morning
+Food,Moderate,Moderate,4,Solo,Matey Hut Traditional Claypot,Food,0.88,1.5,Evening
+Beach,Relaxed,Budget,14,Solo,Barefoot Garden Cafe,Food,0.55,1.9,Midday
+Relaxation,Packed,Budget,2,Couple,Barefoot Garden Cafe,Food,0.82,1.1,Midday
+Adventure,Relaxed,Luxury,3,Solo,Grand Hotel 1891 High Tea,Food,0.68,2.5,Afternoon
+Beach,Relaxed,Luxury,10,Solo,Colombo Lotus Tower,Modern,0.62,2.5,Sunset
+Relaxation,Moderate,Moderate,5,Friends,Grand Hotel 1891 High Tea,Food,0.75,2.0,Afternoon
+Adventure,Moderate,Moderate,5,Couple,Ceylon Sliders Surf Cafe,Beach,0.53,1.5,Morning
+Beach,Moderate,Moderate,4,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.63,3.5,Morning
+Cultural,Relaxed,Moderate,1,Couple,Barefoot Garden Cafe,Food,0.66,1.9,Midday
+Beach,Relaxed,Moderate,2,Solo,Matey Hut Traditional Claypot,Food,0.57,1.9,Evening
+Nature,Moderate,Luxury,14,Friends,Ministry of Crab Colombo,Food,0.65,2.0,Evening
+Adventure,Packed,Budget,1,Friends,Galle Dutch Fort,Cultural,0.84,2.2,Sunset
+Beach,Moderate,Moderate,14,Solo,Nine Arches Bridge,Nature,0.53,2.0,Morning
+Relaxation,Moderate,Luxury,3,Friends,Heritage Cafe & Bistro Galle,Food,0.78,1.5,Evening
+Relaxation,Moderate,Moderate,2,Friends,Matey Hut Traditional Claypot,Food,0.75,1.5,Evening
+Nature,Packed,Budget,10,Family,Matey Hut Traditional Claypot,Food,0.74,1.1,Evening
+Food,Packed,Luxury,7,Family,Cafe Chill Ella,Food,0.95,1.1,Evening
+Adventure,Relaxed,Budget,7,Family,Sigiriya Ancient Rock Fortress,Cultural,0.82,4.4,Morning
+Relaxation,Moderate,Moderate,2,Friends,Grand Hotel 1891 High Tea,Food,0.78,2.0,Afternoon
+Food,Moderate,Budget,4,Couple,Colombo Lotus Tower,Modern,0.64,2.0,Sunset
+Adventure,Relaxed,Luxury,2,Family,Galle Dutch Fort,Cultural,0.79,3.8,Sunset
+Cultural,Packed,Moderate,1,Friends,Heritage Cafe & Bistro Galle,Food,0.73,1.1,Evening
+Food,Moderate,Budget,14,Solo,Cafe Chill Ella,Food,0.94,1.5,Evening
+Food,Moderate,Luxury,2,Friends,Galle Dutch Fort,Cultural,0.61,3.0,Sunset
+Nature,Moderate,Moderate,7,Couple,Upalis Authentic Sri Lankan,Food,0.64,1.5,Midday
+Food,Relaxed,Moderate,2,Couple,Upalis Authentic Sri Lankan,Food,0.94,1.9,Midday
+Beach,Packed,Moderate,4,Solo,Galle Dutch Fort,Cultural,0.56,2.2,Sunset
+Beach,Relaxed,Luxury,14,Friends,Mirissa Coconut Tree Hill,Beach,0.89,2.5,Sunset
+Cultural,Packed,Moderate,5,Friends,Cafe Chill Ella,Food,0.61,1.1,Evening
+Food,Moderate,Luxury,14,Couple,Sigiriya Ancient Rock Fortress,Cultural,0.61,3.5,Morning
+Adventure,Relaxed,Luxury,14,Couple,Ceylon Sliders Surf Cafe,Beach,0.59,1.9,Morning
+Relaxation,Packed,Luxury,10,Solo,Mirissa Coconut Tree Hill,Beach,0.87,1.5,Sunset
+Nature,Relaxed,Budget,5,Friends,Heritage Cafe & Bistro Galle,Food,0.54,1.9,Evening
+Cultural,Packed,Budget,10,Family,Upalis Authentic Sri Lankan,Food,0.64,1.1,Midday
+Beach,Packed,Luxury,4,Friends,Colombo Lotus Tower,Modern,0.66,1.5,Sunset
+Nature,Relaxed,Budget,5,Friends,Matey Hut Traditional Claypot,Food,0.65,1.9,Evening
+Food,Moderate,Luxury,1,Couple,Nuwara Eliya Tea Estates,Nature,0.59,3.0,Midday
+Cultural,Moderate,Moderate,3,Solo,Matey Hut Traditional Claypot,Food,0.57,1.5,Evening
+Cultural,Relaxed,Moderate,5,Solo,Heritage Cafe & Bistro Galle,Food,0.67,1.9,Evening
+Relaxation,Packed,Budget,10,Couple,Colombo Lotus Tower,Modern,0.69,1.5,Sunset
+Relaxation,Packed,Budget,5,Friends,Temple of the Sacred Tooth Relic,Cultural,0.63,1.9,Morning
+Cultural,Moderate,Moderate,10,Couple,Heritage Cafe & Bistro Galle,Food,0.63,1.5,Evening
+Cultural,Relaxed,Budget,5,Friends,Heritage Cafe & Bistro Galle,Food,0.54,1.9,Evening
+Adventure,Relaxed,Moderate,7,Solo,Cafe Chill Ella,Food,0.55,1.9,Evening
+Food,Packed,Budget,5,Couple,Grand Hotel 1891 High Tea,Food,0.73,1.5,Afternoon
+Beach,Moderate,Budget,1,Solo,Colombo Lotus Tower,Modern,0.54,2.0,Sunset
+Food,Moderate,Luxury,7,Solo,Colombo Lotus Tower,Modern,0.62,2.0,Sunset
+Food,Relaxed,Moderate,5,Family,Temple of the Sacred Tooth Relic,Cultural,0.58,3.1,Morning
+Nature,Moderate,Budget,3,Friends,Cafe Chill Ella,Food,0.67,1.5,Evening
+Relaxation,Moderate,Budget,5,Solo,Matey Hut Traditional Claypot,Food,0.85,1.5,Evening
+Food,Moderate,Luxury,10,Solo,Nuwara Eliya Tea Estates,Nature,0.61,3.0,Midday
+Adventure,Relaxed,Moderate,10,Family,Ceylon Sliders Surf Cafe,Beach,0.56,1.9,Morning
+Cultural,Packed,Luxury,3,Friends,Yala National Park Safari,Nature,0.62,3.4,Morning
+Nature,Packed,Moderate,7,Solo,Galle Dutch Fort,Cultural,0.53,2.2,Sunset
+Adventure,Packed,Luxury,3,Friends,Cafe Chill Ella,Food,0.68,1.1,Evening
+Relaxation,Relaxed,Moderate,3,Family,Upalis Authentic Sri Lankan,Food,0.83,1.9,Midday
+Food,Moderate,Budget,10,Friends,Colombo Lotus Tower,Modern,0.52,2.0,Sunset
+Cultural,Packed,Luxury,4,Solo,Ceylon Sliders Surf Cafe,Beach,0.66,1.1,Morning
+Relaxation,Relaxed,Budget,10,Friends,Ministry of Crab Colombo,Food,0.53,2.5,Evening
+Beach,Relaxed,Luxury,2,Solo,Heritage Cafe & Bistro Galle,Food,0.62,1.9,Evening
+Food,Packed,Moderate,2,Couple,Mirissa Coconut Tree Hill,Beach,0.69,1.5,Sunset
+Beach,Moderate,Luxury,14,Friends,Yala National Park Safari,Nature,0.65,4.5,Morning
+Nature,Packed,Budget,5,Couple,Heritage Cafe & Bistro Galle,Food,0.61,1.1,Evening
+Nature,Relaxed,Moderate,5,Couple,Ceylon Sliders Surf Cafe,Beach,0.57,1.9,Morning
+Beach,Packed,Luxury,14,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.6,2.6,Morning
+Beach,Packed,Moderate,4,Friends,Heritage Cafe & Bistro Galle,Food,0.74,1.1,Evening
+Beach,Relaxed,Budget,1,Solo,Cafe Chill Ella,Food,0.68,1.9,Evening
+Food,Moderate,Luxury,1,Solo,Ministry of Crab Colombo,Food,0.95,2.0,Evening
+Food,Moderate,Moderate,7,Couple,Nine Arches Bridge,Nature,0.55,2.0,Morning
+Beach,Relaxed,Luxury,14,Family,Ceylon Sliders Surf Cafe,Beach,0.88,1.9,Morning
+Beach,Packed,Luxury,10,Couple,Ministry of Crab Colombo,Food,0.71,1.5,Evening
+Cultural,Relaxed,Moderate,5,Family,Heritage Cafe & Bistro Galle,Food,0.64,1.9,Evening
+Beach,Packed,Moderate,7,Friends,Nuwara Eliya Tea Estates,Nature,0.64,2.2,Midday
+Food,Relaxed,Luxury,14,Solo,Mirissa Coconut Tree Hill,Beach,0.58,2.5,Sunset
+Nature,Relaxed,Budget,14,Family,Nuwara Eliya Tea Estates,Nature,0.86,3.8,Midday
+Food,Relaxed,Moderate,1,Friends,Grand Hotel 1891 High Tea,Food,0.88,2.5,Afternoon
+Adventure,Moderate,Moderate,14,Solo,Yala National Park Safari,Nature,0.73,4.5,Morning
+Cultural,Relaxed,Moderate,3,Couple,Ministry of Crab Colombo,Food,0.55,2.5,Evening
+Relaxation,Packed,Budget,1,Couple,Heritage Cafe & Bistro Galle,Food,0.86,1.1,Evening
+Nature,Moderate,Luxury,2,Family,Sigiriya Ancient Rock Fortress,Cultural,0.59,3.5,Morning
+Relaxation,Relaxed,Moderate,7,Solo,Cafe Chill Ella,Food,0.73,1.9,Evening
+Cultural,Moderate,Luxury,14,Friends,Ministry of Crab Colombo,Food,0.66,2.0,Evening
+Cultural,Moderate,Budget,14,Family,Yala National Park Safari,Nature,0.43,4.5,Morning
+Cultural,Packed,Moderate,7,Solo,Temple of the Sacred Tooth Relic,Cultural,0.85,1.9,Morning
+Adventure,Moderate,Budget,10,Family,Nuwara Eliya Tea Estates,Nature,0.73,3.0,Midday
+Food,Relaxed,Budget,4,Couple,Barefoot Garden Cafe,Food,0.87,1.9,Midday
+Beach,Packed,Luxury,3,Solo,Upalis Authentic Sri Lankan,Food,0.68,1.1,Midday
+Food,Packed,Moderate,3,Family,Galle Dutch Fort,Cultural,0.57,2.2,Sunset
+Adventure,Relaxed,Moderate,14,Friends,Matey Hut Traditional Claypot,Food,0.54,1.9,Evening
+Adventure,Moderate,Budget,10,Family,Nuwara Eliya Tea Estates,Nature,0.75,3.0,Midday
+Food,Relaxed,Budget,7,Friends,Colombo Lotus Tower,Modern,0.56,2.5,Sunset
+Relaxation,Relaxed,Moderate,2,Family,Ceylon Sliders Surf Cafe,Beach,0.75,1.9,Morning
+Food,Moderate,Budget,3,Family,Colombo Lotus Tower,Modern,0.55,2.0,Sunset
+Beach,Packed,Budget,2,Solo,Galle Dutch Fort,Cultural,0.65,2.2,Sunset
+Food,Relaxed,Moderate,5,Family,Ministry of Crab Colombo,Food,0.86,2.5,Evening
+Adventure,Relaxed,Budget,14,Couple,Nuwara Eliya Tea Estates,Nature,0.77,3.8,Midday
+Cultural,Relaxed,Moderate,5,Family,Ceylon Sliders Surf Cafe,Beach,0.57,1.9,Morning
+Food,Packed,Moderate,7,Couple,Mirissa Coconut Tree Hill,Beach,0.69,1.5,Sunset
+Relaxation,Packed,Moderate,2,Friends,Sigiriya Ancient Rock Fortress,Cultural,0.62,2.6,Morning
+Cultural,Relaxed,Budget,14,Friends,Barefoot Garden Cafe,Food,0.57,1.9,Midday
+Relaxation,Packed,Luxury,14,Family,Grand Hotel 1891 High Tea,Food,0.94,1.5,Afternoon
+Relaxation,Packed,Moderate,5,Solo,Yala National Park Safari,Nature,0.53,3.4,Morning
+Nature,Relaxed,Budget,4,Solo,Mirissa Coconut Tree Hill,Beach,0.65,2.5,Sunset
+Nature,Packed,Budget,10,Couple,Temple of the Sacred Tooth Relic,Cultural,0.64,1.9,Morning
+Food,Relaxed,Moderate,10,Solo,Galle Dutch Fort,Cultural,0.53,3.8,Sunset
+Nature,Packed,Luxury,14,Friends,Matey Hut Traditional Claypot,Food,0.65,1.1,Evening
+Food,Packed,Budget,4,Family,Barefoot Garden Cafe,Food,0.9,1.1,Midday
+Cultural,Relaxed,Luxury,10,Friends,Matey Hut Traditional Claypot,Food,0.61,1.9,Evening
+Adventure,Packed,Luxury,5,Solo,Matey Hut Traditional Claypot,Food,0.67,1.1,Evening
+Adventure,Packed,Luxury,14,Couple,Nine Arches Bridge,Nature,0.88,1.5,Morning
+Food,Packed,Moderate,2,Family,Heritage Cafe & Bistro Galle,Food,0.99,1.1,Evening
+Cultural,Moderate,Luxury,7,Friends,Heritage Cafe & Bistro Galle,Food,0.57,1.5,Evening
+Beach,Packed,Budget,14,Family,Ceylon Sliders Surf Cafe,Beach,0.99,1.1,Morning
+Nature,Packed,Luxury,7,Friends,Yala National Park Safari,Nature,0.97,3.4,Morning
+Relaxation,Packed,Moderate,10,Family,Matey Hut Traditional Claypot,Food,0.85,1.1,Evening
+Nature,Packed,Budget,5,Solo,Matey Hut Traditional Claypot,Food,0.71,1.1,Evening
+Nature,Relaxed,Luxury,14,Solo,Heritage Cafe & Bistro Galle,Food,0.63,1.9,Evening
+Food,Moderate,Budget,4,Solo,Sigiriya Ancient Rock Fortress,Cultural,0.54,3.5,Morning
+Beach,Moderate,Luxury,3,Couple,Nine Arches Bridge,Nature,0.62,2.0,Morning
+Beach,Moderate,Budget,4,Solo,Colombo Lotus Tower,Modern,0.55,2.0,Sunset
+Beach,Moderate,Budget,5,Couple,Galle Dutch Fort,Cultural,0.74,3.0,Sunset
+Food,Moderate,Budget,2,Solo,Nine Arches Bridge,Nature,0.65,2.0,Morning
+Nature,Packed,Budget,4,Family,Nuwara Eliya Tea Estates,Nature,0.86,2.2,Midday
+Relaxation,Moderate,Luxury,14,Solo,Yala National Park Safari,Nature,0.66,4.5,Morning
+Beach,Relaxed,Budget,4,Friends,Heritage Cafe & Bistro Galle,Food,0.57,1.9,Evening
+Cultural,Relaxed,Moderate,7,Family,Nuwara Eliya Tea Estates,Nature,0.63,3.8,Midday
+Beach,Packed,Moderate,7,Couple,Yala National Park Safari,Nature,0.57,3.4,Morning
+Adventure,Moderate,Budget,3,Friends,Heritage Cafe & Bistro Galle,Food,0.58,1.5,Evening
+Food,Packed,Luxury,7,Solo,Ceylon Sliders Surf Cafe,Beach,0.66,1.1,Morning
+Cultural,Packed,Luxury,2,Solo,Cafe Chill Ella,Food,0.67,1.1,Evening
+Nature,Moderate,Budget,10,Solo,Yala National Park Safari,Nature,0.67,4.5,Morning
+Cultural,Packed,Luxury,5,Friends,Barefoot Garden Cafe,Food,0.7,1.1,Midday
+Relaxation,Packed,Moderate,7,Family,Sigiriya Ancient Rock Fortress,Cultural,0.67,2.6,Morning
+Adventure,Packed,Budget,10,Friends,Mirissa Coconut Tree Hill,Beach,0.75,1.5,Sunset
+Adventure,Packed,Luxury,14,Family,Barefoot Garden Cafe,Food,0.7,1.1,Midday
+Beach,Relaxed,Budget,7,Friends,Yala National Park Safari,Nature,0.4,5.6,Morning
+Adventure,Moderate,Budget,2,Family,Cafe Chill Ella,Food,0.67,1.5,Evening
+Nature,Relaxed,Budget,5,Couple,Upalis Authentic Sri Lankan,Food,0.56,1.9,Midday
+Adventure,Relaxed,Luxury,1,Family,Ministry of Crab Colombo,Food,0.66,2.5,Evening
+Beach,Relaxed,Budget,2,Friends,Upalis Authentic Sri Lankan,Food,0.55,1.9,Midday
+Cultural,Moderate,Moderate,4,Couple,Grand Hotel 1891 High Tea,Food,0.54,2.0,Afternoon
+Relaxation,Packed,Luxury,3,Friends,Colombo Lotus Tower,Modern,0.66,1.5,Sunset
+Adventure,Packed,Budget,7,Friends,Galle Dutch Fort,Cultural,0.83,2.2,Sunset
+Food,Moderate,Budget,2,Solo,Heritage Cafe & Bistro Galle,Food,0.87,1.5,Evening
+Food,Relaxed,Moderate,2,Family,Barefoot Garden Cafe,Food,0.96,1.9,Midday
+Adventure,Moderate,Moderate,14,Friends,Ceylon Sliders Surf Cafe,Beach,0.56,1.5,Morning
+Food,Packed,Moderate,3,Couple,Yala National Park Safari,Nature,0.55,3.4,Morning
+Food,Relaxed,Luxury,2,Couple,Ceylon Sliders Surf Cafe,Beach,0.6,1.9,Morning
+Relaxation,Relaxed,Luxury,7,Solo,Heritage Cafe & Bistro Galle,Food,0.78,1.9,Evening
+Beach,Packed,Moderate,1,Couple,Galle Dutch Fort,Cultural,0.62,2.2,Sunset
+Beach,Moderate,Moderate,14,Solo,Yala National Park Safari,Nature,0.53,4.5,Morning
+Adventure,Moderate,Budget,5,Family,Mirissa Coconut Tree Hill,Beach,0.63,2.0,Sunset
+Relaxation,Moderate,Budget,2,Family,Temple of the Sacred Tooth Relic,Cultural,0.67,2.5,Morning
+Food,Moderate,Luxury,5,Friends,Cafe Chill Ella,Food,0.92,1.5,Evening
+Food,Packed,Luxury,3,Couple,Ceylon Sliders Surf Cafe,Beach,0.7,1.1,Morning
+Relaxation,Moderate,Budget,7,Solo,Heritage Cafe & Bistro Galle,Food,0.74,1.5,Evening
+Food,Moderate,Luxury,1,Friends,Ministry of Crab Colombo,Food,0.96,2.0,Evening
+Nature,Packed,Budget,5,Solo,Temple of the Sacred Tooth Relic,Cultural,0.63,1.9,Morning
+Adventure,Packed,Luxury,1,Couple,Matey Hut Traditional Claypot,Food,0.68,1.1,Evening
+Cultural,Relaxed,Luxury,3,Solo,Ministry of Crab Colombo,Food,0.67,2.5,Evening
+Nature,Packed,Luxury,14,Solo,Cafe Chill Ella,Food,0.67,1.1,Evening
+Cultural,Moderate,Budget,7,Friends,Nuwara Eliya Tea Estates,Nature,0.54,3.0,Midday
+Adventure,Moderate,Moderate,5,Solo,Galle Dutch Fort,Cultural,0.78,3.0,Sunset
+Adventure,Relaxed,Moderate,3,Couple,Ministry of Crab Colombo,Food,0.57,2.5,Evening
+Nature,Moderate,Moderate,3,Solo,Cafe Chill Ella,Food,0.53,1.5,Evening
+Relaxation,Relaxed,Moderate,10,Solo,Cafe Chill Ella,Food,0.73,1.9,Evening
+Beach,Moderate,Moderate,2,Solo,Mirissa Coconut Tree Hill,Beach,0.83,2.0,Sunset
+Adventure,Packed,Budget,14,Friends,Galle Dutch Fort,Cultural,0.84,2.2,Sunset
+Beach,Moderate,Luxury,10,Solo,Matey Hut Traditional Claypot,Food,0.57,1.5,Evening
+Relaxation,Relaxed,Budget,5,Solo,Colombo Lotus Tower,Modern,0.57,2.5,Sunset
+Relaxation,Relaxed,Moderate,10,Friends,Temple of the Sacred Tooth Relic,Cultural,0.57,3.1,Morning
+Adventure,Relaxed,Budget,7,Couple,Colombo Lotus Tower,Modern,0.63,2.5,Sunset
+Food,Packed,Moderate,1,Solo,Ceylon Sliders Surf Cafe,Beach,0.66,1.1,Morning
+Adventure,Moderate,Luxury,3,Solo,Nine Arches Bridge,Nature,0.83,2.0,Morning
+Food,Moderate,Luxury,5,Friends,Grand Hotel 1891 High Tea,Food,0.97,2.0,Afternoon

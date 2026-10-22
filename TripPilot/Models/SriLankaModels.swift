@@ -174,6 +174,7 @@ public struct TripStop: Identifiable, Hashable {
     public let imageUrl: String
     public let latitude: Double?
     public let longitude: Double?
+    public let matchPercentage: Int?
     
     public init(
         id: UUID = UUID(),
@@ -191,7 +192,8 @@ public struct TripStop: Identifiable, Hashable {
         passName: String? = nil,
         imageUrl: String,
         latitude: Double? = nil,
-        longitude: Double? = nil
+        longitude: Double? = nil,
+        matchPercentage: Int? = nil
     ) {
         self.id = id
         self.time = time
@@ -209,6 +211,7 @@ public struct TripStop: Identifiable, Hashable {
         self.imageUrl = imageUrl
         self.latitude = latitude
         self.longitude = longitude
+        self.matchPercentage = matchPercentage
     }
     
     public var tag: String { category }

@@ -1347,17 +1347,17 @@ struct TripGeneratorWizardView: View {
         Timer.scheduledTimer(withTimeInterval: 0.35, repeats: true) { timer in
             if generationProgress < 0.3 {
                 generationProgress += 0.1
-                generationStage = "Mapping heritage citadels & scenic routes in \(selectedDestination)..."
+                generationStage = "Running Core ML Recommender on Apple Neural Engine..."
             } else if generationProgress < 0.6 {
                 generationProgress += 0.15
-                generationStage = "Scheduling Ceylon scenic trains & safari permits..."
+                generationStage = "Predicting destination affinity & visit pacing..."
             } else if generationProgress < 0.9 {
                 generationProgress += 0.15
-                generationStage = "Curating authentic local feasting & tea tastings..."
+                generationStage = "Personalizing Ceylon scenic routes & dining stops..."
             } else {
                 timer.invalidate()
                 generationProgress = 1.0
-                generationStage = "Trip ready! Opening your Sri Lanka itinerary..."
+                generationStage = "Core ML Itinerary Ready! Opening your Sri Lanka plan..."
                 
                 // GENERATE REAL DYNAMIC TRIP ACCORDING TO USER INPUT
                 TripManager.shared.generateAndSetActiveTrip(
