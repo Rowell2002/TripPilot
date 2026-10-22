@@ -5,19 +5,28 @@ import UIKit
 
 struct DailyItineraryView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var tripManager = TripManager.shared
     @State private var selectedTab: AppTab = .itinerary
-    @State private var selectedDateIndex: Int = 2 // SAT 26
-    @State private var showPassModal: Bool = false
+    @State private var selectedDateIndex: Int = 0
     @State private var showAudioStoryModal: Bool = false
     @State private var showReorderModal: Bool = false
     @State private var showAddStopModal: Bool = false
     @State private var showDaySettingsModal: Bool = false
     @State private var activeNotice: String? = nil
-    @State private var isFlightPulsing: Bool = false
     @State private var isAudioPlaying: Bool = true
     @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToBudget: Bool = false
     @State private var navigateToProfile: Bool = false
+    
+    private var currentDay: TripDay {
+        let days = tripManager.currentTrip.days
+        if days.indices.contains(selectedDateIndex) {
+            return days[selectedDateIndex]
+        }
+        return days.first ?? SriLankaDataService.shared.generateCustomTrip(destination: "Sigiriya & Ella", durationDays: 3, companion: "Couple", pace: "Balanced", budget: "Comfort", tags: []).days[0]
+    }
+    
+    private var selectedDayIndex: Int { selectedDateIndex }
     
     // Theme Colors
     private let darkBackground = Color(red: 11/255, green: 15/255, blue: 23/255)       // #0b0f17
@@ -32,17 +41,6 @@ struct DailyItineraryView: View {
     private let textOnSurface = Color(red: 241/255, green: 245/255, blue: 249/255)       // slate-100
     private let textMuted = Color(red: 148/255, green: 163/255, blue: 184/255)          // slate-400
     private let outlineVariant = Color.white.opacity(0.08)
-    
-    // Sample dates for carousel
-    private let daysList: [(day: String, date: String)] = [
-        ("THU", "24"),
-        ("FRI", "25"),
-        ("SAT", "26"),
-        ("SUN", "27"),
-        ("MON", "28"),
-        ("TUE", "29"),
-        ("WED", "30")
-    ]
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -69,7 +67,7 @@ struct DailyItineraryView: View {
             // Scrollable Content
             ScrollView(showsIndicators: false) {
                 VStack(spacing: 20) {
-                    // MARK: - Header Bar (Live flight chip + Logo + Actions)
+                    // MARK: - Header Bar (Logo & Actions)
                     headerSection
                         .padding(.top, 4)
                     
@@ -112,14 +110,6 @@ struct DailyItineraryView: View {
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) {
-                isFlightPulsing = true
-            }
-        }
-        .sheet(isPresented: $showPassModal) {
-            shibuyaSkyPassSheet
-        }
         .sheet(isPresented: $showAudioStoryModal) {
             audioStoryPlayerSheet
         }
@@ -133,7 +123,7 @@ struct DailyItineraryView: View {
             daySettingsSheet
         }
         .navigationDestination(isPresented: $navigateToInteractiveMap) {
-            InteractiveMapView()
+            InteractiveMapView(initialDayIndex: selectedDateIndex)
         }
         .navigationDestination(isPresented: $navigateToBudget) {
             BudgetExpensesView()
@@ -164,29 +154,7 @@ struct DailyItineraryView: View {
     
     // MARK: - 1. Top Header Bar
     private var headerSection: some View {
-        VStack(spacing: 12) {
-            // Live Flight Status Capsule
-            HStack(spacing: 8) {
-                Image(systemName: "airplane.departure")
-                    .font(.system(size: 13, weight: .bold))
-                    .foregroundColor(skyBlue)
-                    .scaleEffect(isFlightPulsing ? 1.15 : 0.9)
-                
-                Text("JL 005 • In 2h 15m")
-                    .font(.system(size: 12, weight: .semibold, design: .rounded))
-                    .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
-                    .tracking(0.5)
-            }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 5)
-            .background(surfaceContainerLow)
-            .clipShape(Capsule())
-            .overlay(
-                Capsule()
-                    .stroke(Color.white.opacity(0.12), lineWidth: 1)
-            )
-            .shadow(color: Color.black.opacity(0.3), radius: 6, y: 2)
-            
+        VStack(spacing: 8) {
             // Brand & Navigation Controls
             HStack(alignment: .center, spacing: 12) {
                 // Back Button
@@ -248,7 +216,7 @@ struct DailyItineraryView: View {
                 // Right Actions: Notifications & Avatar
                 HStack(spacing: 10) {
                     Button(action: {
-                        triggerNotice("🔔 Gate 14 boarding starts in 1h 45m")
+                        triggerNotice("📍 Next scheduled stop: \(currentDay.stops.first?.title ?? "Sigiriya Lion Rock")")
                     }) {
                         ZStack(alignment: .topTrailing) {
                             Circle()
@@ -313,7 +281,7 @@ struct DailyItineraryView: View {
                         .font(.system(size: 12))
                         .foregroundColor(skyBlue)
                     
-                    Text("DAY 3 OF 12")
+                    Text("DAY \(selectedDateIndex + 1) OF \(tripManager.currentTrip.durationDays)")
                         .font(.system(size: 10.5, weight: .bold, design: .rounded))
                         .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
                         .tracking(0.8)
@@ -334,7 +302,7 @@ struct DailyItineraryView: View {
                         .font(.system(size: 13))
                         .foregroundColor(amberAccent)
                     
-                    Text("Tokyo 21°C • Clear")
+                    Text("\(currentDay.region) \(currentDay.temperature) • \(currentDay.weather)")
                         .font(.system(size: 11, weight: .semibold, design: .rounded))
                         .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
                 }
@@ -351,12 +319,12 @@ struct DailyItineraryView: View {
             // Title & Switcher
             HStack(alignment: .bottom) {
                 VStack(alignment: .leading, spacing: 3) {
-                    Text("Tokyo & Kyoto")
-                        .font(.system(size: 28, weight: .bold, design: .rounded))
+                    Text(tripManager.currentTrip.title)
+                        .font(.system(size: 26, weight: .bold, design: .rounded))
                         .foregroundColor(textOnSurface)
                         .tracking(-0.3)
                     
-                    Text("Saturday, October 26 • Gentle autumn weather")
+                    Text("\(currentDay.fullDateString) • \(currentDay.title)")
                         .font(.system(size: 13, weight: .medium, design: .rounded))
                         .foregroundColor(textMuted)
                 }
@@ -389,8 +357,8 @@ struct DailyItineraryView: View {
     private var dateSelectorCarousel: some View {
         ScrollView(.horizontal, showsIndicators: false) {
             HStack(spacing: 8) {
-                ForEach(0..<daysList.count, id: \.self) { index in
-                    let item = daysList[index]
+                ForEach(0..<tripManager.currentTrip.days.count, id: \.self) { index in
+                    let item = tripManager.currentTrip.days[index]
                     let isSelected = selectedDateIndex == index
                     
                     Button(action: {
@@ -399,11 +367,11 @@ struct DailyItineraryView: View {
                         }
                     }) {
                         VStack(spacing: 3) {
-                            Text(item.day)
+                            Text(item.dayOfWeek)
                                 .font(.system(size: 10.5, weight: .bold, design: .rounded))
                                 .foregroundColor(isSelected ? Color.white.opacity(0.9) : Color(red: 100/255, green: 116/255, blue: 139/255))
                             
-                            Text(item.date)
+                            Text(item.dayOfMonth)
                                 .font(.system(size: 18, weight: isSelected ? .heavy : .bold, design: .rounded))
                                 .foregroundColor(isSelected ? .white : Color(red: 226/255, green: 232/255, blue: 240/255))
                             
@@ -502,10 +470,63 @@ struct DailyItineraryView: View {
             
             // 3-Column Metrics Grid
             HStack(spacing: 8) {
-                metricCell(title: "STOPS", value: "5 Places", valueColor: .white)
-                metricCell(title: "TRANSFERS", value: "1 Metro", valueColor: .white)
-                metricCell(title: "WALKING", value: "6.4 km", valueColor: skyBlue)
+                metricCell(title: "STOPS", value: "\(currentDay.stops.count) Places", valueColor: .white)
+                metricCell(title: "REGION", value: currentDay.region, valueColor: .white)
+                metricCell(title: "PACE", value: tripManager.currentTrip.pace, valueColor: skyBlue)
             }
+            
+            // MapKit Interactive Exploration Button
+            Button(action: {
+                navigateToInteractiveMap = true
+            }) {
+                HStack(spacing: 10) {
+                    ZStack {
+                        Circle()
+                            .fill(Color(red: 251/255, green: 191/255, blue: 36/255).opacity(0.18))
+                            .frame(width: 32, height: 32)
+                        
+                        Image(systemName: "map.fill")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(Color(red: 251/255, green: 191/255, blue: 36/255))
+                    }
+                    
+                    VStack(alignment: .leading, spacing: 2) {
+                        HStack(spacing: 6) {
+                            Text("View Day Route & Dining on Map")
+                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                            
+                            Text("MapKit")
+                                .font(.system(size: 9.5, weight: .heavy, design: .rounded))
+                                .foregroundColor(Color(red: 251/255, green: 191/255, blue: 36/255))
+                                .padding(.horizontal, 6)
+                                .padding(.vertical, 2)
+                                .background(Color(red: 251/255, green: 191/255, blue: 36/255).opacity(0.15))
+                                .clipShape(Capsule())
+                        }
+                        
+                        Text("Breakfast spots, cafes, attractions, lunch & dinner with Apple Maps navigation")
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundColor(textMuted)
+                            .lineLimit(1)
+                    }
+                    
+                    Spacer()
+                    
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 12, weight: .bold))
+                        .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                }
+                .padding(.horizontal, 12)
+                .padding(.vertical, 9)
+                .background(surfaceContainerLow)
+                .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .stroke(Color(red: 251/255, green: 191/255, blue: 36/255).opacity(0.25), lineWidth: 1)
+                )
+            }
+            .buttonStyle(PlainButtonStyle())
         }
         .padding(16)
         .background(surfaceContainerLowest)
@@ -527,6 +548,7 @@ struct DailyItineraryView: View {
             Text(value)
                 .font(.system(size: 14, weight: .bold, design: .rounded))
                 .foregroundColor(valueColor)
+                .lineLimit(1)
         }
         .frame(maxWidth: .infinity, alignment: .leading)
         .padding(.horizontal, 12)
@@ -539,29 +561,19 @@ struct DailyItineraryView: View {
         )
     }
     
-    // MARK: - 5. Timeline Detailed Stops (Section 3)
+    // MARK: - 5. Timeline Detailed Stops (Section 3 - Dynamic)
     private var timelineStopsSection: some View {
         VStack(spacing: 0) {
-            // STOP 1: 08:30 AM (Coffee)
-            stop1BlueBottleCoffee
-            
-            // STOP 2: 09:45 AM (Meiji Jingu Shrine)
-            stop2MeijiJinguShrine
-            
-            // STOP 3: 01:00 PM (Katsukura Tonkatsu)
-            stop3KatsukuraTonkatsu
-            
-            // STOP 4: 03:30 PM (Shibuya Sky 360)
-            stop4ShibuyaSky
-            
-            // STOP 5: 07:30 PM (Omoide Yokocho Izakaya)
-            stop5OmoideYokocho
+            ForEach(0..<currentDay.stops.count, id: \.self) { idx in
+                let stop = currentDay.stops[idx]
+                let isLast = idx == currentDay.stops.count - 1
+                stopCardView(stop: stop, isLast: isLast)
+            }
         }
         .padding(.leading, 6)
     }
     
-    // MARK: - Stop 1
-    private var stop1BlueBottleCoffee: some View {
+    private func stopCardView(stop: TripStop, isLast: Bool) -> some View {
         timelineRow(
             bead: {
                 ZStack {
@@ -576,10 +588,10 @@ struct DailyItineraryView: View {
                         .shadow(color: skyBlue, radius: 5)
                 }
             },
-            timeText: "08:30 AM",
+            timeText: stop.time,
             timeColor: skyBlue,
             tagView: {
-                Text("45 MIN")
+                Text(stop.estimatedDuration)
                     .font(.system(size: 10, weight: .bold, design: .rounded))
                     .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
                     .padding(.horizontal, 8)
@@ -592,7 +604,7 @@ struct DailyItineraryView: View {
                 VStack(alignment: .leading, spacing: 10) {
                     VStack(alignment: .leading, spacing: 4) {
                         HStack(spacing: 6) {
-                            Text("Blue Bottle Coffee Aoyama")
+                            Text(stop.title)
                                 .font(.system(size: 16, weight: .bold, design: .rounded))
                                 .foregroundColor(textOnSurface)
                             
@@ -601,491 +613,32 @@ struct DailyItineraryView: View {
                                 .foregroundColor(skyBlue)
                         }
                         
-                        Text("Light roast pour-over & fresh sesame pastry in the tranquil bamboo courtyard.")
-                            .font(.system(size: 12.5))
-                            .foregroundColor(textMuted)
-                            .lineSpacing(2)
-                    }
-                    
-                    // Walking hop badge
-                    HStack(spacing: 6) {
-                        Image(systemName: "figure.walk")
-                            .font(.system(size: 13, weight: .bold))
-                            .foregroundColor(skyBlue)
-                        
-                        Text("12 min scenic walk (0.8 km) to shrine")
-                            .font(.system(size: 11.5, weight: .medium, design: .rounded))
-                            .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
-                    }
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 6)
-                    .background(surfaceContainerLow)
-                    .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10, style: .continuous)
-                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                    )
-                }
-                .padding(14)
-                .background(surfaceContainerLowest)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(outlineVariant, lineWidth: 1)
-                )
-            }
-        )
-    }
-    
-    // MARK: - Stop 2
-    private var stop2MeijiJinguShrine: some View {
-        timelineRow(
-            bead: {
-                ZStack {
-                    Circle()
-                        .fill(tealAccent)
-                        .frame(width: 26, height: 26)
-                        .overlay(Circle().stroke(Color.white.opacity(0.3), lineWidth: 1))
-                        .shadow(color: tealAccent.opacity(0.5), radius: 6)
-                    
-                    Image(systemName: "building.columns.fill")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundColor(Color(red: 11/255, green: 15/255, blue: 23/255))
-                }
-            },
-            timeText: "09:45 AM",
-            timeColor: tealAccent,
-            tagView: {
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(tealAccent)
-                        .frame(width: 6, height: 6)
-                    
-                    Text("LOW CROWD")
-                        .font(.system(size: 9.5, weight: .heavy, design: .rounded))
-                        .foregroundColor(Color(red: 94/255, green: 234/255, blue: 212/255))
-                }
-                .padding(.horizontal, 8)
-                .padding(.vertical, 3)
-                .background(Color(red: 19/255, green: 78/255, blue: 74/255).opacity(0.4))
-                .clipShape(Capsule())
-                .overlay(Capsule().stroke(tealAccent.opacity(0.4), lineWidth: 1))
-            },
-            content: {
-                VStack(alignment: .leading, spacing: 0) {
-                    // Image Banner with Badges
-                    ZStack(alignment: .bottomLeading) {
-                        AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuCUBmMYz7dWcF-p-XrJq15EhxKN_2Kb1ALHVsKlm-Zx6GPbZAR2dgZHBhti1qIrkAN-obN9HgCVRYszJxDTqN6ftPZtahTET8PoFpn36XmogW-uWBi39wddx8cZ8sUnUzBe3FYiaHZu6inaG4b_MhE86-xrnYNs0i99ilw-moR8JMsZUgkC2vhlD0ljdBc91Z4Ke8IsB6OgCBKOPc6p0C5O8-Zrew3zlSK0IpqveVYeljt2YHhVRhbELw")) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(height: 125)
-                                    .clipped()
-                            default:
-                                LinearGradient(
-                                    colors: [Color(red: 20/255, green: 40/255, blue: 35/255), surfaceContainerLowest],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                                .frame(height: 125)
-                            }
-                        }
-                        
-                        LinearGradient(
-                            colors: [Color.clear, surfaceContainerLowest],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        
-                        // Top floating tags
-                        HStack {
-                            Text("UNESCO Spot")
-                                .font(.system(size: 9.5, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(Color.black.opacity(0.65))
-                                .clipShape(Capsule())
-                                .overlay(Capsule().stroke(Color.white.opacity(0.15), lineWidth: 0.8))
-                            
-                            Text("Pass Included")
-                                .font(.system(size: 9.5, weight: .bold, design: .rounded))
-                                .foregroundColor(tealAccent)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 3)
-                                .background(Color.black.opacity(0.65))
-                                .clipShape(Capsule())
-                                .overlay(Capsule().stroke(tealAccent.opacity(0.4), lineWidth: 0.8))
-                        }
-                        .padding(10)
-                        .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
-                    }
-                    
-                    // Card Details
-                    VStack(alignment: .leading, spacing: 10) {
-                        VStack(alignment: .leading, spacing: 3) {
-                            Text("Meiji Jingu Shrine & Forest")
-                                .font(.system(size: 16, weight: .bold, design: .rounded))
-                                .foregroundColor(textOnSurface)
-                            
-                            Text("Inner shrine gardens, wishing ema plaques, and peaceful forest tree walk.")
-                                .font(.system(size: 12.5))
-                                .foregroundColor(textMuted)
-                        }
-                        
-                        HStack {
-                            Button(action: {
-                                showAudioStoryModal = true
-                            }) {
-                                HStack(spacing: 5) {
-                                    Image(systemName: "headphones")
-                                        .font(.system(size: 12, weight: .bold))
-                                        .foregroundColor(skyBlue)
-                                    
-                                    Text("3m Audio Story")
-                                        .font(.system(size: 11.5, weight: .bold, design: .rounded))
-                                        .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
-                                }
-                                .padding(.horizontal, 12)
-                                .padding(.vertical, 6)
-                                .background(surfaceContainerLow)
-                                .clipShape(Capsule())
-                                .overlay(
-                                    Capsule()
-                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                )
-                            }
-                            
-                            Spacer()
-                            
-                            Text("~1h 45m visit")
-                                .font(.system(size: 11, weight: .medium, design: .rounded))
-                                .foregroundColor(textMuted)
-                        }
-                    }
-                    .padding(14)
-                    
-                    // Transit hop connector
-                    HStack {
-                        HStack(spacing: 6) {
-                            Image(systemName: "tram.fill")
-                                .font(.system(size: 13))
-                                .foregroundColor(skyBlue)
-                            
-                            Text("Ginza Line • Harajuku → Shibuya")
-                                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                                .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
-                        }
-                        
-                        Spacer()
-                        
-                        Text("8 MIN")
-                            .font(.system(size: 10, weight: .bold, design: .rounded))
-                            .foregroundColor(textMuted)
-                            .padding(.horizontal, 7)
-                            .padding(.vertical, 2.5)
-                            .background(surfaceContainerLowest)
-                            .clipShape(RoundedRectangle(cornerRadius: 6))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 6)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                            )
-                    }
-                    .padding(.horizontal, 14)
-                    .padding(.vertical, 9)
-                    .background(surfaceContainerLow)
-                }
-                .background(surfaceContainerLowest)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(outlineVariant, lineWidth: 1)
-                )
-            }
-        )
-    }
-    
-    // MARK: - Stop 3
-    private var stop3KatsukuraTonkatsu: some View {
-        timelineRow(
-            bead: {
-                ZStack {
-                    Circle()
-                        .fill(surfaceContainerLowest)
-                        .frame(width: 24, height: 24)
-                        .overlay(Circle().stroke(Color.white.opacity(0.2), lineWidth: 1))
-                    
-                    Circle()
-                        .fill(skyBlue)
-                        .frame(width: 10, height: 10)
-                        .shadow(color: skyBlue, radius: 5)
-                }
-            },
-            timeText: "01:00 PM",
-            timeColor: .white,
-            tagView: {
-                Text("RESERVED")
-                    .font(.system(size: 10, weight: .heavy, design: .rounded))
-                    .foregroundColor(Color(red: 186/255, green: 230/255, blue: 253/255))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(skyBlue.opacity(0.2))
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(skyBlue.opacity(0.4), lineWidth: 1))
-            },
-            content: {
-                VStack(alignment: .leading, spacing: 10) {
-                    VStack(alignment: .leading, spacing: 3) {
-                        Text("Katsukura Tonkatsu Shinjuku")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(textOnSurface)
-                        
-                        Text("Kyoto-style premium Kurobuta pork cutlet with house-ground sesame dipping sauce.")
+                        Text(stop.description)
                             .font(.system(size: 12.5))
                             .foregroundColor(textMuted)
                             .lineSpacing(2)
                     }
                     
                     HStack(spacing: 8) {
-                        Text("CONF: #TP-8842")
-                            .font(.system(size: 10.5, weight: .bold, design: .monospaced))
-                            .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(surfaceContainerLow)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.white.opacity(0.06), lineWidth: 1))
-                        
-                        Text("2 Guests • Counter")
-                            .font(.system(size: 11, weight: .medium, design: .rounded))
-                            .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
-                            .padding(.horizontal, 8)
-                            .padding(.vertical, 4)
-                            .background(surfaceContainerLow)
-                            .clipShape(RoundedRectangle(cornerRadius: 8))
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.white.opacity(0.06), lineWidth: 1))
-                        
-                        Spacer()
-                        
-                        Image(systemName: "fork.knife")
-                            .font(.system(size: 13))
-                            .foregroundColor(textMuted)
-                    }
-                }
-                .padding(14)
-                .background(surfaceContainerLowest)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(outlineVariant, lineWidth: 1)
-                )
-            }
-        )
-    }
-    
-    // MARK: - Stop 4
-    private var stop4ShibuyaSky: some View {
-        timelineRow(
-            bead: {
-                ZStack {
-                    Circle()
-                        .fill(
-                            LinearGradient(
-                                colors: [skyBlue, royalBlue],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            )
-                        )
-                        .frame(width: 26, height: 26)
-                        .overlay(Circle().stroke(Color.white.opacity(0.3), lineWidth: 1))
-                        .shadow(color: skyBlue.opacity(0.5), radius: 6)
-                    
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 11, weight: .bold))
-                        .foregroundColor(.white)
-                }
-            },
-            timeText: "03:30 PM",
-            timeColor: skyBlue,
-            tagView: {
-                Text("GOLDEN HOUR")
-                    .font(.system(size: 9.5, weight: .heavy, design: .rounded))
-                    .foregroundColor(amberAccent)
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(amberAccent.opacity(0.18))
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(amberAccent.opacity(0.4), lineWidth: 1))
-            },
-            content: {
-                VStack(alignment: .leading, spacing: 0) {
-                    // Image Banner
-                    ZStack(alignment: .bottomLeading) {
-                        AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuCHSU-udI3gO3Gq8ugQPlNooXT5C0UKLe3NYNCBZBTvOsicgjS2zMgUXpiO7MJKdWo0pHjhiO4tm71j81ZC2Fz7WDVkqY-6VHyUVvyrdhu1uuvC5_WAZZNh2zL-uuOgJEdMQ4yZb8xh_w5CCnUmUckrTIukPNWY3TdLtojH24onxiepx6BxcFrD3nw1bONEKD9n7XX6m5D9p2-MPcpZGJ1zklUEv5NslgKzkv2cpgHZu3K5u1th-IJiAA")) { phase in
-                            switch phase {
-                            case .success(let image):
-                                image
-                                    .resizable()
-                                    .aspectRatio(contentMode: .fill)
-                                    .frame(height: 125)
-                                    .clipped()
-                            default:
-                                LinearGradient(
-                                    colors: [Color(red: 25/255, green: 40/255, blue: 60/255), surfaceContainerLowest],
-                                    startPoint: .top,
-                                    endPoint: .bottom
-                                )
-                                .frame(height: 125)
-                            }
-                        }
-                        
-                        LinearGradient(
-                            colors: [Color.clear, surfaceContainerLowest.opacity(0.9), surfaceContainerLowest],
-                            startPoint: .top,
-                            endPoint: .bottom
-                        )
-                        
-                        HStack {
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("Shibuya Sky 360°")
-                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                                    .foregroundColor(.white)
-                                
-                                Text("Rooftop Observation Deck (47F)")
-                                    .font(.system(size: 11, weight: .medium, design: .rounded))
-                                    .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
-                            }
-                            
-                            Spacer()
-                            
-                            Text("PASS ACTIVE")
-                                .font(.system(size: 10, weight: .heavy, design: .rounded))
-                                .foregroundColor(Color(red: 11/255, green: 15/255, blue: 23/255))
-                                .padding(.horizontal, 9)
-                                .padding(.vertical, 4)
-                                .background(skyBlue)
-                                .clipShape(Capsule())
-                                .shadow(color: skyBlue.opacity(0.4), radius: 5)
-                        }
-                        .padding(12)
-                    }
-                    
-                    // Pass Control Box
-                    HStack {
-                        HStack(spacing: 8) {
-                            Image(systemName: "qrcode")
-                                .font(.system(size: 24))
+                        HStack(spacing: 5) {
+                            Image(systemName: "mappin.and.ellipse")
+                                .font(.system(size: 11))
                                 .foregroundColor(skyBlue)
-                            
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("ENTRY SLOT")
-                                    .font(.system(size: 9.5, weight: .bold, design: .rounded))
-                                    .foregroundColor(textMuted)
-                                
-                                Text("16:30 Sunset Priority")
-                                    .font(.system(size: 12, weight: .bold, design: .rounded))
-                                    .foregroundColor(textOnSurface)
-                            }
+                            Text(stop.locationName)
+                                .font(.system(size: 11.5, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
+                                .lineLimit(1)
                         }
                         
                         Spacer()
                         
-                        Button(action: {
-                            showPassModal = true
-                        }) {
-                            Text("Show Pass")
-                                .font(.system(size: 11.5, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                                .padding(.horizontal, 14)
-                                .padding(.vertical, 7)
-                                .background(
-                                    LinearGradient(
-                                        colors: [skyBlue, royalBlue],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
-                                )
-                                .clipShape(Capsule())
-                                .shadow(color: skyBlue.opacity(0.35), radius: 8, y: 2)
-                        }
-                    }
-                    .padding(12)
-                    .background(surfaceContainerLow)
-                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 14, style: .continuous)
-                            .stroke(Color.white.opacity(0.06), lineWidth: 1)
-                    )
-                    .padding(12)
-                }
-                .background(surfaceContainerLowest)
-                .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 18, style: .continuous)
-                        .stroke(outlineVariant, lineWidth: 1)
-                )
-            }
-        )
-    }
-    
-    // MARK: - Stop 5
-    private var stop5OmoideYokocho: some View {
-        timelineRow(
-            bead: {
-                ZStack {
-                    Circle()
-                        .fill(surfaceContainerLowest)
-                        .frame(width: 24, height: 24)
-                        .overlay(Circle().stroke(Color.white.opacity(0.2), lineWidth: 1))
-                    
-                    Circle()
-                        .fill(Color(red: 167/255, green: 139/255, blue: 250/255))
-                        .frame(width: 10, height: 10)
-                        .shadow(color: Color(red: 167/255, green: 139/255, blue: 250/255), radius: 5)
-                }
-            },
-            timeText: "07:30 PM",
-            timeColor: .white,
-            tagView: {
-                Text("CASUAL VIBE")
-                    .font(.system(size: 10, weight: .bold, design: .rounded))
-                    .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(surfaceContainerLow)
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
-            },
-            content: {
-                VStack(alignment: .leading, spacing: 10) {
-                    HStack {
-                        Text("Omoide Yokocho Izakaya Crawl")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(textOnSurface)
-                        
-                        Spacer()
-                        
-                        Image(systemName: "wineglass.fill")
-                            .font(.system(size: 14))
-                            .foregroundColor(textMuted)
-                    }
-                    
-                    Text("Atmospheric lantern-lit alleyway for grilled yakitori skewers, highballs, and regional craft beer.")
-                        .font(.system(size: 12.5))
-                        .foregroundColor(textMuted)
-                        .lineSpacing(2)
-                    
-                    // Cash Tip Badge
-                    HStack(spacing: 6) {
-                        Image(systemName: "banknote.fill")
-                            .font(.system(size: 12))
-                            .foregroundColor(amberAccent)
-                        
-                        Text("Tip: Carry ~¥5,000 in cash")
-                            .font(.system(size: 11.5, weight: .semibold, design: .rounded))
-                            .foregroundColor(Color(red: 226/255, green: 232/255, blue: 240/255))
+                        Text(stop.costLKR > 0 ? "Rs \(stop.costLKR) / $\(Int(stop.costUSD))" : "Free Entry")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundColor(primaryCyan)
+                            .padding(.horizontal, 8)
+                            .padding(.vertical, 4)
+                            .background(primaryCyan.opacity(0.12))
+                            .clipShape(Capsule())
                     }
                     .padding(.horizontal, 10)
                     .padding(.vertical, 6)
@@ -1095,6 +648,8 @@ struct DailyItineraryView: View {
                         RoundedRectangle(cornerRadius: 10, style: .continuous)
                             .stroke(Color.white.opacity(0.06), lineWidth: 1)
                     )
+                    
+
                 }
                 .padding(14)
                 .background(surfaceContainerLowest)
@@ -1104,7 +659,7 @@ struct DailyItineraryView: View {
                         .stroke(outlineVariant, lineWidth: 1)
                 )
             },
-            isLast: true
+            isLast: isLast
         )
     }
     
@@ -1162,19 +717,19 @@ struct DailyItineraryView: View {
             
             HStack(spacing: 8) {
                 Button(action: {
-                    triggerNotice("📄 Generating high-resolution Itinerary PDF...")
+                    triggerNotice("📄 Generating high-resolution Sri Lanka Itinerary PDF...")
                 }) {
                     utilityButton(icon: "doc.richtext.fill", title: "Share PDF", iconColor: skyBlue)
                 }
                 
                 Button(action: {
-                    triggerNotice("🗺️ Offline maps for Tokyo & Kyoto cached (42 MB)")
+                    triggerNotice("🗺️ Offline maps for Sri Lanka (Sigiriya, Ella, Galle) cached (38 MB)")
                 }) {
                     utilityButton(icon: "arrow.down.circle.fill", title: "Offline Map", iconColor: skyBlue)
                 }
                 
                 Button(action: {
-                    triggerNotice("✨ AI re-optimized transit hops to save 18 mins!")
+                    triggerNotice("✨ AI re-optimized scenic route to save 24 mins!")
                 }) {
                     utilityButton(icon: "sparkles", title: "AI Optimize", iconColor: tealAccent)
                 }
@@ -1223,140 +778,7 @@ struct DailyItineraryView: View {
         }
     }
     
-    // MARK: - Sheet 1: Shibuya Sky Digital Entry Pass
-    private var shibuyaSkyPassSheet: some View {
-        ZStack {
-            darkBackground.ignoresSafeArea()
-            
-            VStack(spacing: 20) {
-                // Sheet drag handle
-                Capsule()
-                    .fill(Color.white.opacity(0.2))
-                    .frame(width: 40, height: 4)
-                    .padding(.top, 12)
-                
-                HStack {
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Digital Entry Pass")
-                            .font(.system(size: 20, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        
-                        Text("Shibuya Sky 360° Observation Deck")
-                            .font(.system(size: 13))
-                            .foregroundColor(skyBlue)
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: { showPassModal = false }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 24))
-                            .foregroundColor(textMuted)
-                    }
-                }
-                .padding(.horizontal, 20)
-                
-                // Digital Ticket Card
-                VStack(spacing: 16) {
-                    HStack {
-                        VStack(alignment: .leading, spacing: 4) {
-                            Text("BOOKING REFERENCE")
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(textMuted)
-                            Text("TP-SHIBUYA-7719")
-                                .font(.system(size: 16, weight: .bold, design: .monospaced))
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        Text("CONFIRMED")
-                            .font(.system(size: 11, weight: .heavy, design: .rounded))
-                            .foregroundColor(tealAccent)
-                            .padding(.horizontal, 10)
-                            .padding(.vertical, 4)
-                            .background(tealAccent.opacity(0.15))
-                            .clipShape(Capsule())
-                    }
-                    
-                    Divider().background(Color.white.opacity(0.1))
-                    
-                    // QR Code visual
-                    VStack(spacing: 8) {
-                        ZStack {
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .fill(Color.white)
-                                .frame(width: 200, height: 200)
-                            
-                            Image(systemName: "qrcode")
-                                .font(.system(size: 160))
-                                .foregroundColor(.black)
-                        }
-                        
-                        Text("Scan at 14F Shibuya Scramble Tower Gate")
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(textMuted)
-                    }
-                    .padding(.vertical, 8)
-                    
-                    HStack(spacing: 20) {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("TIME SLOT")
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(textMuted)
-                            Text("16:30 - 18:00")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                        
-                        Spacer()
-                        
-                        VStack(alignment: .trailing, spacing: 2) {
-                            Text("PASSENGER")
-                                .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(textMuted)
-                            Text("Elena Vance +1")
-                                .font(.system(size: 14, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                    }
-                }
-                .padding(20)
-                .background(surfaceContainerLowest)
-                .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                .overlay(
-                    RoundedRectangle(cornerRadius: 22, style: .continuous)
-                        .stroke(skyBlue.opacity(0.3), lineWidth: 1)
-                )
-                .padding(.horizontal, 20)
-                
-                // Add to Apple Wallet Button
-                Button(action: {
-                    showPassModal = false
-                    triggerNotice("🎟️ Pass added to Apple Wallet")
-                }) {
-                    HStack(spacing: 8) {
-                        Image(systemName: "wallet.pass.fill")
-                            .font(.system(size: 16))
-                        Text("Add to Apple Wallet")
-                            .font(.system(size: 15, weight: .bold, design: .rounded))
-                    }
-                    .foregroundColor(.black)
-                    .frame(maxWidth: .infinity)
-                    .frame(height: 52)
-                    .background(Color.white)
-                    .clipShape(Capsule())
-                    .padding(.horizontal, 20)
-                }
-                
-                Spacer()
-            }
-        }
-        .presentationDetents([.fraction(0.72)])
-        .preferredColorScheme(.dark)
-    }
-    
-    // MARK: - Sheet 2: Meiji Jingu 3m Audio Story
+    // MARK: - Sheet 2: Sri Lanka Audio Story
     private var audioStoryPlayerSheet: some View {
         ZStack {
             darkBackground.ignoresSafeArea()
@@ -1373,7 +795,7 @@ struct DailyItineraryView: View {
                             .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(skyBlue)
                         
-                        Text("Meiji Jingu: The Sacred Forest")
+                        Text("Sigiriya: The Fortress in the Sky")
                             .font(.system(size: 18, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                     }
@@ -1388,7 +810,6 @@ struct DailyItineraryView: View {
                 }
                 .padding(.horizontal, 20)
                 
-                // Audio Wave Animation simulation
                 HStack(spacing: 4) {
                     ForEach(0..<24, id: \.self) { i in
                         RoundedRectangle(cornerRadius: 2)
@@ -1399,7 +820,6 @@ struct DailyItineraryView: View {
                 .frame(height: 70)
                 .padding(.vertical, 8)
                 
-                // Controls
                 HStack(spacing: 36) {
                     Button(action: {}) {
                         Image(systemName: "gobackward.15")
@@ -1431,7 +851,7 @@ struct DailyItineraryView: View {
                     }
                 }
                 
-                Text("Narrated by AI Cultural Storyteller • 3m 12s remaining")
+                Text("Narrated by AI Cultural Storyteller • 3m 45s")
                     .font(.system(size: 12))
                     .foregroundColor(textMuted)
                 
@@ -1454,7 +874,7 @@ struct DailyItineraryView: View {
                     .padding(.top, 12)
                 
                 HStack {
-                    Text("Reorder Stops")
+                    Text("Reorder Day \(selectedDayIndex + 1) Stops")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
@@ -1470,11 +890,9 @@ struct DailyItineraryView: View {
                 .padding(.horizontal, 20)
                 
                 VStack(spacing: 10) {
-                    reorderRow(number: "1", title: "Blue Bottle Coffee Aoyama", time: "08:30 AM")
-                    reorderRow(number: "2", title: "Meiji Jingu Shrine & Forest", time: "09:45 AM")
-                    reorderRow(number: "3", title: "Katsukura Tonkatsu Shinjuku", time: "01:00 PM")
-                    reorderRow(number: "4", title: "Shibuya Sky 360°", time: "03:30 PM")
-                    reorderRow(number: "5", title: "Omoide Yokocho Izakaya Crawl", time: "07:30 PM")
+                    ForEach(Array(currentDay.stops.enumerated()), id: \.element.id) { index, stop in
+                        reorderRow(number: "\(index + 1)", title: stop.title, time: stop.time)
+                    }
                 }
                 .padding(.horizontal, 20)
                 
@@ -1527,7 +945,7 @@ struct DailyItineraryView: View {
                     .padding(.top, 12)
                 
                 HStack {
-                    Text("Add Stop to Day 3")
+                    Text("Add Stop to Day \(selectedDayIndex + 1)")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
@@ -1542,7 +960,7 @@ struct DailyItineraryView: View {
                     HStack {
                         Image(systemName: "magnifyingglass")
                             .foregroundColor(textMuted)
-                        TextField("Search places in Tokyo...", text: .constant(""))
+                        TextField("Search places in Sri Lanka...", text: .constant(""))
                             .foregroundColor(.white)
                     }
                     .padding(12)
@@ -1550,15 +968,15 @@ struct DailyItineraryView: View {
                     .clipShape(RoundedRectangle(cornerRadius: 12))
                     .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
                     
-                    Text("POPULAR NEAR SHIBUYA")
+                    Text("POPULAR IN SRI LANKA")
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .foregroundColor(textMuted)
                         .frame(maxWidth: .infinity, alignment: .leading)
                         .padding(.top, 8)
                     
-                    suggestedStopRow(name: "Yoyogi Park Sakura Grove", type: "Park • 15 min visit")
-                    suggestedStopRow(name: "Nezu Museum Garden", type: "Art & Tea House • 45 min")
-                    suggestedStopRow(name: "Tower Records Shibuya", type: "Culture & Vinyl • 30 min")
+                    ForEach(SriLankaDataService.shared.places.prefix(3)) { place in
+                        suggestedStopRow(name: place.name, type: "\(place.category.rawValue) • \(place.bestTimeToVisit)")
+                    }
                 }
                 .padding(.horizontal, 20)
                 
@@ -1584,7 +1002,7 @@ struct DailyItineraryView: View {
             
             Button(action: {
                 showAddStopModal = false
-                triggerNotice("📍 Added '\(name)' to Day 3")
+                triggerNotice("📍 Added '\(name)' to Day \(selectedDayIndex + 1)")
             }) {
                 Image(systemName: "plus.circle.fill")
                     .font(.system(size: 20))
@@ -1608,7 +1026,7 @@ struct DailyItineraryView: View {
                     .padding(.top, 12)
                 
                 HStack {
-                    Text("Day 3 Settings")
+                    Text("Day \(selectedDayIndex + 1) Settings")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
@@ -1621,19 +1039,19 @@ struct DailyItineraryView: View {
                 .padding(.horizontal, 20)
                 
                 VStack(spacing: 12) {
-                    Toggle("Smart Weather Rerouting", isOn: .constant(true))
+                    Toggle("Monsoon Smart Weather Alert", isOn: .constant(true))
                         .tint(skyBlue)
                         .padding(12)
                         .background(surfaceContainerLowest)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     
-                    Toggle("Crowd-Density Alerts", isOn: .constant(true))
+                    Toggle("Temple Dress Code Warnings", isOn: .constant(true))
                         .tint(tealAccent)
                         .padding(12)
                         .background(surfaceContainerLowest)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
                     
-                    Toggle("Transit Fare Auto-Calculation", isOn: .constant(true))
+                    Toggle("Safari Permit Auto-Sync", isOn: .constant(true))
                         .tint(amberAccent)
                         .padding(12)
                         .background(surfaceContainerLowest)

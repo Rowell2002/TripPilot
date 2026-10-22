@@ -12,6 +12,12 @@ struct SignInView: View {
     @State private var navigateToCreateAccount: Bool = false
     @State private var navigateToHome: Bool = false
     
+    // Validation States
+    @State private var emailError: String? = nil
+    @State private var passwordError: String? = nil
+    @State private var showForgotPasswordAlert: Bool = false
+    @State private var forgotPasswordEmail: String = ""
+    
     // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let containerLow = Color(red: 24/255, green: 28/255, blue: 36/255)         // #181c24
@@ -96,7 +102,7 @@ struct SignInView: View {
                             .font(.system(size: 28, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                         
-                        Text("Enter your credentials or use biometric security to access your flight itineraries and travel journals.")
+                        Text("Enter your credentials or use biometric security to access your curated travel itineraries and journals.")
                             .font(.system(size: 13, weight: .regular))
                             .foregroundColor(Color(white: 0.65))
                             .multilineTextAlignment(.center)
@@ -184,16 +190,16 @@ struct SignInView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("EMAIL ADDRESS")
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
-                                .foregroundColor(Color(white: 0.55))
+                                .foregroundColor(emailError != nil ? Color.red.opacity(0.9) : Color(white: 0.55))
                                 .tracking(0.5)
                                 .padding(.horizontal, 4)
                             
                             HStack(spacing: 12) {
                                 Image(systemName: "envelope.fill")
                                     .font(.system(size: 16))
-                                    .foregroundColor(Color(white: 0.5))
+                                    .foregroundColor(emailError != nil ? Color.red.opacity(0.8) : Color(white: 0.5))
                                 
-                                TextField("name@icloud.com", text: $email)
+                                TextField("name@example.com", text: $email)
                                     .font(.system(size: 14))
                                     .foregroundColor(.white)
                                     #if os(iOS)
@@ -201,6 +207,17 @@ struct SignInView: View {
                                     .autocorrectionDisabled()
                                     .keyboardType(.emailAddress)
                                     #endif
+                                    .onChange(of: email) { _ in
+                                        if emailError != nil {
+                                            validateEmail()
+                                        }
+                                    }
+                                
+                                if AuthViewModel.isValidEmail(email) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(primaryCyan)
+                                }
                             }
                             .padding(.horizontal, 16)
                             .frame(height: 52)
@@ -208,8 +225,19 @@ struct SignInView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                    .stroke(emailError != nil ? Color.red.opacity(0.7) : Color.white.opacity(0.1), lineWidth: emailError != nil ? 1.5 : 1)
                             )
+                            
+                            if let error = emailError {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(.system(size: 11))
+                                    Text(error)
+                                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                                }
+                                .foregroundColor(Color.red.opacity(0.9))
+                                .padding(.horizontal, 4)
+                            }
                         }
                         
                         // Password Field
@@ -217,12 +245,15 @@ struct SignInView: View {
                             HStack {
                                 Text("PASSWORD")
                                     .font(.system(size: 11, weight: .bold, design: .rounded))
-                                    .foregroundColor(Color(white: 0.55))
+                                    .foregroundColor(passwordError != nil ? Color.red.opacity(0.9) : Color(white: 0.55))
                                     .tracking(0.5)
                                 
                                 Spacer()
                                 
-                                Button(action: {}) {
+                                Button(action: {
+                                    forgotPasswordEmail = email
+                                    showForgotPasswordAlert = true
+                                }) {
                                     Text("Forgot?")
                                         .font(.system(size: 12, weight: .semibold, design: .rounded))
                                         .foregroundColor(primaryBlue)
@@ -233,7 +264,7 @@ struct SignInView: View {
                             HStack(spacing: 12) {
                                 Image(systemName: "lock.fill")
                                     .font(.system(size: 16))
-                                    .foregroundColor(Color(white: 0.5))
+                                    .foregroundColor(passwordError != nil ? Color.red.opacity(0.8) : Color(white: 0.5))
                                 
                                 if isPasswordVisible {
                                     TextField("Enter password", text: $password)
@@ -243,6 +274,11 @@ struct SignInView: View {
                                         .textInputAutocapitalization(.never)
                                         .autocorrectionDisabled()
                                         #endif
+                                        .onChange(of: password) { _ in
+                                            if passwordError != nil {
+                                                validatePassword()
+                                            }
+                                        }
                                 } else {
                                     SecureField("Enter password", text: $password)
                                         .font(.system(size: 14))
@@ -251,6 +287,11 @@ struct SignInView: View {
                                         .textInputAutocapitalization(.never)
                                         .autocorrectionDisabled()
                                         #endif
+                                        .onChange(of: password) { _ in
+                                            if passwordError != nil {
+                                                validatePassword()
+                                            }
+                                        }
                                 }
                                 
                                 Button(action: {
@@ -267,8 +308,19 @@ struct SignInView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                    .stroke(passwordError != nil ? Color.red.opacity(0.7) : Color.white.opacity(0.1), lineWidth: passwordError != nil ? 1.5 : 1)
                             )
+                            
+                            if let error = passwordError {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(.system(size: 11))
+                                    Text(error)
+                                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                                }
+                                .foregroundColor(Color.red.opacity(0.9))
+                                .padding(.horizontal, 4)
+                            }
                         }
                         
                         // Quick Face ID Biometric Card
@@ -329,13 +381,18 @@ struct SignInView: View {
                         
                         // Primary Action Button
                         Button(action: {
-                            navigateToHome = true
+                            handleSignIn()
                         }) {
                             HStack(spacing: 8) {
-                                Text("Sign In to TripPilot")
-                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 15, weight: .bold))
+                                if authViewModel.isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                } else {
+                                    Text("Sign In to TripPilot")
+                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    Image(systemName: "arrow.right")
+                                        .font(.system(size: 15, weight: .bold))
+                                }
                             }
                             .foregroundColor(Color(red: 10/255, green: 14/255, blue: 22/255))
                             .frame(maxWidth: .infinity)
@@ -350,6 +407,7 @@ struct SignInView: View {
                             .clipShape(Capsule())
                             .shadow(color: skyGradientStart.opacity(0.35), radius: 12, y: 4)
                         }
+                        .disabled(authViewModel.isLoading)
                         .padding(.top, 8)
                     }
                     .padding(.horizontal, 20)
@@ -423,7 +481,70 @@ struct SignInView: View {
         } message: {
             Text(authViewModel.errorMessage ?? "An unknown authentication error occurred.")
         }
+        .alert("Reset Password", isPresented: $showForgotPasswordAlert) {
+            TextField("Enter your email", text: $forgotPasswordEmail)
+                #if os(iOS)
+                .keyboardType(.emailAddress)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                #endif
+            Button("Send Reset Link") {
+                Task {
+                    _ = await authViewModel.sendPasswordReset(email: forgotPasswordEmail)
+                }
+            }
+            Button("Cancel", role: .cancel) {}
+        } message: {
+            Text("Enter your registered email address and we'll send you instructions to reset your password.")
+        }
+        .alert("Success", isPresented: $authViewModel.showSuccessAlert) {
+            Button("OK", role: .cancel) {}
+        } message: {
+            Text(authViewModel.successMessage ?? "")
+        }
         .preferredColorScheme(.dark)
+    }
+    
+    // MARK: - Validation Helpers
+    
+    @discardableResult
+    private func validateEmail() -> Bool {
+        let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            emailError = "Email address cannot be empty."
+            return false
+        } else if !AuthViewModel.isValidEmail(trimmed) {
+            emailError = "Please enter a valid email (e.g. user@domain.com)."
+            return false
+        }
+        emailError = nil
+        return true
+    }
+    
+    @discardableResult
+    private func validatePassword() -> Bool {
+        if password.isEmpty {
+            passwordError = "Password cannot be empty."
+            return false
+        } else if password.count < 6 {
+            passwordError = "Password must be at least 6 characters."
+            return false
+        }
+        passwordError = nil
+        return true
+    }
+    
+    private func handleSignIn() {
+        let isEmailValid = validateEmail()
+        let isPasswordValid = validatePassword()
+        guard isEmailValid && isPasswordValid else { return }
+        
+        Task {
+            let success = await authViewModel.signInWithEmail(email: email, password: password)
+            if success {
+                navigateToHome = true
+            }
+        }
     }
 }
 

@@ -549,16 +549,16 @@ struct PastJourneysView: View {
             }
             .padding(.horizontal, 2)
             
-            // Featured Card 1: Kyoto & Tokyo Blossom
-            kyotoBlossomCard
+            // Featured Card 1: Cultural Triangle & Sigiriya
+            culturalTriangleCard
             
-            // Card 2: Nordic Auroras & Fjords
-            nordicAurorasCard
+            // Card 2: Ella & Highlands
+            highlandsCard
         }
     }
     
-    // Featured Card: Kyoto & Tokyo Blossom
-    private var kyotoBlossomCard: some View {
+    // Featured Card: Cultural Triangle & Sigiriya
+    private var culturalTriangleCard: some View {
         VStack(spacing: 0) {
             // Cover Image Canvas
             ZStack(alignment: .bottomLeading) {
@@ -623,12 +623,12 @@ struct PastJourneysView: View {
                 
                 // Destination Title
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("JAPAN EXPEDITION")
+                    Text("SRI LANKA EXPEDITION")
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .foregroundColor(skyBlue)
                         .tracking(0.8)
                     
-                    Text("Kyoto & Tokyo Blossom")
+                    Text("Cultural Triangle & Sigiriya")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                 }
@@ -699,7 +699,7 @@ struct PastJourneysView: View {
                 // Action Buttons
                 HStack(spacing: 8) {
                     Button(action: {
-                        selectedStoryTitle = "Kyoto & Tokyo Blossom"
+                        selectedStoryTitle = "Cultural Triangle & Sigiriya"
                         showStorySheet = true
                     }) {
                         HStack(spacing: 6) {
@@ -748,8 +748,8 @@ struct PastJourneysView: View {
         .shadow(color: Color.black.opacity(0.4), radius: 10, y: 4)
     }
     
-    // Card 2: Nordic Auroras & Fjords
-    private var nordicAurorasCard: some View {
+    // Card 2: Ella & Nuwara Eliya Highlands
+    private var highlandsCard: some View {
         VStack(spacing: 0) {
             ZStack(alignment: .bottomLeading) {
                 AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuDYVN5VMFiu8R_JPPRMTdqlPzUhQPZY7GdgWj2T_H7koFEvC-BSaEWPZ14M0-VKaYb4GsAHVFxGEYfgxJSXEfsa9aW_PvvyZv1D-qC-ReHy1dpi7eFKAg2LzfSKS7754cTGI3vpYTYs7Vz9i5D-u7BPf1Cjfd3tZ3rBJxY0WZcelCU2EE_Up-lh2EgR7HotRs2Eq9gin8XnWjzjSM59-pIPogbUkBIynUZahIm3Eq_rvcfRZD8ihUOKhw")) { phase in
@@ -793,11 +793,11 @@ struct PastJourneysView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("NORWAY & ICELAND")
+                    Text("SRI LANKA HIGHLANDS")
                         .font(.system(size: 9.5, weight: .bold, design: .rounded))
                         .foregroundColor(primaryCyan)
                         .tracking(0.8)
-                    Text("Nordic Auroras & Fjords")
+                    Text("Ella & Nuwara Eliya Highlands")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                 }
@@ -808,18 +808,18 @@ struct PastJourneysView: View {
             VStack(alignment: .leading, spacing: 10) {
                 // Highlight Tags
                 HStack(spacing: 6) {
-                    chipTag("Tromsø")
-                    chipTag("Lofoten Islands")
-                    chipTag("Reykjavik")
-                    chipTag("16 Key Spots", textColor: skyBlue)
+                    chipTag("Nine Arches")
+                    chipTag("Little Adam's Peak")
+                    chipTag("Pedro Estate")
+                    chipTag("16 Mountain Spots", textColor: skyBlue)
                 }
                 
                 HStack {
                     HStack(spacing: 5) {
-                        Image(systemName: "snowflake")
+                        Image(systemName: "mountain.2.fill")
                             .font(.system(size: 12))
                             .foregroundColor(skyBlue)
-                        Text("11 Days • Polar Circle Route")
+                        Text("11 Days • Scenic Highland Route")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(textMuted)
                     }
@@ -827,7 +827,7 @@ struct PastJourneysView: View {
                     Spacer()
                     
                     Button(action: {
-                        selectedStoryTitle = "Nordic Auroras & Fjords"
+                        selectedStoryTitle = "Ella & Nuwara Eliya Highlands"
                         showStorySheet = true
                     }) {
                         HStack(spacing: 3) {
@@ -930,11 +930,11 @@ struct PastJourneysView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("ITALY ODYSSEY")
+                    Text("SOUTHERN PROVINCE")
                         .font(.system(size: 9.5, weight: .bold, design: .rounded))
                         .foregroundColor(skyBlue)
                         .tracking(0.8)
-                    Text("Amalfi Coast & Sicily Discovery")
+                    Text("Galle Fort & Southern Coastline")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                 }
@@ -944,10 +944,10 @@ struct PastJourneysView: View {
             
             VStack(alignment: .leading, spacing: 10) {
                 HStack(spacing: 6) {
-                    chipTag("Positano")
-                    chipTag("Capri")
-                    chipTag("Taormina")
-                    chipTag("31 Culinary Spots", textColor: primaryCyan)
+                    chipTag("Galle Fort")
+                    chipTag("Mirissa")
+                    chipTag("Weligama")
+                    chipTag("31 Coastal Spots", textColor: primaryCyan)
                 }
                 
                 HStack {
@@ -958,7 +958,7 @@ struct PastJourneysView: View {
                     Spacer()
                     
                     Button(action: {
-                        selectedStoryTitle = "Amalfi Coast & Sicily"
+                        selectedStoryTitle = "Galle & Southern Coastline"
                         showStorySheet = true
                     }) {
                         HStack(spacing: 3) {
@@ -1006,7 +1006,7 @@ struct PastJourneysView: View {
                 
                 VStack {
                     HStack {
-                        Text("W-Trek Trekker")
+                        Text("Safari Ranger")
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .foregroundColor(skyBlue)
                             .padding(.horizontal, 8)
@@ -1029,11 +1029,11 @@ struct PastJourneysView: View {
                 }
                 
                 VStack(alignment: .leading, spacing: 2) {
-                    Text("CHILE & ARGENTINA")
+                    Text("SRI LANKA WILDLIFE")
                         .font(.system(size: 9.5, weight: .bold, design: .rounded))
                         .foregroundColor(primaryCyan)
                         .tracking(0.8)
-                    Text("Patagonia Wild Trails")
+                    Text("Yala Safari & Leopard Trail")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                 }
@@ -1044,10 +1044,10 @@ struct PastJourneysView: View {
             VStack(alignment: .leading, spacing: 10) {
                 HStack {
                     HStack(spacing: 4) {
-                        Image(systemName: "figure.hiking")
+                        Image(systemName: "binoculars.fill")
                             .font(.system(size: 12))
                             .foregroundColor(primaryCyan)
-                        Text("108 km Trekked")
+                        Text("Yala Block 1 + Udawalawe")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(textOnSurface)
                     }
@@ -1055,24 +1055,24 @@ struct PastJourneysView: View {
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Image(systemName: "mountain.2.fill")
+                        Image(systemName: "pawprint.fill")
                             .font(.system(size: 12))
                             .foregroundColor(skyBlue)
-                        Text("Grade: Strenuous")
+                        Text("Leopards & Elephants")
                             .font(.system(size: 11, weight: .medium))
                             .foregroundColor(textOnSurface)
                     }
                 }
                 
                 HStack {
-                    Text("13 Days • Campsite Lodging")
+                    Text("13 Days • 4x4 Safari Jeep Camps")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundColor(textMuted)
                     
                     Spacer()
                     
                     Button(action: {
-                        selectedStoryTitle = "Patagonia Wild Trails"
+                        selectedStoryTitle = "Yala Safari & Leopard Trail"
                         showStorySheet = true
                     }) {
                         HStack(spacing: 3) {
@@ -1254,10 +1254,10 @@ struct PastJourneysView: View {
                 .padding(.top, 20)
                 
                 VStack(spacing: 12) {
-                    passportRow(country: "Japan 🇯🇵", stamps: "Tokyo, Kyoto, Hakone", date: "April 2024")
-                    passportRow(country: "Norway 🇳🇴", stamps: "Tromsø, Lofoten", date: "January 2024")
-                    passportRow(country: "Italy 🇮🇹", stamps: "Amalfi, Capri, Taormina", date: "September 2023")
-                    passportRow(country: "Chile 🇨🇱", stamps: "Torres del Paine", date: "November 2023")
+                    passportRow(country: "Cultural Triangle 🇱🇰", stamps: "Sigiriya, Dambulla, Polonnaruwa", date: "April 2024")
+                    passportRow(country: "Central Highlands 🇱🇰", stamps: "Ella, Nuwara Eliya, Horton Plains", date: "January 2024")
+                    passportRow(country: "Southern Coast 🇱🇰", stamps: "Galle Fort, Mirissa, Weligama", date: "September 2023")
+                    passportRow(country: "Wildlife Reserves 🇱🇰", stamps: "Yala Block 1, Udawalawe, Wilpattu", date: "November 2023")
                 }
                 .padding(.horizontal, 20)
                 Spacer()

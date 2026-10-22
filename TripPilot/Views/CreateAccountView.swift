@@ -15,6 +15,12 @@ struct CreateAccountView: View {
     @State private var agreeToTerms: Bool = true
     @State private var navigateToHome: Bool = false
     
+    // Validation States
+    @State private var fullNameError: String? = nil
+    @State private var emailError: String? = nil
+    @State private var passwordError: String? = nil
+    @State private var termsError: String? = nil
+    
     // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
     private let containerLow = Color(red: 24/255, green: 28/255, blue: 36/255)         // #181c24
@@ -115,7 +121,7 @@ struct CreateAccountView: View {
                                 .fill(primaryBlue)
                                 .frame(width: 6, height: 6)
                             
-                            Text("FLIGHT & ITINERARY CLOUD")
+                            Text("SMART TRAVEL ITINERARY")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
                                 .foregroundColor(primaryBlue)
                                 .tracking(0.8)
@@ -219,18 +225,27 @@ struct CreateAccountView: View {
                         VStack(alignment: .leading, spacing: 6) {
                             Text("FULL NAME")
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
-                                .foregroundColor(Color(white: 0.55))
+                                .foregroundColor(fullNameError != nil ? Color.red.opacity(0.9) : Color(white: 0.55))
                                 .tracking(0.5)
                                 .padding(.leading, 4)
                             
                             HStack(spacing: 12) {
                                 Image(systemName: "person.fill")
                                     .font(.system(size: 16))
-                                    .foregroundColor(Color(white: 0.5))
+                                    .foregroundColor(fullNameError != nil ? Color.red.opacity(0.8) : Color(white: 0.5))
                                 
                                 TextField("First and last name", text: $fullName)
                                     .font(.system(size: 14))
                                     .foregroundColor(.white)
+                                    .onChange(of: fullName) { _ in
+                                        if fullNameError != nil { validateFullName() }
+                                    }
+                                
+                                if AuthViewModel.isValidName(fullName) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(primaryCyan)
+                                }
                             }
                             .padding(.horizontal, 16)
                             .frame(height: 50)
@@ -238,22 +253,33 @@ struct CreateAccountView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                    .stroke(fullNameError != nil ? Color.red.opacity(0.7) : Color.white.opacity(0.1), lineWidth: fullNameError != nil ? 1.5 : 1)
                             )
+                            
+                            if let error = fullNameError {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(.system(size: 11))
+                                    Text(error)
+                                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                                }
+                                .foregroundColor(Color.red.opacity(0.9))
+                                .padding(.leading, 4)
+                            }
                         }
                         
                         // Email Field
                         VStack(alignment: .leading, spacing: 6) {
                             Text("EMAIL ADDRESS")
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
-                                .foregroundColor(Color(white: 0.55))
+                                .foregroundColor(emailError != nil ? Color.red.opacity(0.9) : Color(white: 0.55))
                                 .tracking(0.5)
                                 .padding(.leading, 4)
                             
                             HStack(spacing: 12) {
                                 Image(systemName: "envelope.fill")
                                     .font(.system(size: 16))
-                                    .foregroundColor(Color(white: 0.5))
+                                    .foregroundColor(emailError != nil ? Color.red.opacity(0.8) : Color(white: 0.5))
                                 
                                 TextField("name@example.com", text: $email)
                                     .font(.system(size: 14))
@@ -263,6 +289,15 @@ struct CreateAccountView: View {
                                     .autocorrectionDisabled()
                                     .keyboardType(.emailAddress)
                                     #endif
+                                    .onChange(of: email) { _ in
+                                        if emailError != nil { validateEmail() }
+                                    }
+                                
+                                if AuthViewModel.isValidEmail(email) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .font(.system(size: 14))
+                                        .foregroundColor(primaryCyan)
+                                }
                             }
                             .padding(.horizontal, 16)
                             .frame(height: 50)
@@ -270,22 +305,33 @@ struct CreateAccountView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                    .stroke(emailError != nil ? Color.red.opacity(0.7) : Color.white.opacity(0.1), lineWidth: emailError != nil ? 1.5 : 1)
                             )
+                            
+                            if let error = emailError {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(.system(size: 11))
+                                    Text(error)
+                                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                                }
+                                .foregroundColor(Color.red.opacity(0.9))
+                                .padding(.leading, 4)
+                            }
                         }
                         
                         // Password Field & Quality Stack
                         VStack(alignment: .leading, spacing: 6) {
                             Text("CREATE PASSWORD")
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
-                                .foregroundColor(Color(white: 0.55))
+                                .foregroundColor(passwordError != nil ? Color.red.opacity(0.9) : Color(white: 0.55))
                                 .tracking(0.5)
                                 .padding(.leading, 4)
                             
                             HStack(spacing: 12) {
                                 Image(systemName: "lock.fill")
                                     .font(.system(size: 16))
-                                    .foregroundColor(Color(white: 0.5))
+                                    .foregroundColor(passwordError != nil ? Color.red.opacity(0.8) : Color(white: 0.5))
                                 
                                 if isPasswordVisible {
                                     TextField("Minimum 8 characters", text: $password)
@@ -295,6 +341,9 @@ struct CreateAccountView: View {
                                         .textInputAutocapitalization(.never)
                                         .autocorrectionDisabled()
                                         #endif
+                                        .onChange(of: password) { _ in
+                                            if passwordError != nil { validatePassword() }
+                                        }
                                 } else {
                                     SecureField("Minimum 8 characters", text: $password)
                                         .font(.system(size: 14))
@@ -303,6 +352,9 @@ struct CreateAccountView: View {
                                         .textInputAutocapitalization(.never)
                                         .autocorrectionDisabled()
                                         #endif
+                                        .onChange(of: password) { _ in
+                                            if passwordError != nil { validatePassword() }
+                                        }
                                 }
                                 
                                 Button(action: {
@@ -319,8 +371,19 @@ struct CreateAccountView: View {
                             .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                             .overlay(
                                 RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                    .stroke(passwordError != nil ? Color.red.opacity(0.7) : Color.white.opacity(0.1), lineWidth: passwordError != nil ? 1.5 : 1)
                             )
+                            
+                            if let error = passwordError {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
+                                        .font(.system(size: 11))
+                                    Text(error)
+                                        .font(.system(size: 11, weight: .medium, design: .rounded))
+                                }
+                                .foregroundColor(Color.red.opacity(0.9))
+                                .padding(.leading, 4)
+                            }
                             
                             // Strength Indicator Meter
                             VStack(spacing: 6) {
@@ -401,52 +464,75 @@ struct CreateAccountView: View {
                         .padding(.top, 2)
                         
                         // Terms & Policies Consent
-                        HStack(alignment: .top, spacing: 10) {
-                            Button(action: {
-                                agreeToTerms.toggle()
-                            }) {
-                                ZStack {
-                                    RoundedRectangle(cornerRadius: 6, style: .continuous)
-                                        .fill(agreeToTerms ? skyGradientStart : containerHigh)
-                                        .frame(width: 20, height: 20)
-                                    
-                                    if agreeToTerms {
-                                        Image(systemName: "checkmark")
-                                            .font(.system(size: 11, weight: .bold))
-                                            .foregroundColor(.black)
+                        VStack(alignment: .leading, spacing: 6) {
+                            HStack(alignment: .top, spacing: 10) {
+                                Button(action: {
+                                    agreeToTerms.toggle()
+                                    if agreeToTerms { termsError = nil }
+                                }) {
+                                    ZStack {
+                                        RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                            .fill(agreeToTerms ? skyGradientStart : containerHigh)
+                                            .frame(width: 20, height: 20)
+                                            .overlay(
+                                                RoundedRectangle(cornerRadius: 6, style: .continuous)
+                                                    .stroke(termsError != nil ? Color.red.opacity(0.8) : Color.white.opacity(0.1), lineWidth: 1)
+                                            )
+                                        
+                                        if agreeToTerms {
+                                            Image(systemName: "checkmark")
+                                                .font(.system(size: 11, weight: .bold))
+                                                .foregroundColor(.black)
+                                        }
                                     }
                                 }
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text("I agree to the **Terms of Service** and **Privacy Policy**.")
+                                        .foregroundColor(Color(white: 0.65))
+                                    
+                                    HStack(spacing: 5) {
+                                        Image(systemName: "lock.shield.fill")
+                                            .font(.system(size: 11))
+                                            .foregroundColor(primaryCyan)
+                                        
+                                        Text("256-bit Secure Enclave • Zero data selling")
+                                            .font(.system(size: 11, weight: .medium))
+                                            .foregroundColor(Color(white: 0.5))
+                                    }
+                                    .padding(.top, 2)
+                                }
+                                .font(.system(size: 12))
                             }
                             
-                            VStack(alignment: .leading, spacing: 4) {
-                                Text("I agree to the **Terms of Service** and **Privacy Policy**.")
-                                    .foregroundColor(Color(white: 0.65))
-                                
-                                HStack(spacing: 5) {
-                                    Image(systemName: "lock.shield.fill")
+                            if let error = termsError {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "exclamationmark.triangle.fill")
                                         .font(.system(size: 11))
-                                        .foregroundColor(primaryCyan)
-                                    
-                                    Text("256-bit Secure Enclave • Zero data selling")
-                                        .font(.system(size: 11, weight: .medium))
-                                        .foregroundColor(Color(white: 0.5))
+                                    Text(error)
+                                        .font(.system(size: 11, weight: .medium, design: .rounded))
                                 }
-                                .padding(.top, 2)
+                                .foregroundColor(Color.red.opacity(0.9))
+                                .padding(.leading, 4)
                             }
-                            .font(.system(size: 12))
                         }
                         .padding(.horizontal, 4)
                         .padding(.top, 2)
                         
                         // Primary CTA Button
                         Button(action: {
-                            navigateToHome = true
+                            handleSignUp()
                         }) {
                             HStack(spacing: 8) {
-                                Text("Create Free Account")
-                                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                                Image(systemName: "arrow.right")
-                                    .font(.system(size: 15, weight: .bold))
+                                if authViewModel.isLoading {
+                                    ProgressView()
+                                        .progressViewStyle(CircularProgressViewStyle(tint: .black))
+                                } else {
+                                    Text("Create Free Account")
+                                        .font(.system(size: 16, weight: .bold, design: .rounded))
+                                    Image(systemName: "arrow.right")
+                                        .font(.system(size: 15, weight: .bold))
+                                }
                             }
                             .foregroundColor(Color(red: 10/255, green: 14/255, blue: 22/255))
                             .frame(maxWidth: .infinity)
@@ -461,6 +547,7 @@ struct CreateAccountView: View {
                             .clipShape(Capsule())
                             .shadow(color: skyGradientStart.opacity(0.3), radius: 12, y: 4)
                         }
+                        .disabled(authViewModel.isLoading)
                         .padding(.top, 6)
                     }
                     .padding(.horizontal, 20)
@@ -527,6 +614,75 @@ struct CreateAccountView: View {
         .padding(.vertical, 3)
         .background(containerHigh)
         .clipShape(Capsule())
+    }
+    
+    // MARK: - Validation Helpers
+    
+    @discardableResult
+    private func validateFullName() -> Bool {
+        let trimmed = fullName.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            fullNameError = "Please enter your full name."
+            return false
+        } else if trimmed.count < 2 {
+            fullNameError = "Full name must be at least 2 characters."
+            return false
+        }
+        fullNameError = nil
+        return true
+    }
+    
+    @discardableResult
+    private func validateEmail() -> Bool {
+        let trimmed = email.trimmingCharacters(in: .whitespacesAndNewlines)
+        if trimmed.isEmpty {
+            emailError = "Email address cannot be empty."
+            return false
+        } else if !AuthViewModel.isValidEmail(trimmed) {
+            emailError = "Please enter a valid email (e.g. name@example.com)."
+            return false
+        }
+        emailError = nil
+        return true
+    }
+    
+    @discardableResult
+    private func validatePassword() -> Bool {
+        if password.isEmpty {
+            passwordError = "Password cannot be empty."
+            return false
+        } else if password.count < 8 {
+            passwordError = "Password must be at least 8 characters."
+            return false
+        }
+        passwordError = nil
+        return true
+    }
+    
+    @discardableResult
+    private func validateTerms() -> Bool {
+        if !agreeToTerms {
+            termsError = "You must agree to the Terms of Service to continue."
+            return false
+        }
+        termsError = nil
+        return true
+    }
+    
+    private func handleSignUp() {
+        let isNameValid = validateFullName()
+        let isEmailValid = validateEmail()
+        let isPassValid = validatePassword()
+        let isTermsValid = validateTerms()
+        
+        guard isNameValid && isEmailValid && isPassValid && isTermsValid else { return }
+        
+        Task {
+            let success = await authViewModel.signUpWithEmail(email: email, password: password, fullName: fullName)
+            if success {
+                navigateToHome = true
+            }
+        }
     }
 }
 
