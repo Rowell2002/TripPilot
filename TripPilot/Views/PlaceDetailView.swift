@@ -38,6 +38,10 @@ struct PlaceDetailView: View {
     @State private var show360PreviewModal: Bool = false
     @State private var showCurrencyInLKR: Bool = false
     
+    // Google Places Live Reviews State
+    @State private var googlePlaceDetails: GooglePlaceDetailsResult? = nil
+    @State private var isLoadingReviews: Bool = true
+    
     var body: some View {
         ZStack(alignment: .bottom) {
             // Background
@@ -117,6 +121,9 @@ struct PlaceDetailView: View {
                     .padding(.top, 74)
                     .zIndex(100)
             }
+        }
+        .task {
+            await loadLiveReviews()
         }
     }
     
@@ -294,17 +301,27 @@ struct PlaceDetailView: View {
     private var placeHeaderSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             HStack(spacing: 8) {
-                // Star Rating
+                // Star Rating & Review Count (Synced with Google Places)
                 HStack(spacing: 4) {
                     Image(systemName: "star.fill")
                         .font(.system(size: 11))
                         .foregroundColor(amberGold)
-                    Text(String(format: "%.1f", place.rating))
+                    Text(String(format: "%.1f", googlePlaceDetails?.rating ?? place.rating))
                         .font(.system(size: 13, weight: .heavy, design: .rounded))
                         .foregroundColor(.white)
-                    Text("(\(place.reviewCount))")
+                    Text("(\(googlePlaceDetails?.formattedReviewCount ?? place.reviewCount))")
                         .font(.system(size: 11))
                         .foregroundColor(textDim)
+                    
+                    if googlePlaceDetails?.source == .googlePlacesLive {
+                        Text("Google")
+                            .font(.system(size: 9, weight: .bold))
+                            .foregroundColor(primaryCyan)
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1.5)
+                            .background(primaryCyan.opacity(0.15))
+                            .clipShape(Capsule())
+                    }
                 }
                 .padding(.horizontal, 9)
                 .padding(.vertical, 4)
@@ -515,77 +532,192 @@ struct PlaceDetailView: View {
     // MARK: - 5. Authentic Reviews & Ratings
     private var reviewsSection: some View {
         VStack(alignment: .leading, spacing: 14) {
-            HStack {
-                VStack(alignment: .leading, spacing: 2) {
+            HStack(alignment: .top) {
+                VStack(alignment: .leading, spacing: 3) {
                     Text("Visitor Reviews & Ratings")
                         .font(.system(size: 18, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
-                    Text("Verified travelers & local explorers")
-                        .font(.system(size: 11.5, weight: .medium))
-                        .foregroundColor(textDim)
+                    
+                    HStack(spacing: 5) {
+                        if isLoadingReviews {
+                            ProgressView()
+                                .scaleEffect(0.65)
+                                .tint(primaryCyan)
+                            Text("Syncing Google Places...")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundColor(textDim)
+                        } else if googlePlaceDetails?.source == .googlePlacesLive {
+                            HStack(spacing: 4) {
+                                Circle()
+                                    .fill(secondaryMint)
+                                    .frame(width: 6, height: 6)
+                                Text("Google Places API (Live)")
+                                    .font(.system(size: 11, weight: .bold))
+                                    .foregroundColor(secondaryMint)
+                            }
+                        } else {
+                            Text("Verified travelers & local explorers")
+                                .font(.system(size: 11.5, weight: .medium))
+                                .foregroundColor(textDim)
+                        }
+                    }
                 }
                 
                 Spacer()
                 
-                HStack(spacing: 4) {
-                    Image(systemName: "star.fill")
-                        .font(.system(size: 13))
-                        .foregroundColor(amberGold)
-                    Text(String(format: "%.1f", place.rating))
-                        .font(.system(size: 16, weight: .heavy, design: .rounded))
-                        .foregroundColor(.white)
+                HStack(spacing: 8) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 13))
+                            .foregroundColor(amberGold)
+                        Text(String(format: "%.1f", googlePlaceDetails?.rating ?? place.rating))
+                            .font(.system(size: 16, weight: .heavy, design: .rounded))
+                            .foregroundColor(.white)
+                    }
+                    
+                    Button(action: {
+                        Task { await loadLiveReviews() }
+                    }) {
+                        Image(systemName: "arrow.clockwise")
+                            .font(.system(size: 12, weight: .semibold))
+                            .foregroundColor(primaryCyan)
+                            .frame(width: 28, height: 28)
+                            .background(surfaceCard)
+                            .clipShape(Circle())
+                    }
                 }
             }
             
-            VStack(spacing: 10) {
-                ForEach(place.reviews) { review in
-                    VStack(alignment: .leading, spacing: 6) {
-                        HStack {
-                            Text(review.userName)
-                                .font(.system(size: 13.5, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            
-                            Spacer()
-                            
-                            Text(review.date)
-                                .font(.system(size: 11))
-                                .foregroundColor(textDim)
-                        }
-                        
-                        HStack(spacing: 2) {
-                            ForEach(0..<5) { starIndex in
-                                Image(systemName: "star.fill")
-                                    .font(.system(size: 10))
-                                    .foregroundColor(Double(starIndex + 1) <= review.rating ? amberGold : Color.white.opacity(0.2))
-                            }
-                        }
-                        
-                        Text(review.comment)
-                            .font(.system(size: 12.5))
-                            .foregroundColor(textOnSurfaceVariant)
-                            .lineSpacing(2)
-                        
-                        HStack {
-                            Spacer()
-                            HStack(spacing: 4) {
-                                Image(systemName: "hand.thumbsup.fill")
-                                    .font(.system(size: 10))
-                                Text("\(review.helpfulCount) found helpful")
-                                    .font(.system(size: 10.5))
-                            }
+            if isLoadingReviews {
+                VStack(spacing: 10) {
+                    reviewSkeletonCard
+                    reviewSkeletonCard
+                }
+            } else {
+                let reviews = googlePlaceDetails?.reviews ?? []
+                if reviews.isEmpty {
+                    VStack(spacing: 8) {
+                        Image(systemName: "text.bubble")
+                            .font(.system(size: 24))
                             .foregroundColor(textDim)
-                        }
+                        Text("No reviews fetched yet")
+                            .font(.system(size: 13, weight: .semibold))
+                            .foregroundColor(.white)
+                        Text("Tap the refresh button above to sync with Google Places")
+                            .font(.system(size: 11))
+                            .foregroundColor(textDim)
                     }
-                    .padding(12)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 24)
                     .background(surfaceCard)
                     .clipShape(RoundedRectangle(cornerRadius: 12))
+                } else {
+                    VStack(spacing: 10) {
+                        ForEach(reviews) { review in
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack(spacing: 10) {
+                                    ZStack {
+                                        Circle()
+                                            .fill(primaryContainer.opacity(0.2))
+                                            .frame(width: 30, height: 30)
+                                        Text(review.userAvatar)
+                                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                                            .foregroundColor(primaryCyan)
+                                    }
+                                    
+                                    VStack(alignment: .leading, spacing: 2) {
+                                        Text(review.userName)
+                                            .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                                            .foregroundColor(.white)
+                                        Text(review.userCountry)
+                                            .font(.system(size: 10))
+                                            .foregroundColor(textDim)
+                                    }
+                                    
+                                    Spacer()
+                                    
+                                    Text(review.date)
+                                        .font(.system(size: 11))
+                                        .foregroundColor(textDim)
+                                }
+                                
+                                HStack(spacing: 2) {
+                                    ForEach(0..<5) { starIndex in
+                                        Image(systemName: "star.fill")
+                                            .font(.system(size: 10))
+                                            .foregroundColor(Double(starIndex + 1) <= review.rating ? amberGold : Color.white.opacity(0.2))
+                                    }
+                                }
+                                
+                                Text(review.comment)
+                                    .font(.system(size: 12.5))
+                                    .foregroundColor(textOnSurfaceVariant)
+                                    .lineSpacing(2)
+                                
+                                HStack {
+                                    Spacer()
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "hand.thumbsup.fill")
+                                            .font(.system(size: 10))
+                                        Text("\(review.helpfulCount) found helpful")
+                                            .font(.system(size: 10.5))
+                                    }
+                                    .foregroundColor(textDim)
+                                }
+                            }
+                            .padding(12)
+                            .background(surfaceCard)
+                            .clipShape(RoundedRectangle(cornerRadius: 12))
+                        }
+                    }
                 }
             }
+            
+            // Attribution
+            HStack(spacing: 6) {
+                Image(systemName: "globe.badge.chevron.backward")
+                    .font(.system(size: 10))
+                    .foregroundColor(textDim)
+                Text(googlePlaceDetails?.attribution ?? "Reviews via Google Places API (New)")
+                    .font(.system(size: 10, weight: .medium))
+                    .foregroundColor(textDim)
+                Spacer()
+            }
+            .padding(.top, 4)
         }
         .padding(14)
         .background(surfaceContainerLow)
         .clipShape(RoundedRectangle(cornerRadius: 18))
         .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
+    }
+    
+    private var reviewSkeletonCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Circle()
+                    .fill(Color.white.opacity(0.08))
+                    .frame(width: 28, height: 28)
+                VStack(alignment: .leading, spacing: 4) {
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.white.opacity(0.12))
+                        .frame(width: 120, height: 12)
+                    RoundedRectangle(cornerRadius: 4)
+                        .fill(Color.white.opacity(0.06))
+                        .frame(width: 80, height: 10)
+                }
+                Spacer()
+            }
+            RoundedRectangle(cornerRadius: 4)
+                .fill(Color.white.opacity(0.08))
+                .frame(maxWidth: .infinity)
+                .frame(height: 12)
+            RoundedRectangle(cornerRadius: 4)
+                .fill(Color.white.opacity(0.08))
+                .frame(width: 180, height: 12)
+        }
+        .padding(12)
+        .background(surfaceCard)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
     }
     
     // MARK: - 6. Transit & Arrival
@@ -727,6 +859,15 @@ struct PlaceDetailView: View {
     }
     
     // MARK: - Actions
+    private func loadLiveReviews() async {
+        isLoadingReviews = true
+        let result = await GooglePlacesService.shared.fetchPlaceDetails(for: place)
+        withAnimation(.easeInOut(duration: 0.35)) {
+            self.googlePlaceDetails = result
+            self.isLoadingReviews = false
+        }
+    }
+    
     private func triggerToast(_ message: String) {
         withAnimation {
             toastNotice = message
