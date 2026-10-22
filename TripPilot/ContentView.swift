@@ -6,9 +6,20 @@
 import SwiftUI
 
 struct ContentView: View {
+    @ObservedObject private var notificationManager = NotificationManager.shared
+    @State private var activeLandmark: GeofenceLandmarkData? = nil
+    
     var body: some View {
         NavigationStack {
-            SignInView()
+            WelcomeLandingView()
+        }
+        .fullScreenCover(item: $activeLandmark) { landmark in
+            GeofencedAudioGuideDetailView(landmark: landmark)
+        }
+        .onReceive(notificationManager.$activeGeofenceAlert) { landmark in
+            if let landmark = landmark {
+                self.activeLandmark = landmark
+            }
         }
     }
 }

@@ -26,11 +26,29 @@ struct FloatingBottomNavBar: View {
     @Binding var selectedTab: AppTab
     var onTabSelected: ((AppTab) -> Void)? = nil
     
+    // Theme Mode
+    @Environment(\.colorScheme) private var systemColorScheme
+    @AppStorage("appSelectedTheme") private var appSelectedTheme: String = "Dark"
+    
+    private var isDarkMode: Bool {
+        switch appSelectedTheme {
+        case "Light": return false
+        case "Auto": return systemColorScheme == .dark
+        default: return true
+        }
+    }
+    
     // Theme Colors
     private let skyBlue = Color(red: 56/255, green: 189/255, blue: 248/255)
-    private let textMuted = Color(red: 135/255, green: 146/255, blue: 154/255)
-    private let surfaceBackground = Color(red: 10/255, green: 14/255, blue: 22/255)
-    private let borderOutline = Color.white.opacity(0.12)
+    private var textMuted: Color {
+        isDarkMode ? Color(red: 135/255, green: 146/255, blue: 154/255) : Color(red: 100/255, green: 116/255, blue: 139/255)
+    }
+    private var surfaceBackground: Color {
+        isDarkMode ? Color(red: 10/255, green: 14/255, blue: 22/255) : Color(white: 0.98)
+    }
+    private var borderOutline: Color {
+        isDarkMode ? Color.white.opacity(0.12) : Color.black.opacity(0.08)
+    }
     
     var body: some View {
         HStack(spacing: 0) {

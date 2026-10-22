@@ -19,6 +19,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         } else {
             print("⚠️ GoogleService-Info.plist not found in bundle. Please add GoogleService-Info.plist from Firebase Console.")
         }
+        
+        // Configure Geofence & In-App Notification Center
+        NotificationManager.shared.setupNotificationCenter()
+        
         return true
     }
     
@@ -33,11 +37,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct TripPilotApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var authViewModel = AuthViewModel.shared
+    @AppStorage("appSelectedTheme") private var appSelectedTheme: String = "Dark"
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authViewModel)
+                .preferredColorScheme(ThemeAppearanceMode(rawValue: appSelectedTheme)?.colorScheme)
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }

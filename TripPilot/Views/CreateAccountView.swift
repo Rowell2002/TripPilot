@@ -11,7 +11,6 @@ struct CreateAccountView: View {
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
-    @State private var isBiometricEnabled: Bool = true
     @State private var agreeToTerms: Bool = true
     @State private var navigateToHome: Bool = false
     
@@ -424,44 +423,6 @@ struct CreateAccountView: View {
                             .padding(.horizontal, 4)
                             .padding(.top, 4)
                         }
-                        
-                        // iCloud Keychain & Face ID Card
-                        HStack(spacing: 12) {
-                            ZStack {
-                                Circle()
-                                    .fill(primaryBlue.opacity(0.15))
-                                    .frame(width: 40, height: 40)
-                                
-                                Image(systemName: "touchid")
-                                    .font(.system(size: 20))
-                                    .foregroundColor(primaryBlue)
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 2) {
-                                Text("iCloud Keychain & Face ID")
-                                    .font(.system(size: 14, weight: .semibold, design: .rounded))
-                                    .foregroundColor(.white)
-                                
-                                Text("Instant biometric sign-in")
-                                    .font(.system(size: 12))
-                                    .foregroundColor(Color(white: 0.55))
-                            }
-                            
-                            Spacer()
-                            
-                            Toggle("", isOn: $isBiometricEnabled)
-                                .labelsHidden()
-                                .tint(skyGradientStart)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 12)
-                        .background(containerMid)
-                        .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 16, style: .continuous)
-                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                        )
-                        .padding(.top, 2)
                         
                         // Terms & Policies Consent
                         VStack(alignment: .leading, spacing: 6) {

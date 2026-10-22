@@ -6,6 +6,7 @@ import UIKit
 struct HomeDashboardView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var tripManager = TripManager.shared
+    @ObservedObject private var stepTracker = TripStepTrackerService.shared
     
     @State private var selectedTab: AppTab = .home
     @State private var isLivePulsing: Bool = false
@@ -21,17 +22,50 @@ struct HomeDashboardView: View {
     @State private var navigateToBudget: Bool = false
     @State private var navigateToProfile: Bool = false
     
+    // Notifications & Geofence Audio Guide
+    @ObservedObject private var notificationManager = NotificationManager.shared
+    @State private var showNotificationsSheet: Bool = false
+    @State private var showGeofenceAudioGuide: Bool = false
+    @State private var selectedGeofenceLandmark: GeofenceLandmarkData = .defaultShibuya
+    
+    // Theme Mode
+    @Environment(\.colorScheme) private var systemColorScheme
+    @AppStorage("appSelectedTheme") private var appSelectedTheme: String = "Dark"
+    
+    private var isDarkMode: Bool {
+        switch appSelectedTheme {
+        case "Light": return false
+        case "Auto": return systemColorScheme == .dark
+        default: return true
+        }
+    }
+    
     // Theme Colors
-    private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16
-    private let surfaceDark = Color(red: 17/255, green: 24/255, blue: 39/255)          // #111827
-    private let surfaceCard = Color(red: 22/255, green: 31/255, blue: 48/255)          // #161f30
-    private let containerBorder = Color.white.opacity(0.08)
+    private var darkBackground: Color {
+        isDarkMode ? Color(red: 10/255, green: 14/255, blue: 22/255) : Color(red: 245/255, green: 247/255, blue: 250/255)
+    }
+    private var surfaceDark: Color {
+        isDarkMode ? Color(red: 17/255, green: 24/255, blue: 39/255) : Color(red: 238/255, green: 242/255, blue: 246/255)
+    }
+    private var surfaceCard: Color {
+        isDarkMode ? Color(red: 22/255, green: 31/255, blue: 48/255) : Color.white
+    }
+    private var containerBorder: Color {
+        isDarkMode ? Color.white.opacity(0.08) : Color.black.opacity(0.06)
+    }
     private let primaryCyan = Color(red: 68/255, green: 226/255, blue: 205/255)        // #44e2cd
     private let skyBlue = Color(red: 56/255, green: 189/255, blue: 248/255)           // #38bdf8
     private let amberGold = Color(red: 251/255, green: 191/255, blue: 36/255)          // #fbbf24
-    private let slateLight = Color(red: 226/255, green: 232/255, blue: 240/255)       // slate-200
-    private let slateMuted = Color(red: 148/255, green: 163/255, blue: 184/255)       // slate-400
-    private let slateDark = Color(red: 30/255, green: 41/255, blue: 59/255)           // #1e293b
+    private var slateLight: Color {
+        isDarkMode ? Color(red: 226/255, green: 232/255, blue: 240/255) : Color(red: 15/255, green: 23/255, blue: 42/255)
+    }
+    private var slateMuted: Color {
+        isDarkMode ? Color(red: 148/255, green: 163/255, blue: 184/255) : Color(red: 100/255, green: 116/255, blue: 139/255)
+    }
+    private var slateDark: Color {
+        isDarkMode ? Color(red: 30/255, green: 41/255, blue: 59/255) : Color(red: 241/255, green: 245/255, blue: 249/255)
+    }
+    private let coralAccent = Color(red: 251/255, green: 113/255, blue: 133/255)
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -54,34 +88,35 @@ struct HomeDashboardView: View {
             .ignoresSafeArea()
             
             // Scrollable Content
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 20) {
-                    // Header
-                    navigationHeaderSection
-                        .padding(.top, 8)
-                    
-
-                    // 2. Personalized Greeting & Local Sri Lanka Weather
-                    greetingWeatherSection
-                    
-                    // 3. Hero Active Trip Card
-                    heroTripCard
-                    
-                    // 4. Today's Live Itinerary Timeline Widget
-                    todayScheduleWidget
-                    
-                    // 5. Interactive Map Preview Widget
-                    explorationMapWidget
-                    
-                    // 6. Travel Statistics & Quick Budget
-                    statsAndBudgetGrid
-                    
-                    // 7. Smart Utilities
-                    smartUtilitiesSection
-                    
-                    Spacer().frame(height: 100)
+            ScrollViewReader { scrollProxy in
+                ScrollView(showsIndicators: false) {
+                    VStack(spacing: 20) {
+                        // Header
+                        navigationHeaderSection
+                            .padding(.top, 8)
+                        
+                        // 2. Personalized Greeting & Local Sri Lanka Weather
+                        greetingWeatherSection
+                        
+                        // 3. Hero Active Trip Card
+                        heroTripCard
+                        
+                        // 4. Today's Live Itinerary Timeline Widget
+                        todayScheduleWidget
+                        
+                        // 5. Interactive Map Preview Widget
+                        explorationMapWidget
+                        
+                        // 6. Travel Statistics & Quick Budget
+                        statsAndBudgetGrid
+                        
+                        // 7. Trip Step Count Tracker & Activity Idea
+                        stepCountTrackerSection
+                        
+                        Spacer().frame(height: 140)
+                    }
+                    .padding(.horizontal, 18)
                 }
-                .padding(.horizontal, 18)
             }
             
             // 8. Floating Bottom Tab Bar
@@ -129,6 +164,22 @@ struct HomeDashboardView: View {
         }
         .navigationDestination(isPresented: $navigateToProfile) {
             SettingsProfileView()
+        }
+        .sheet(isPresented: $showNotificationsSheet) {
+            NotificationsInboxSheet { landmark in
+                selectedGeofenceLandmark = landmark
+                showGeofenceAudioGuide = true
+            }
+        }
+        .fullScreenCover(isPresented: $showGeofenceAudioGuide) {
+            GeofencedAudioGuideDetailView(landmark: selectedGeofenceLandmark)
+        }
+        .onChange(of: notificationManager.activeGeofenceAlert) { _, landmark in
+            if let landmark = landmark {
+                selectedGeofenceLandmark = landmark
+                showGeofenceAudioGuide = true
+                notificationManager.activeGeofenceAlert = nil
+            }
         }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {
@@ -187,7 +238,7 @@ struct HomeDashboardView: View {
             // Notification & Profile
             HStack(spacing: 10) {
                 Button(action: {
-                    triggerNotice("☀️ Weather Alert: Perfect tropical sunshine across Sigiriya & Ella")
+                    showNotificationsSheet = true
                 }) {
                     ZStack(alignment: .topTrailing) {
                         Circle()
@@ -200,11 +251,13 @@ struct HomeDashboardView: View {
                             .foregroundColor(slateLight)
                             .frame(width: 38, height: 38)
                         
-                        Circle()
-                            .fill(primaryCyan)
-                            .frame(width: 8, height: 8)
-                            .overlay(Circle().stroke(Color.black, lineWidth: 1.5))
-                            .offset(x: -2, y: 2)
+                        if notificationManager.unreadCount > 0 {
+                            Circle()
+                                .fill(skyBlue)
+                                .frame(width: 8, height: 8)
+                                .overlay(Circle().stroke(Color.black, lineWidth: 1.5))
+                                .offset(x: -2, y: 2)
+                        }
                     }
                 }
                 
@@ -774,72 +827,211 @@ struct HomeDashboardView: View {
             .clipShape(Circle())
     }
     
-    // MARK: - 7. Smart Utilities
-    private var smartUtilitiesSection: some View {
-        VStack(alignment: .leading, spacing: 10) {
+    // MARK: - 7. Trip Step Count Tracker
+    private var stepCountTrackerSection: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            // Section Header
             HStack {
-                Text("Sri Lanka Smart Travel Utilities")
-                    .font(.system(size: 16, weight: .bold, design: .rounded))
-                    .foregroundColor(.white)
+                HStack(spacing: 8) {
+                    Image(systemName: "figure.walk.motion")
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(primaryCyan)
+                    
+                    Text("Trip Step Tracker")
+                        .font(.system(size: 17, weight: .bold, design: .rounded))
+                        .foregroundColor(slateLight)
+                }
                 
                 Spacer()
+                
+                // Live Motion Indicator
+                HStack(spacing: 5) {
+                    Circle()
+                        .fill(primaryCyan)
+                        .frame(width: 7, height: 7)
+                        .scaleEffect(isLivePulsing ? 1.3 : 0.8)
+                        .opacity(isLivePulsing ? 1.0 : 0.5)
+                        .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isLivePulsing)
+                    
+                    Text("LIVE MOTION")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .foregroundColor(primaryCyan)
+                }
+                .padding(.horizontal, 9)
+                .padding(.vertical, 4)
+                .background(primaryCyan.opacity(0.12))
+                .clipShape(Capsule())
             }
             
-            ScrollView(.horizontal, showsIndicators: false) {
-                HStack(spacing: 10) {
-                    // Generate Trip
-                    Button(action: {
-                        showTripWizardModal = true
-                    }) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "wand.and.stars")
-                                .font(.system(size: 14, weight: .bold))
-                            Text("Generate Trip")
-                                .font(.system(size: 13, weight: .bold, design: .rounded))
+            // Primary Glass Card
+            VStack(spacing: 14) {
+                // Steps Count & Goal Ring
+                HStack(alignment: .center) {
+                    // Left: Steps count & goal
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text("\(stepTracker.todaySteps.formatted())")
+                            .font(.system(size: 34, weight: .heavy, design: .rounded))
+                            .foregroundColor(slateLight)
+                        
+                        Text("Steps Walked Today • Goal: \(stepTracker.dailyGoal.formatted())")
+                            .font(.system(size: 12, weight: .semibold, design: .rounded))
+                            .foregroundColor(slateMuted)
+                        
+                        HStack(spacing: 4) {
+                            Image(systemName: "suitcase.fill")
+                                .font(.system(size: 10))
+                            Text("Trip Total: \(stepTracker.tripTotalSteps.formatted()) steps (~\(String(format: "%.1f", stepTracker.tripDistanceKm)) km)")
+                                .font(.system(size: 11, weight: .semibold, design: .rounded))
                         }
-                        .foregroundColor(Color(red: 10/255, green: 14/255, blue: 22/255))
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(skyBlue)
+                        .foregroundColor(skyBlue)
+                        .padding(.top, 2)
+                    }
+                    
+                    Spacer()
+                    
+                    // Right: Circular Progress Ring
+                    ZStack {
+                        // Background track
+                        Circle()
+                            .stroke(containerBorder, lineWidth: 8)
+                            .frame(width: 70, height: 70)
+                        
+                        // Progress Arc
+                        Circle()
+                            .trim(from: 0, to: CGFloat(stepTracker.goalProgress))
+                            .stroke(
+                                LinearGradient(
+                                    colors: [primaryCyan, skyBlue],
+                                    startPoint: .topLeading,
+                                    endPoint: .bottomTrailing
+                                ),
+                                style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                            )
+                            .frame(width: 70, height: 70)
+                            .rotationEffect(.degrees(-90))
+                            .animation(.spring(response: 0.6, dampingFraction: 0.7), value: stepTracker.goalProgress)
+                        
+                        VStack(spacing: 1) {
+                            Text(stepTracker.goalPercentText)
+                                .font(.system(size: 14, weight: .heavy, design: .rounded))
+                                .foregroundColor(slateLight)
+                            
+                            Text("GOAL")
+                                .font(.system(size: 8, weight: .bold, design: .rounded))
+                                .foregroundColor(primaryCyan)
+                        }
+                    }
+                }
+                
+                Divider().background(containerBorder)
+                
+                // 3 Mini Stat Pills: Distance, Calories, Active Time
+                HStack(spacing: 8) {
+                    statPill(icon: "figure.walk", label: "Distance", value: "\(String(format: "%.2f", stepTracker.distanceKm)) km", color: primaryCyan)
+                    statPill(icon: "flame.fill", label: "Calories", value: "\(stepTracker.activeCalories) kcal", color: coralAccent)
+                    statPill(icon: "timer", label: "Active Time", value: "\(stepTracker.activeMinutes) min", color: amberGold)
+                }
+                
+                // "Small Idea" / Travel Activity Insight Box
+                let idea = stepTracker.currentTravelIdea
+                HStack(alignment: .top, spacing: 10) {
+                    Image(systemName: idea.icon)
+                        .font(.system(size: 16, weight: .bold))
+                        .foregroundColor(idea.accentColor)
+                        .frame(width: 36, height: 36)
+                        .background(idea.accentColor.opacity(0.16))
+                        .clipShape(Circle())
+                    
+                    VStack(alignment: .leading, spacing: 3) {
+                        HStack {
+                            Text(idea.title)
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                                .foregroundColor(slateLight)
+                            
+                            Spacer()
+                            
+                            Text(idea.badge)
+                                .font(.system(size: 9, weight: .heavy, design: .rounded))
+                                .foregroundColor(idea.accentColor)
+                                .padding(.horizontal, 7)
+                                .padding(.vertical, 2)
+                                .background(idea.accentColor.opacity(0.15))
+                                .clipShape(Capsule())
+                        }
+                        
+                        Text(idea.description)
+                            .font(.system(size: 11, weight: .medium, design: .rounded))
+                            .foregroundColor(slateMuted)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                }
+                .padding(11)
+                .background(isDarkMode ? Color.white.opacity(0.04) : Color.black.opacity(0.03))
+                .cornerRadius(12)
+                .overlay(RoundedRectangle(cornerRadius: 12).stroke(containerBorder, lineWidth: 1))
+                
+                // Interactive Controls: Simulate Walk / Sync
+                HStack {
+                    Button(action: {
+                        stepTracker.simulateWalk(steps: 350)
+                        triggerNotice("🚶 Logged +350 steps on your Ceylon exploration!")
+                    }) {
+                        HStack(spacing: 5) {
+                            Image(systemName: "plus.circle.fill")
+                                .font(.system(size: 12, weight: .bold))
+                            Text("Simulate Walk (+350)")
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                        }
+                        .foregroundColor(primaryCyan)
+                        .padding(.horizontal, 11)
+                        .padding(.vertical, 6)
+                        .background(primaryCyan.opacity(0.12))
                         .clipShape(Capsule())
-                        .shadow(color: skyBlue.opacity(0.35), radius: 8, y: 2)
                     }
                     
-                    // Forex
-                    utilityButton(icon: "dollarsign.arrow.circlepath", text: "1 USD = 305 Rs. LKR", iconColor: primaryCyan) {
-                        triggerNotice("💱 Central Bank of Sri Lanka Rate: 1 USD ≈ 305 LKR")
-                    }
+                    Spacer()
                     
-                    // Tourist Police Hotline
-                    utilityButton(icon: "phone.badge.waveform.fill", text: "Tourist Hotline: 1912", iconColor: amberGold) {
-                        triggerNotice("📞 Sri Lanka Tourism Development Authority Helpline: 1912")
-                    }
-                    
-                    // Offline Maps
-                    utilityButton(icon: "arrow.down.circle.fill", text: "Offline Ceylon Map", iconColor: primaryCyan) {
-                        triggerNotice("🗺️ Cached offline maps for Cultural Triangle, Ella & Coast")
+                    Button(action: {
+                        stepTracker.startTracking()
+                        triggerNotice("🔄 Synced with motion pedometer data")
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "arrow.clockwise")
+                                .font(.system(size: 11, weight: .semibold))
+                            Text(stepTracker.statusMessage)
+                                .font(.system(size: 10, weight: .semibold, design: .rounded))
+                        }
+                        .foregroundColor(slateMuted)
                     }
                 }
             }
+            .padding(16)
+            .background(surfaceCard)
+            .cornerRadius(20)
+            .overlay(RoundedRectangle(cornerRadius: 20).stroke(containerBorder, lineWidth: 1))
+            .shadow(color: isDarkMode ? Color.black.opacity(0.3) : Color.black.opacity(0.04), radius: 10, y: 4)
         }
     }
     
-    private func utilityButton(icon: String, text: String, iconColor: Color, action: @escaping () -> Void) -> some View {
-        Button(action: action) {
-            HStack(spacing: 6) {
+    private func statPill(icon: String, label: String, value: String, color: Color) -> some View {
+        VStack(spacing: 3) {
+            HStack(spacing: 4) {
                 Image(systemName: icon)
-                    .font(.system(size: 13, weight: .semibold))
-                    .foregroundColor(iconColor)
-                Text(text)
-                    .font(.system(size: 13, weight: .semibold, design: .rounded))
-                    .foregroundColor(.white)
+                    .font(.system(size: 10, weight: .bold))
+                    .foregroundColor(color)
+                Text(label)
+                    .font(.system(size: 10, weight: .semibold, design: .rounded))
+                    .foregroundColor(slateMuted)
             }
-            .padding(.horizontal, 14)
-            .padding(.vertical, 10)
-            .background(surfaceCard)
-            .clipShape(Capsule())
-            .overlay(Capsule().stroke(containerBorder, lineWidth: 1))
+            Text(value)
+                .font(.system(size: 12, weight: .heavy, design: .rounded))
+                .foregroundColor(slateLight)
         }
+        .frame(maxWidth: .infinity)
+        .padding(.vertical, 8)
+        .background(isDarkMode ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
+        .cornerRadius(10)
+        .overlay(RoundedRectangle(cornerRadius: 10).stroke(containerBorder, lineWidth: 1))
     }
     
     // MARK: - Helper Banner

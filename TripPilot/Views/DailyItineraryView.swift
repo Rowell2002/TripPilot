@@ -591,14 +591,31 @@ struct DailyItineraryView: View {
             timeText: stop.time,
             timeColor: skyBlue,
             tagView: {
-                Text(stop.estimatedDuration)
-                    .font(.system(size: 10, weight: .bold, design: .rounded))
-                    .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
-                    .padding(.horizontal, 8)
-                    .padding(.vertical, 3)
-                    .background(surfaceContainerLow)
-                    .clipShape(Capsule())
-                    .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
+                HStack(spacing: 6) {
+                    if let match = stop.matchPercentage {
+                        HStack(spacing: 3) {
+                            Image(systemName: "sparkles")
+                                .font(.system(size: 8, weight: .bold))
+                            Text("\(match)% Match")
+                                .font(.system(size: 9.5, weight: .heavy, design: .rounded))
+                        }
+                        .foregroundColor(Color(red: 68/255, green: 226/255, blue: 205/255))
+                        .padding(.horizontal, 7)
+                        .padding(.vertical, 3)
+                        .background(Color(red: 68/255, green: 226/255, blue: 205/255).opacity(0.16))
+                        .clipShape(Capsule())
+                        .overlay(Capsule().stroke(Color(red: 68/255, green: 226/255, blue: 205/255).opacity(0.35), lineWidth: 1))
+                    }
+                    
+                    Text(stop.estimatedDuration)
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .foregroundColor(Color(red: 203/255, green: 213/255, blue: 225/255))
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 3)
+                        .background(surfaceContainerLow)
+                        .clipShape(Capsule())
+                        .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
+                }
             },
             content: {
                 VStack(alignment: .leading, spacing: 10) {

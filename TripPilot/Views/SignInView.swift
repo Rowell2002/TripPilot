@@ -4,11 +4,11 @@ import UIKit
 #endif
 
 struct SignInView: View {
+    @Environment(\.dismiss) private var dismiss
     @ObservedObject private var authViewModel = AuthViewModel.shared
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
-    @State private var isFaceIdEnabled: Bool = true
     @State private var navigateToCreateAccount: Bool = false
     @State private var navigateToHome: Bool = false
     
@@ -53,6 +53,21 @@ struct SignInView: View {
                 VStack(spacing: 0) {
                     // MARK: - Top Navigation Bar
                     HStack {
+                        Button(action: {
+                            dismiss()
+                        }) {
+                            Image(systemName: "chevron.left")
+                                .font(.system(size: 14, weight: .bold))
+                                .foregroundColor(.white)
+                                .frame(width: 38, height: 38)
+                                .background(containerHigh)
+                                .clipShape(Circle())
+                                .overlay(
+                                    Circle()
+                                        .stroke(Color.white.opacity(0.12), lineWidth: 1)
+                                )
+                        }
+                        
                         Spacer()
                         
                         Button(action: {}) {
@@ -322,62 +337,6 @@ struct SignInView: View {
                                 .padding(.horizontal, 4)
                             }
                         }
-                        
-                        // Quick Face ID Biometric Card
-                        HStack(spacing: 14) {
-                            ZStack {
-                                Circle()
-                                    .fill(containerHigh)
-                                    .frame(width: 42, height: 42)
-                                    .overlay(
-                                        Circle()
-                                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                    )
-                                
-                                Image(systemName: "faceid")
-                                    .font(.system(size: 20, weight: .medium))
-                                    .foregroundColor(primaryBlue)
-                            }
-                            
-                            VStack(alignment: .leading, spacing: 3) {
-                                HStack(spacing: 6) {
-                                    Text("Quick Face ID")
-                                        .font(.system(size: 15, weight: .semibold, design: .rounded))
-                                        .foregroundColor(.white)
-                                    
-                                    Text("Haptic")
-                                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                                        .foregroundColor(primaryCyan)
-                                        .padding(.horizontal, 6)
-                                        .padding(.vertical, 2)
-                                        .background(primaryCyan.opacity(0.15))
-                                        .clipShape(Capsule())
-                                        .overlay(
-                                            Capsule()
-                                                .stroke(primaryCyan.opacity(0.3), lineWidth: 0.5)
-                                        )
-                                }
-                                
-                                Text("Fast, secure instant bypass")
-                                    .font(.system(size: 12))
-                                    .foregroundColor(Color(white: 0.55))
-                            }
-                            
-                            Spacer()
-                            
-                            Toggle("", isOn: $isFaceIdEnabled)
-                                .labelsHidden()
-                                .tint(primaryCyan)
-                        }
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 14)
-                        .background(containerLow.opacity(0.9))
-                        .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 18, style: .continuous)
-                                .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                        )
-                        .padding(.top, 4)
                         
                         // Primary Action Button
                         Button(action: {

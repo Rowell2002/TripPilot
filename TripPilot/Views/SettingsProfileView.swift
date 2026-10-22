@@ -1,48 +1,92 @@
 import SwiftUI
+import LocalAuthentication
 #if canImport(UIKit)
 import UIKit
 #endif
 
-// MARK: - Theme Mode Enum
-enum ThemeAppearanceMode: String, CaseIterable, Identifiable {
-    case light = "Light"
-    case dark = "Dark"
-    case auto = "Auto"
-    
-    var id: String { rawValue }
-}
-
 // MARK: - Main View
 struct SettingsProfileView: View {
     @Environment(\.dismiss) private var dismiss
+    @Environment(\.colorScheme) private var systemColorScheme
     
-    // Theme Colors
-    private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)            // #0f131c
-    private let surfaceContainerLowest = Color(red: 10/255, green: 14/255, blue: 22/255)   // #0a0e16
-    private let surfaceContainerLow = Color(red: 24/255, green: 28/255, blue: 36/255)      // #181c24
-    private let surfaceContainer = Color(red: 28/255, green: 32/255, blue: 40/255)         // #1c2028
-    private let surfaceContainerHigh = Color(red: 38/255, green: 42/255, blue: 51/255)     // #262a33
-    private let surfaceContainerHighest = Color(red: 49/255, green: 53/255, blue: 62/255)  // #31353e
+    // Theme Mode from AppStorage
+    @AppStorage("appSelectedTheme") private var selectedThemeRaw: String = "Dark"
     
-    private let primarySky = Color(red: 56/255, green: 189/255, blue: 248/255)             // #38bdf8
-    private let primaryTint = Color(red: 142/255, green: 213/255, blue: 255/255)          // #8ed5ff
-    private let secondaryMint = Color(red: 68/255, green: 226/255, blue: 205/255)          // #44e2cd
-    private let secondaryContainer = Color(red: 3/255, green: 198/255, blue: 178/255)      // #03c6b2
-    private let tertiaryBlue = Color(red: 175/255, green: 207/255, blue: 255/255)          // #afcfff
+    private var selectedTheme: ThemeAppearanceMode {
+        get { ThemeAppearanceMode(rawValue: selectedThemeRaw) ?? .dark }
+        nonmutating set { selectedThemeRaw = newValue.rawValue }
+    }
+    
+    private var isDarkMode: Bool {
+        switch selectedTheme {
+        case .dark: return true
+        case .light: return false
+        case .auto: return systemColorScheme == .dark
+        }
+    }
+    
+    // Dynamic Theme Colors
+    private var darkBackground: Color {
+        isDarkMode ? Color(red: 15/255, green: 19/255, blue: 28/255) : Color(red: 245/255, green: 247/255, blue: 250/255)
+    }
+    private var surfaceContainerLowest: Color {
+        isDarkMode ? Color(red: 10/255, green: 14/255, blue: 22/255) : Color(red: 238/255, green: 242/255, blue: 246/255)
+    }
+    private var surfaceContainerLow: Color {
+        isDarkMode ? Color(red: 24/255, green: 28/255, blue: 36/255) : Color.white
+    }
+    private var surfaceContainer: Color {
+        isDarkMode ? Color(red: 28/255, green: 32/255, blue: 40/255) : Color.white
+    }
+    private var surfaceContainerHigh: Color {
+        isDarkMode ? Color(red: 38/255, green: 42/255, blue: 51/255) : Color(red: 241/255, green: 245/255, blue: 249/255)
+    }
+    private var surfaceContainerHighest: Color {
+        isDarkMode ? Color(red: 49/255, green: 53/255, blue: 62/255) : Color(red: 226/255, green: 232/255, blue: 240/255)
+    }
+    
+    private var primarySky: Color {
+        isDarkMode ? Color(red: 56/255, green: 189/255, blue: 248/255) : Color(red: 2/255, green: 132/255, blue: 199/255)
+    }
+    private var primaryTint: Color {
+        isDarkMode ? Color(red: 142/255, green: 213/255, blue: 255/255) : Color(red: 3/255, green: 105/255, blue: 161/255)
+    }
+    private var secondaryMint: Color {
+        isDarkMode ? Color(red: 68/255, green: 226/255, blue: 205/255) : Color(red: 13/255, green: 148/255, blue: 136/255)
+    }
+    private var secondaryContainer: Color {
+        isDarkMode ? Color(red: 3/255, green: 198/255, blue: 178/255) : Color(red: 13/255, green: 148/255, blue: 136/255)
+    }
+    private var tertiaryBlue: Color {
+        isDarkMode ? Color(red: 175/255, green: 207/255, blue: 255/255) : Color(red: 30/255, green: 64/255, blue: 175/255)
+    }
     private let errorRed = Color(red: 255/255, green: 180/255, blue: 171/255)              // #ffb4ab
     
-    private let textOnSurface = Color(red: 223/255, green: 226/255, blue: 238/255)         // #dfe2ee
-    private let textVariant = Color(red: 189/255, green: 200/255, blue: 209/255)           // #bdc8d1
-    private let outlineVariant = Color(red: 62/255, green: 72/255, blue: 79/255)          // #3e484f
+    private var textOnSurface: Color {
+        isDarkMode ? Color(red: 223/255, green: 226/255, blue: 238/255) : Color(red: 15/255, green: 23/255, blue: 42/255)
+    }
+    private var textVariant: Color {
+        isDarkMode ? Color(red: 189/255, green: 200/255, blue: 209/255) : Color(red: 100/255, green: 116/255, blue: 139/255)
+    }
+    private var outlineVariant: Color {
+        isDarkMode ? Color(red: 62/255, green: 72/255, blue: 79/255) : Color(red: 226/255, green: 232/255, blue: 240/255)
+    }
     private let amberGold = Color(red: 251/255, green: 191/255, blue: 36/255)              // #fbbf24
+    
+    private var cardBorder: Color {
+        isDarkMode ? Color.white.opacity(0.06) : Color.black.opacity(0.07)
+    }
+    
+    private var cardShadow: Color {
+        isDarkMode ? Color.black.opacity(0.35) : Color.black.opacity(0.04)
+    }
     
     // Interactive State
     @State private var selectedTab: AppTab = .profile
     @State private var isVIPIndicatorPulsing: Bool = false
-    @State private var selectedTheme: ThemeAppearanceMode = .dark
     
     // Toggles
-    @State private var isFaceIDEnabled: Bool = true
+    @AppStorage("isFaceIDQuickUnlockEnabled") private var isFaceIDEnabled: Bool = true
     @State private var isSecureEnclaveSyncEnabled: Bool = true
     @State private var isItineraryAlertsEnabled: Bool = true
     @State private var isGeofencedAudioEnabled: Bool = true
@@ -174,7 +218,7 @@ struct SettingsProfileView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .preferredColorScheme(.dark)
+        .preferredColorScheme(selectedTheme.colorScheme)
         .onAppear {
             withAnimation(.easeInOut(duration: 1.3).repeatForever(autoreverses: true)) {
                 isVIPIndicatorPulsing = true
@@ -642,10 +686,27 @@ struct SettingsProfileView: View {
                     iconColor: secondaryMint,
                     iconBg: secondaryMint.opacity(0.18),
                     title: "Face ID Quick Unlock",
-                    subtitle: "Authenticate instant wallet and vault",
+                    subtitle: "Instant biometric sign-in & secure travel vault",
                     isOn: $isFaceIDEnabled,
                     tintColor: secondaryMint
                 )
+                
+                rowDivider
+                
+                // Biometric Hardware Status
+                settingRowButton(
+                    icon: "checkmark.shield.fill",
+                    iconColor: secondaryMint,
+                    iconBg: secondaryMint.opacity(0.18),
+                    title: "Biometric Hardware Status",
+                    value: isFaceIDEnabled ? "Ready (Face ID)" : "Disabled"
+                ) {
+                    if isFaceIDEnabled {
+                        testFaceIDAuthentication()
+                    } else {
+                        showToast("Enable Face ID toggle above to activate instant unlock")
+                    }
+                }
                 
                 rowDivider
                 
@@ -767,31 +828,36 @@ struct SettingsProfileView: View {
                     }
                     
                     // Segmented Pills
-                    HStack(spacing: 4) {
+                    HStack(spacing: 6) {
                         ForEach(ThemeAppearanceMode.allCases) { mode in
                             let isSelected = (selectedTheme == mode)
                             Button(action: {
                                 triggerHapticFeedback()
-                                withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
                                     selectedTheme = mode
                                 }
                                 showToast("Theme set to \(mode.rawValue)")
                             }) {
-                                Text(mode.rawValue)
-                                    .font(.system(size: 12, weight: isSelected ? .bold : .medium, design: .rounded))
-                                    .foregroundColor(isSelected ? primarySky : textVariant)
-                                    .frame(maxWidth: .infinity)
-                                    .padding(.vertical, 7)
-                                    .background(
-                                        isSelected ?
-                                        surfaceContainerHighest :
-                                        Color.clear
-                                    )
-                                    .clipShape(Capsule())
+                                HStack(spacing: 5) {
+                                    Image(systemName: mode.iconName)
+                                        .font(.system(size: 11, weight: .semibold))
+                                    Text(mode.rawValue)
+                                        .font(.system(size: 12, weight: isSelected ? .bold : .medium, design: .rounded))
+                                }
+                                .foregroundColor(isSelected ? (isDarkMode ? primarySky : .white) : textVariant)
+                                .frame(maxWidth: .infinity)
+                                .padding(.vertical, 8)
+                                .background(
+                                    isSelected ?
+                                    (isDarkMode ? surfaceContainerHighest : primarySky) :
+                                    Color.clear
+                                )
+                                .clipShape(Capsule())
+                                .shadow(color: isSelected && !isDarkMode ? primarySky.opacity(0.3) : .clear, radius: 4, y: 2)
                             }
                         }
                     }
-                    .padding(3)
+                    .padding(4)
                     .background(surfaceContainerLowest)
                     .clipShape(Capsule())
                 }
@@ -1261,6 +1327,28 @@ struct SettingsProfileView: View {
     }
     
     // MARK: - Helper Methods
+    private func testFaceIDAuthentication() {
+        let context = LAContext()
+        var error: NSError?
+        
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            let reason = "Authenticate with Face ID to verify biometric access for TripPilot"
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, _ in
+                DispatchQueue.main.async {
+                    triggerHapticFeedback()
+                    if success {
+                        showToast("✅ Face ID Verified Successfully!")
+                    } else {
+                        showToast("⚠️ Face ID Authentication Canceled or Failed")
+                    }
+                }
+            }
+        } else {
+            triggerHapticFeedback()
+            showToast("ℹ️ Face ID Ready (Simulated mode active)")
+        }
+    }
+    
     private func triggerHapticFeedback() {
         #if canImport(UIKit)
         let impact = UIImpactFeedbackGenerator(style: .medium)

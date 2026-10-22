@@ -738,7 +738,52 @@ public final class SriLankaDataService {
                 budget: budget,
                 tags: tags
             )
-            generatedDays.append(dayData)
+            
+            // Enrich stops using Core ML Recommender Engine
+            let mlEnrichedStops = dayData.stops.map { stop in
+                let mlPrediction = TripMLRecommenderService.shared.predict(
+                    for: stop.title,
+                    category: stop.category,
+                    purpose: tags.joined(separator: " "),
+                    pace: pace,
+                    budget: budget,
+                    durationDays: daysCount,
+                    travelerType: companion
+                )
+                return TripStop(
+                    id: stop.id,
+                    time: stop.time,
+                    title: stop.title,
+                    category: stop.category,
+                    icon: stop.icon,
+                    description: stop.description,
+                    locationName: stop.locationName,
+                    estimatedDuration: stop.estimatedDuration,
+                    costLKR: stop.costLKR,
+                    costUSD: stop.costUSD,
+                    highlight: stop.highlight,
+                    passRequired: stop.passRequired,
+                    passName: stop.passName,
+                    imageUrl: stop.imageUrl,
+                    latitude: stop.latitude,
+                    longitude: stop.longitude,
+                    matchPercentage: mlPrediction.matchPercentage
+                )
+            }
+            
+            let enrichedDay = TripDay(
+                id: dayData.id,
+                dayNumber: dayData.dayNumber,
+                dayOfWeek: dayData.dayOfWeek,
+                dayOfMonth: dayData.dayOfMonth,
+                fullDateString: dayData.fullDateString,
+                title: dayData.title,
+                region: dayData.region,
+                weather: dayData.weather,
+                temperature: dayData.temperature,
+                stops: mlEnrichedStops
+            )
+            generatedDays.append(enrichedDay)
         }
         
         let weatherSummary: String = {
