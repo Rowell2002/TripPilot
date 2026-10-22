@@ -19,6 +19,10 @@ class AppDelegate: NSObject, UIApplicationDelegate {
         } else {
             print("⚠️ GoogleService-Info.plist not found in bundle. Please add GoogleService-Info.plist from Firebase Console.")
         }
+        
+        // Configure Geofence & In-App Notification Center
+        NotificationManager.shared.setupNotificationCenter()
+        
         return true
     }
     

@@ -21,6 +21,12 @@ struct HomeDashboardView: View {
     @State private var navigateToBudget: Bool = false
     @State private var navigateToProfile: Bool = false
     
+    // Notifications & Geofence Audio Guide
+    @ObservedObject private var notificationManager = NotificationManager.shared
+    @State private var showNotificationsSheet: Bool = false
+    @State private var showGeofenceAudioGuide: Bool = false
+    @State private var selectedGeofenceLandmark: GeofenceLandmarkData = .defaultShibuya
+    
     // Theme Colors
     private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16
     private let surfaceDark = Color(red: 17/255, green: 24/255, blue: 39/255)          // #111827
@@ -130,6 +136,22 @@ struct HomeDashboardView: View {
         .navigationDestination(isPresented: $navigateToProfile) {
             SettingsProfileView()
         }
+        .sheet(isPresented: $showNotificationsSheet) {
+            NotificationsInboxSheet { landmark in
+                selectedGeofenceLandmark = landmark
+                showGeofenceAudioGuide = true
+            }
+        }
+        .fullScreenCover(isPresented: $showGeofenceAudioGuide) {
+            GeofencedAudioGuideDetailView(landmark: selectedGeofenceLandmark)
+        }
+        .onChange(of: notificationManager.activeGeofenceAlert) { _, landmark in
+            if let landmark = landmark {
+                selectedGeofenceLandmark = landmark
+                showGeofenceAudioGuide = true
+                notificationManager.activeGeofenceAlert = nil
+            }
+        }
         .overlay(alignment: .top) {
             if let notice = activeUtilityNotice {
                 Text(notice)
@@ -187,7 +209,7 @@ struct HomeDashboardView: View {
             // Notification & Profile
             HStack(spacing: 10) {
                 Button(action: {
-                    triggerNotice("☀️ Weather Alert: Perfect tropical sunshine across Sigiriya & Ella")
+                    showNotificationsSheet = true
                 }) {
                     ZStack(alignment: .topTrailing) {
                         Circle()
@@ -200,11 +222,13 @@ struct HomeDashboardView: View {
                             .foregroundColor(slateLight)
                             .frame(width: 38, height: 38)
                         
-                        Circle()
-                            .fill(primaryCyan)
-                            .frame(width: 8, height: 8)
-                            .overlay(Circle().stroke(Color.black, lineWidth: 1.5))
-                            .offset(x: -2, y: 2)
+                        if notificationManager.unreadCount > 0 {
+                            Circle()
+                                .fill(skyBlue)
+                                .frame(width: 8, height: 8)
+                                .overlay(Circle().stroke(Color.black, lineWidth: 1.5))
+                                .offset(x: -2, y: 2)
+                        }
                     }
                 }
                 
