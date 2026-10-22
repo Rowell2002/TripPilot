@@ -27,17 +27,43 @@ struct HomeDashboardView: View {
     @State private var showGeofenceAudioGuide: Bool = false
     @State private var selectedGeofenceLandmark: GeofenceLandmarkData = .defaultShibuya
     
+    // Theme Mode
+    @Environment(\.colorScheme) private var systemColorScheme
+    @AppStorage("appSelectedTheme") private var appSelectedTheme: String = "Dark"
+    
+    private var isDarkMode: Bool {
+        switch appSelectedTheme {
+        case "Light": return false
+        case "Auto": return systemColorScheme == .dark
+        default: return true
+        }
+    }
+    
     // Theme Colors
-    private let darkBackground = Color(red: 10/255, green: 14/255, blue: 22/255)       // #0a0e16
-    private let surfaceDark = Color(red: 17/255, green: 24/255, blue: 39/255)          // #111827
-    private let surfaceCard = Color(red: 22/255, green: 31/255, blue: 48/255)          // #161f30
-    private let containerBorder = Color.white.opacity(0.08)
+    private var darkBackground: Color {
+        isDarkMode ? Color(red: 10/255, green: 14/255, blue: 22/255) : Color(red: 245/255, green: 247/255, blue: 250/255)
+    }
+    private var surfaceDark: Color {
+        isDarkMode ? Color(red: 17/255, green: 24/255, blue: 39/255) : Color(red: 238/255, green: 242/255, blue: 246/255)
+    }
+    private var surfaceCard: Color {
+        isDarkMode ? Color(red: 22/255, green: 31/255, blue: 48/255) : Color.white
+    }
+    private var containerBorder: Color {
+        isDarkMode ? Color.white.opacity(0.08) : Color.black.opacity(0.06)
+    }
     private let primaryCyan = Color(red: 68/255, green: 226/255, blue: 205/255)        // #44e2cd
     private let skyBlue = Color(red: 56/255, green: 189/255, blue: 248/255)           // #38bdf8
     private let amberGold = Color(red: 251/255, green: 191/255, blue: 36/255)          // #fbbf24
-    private let slateLight = Color(red: 226/255, green: 232/255, blue: 240/255)       // slate-200
-    private let slateMuted = Color(red: 148/255, green: 163/255, blue: 184/255)       // slate-400
-    private let slateDark = Color(red: 30/255, green: 41/255, blue: 59/255)           // #1e293b
+    private var slateLight: Color {
+        isDarkMode ? Color(red: 226/255, green: 232/255, blue: 240/255) : Color(red: 15/255, green: 23/255, blue: 42/255)
+    }
+    private var slateMuted: Color {
+        isDarkMode ? Color(red: 148/255, green: 163/255, blue: 184/255) : Color(red: 100/255, green: 116/255, blue: 139/255)
+    }
+    private var slateDark: Color {
+        isDarkMode ? Color(red: 30/255, green: 41/255, blue: 59/255) : Color(red: 241/255, green: 245/255, blue: 249/255)
+    }
     
     var body: some View {
         ZStack(alignment: .bottom) {

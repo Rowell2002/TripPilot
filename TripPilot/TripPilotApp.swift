@@ -37,11 +37,13 @@ class AppDelegate: NSObject, UIApplicationDelegate {
 struct TripPilotApp: App {
     @UIApplicationDelegateAdaptor(AppDelegate.self) var appDelegate
     @StateObject private var authViewModel = AuthViewModel.shared
+    @AppStorage("appSelectedTheme") private var appSelectedTheme: String = "Dark"
     
     var body: some Scene {
         WindowGroup {
             ContentView()
                 .environmentObject(authViewModel)
+                .preferredColorScheme(ThemeAppearanceMode(rawValue: appSelectedTheme)?.colorScheme)
                 .onOpenURL { url in
                     GIDSignIn.sharedInstance.handle(url)
                 }
