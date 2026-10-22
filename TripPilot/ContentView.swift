@@ -11,7 +11,7 @@ struct ContentView: View {
     
     var body: some View {
         NavigationStack {
-            SignInView()
+            WelcomeLandingView()
         }
         .fullScreenCover(item: $activeLandmark) { landmark in
             GeofencedAudioGuideDetailView(landmark: landmark)

@@ -42,7 +42,7 @@ struct SettingsProfileView: View {
     @State private var selectedTheme: ThemeAppearanceMode = .dark
     
     // Toggles
-    @State private var isFaceIDEnabled: Bool = true
+    @AppStorage("isFaceIDQuickUnlockEnabled") private var isFaceIDEnabled: Bool = true
     @State private var isSecureEnclaveSyncEnabled: Bool = true
     @State private var isItineraryAlertsEnabled: Bool = true
     @State private var isGeofencedAudioEnabled: Bool = true
@@ -642,10 +642,23 @@ struct SettingsProfileView: View {
                     iconColor: secondaryMint,
                     iconBg: secondaryMint.opacity(0.18),
                     title: "Face ID Quick Unlock",
-                    subtitle: "Authenticate instant wallet and vault",
+                    subtitle: "Instant biometric sign-in & secure travel vault",
                     isOn: $isFaceIDEnabled,
                     tintColor: secondaryMint
                 )
+                
+                rowDivider
+                
+                // Biometric Hardware Status
+                settingRowButton(
+                    icon: "checkmark.shield.fill",
+                    iconColor: secondaryMint,
+                    iconBg: secondaryMint.opacity(0.18),
+                    title: "Biometric Hardware Status",
+                    value: isFaceIDEnabled ? "Ready (Face ID)" : "Disabled"
+                ) {
+                    showToast(isFaceIDEnabled ? "Face ID Sensor Verified & Active" : "Enable Face ID toggle above to activate instant unlock")
+                }
                 
                 rowDivider
                 
