@@ -6,13 +6,23 @@ import UIKit
 struct DailyItineraryView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var tripManager = TripManager.shared
+    @ObservedObject private var audioPlayer = SpatialAudioGuidePlayer.shared
     @State private var selectedDateIndex: Int = 0
     @State private var showAudioStoryModal: Bool = false
+    @State private var selectedAudioStopTitle: String = "Sigiriya: The Fortress in the Sky"
+    @State private var selectedAudioStoryText: String = ""
     @State private var showReorderModal: Bool = false
+    @State private var reorderableStops: [TripStop] = []
     @State private var showAddStopModal: Bool = false
+    @State private var stopSearchQuery: String = ""
     @State private var showDaySettingsModal: Bool = false
     @State private var activeNotice: String? = nil
-    @State private var isAudioPlaying: Bool = true
+    
+    // Day Settings Toggles with AppStorage
+    @AppStorage("itinerary_monsoon_alerts") private var monsoonAlertsEnabled: Bool = true
+    @AppStorage("itinerary_dress_code_warnings") private var dressCodeWarningsEnabled: Bool = true
+    @AppStorage("itinerary_safari_permit_sync") private var safariPermitSyncEnabled: Bool = true
+    @AppStorage("itinerary_offline_caching") private var offlineCachingEnabled: Bool = true
     
     private var currentDay: TripDay {
         let days = tripManager.currentTrip.days
@@ -92,7 +102,6 @@ struct DailyItineraryView: View {
             
         }
         .navigationBarBackButtonHidden(true)
-        .preferredColorScheme(.dark)
         .sheet(isPresented: $showAudioStoryModal) {
             audioStoryPlayerSheet
         }
@@ -394,6 +403,7 @@ struct DailyItineraryView: View {
                 
                 HStack(spacing: 8) {
                     Button(action: {
+                        reorderableStops = currentDay.stops
                         showReorderModal = true
                     }) {
                         HStack(spacing: 5) {
@@ -640,7 +650,29 @@ struct DailyItineraryView: View {
                             .stroke(Color.white.opacity(0.06), lineWidth: 1)
                     )
                     
-
+                    // Audio Guide Action
+                    HStack {
+                        Button(action: {
+                            selectedAudioStopTitle = stop.title
+                            selectedAudioStoryText = stop.description
+                            audioPlayer.loadGuide(title: stop.title, narrator: "AI Cultural Storyteller", narrativeText: stop.description)
+                            showAudioStoryModal = true
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: "headphones")
+                                    .font(.system(size: 11, weight: .bold))
+                                Text("Listen Guide")
+                                    .font(.system(size: 11, weight: .semibold, design: .rounded))
+                            }
+                            .foregroundColor(amberAccent)
+                            .padding(.horizontal, 10)
+                            .padding(.vertical, 5)
+                            .background(amberAccent.opacity(0.12))
+                            .clipShape(Capsule())
+                        }
+                        
+                        Spacer()
+                    }
                 }
                 .padding(14)
                 .background(surfaceContainerLowest)
@@ -706,7 +738,19 @@ struct DailyItineraryView: View {
                 .foregroundColor(textMuted)
                 .tracking(0.8)
             
-            HStack(spacing: 8) {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 10) {
+                Button(action: {
+                    let firstStop = currentDay.stops.first
+                    let title = firstStop?.title ?? "Sigiriya: The Fortress in the Sky"
+                    let narrative = firstStop?.description ?? "A cultural journey through the ancient UNESCO heritage citadel of Sigiriya."
+                    selectedAudioStopTitle = title
+                    selectedAudioStoryText = narrative
+                    audioPlayer.loadGuide(title: title, narrator: "AI Cultural Storyteller", narrativeText: narrative)
+                    showAudioStoryModal = true
+                }) {
+                    utilityButton(icon: "headphones", title: "Audio Story", iconColor: amberAccent)
+                }
+                
                 Button(action: {
                     triggerNotice("📄 Generating high-resolution Sri Lanka Itinerary PDF...")
                 }) {
@@ -714,9 +758,9 @@ struct DailyItineraryView: View {
                 }
                 
                 Button(action: {
-                    triggerNotice("🗺️ Offline maps for Sri Lanka (Sigiriya, Ella, Galle) cached (38 MB)")
+                    triggerNotice("🗺️ Offline maps for Sri Lanka cached (38 MB)")
                 }) {
-                    utilityButton(icon: "arrow.down.circle.fill", title: "Offline Map", iconColor: skyBlue)
+                    utilityButton(icon: "arrow.down.circle.fill", title: "Offline Map", iconColor: primaryCyan)
                 }
                 
                 Button(action: {
@@ -774,7 +818,7 @@ struct DailyItineraryView: View {
         ZStack {
             darkBackground.ignoresSafeArea()
             
-            VStack(spacing: 22) {
+            VStack(spacing: 18) {
                 Capsule()
                     .fill(Color.white.opacity(0.2))
                     .frame(width: 40, height: 4)
@@ -782,18 +826,28 @@ struct DailyItineraryView: View {
                 
                 HStack {
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("TripPilot Audio Guide")
-                            .font(.system(size: 12, weight: .bold, design: .rounded))
-                            .foregroundColor(skyBlue)
+                        HStack(spacing: 6) {
+                            Circle()
+                                .fill(audioPlayer.isPlaying ? primaryCyan : textMuted)
+                                .frame(width: 7, height: 7)
+                            Text(audioPlayer.isPlaying ? "PLAYING AUDIO GUIDE" : "AUDIO GUIDE PAUSED")
+                                .font(.system(size: 10, weight: .heavy, design: .rounded))
+                                .foregroundColor(audioPlayer.isPlaying ? primaryCyan : textMuted)
+                                .tracking(0.5)
+                        }
                         
-                        Text("Sigiriya: The Fortress in the Sky")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                        Text(selectedAudioStopTitle)
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
+                            .lineLimit(1)
                     }
                     
                     Spacer()
                     
-                    Button(action: { showAudioStoryModal = false }) {
+                    Button(action: {
+                        audioPlayer.pause()
+                        showAudioStoryModal = false
+                    }) {
                         Image(systemName: "xmark.circle.fill")
                             .font(.system(size: 22))
                             .foregroundColor(textMuted)
@@ -801,96 +855,162 @@ struct DailyItineraryView: View {
                 }
                 .padding(.horizontal, 20)
                 
+                // Animated Dynamic Waveform
                 HStack(spacing: 4) {
-                    ForEach(0..<24, id: \.self) { i in
+                    ForEach(0..<26, id: \.self) { i in
                         RoundedRectangle(cornerRadius: 2)
-                            .fill(i % 3 == 0 ? skyBlue : (i % 2 == 0 ? primaryCyan : Color.white.opacity(0.2)))
-                            .frame(width: 4, height: CGFloat.random(in: 15...55))
+                            .fill(
+                                audioPlayer.isPlaying
+                                    ? (i % 3 == 0 ? skyBlue : (i % 2 == 0 ? primaryCyan : Color.white.opacity(0.5)))
+                                    : Color.white.opacity(0.18)
+                            )
+                            .frame(width: 4, height: audioPlayer.isPlaying ? CGFloat((i * 7) % 45 + 15) : 14)
+                            .animation(.easeInOut(duration: 0.35).repeatForever().delay(Double(i) * 0.02), value: audioPlayer.isPlaying)
                     }
                 }
-                .frame(height: 70)
-                .padding(.vertical, 8)
+                .frame(height: 60)
+                .padding(.vertical, 4)
                 
+                // Scrubbing Timeline & Duration
+                VStack(spacing: 6) {
+                    GeometryReader { geo in
+                        ZStack(alignment: .leading) {
+                            Capsule()
+                                .fill(surfaceContainerHigh)
+                                .frame(height: 6)
+                            
+                            Capsule()
+                                .fill(LinearGradient(colors: [primaryCyan, skyBlue], startPoint: .leading, endPoint: .trailing))
+                                .frame(width: max(0, min(geo.size.width * CGFloat(audioPlayer.progress), geo.size.width)), height: 6)
+                        }
+                        .contentShape(Rectangle())
+                        .gesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { val in
+                                    let progress = max(0.0, min(1.0, Double(val.location.x / geo.size.width)))
+                                    audioPlayer.seek(to: progress)
+                                }
+                        )
+                    }
+                    .frame(height: 12)
+                    
+                    HStack {
+                        Text(audioPlayer.currentTimeString)
+                            .font(.system(size: 11, weight: .medium, design: .monospaced))
+                            .foregroundColor(skyBlue)
+                        
+                        Spacer()
+                        
+                        Text(String(format: "%02d:%02d", Int(audioPlayer.totalDurationSeconds) / 60, Int(audioPlayer.totalDurationSeconds) % 60))
+                            .font(.system(size: 11, weight: .medium, design: .monospaced))
+                            .foregroundColor(textMuted)
+                    }
+                }
+                .padding(.horizontal, 20)
+                
+                // Controls: -15s, Play/Pause, +15s
                 HStack(spacing: 36) {
-                    Button(action: {}) {
+                    Button(action: {
+                        audioPlayer.skip(seconds: -15)
+                    }) {
                         Image(systemName: "gobackward.15")
-                            .font(.system(size: 22))
+                            .font(.system(size: 24))
                             .foregroundColor(textOnSurface)
                     }
                     
                     Button(action: {
-                        isAudioPlaying.toggle()
+                        audioPlayer.togglePlayPause()
                     }) {
                         ZStack {
                             Circle()
                                 .fill(
                                     LinearGradient(colors: [skyBlue, royalBlue], startPoint: .topLeading, endPoint: .bottomTrailing)
                                 )
-                                .frame(width: 60, height: 60)
+                                .frame(width: 62, height: 62)
                                 .shadow(color: skyBlue.opacity(0.4), radius: 10)
                             
-                            Image(systemName: isAudioPlaying ? "pause.fill" : "play.fill")
-                                .font(.system(size: 22, weight: .bold))
+                            Image(systemName: audioPlayer.isPlaying ? "pause.fill" : "play.fill")
+                                .font(.system(size: 24, weight: .bold))
                                 .foregroundColor(.white)
                         }
                     }
                     
-                    Button(action: {}) {
+                    Button(action: {
+                        audioPlayer.skip(seconds: 15)
+                    }) {
                         Image(systemName: "goforward.15")
-                            .font(.system(size: 22))
+                            .font(.system(size: 24))
                             .foregroundColor(textOnSurface)
                     }
                 }
                 
-                Text("Narrated by AI Cultural Storyteller • 3m 45s")
-                    .font(.system(size: 12))
+                Text("Spatial Audio Synthesis • Narrated by AI Cultural Storyteller")
+                    .font(.system(size: 11.5, weight: .medium))
                     .foregroundColor(textMuted)
                 
                 Spacer()
             }
         }
-        .presentationDetents([.fraction(0.48)])
+        .presentationDetents([.fraction(0.55)])
         .preferredColorScheme(.dark)
     }
     
     // MARK: - Sheet 3: Reorder Stops
     private var reorderStopsSheet: some View {
-        ZStack {
-            darkBackground.ignoresSafeArea()
-            
-            VStack(spacing: 16) {
-                Capsule()
-                    .fill(Color.white.opacity(0.2))
-                    .frame(width: 40, height: 4)
-                    .padding(.top, 12)
+        NavigationStack {
+            ZStack {
+                darkBackground.ignoresSafeArea()
                 
-                HStack {
-                    Text("Reorder Day \(selectedDayIndex + 1) Stops")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                VStack(spacing: 0) {
+                    Text("Drag stops using the handles on the right to reorder Day \(selectedDayIndex + 1)'s schedule. Changes will update your active route instantly.")
+                        .font(.system(size: 12.5))
+                        .foregroundColor(textMuted)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 10)
+                        .padding(.bottom, 12)
+                        .frame(maxWidth: .infinity, alignment: .leading)
                     
-                    Spacer()
-                    
-                    Button("Done") {
+                    List {
+                        ForEach(Array(reorderableStops.enumerated()), id: \.element.id) { index, stop in
+                            reorderRow(number: "\(index + 1)", title: stop.title, time: stop.time)
+                                .listRowBackground(Color.clear)
+                                .listRowSeparator(.hidden)
+                                .listRowInsets(EdgeInsets(top: 5, leading: 16, bottom: 5, trailing: 16))
+                        }
+                        .onMove { indices, newOffset in
+                            reorderableStops.move(fromOffsets: indices, toOffset: newOffset)
+                        }
+                        .onDelete { indices in
+                            reorderableStops.remove(atOffsets: indices)
+                        }
+                    }
+                    .listStyle(.plain)
+                    .scrollContentBackground(.hidden)
+                    .environment(\.editMode, .constant(.active))
+                }
+            }
+            .navigationTitle("Reorder Day \(selectedDayIndex + 1) Stops")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") {
                         showReorderModal = false
-                        triggerNotice("✅ Itinerary schedule updated")
+                    }
+                    .foregroundColor(textMuted)
+                }
+                
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Save") {
+                        tripManager.updateStopsOrder(for: selectedDayIndex, newStops: reorderableStops)
+                        showReorderModal = false
+                        triggerNotice("✅ Day \(selectedDayIndex + 1) schedule reordered")
                     }
                     .font(.system(size: 15, weight: .bold, design: .rounded))
                     .foregroundColor(skyBlue)
                 }
-                .padding(.horizontal, 20)
-                
-                VStack(spacing: 10) {
-                    ForEach(Array(currentDay.stops.enumerated()), id: \.element.id) { index, stop in
-                        reorderRow(number: "\(index + 1)", title: stop.title, time: stop.time)
-                    }
-                }
-                .padding(.horizontal, 20)
-                
-                Spacer()
             }
         }
-        .presentationDetents([.fraction(0.6)])
+        .presentationDetents([.fraction(0.7), .large])
         .preferredColorScheme(.dark)
     }
     
@@ -925,6 +1045,18 @@ struct DailyItineraryView: View {
     }
     
     // MARK: - Sheet 4: Add New Stop
+    private var filteredPlacesForAdd: [SriLankaPlace] {
+        let q = stopSearchQuery.trimmingCharacters(in: .whitespacesAndNewlines).lowercased()
+        if q.isEmpty {
+            return Array(SriLankaDataService.shared.places.prefix(6))
+        }
+        return SriLankaDataService.shared.places.filter {
+            $0.name.lowercased().contains(q) ||
+            $0.district.lowercased().contains(q) ||
+            $0.category.rawValue.lowercased().contains(q)
+        }
+    }
+    
     private var addStopSheet: some View {
         ZStack {
             darkBackground.ignoresSafeArea()
@@ -936,55 +1068,109 @@ struct DailyItineraryView: View {
                     .padding(.top, 12)
                 
                 HStack {
-                    Text("Add Stop to Day \(selectedDayIndex + 1)")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Add Stop to Day \(selectedDayIndex + 1)")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        Text("Search catalog or enter custom destination")
+                            .font(.system(size: 11))
+                            .foregroundColor(textMuted)
+                    }
                     
                     Spacer()
                     
-                    Button("Cancel") { showAddStopModal = false }
-                        .foregroundColor(textMuted)
+                    Button("Cancel") {
+                        stopSearchQuery = ""
+                        showAddStopModal = false
+                    }
+                    .foregroundColor(textMuted)
                 }
                 .padding(.horizontal, 20)
                 
-                VStack(spacing: 12) {
-                    HStack {
-                        Image(systemName: "magnifyingglass")
+                // Search Input Field
+                HStack(spacing: 8) {
+                    Image(systemName: "magnifyingglass")
+                        .foregroundColor(textMuted)
+                    TextField("Search places in Sri Lanka...", text: $stopSearchQuery)
+                        .foregroundColor(.white)
+                        .autocorrectionDisabled()
+                    
+                    if !stopSearchQuery.isEmpty {
+                        Button(action: { stopSearchQuery = "" }) {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(textMuted)
+                        }
+                    }
+                }
+                .padding(12)
+                .background(surfaceContainerLowest)
+                .clipShape(RoundedRectangle(cornerRadius: 12))
+                .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
+                .padding(.horizontal, 20)
+                
+                ScrollView {
+                    VStack(spacing: 10) {
+                        // Custom Stop Option if query isn't empty
+                        if !stopSearchQuery.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+                            Button(action: {
+                                let customTitle = stopSearchQuery.trimmingCharacters(in: .whitespacesAndNewlines)
+                                tripManager.addCustomStop(
+                                    title: customTitle,
+                                    category: "Custom Discovery",
+                                    notes: "Custom itinerary stop added by traveler",
+                                    entranceFeeLKR: 0,
+                                    dayIndex: selectedDayIndex
+                                )
+                                stopSearchQuery = ""
+                                showAddStopModal = false
+                                triggerNotice("📍 Added '\(customTitle)' to Day \(selectedDayIndex + 1)")
+                            }) {
+                                HStack(spacing: 10) {
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.system(size: 18))
+                                        .foregroundColor(skyBlue)
+                                    VStack(alignment: .leading, spacing: 1) {
+                                        Text("Add \"\(stopSearchQuery)\"")
+                                            .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                                            .foregroundColor(.white)
+                                        Text("Add as custom unlisted destination")
+                                            .font(.system(size: 11))
+                                            .foregroundColor(skyBlue)
+                                    }
+                                    Spacer()
+                                }
+                                .padding(12)
+                                .background(surfaceContainerLowest)
+                                .clipShape(RoundedRectangle(cornerRadius: 12))
+                                .overlay(RoundedRectangle(cornerRadius: 12).stroke(skyBlue.opacity(0.4), lineWidth: 1))
+                            }
+                        }
+                        
+                        Text(stopSearchQuery.isEmpty ? "POPULAR SRI LANKAN ATTRACTIONS" : "CATALOG RESULTS (\(filteredPlacesForAdd.count))")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
                             .foregroundColor(textMuted)
-                        TextField("Search places in Sri Lanka...", text: .constant(""))
-                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            .padding(.top, 4)
+                        
+                        ForEach(filteredPlacesForAdd) { place in
+                            suggestedStopRow(place: place)
+                        }
                     }
-                    .padding(12)
-                    .background(surfaceContainerLowest)
-                    .clipShape(RoundedRectangle(cornerRadius: 12))
-                    .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
-                    
-                    Text("POPULAR IN SRI LANKA")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(textMuted)
-                        .frame(maxWidth: .infinity, alignment: .leading)
-                        .padding(.top, 8)
-                    
-                    ForEach(SriLankaDataService.shared.places.prefix(3)) { place in
-                        suggestedStopRow(name: place.name, type: "\(place.category.rawValue) • \(place.bestTimeToVisit)")
-                    }
+                    .padding(.horizontal, 20)
                 }
-                .padding(.horizontal, 20)
-                
-                Spacer()
             }
         }
-        .presentationDetents([.fraction(0.55)])
+        .presentationDetents([.fraction(0.65), .large])
         .preferredColorScheme(.dark)
     }
     
-    private func suggestedStopRow(name: String, type: String) -> some View {
+    private func suggestedStopRow(place: SriLankaPlace) -> some View {
         HStack {
             VStack(alignment: .leading, spacing: 2) {
-                Text(name)
+                Text(place.name)
                     .font(.system(size: 13.5, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
-                Text(type)
+                Text("\(place.category.rawValue) • \(place.district) • $\(Int(place.entryFeeUSD))")
                     .font(.system(size: 11))
                     .foregroundColor(textMuted)
             }
@@ -992,17 +1178,26 @@ struct DailyItineraryView: View {
             Spacer()
             
             Button(action: {
+                tripManager.addCustomStop(
+                    title: place.name,
+                    category: place.category.rawValue,
+                    notes: place.description,
+                    entranceFeeLKR: place.entryFeeLKR,
+                    dayIndex: selectedDayIndex
+                )
+                stopSearchQuery = ""
                 showAddStopModal = false
-                triggerNotice("📍 Added '\(name)' to Day \(selectedDayIndex + 1)")
+                triggerNotice("📍 Added '\(place.name)' to Day \(selectedDayIndex + 1)")
             }) {
                 Image(systemName: "plus.circle.fill")
-                    .font(.system(size: 20))
+                    .font(.system(size: 22))
                     .foregroundColor(skyBlue)
             }
         }
         .padding(12)
         .background(surfaceContainerLowest)
         .clipShape(RoundedRectangle(cornerRadius: 12))
+        .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
     }
     
     // MARK: - Sheet 5: Day Settings
@@ -1017,43 +1212,61 @@ struct DailyItineraryView: View {
                     .padding(.top, 12)
                 
                 HStack {
-                    Text("Day \(selectedDayIndex + 1) Settings")
-                        .font(.system(size: 18, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Day \(selectedDayIndex + 1) Settings")
+                            .font(.system(size: 18, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        Text("Live alerts and route synchronizations")
+                            .font(.system(size: 11))
+                            .foregroundColor(textMuted)
+                    }
                     
                     Spacer()
                     
-                    Button("Done") { showDaySettingsModal = false }
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(skyBlue)
+                    Button("Done") {
+                        showDaySettingsModal = false
+                        triggerNotice("⚙️ Day \(selectedDayIndex + 1) preferences saved")
+                    }
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(skyBlue)
                 }
                 .padding(.horizontal, 20)
                 
                 VStack(spacing: 12) {
-                    Toggle("Monsoon Smart Weather Alert", isOn: .constant(true))
+                    Toggle("Monsoon Smart Weather Alert", isOn: $monsoonAlertsEnabled)
                         .tint(skyBlue)
                         .padding(12)
                         .background(surfaceContainerLowest)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
                     
-                    Toggle("Temple Dress Code Warnings", isOn: .constant(true))
+                    Toggle("Temple Dress Code Warnings", isOn: $dressCodeWarningsEnabled)
                         .tint(tealAccent)
                         .padding(12)
                         .background(surfaceContainerLowest)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
                     
-                    Toggle("Safari Permit Auto-Sync", isOn: .constant(true))
+                    Toggle("Safari Permit Auto-Sync", isOn: $safariPermitSyncEnabled)
                         .tint(amberAccent)
                         .padding(12)
                         .background(surfaceContainerLowest)
                         .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
+                    
+                    Toggle("Offline Map Auto-Cache", isOn: $offlineCachingEnabled)
+                        .tint(primaryCyan)
+                        .padding(12)
+                        .background(surfaceContainerLowest)
+                        .clipShape(RoundedRectangle(cornerRadius: 12))
+                        .overlay(RoundedRectangle(cornerRadius: 12).stroke(outlineVariant, lineWidth: 1))
                 }
                 .padding(.horizontal, 20)
                 
                 Spacer()
             }
         }
-        .presentationDetents([.fraction(0.42)])
+        .presentationDetents([.fraction(0.52)])
         .preferredColorScheme(.dark)
     }
 }

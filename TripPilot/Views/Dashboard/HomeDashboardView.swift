@@ -20,6 +20,7 @@ struct HomeDashboardView: View {
     // Navigation Triggers
     @State private var navigateToMyTrips: Bool = false
     @State private var navigateToPlaceDiscovery: Bool = false
+    @State private var navigateToAnalytics: Bool = false
     
     // Notifications & Geofence Audio Guide
     @ObservedObject private var notificationManager = NotificationManager.shared
@@ -139,7 +140,6 @@ struct HomeDashboardView: View {
             
         }
         .navigationBarBackButtonHidden(true)
-        .preferredColorScheme(.dark)
         .onAppear {
             withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                 isLivePulsing = true
@@ -156,6 +156,9 @@ struct HomeDashboardView: View {
         }
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
+        }
+        .navigationDestination(isPresented: $navigateToAnalytics) {
+            TravelAnalyticsMilestonesView()
         }
         .sheet(isPresented: $showNotificationsSheet) {
             NotificationsInboxSheet { landmark in
@@ -775,7 +778,7 @@ struct HomeDashboardView: View {
             // Right: Trip Steps (Compact, matching Trip Budget!)
             Button(action: {
                 stepTracker.startTracking()
-                triggerNotice("🔄 Original steps: \(stepTracker.todaySteps) recorded")
+                navigateToAnalytics = true
             }) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {

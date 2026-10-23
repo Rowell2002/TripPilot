@@ -60,7 +60,7 @@ struct InteractiveMapView: View {
     @State private var searchText: String = ""
     @State private var is3DEnabled: Bool = false
     @State private var isAudioPlaying: Bool = false
-    @State private var isSpotSaved: Bool = false
+    @ObservedObject private var bookmarkManager = BookmarkManager.shared
     @State private var isGpsRadarPulsing: Bool = false
     @State private var isRecenterPressed: Bool = false
     @State private var toastMessage: String? = nil
@@ -160,7 +160,6 @@ struct InteractiveMapView: View {
             
         }
         .navigationBarBackButtonHidden(true)
-        .preferredColorScheme(.dark)
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
         }
@@ -755,12 +754,13 @@ struct InteractiveMapView: View {
                     Spacer()
                     
                     Button(action: {
-                        isSpotSaved.toggle()
-                        triggerToast(isSpotSaved ? "Saved \(selectedPlace.name) to Travel Vault" : "Removed from Favorites")
+                        bookmarkManager.toggleBookmark(place: selectedPlace)
+                        let isSaved = bookmarkManager.isBookmarked(place: selectedPlace)
+                        triggerToast(isSaved ? "Saved \(selectedPlace.name) to Travel Vault" : "Removed from Favorites")
                     }) {
-                        Image(systemName: isSpotSaved ? "bookmark.fill" : "bookmark")
+                        Image(systemName: bookmarkManager.isBookmarked(place: selectedPlace) ? "bookmark.fill" : "bookmark")
                             .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(isSpotSaved ? secondaryMint : textOnSurface)
+                            .foregroundColor(bookmarkManager.isBookmarked(place: selectedPlace) ? secondaryMint : textOnSurface)
                             .frame(width: 34, height: 34)
                             .background(surfaceContainerHigh)
                             .clipShape(Circle())

@@ -30,7 +30,7 @@ public struct GeofencedAudioGuideDetailView: View {
     
     // Offline Cache Toggle & Bookmark
     @State private var isOfflineCached: Bool = true
-    @State private var isBookmarked: Bool = false
+    @ObservedObject private var bookmarkManager = BookmarkManager.shared
     
     // Feedback alerts
     @State private var toastMessage: String? = nil
@@ -852,15 +852,16 @@ public struct GeofencedAudioGuideDetailView: View {
             HStack(spacing: 10) {
                 // Save Highlight
                 Button(action: {
-                    isBookmarked.toggle()
-                    showToast(isBookmarked ? "Saved to Travel Highlights" : "Removed from Highlights")
+                    bookmarkManager.toggleBookmark(name: landmark.name)
+                    let isSaved = bookmarkManager.isBookmarked(name: landmark.name)
+                    showToast(isSaved ? "Saved to Travel Highlights" : "Removed from Highlights")
                 }) {
                     HStack(spacing: 6) {
-                        Image(systemName: isBookmarked ? "bookmark.fill" : "bookmark")
+                        Image(systemName: bookmarkManager.isBookmarked(name: landmark.name) ? "bookmark.fill" : "bookmark")
                             .font(.system(size: 14))
                             .foregroundColor(primaryCyan)
                         
-                        Text(isBookmarked ? "Saved" : "Save Highlight")
+                        Text(bookmarkManager.isBookmarked(name: landmark.name) ? "Saved" : "Save Highlight")
                             .font(.system(size: 13, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                     }

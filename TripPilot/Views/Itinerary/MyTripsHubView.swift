@@ -46,7 +46,7 @@ struct MyTripsHubView: View {
     
     enum TripSegment: String {
         case activeAndUpcoming = "Active & Upcoming"
-        case pastJourneys = "Past Journeys (8)"
+        case pastJourneys = "Past Journeys"
     }
     
     var body: some View {
@@ -433,7 +433,7 @@ struct MyTripsHubView: View {
                     selectedSegment = .pastJourneys
                 }
             }) {
-                Text(TripSegment.pastJourneys.rawValue)
+                Text("Past Journeys (\(tripManager.savedTrips.count))")
                     .font(.system(size: 13, weight: selectedSegment == .pastJourneys ? .semibold : .medium, design: .rounded))
                     .foregroundColor(selectedSegment == .pastJourneys ? skyBlue : textMuted)
                     .frame(maxWidth: .infinity)

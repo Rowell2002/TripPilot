@@ -52,7 +52,6 @@ struct MainAppContainerView: View {
                 .transition(.move(edge: .bottom).combined(with: .opacity))
             }
         }
-        .preferredColorScheme(.dark)
     }
 }
 

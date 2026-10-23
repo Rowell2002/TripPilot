@@ -199,4 +199,52 @@ public final class TripManager: ObservableObject {
         )
         persistUserTrips()
     }
+    
+    public func updateStopsOrder(for dayIndex: Int, newStops: [TripStop]) {
+        guard !currentTrip.days.isEmpty else { return }
+        let targetIndex = min(max(dayIndex, 0), currentTrip.days.count - 1)
+        var updatedDays = currentTrip.days
+        let oldDay = updatedDays[targetIndex]
+        let updatedDay = TripDay(
+            id: oldDay.id,
+            dayNumber: oldDay.dayNumber,
+            dayOfWeek: oldDay.dayOfWeek,
+            dayOfMonth: oldDay.dayOfMonth,
+            fullDateString: oldDay.fullDateString,
+            title: oldDay.title,
+            region: oldDay.region,
+            weather: oldDay.weather,
+            temperature: oldDay.temperature,
+            stops: newStops
+        )
+        updatedDays[targetIndex] = updatedDay
+        self.currentTrip = GeneratedTrip(
+            id: currentTrip.id,
+            title: currentTrip.title,
+            destinationRegion: currentTrip.destinationRegion,
+            destinationFlag: currentTrip.destinationFlag,
+            durationDays: currentTrip.durationDays,
+            durationNights: currentTrip.durationNights,
+            companion: currentTrip.companion,
+            pace: currentTrip.pace,
+            budgetTier: currentTrip.budgetTier,
+            tags: currentTrip.tags,
+            startDateString: currentTrip.startDateString,
+            endDateString: currentTrip.endDateString,
+            weatherSummary: currentTrip.weatherSummary,
+            totalEstimatedLKR: currentTrip.totalEstimatedLKR,
+            totalEstimatedUSD: currentTrip.totalEstimatedUSD,
+            days: updatedDays
+        )
+        persistUserTrips()
+    }
+    
+    public func deleteStop(at index: Int, in dayIndex: Int) {
+        guard !currentTrip.days.isEmpty else { return }
+        let targetIndex = min(max(dayIndex, 0), currentTrip.days.count - 1)
+        var targetStops = currentTrip.days[targetIndex].stops
+        guard targetStops.indices.contains(index) else { return }
+        targetStops.remove(at: index)
+        updateStopsOrder(for: targetIndex, newStops: targetStops)
+    }
 }

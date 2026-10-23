@@ -98,7 +98,6 @@ struct BudgetExpensesView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .preferredColorScheme(.dark)
         .sheet(isPresented: $viewModel.showLogExpenseSheet) {
             logExpenseModalSheet
         }

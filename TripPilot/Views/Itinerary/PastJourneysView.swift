@@ -19,6 +19,7 @@ struct PastJourneysView: View {
     @State private var navigateToProfile: Bool = false
     @State private var navigateToAnalytics: Bool = false
     @ObservedObject private var authViewModel = AuthViewModel.shared
+    @ObservedObject private var tripManager = TripManager.shared
     
     // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -348,7 +349,7 @@ struct PastJourneysView: View {
                         .font(.system(size: 12))
                         .foregroundColor(primaryCyan)
                     
-                    Text("Past Journeys (8)")
+                    Text("Past Journeys (\(tripManager.savedTrips.count))")
                         .font(.system(size: 13, weight: selectedSegment == .pastJourneys ? .semibold : .medium, design: .rounded))
                 }
                 .foregroundColor(selectedSegment == .pastJourneys ? skyBlue : textMuted)

@@ -84,6 +84,7 @@ struct SettingsProfileView: View {
     // Interactive State
     @ObservedObject private var authViewModel = AuthViewModel.shared
     @ObservedObject private var tripManager = TripManager.shared
+    @ObservedObject private var bookmarkManager = BookmarkManager.shared
     @State private var isVIPIndicatorPulsing: Bool = false
     
     // Toggles
@@ -470,7 +471,7 @@ struct SettingsProfileView: View {
                     
                     // Saved
                     VStack(spacing: 2) {
-                        Text("324")
+                        Text("\(bookmarkManager.count)")
                             .font(.system(size: 20, weight: .heavy, design: .rounded))
                             .foregroundColor(primarySky)
                         

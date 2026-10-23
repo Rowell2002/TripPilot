@@ -1377,7 +1377,8 @@ struct TripGeneratorWizardView: View {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation {
                         isGenerating = false
-                        navigateToDailyItinerary = true
+                        dismiss()
+                        AppNavigationRouter.shared.switchTab(to: .itinerary)
                     }
                 }
             }

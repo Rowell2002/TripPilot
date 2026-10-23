@@ -60,7 +60,7 @@ struct PlaceDiscoveryView: View {
     @State private var searchText: String = ""
     @State private var activeNotice: String? = nil
     @State private var isRadarPulsing: Bool = false
-    @State private var bookmarkedPlaceIds: Set<UUID> = []
+    @ObservedObject private var bookmarkManager = BookmarkManager.shared
     @State private var addedPlaceNames: Set<String> = []
     
     // Navigation Triggers
@@ -520,17 +520,13 @@ struct PlaceDiscoveryView: View {
                     Spacer()
                     
                     Button(action: {
-                        if bookmarkedPlaceIds.contains(place.id) {
-                            bookmarkedPlaceIds.remove(place.id)
-                            triggerNotice("Removed \(place.name) from saved")
-                        } else {
-                            bookmarkedPlaceIds.insert(place.id)
-                            triggerNotice("Saved \(place.name) to Travel Vault")
-                        }
+                        bookmarkManager.toggleBookmark(place: place)
+                        let isSaved = bookmarkManager.isBookmarked(place: place)
+                        triggerNotice(isSaved ? "Saved \(place.name) to Travel Vault" : "Removed \(place.name) from saved")
                     }) {
-                        Image(systemName: bookmarkedPlaceIds.contains(place.id) ? "bookmark.fill" : "bookmark")
+                        Image(systemName: bookmarkManager.isBookmarked(place: place) ? "bookmark.fill" : "bookmark")
                             .font(.system(size: 14))
-                            .foregroundColor(bookmarkedPlaceIds.contains(place.id) ? primaryContainer : textOnSurface)
+                            .foregroundColor(bookmarkManager.isBookmarked(place: place) ? primaryContainer : textOnSurface)
                             .frame(width: 32, height: 32)
                             .background(surfaceContainerLowest.opacity(0.75))
                             .clipShape(Circle())
