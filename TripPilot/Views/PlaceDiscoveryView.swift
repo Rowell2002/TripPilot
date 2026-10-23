@@ -185,15 +185,17 @@ struct PlaceDiscoveryView: View {
                     
                     Spacer().frame(height: 120)
                 }
-                .frame(width: UIScreen.main.bounds.width - 36, alignment: .leading)
+                .frame(maxWidth: .infinity, alignment: .leading)
                 .padding(.horizontal, 18)
                 .padding(.top, 64)
+                .responsiveContentWidth(1000)
             }
-            .frame(width: UIScreen.main.bounds.width)
+            .frame(maxWidth: .infinity)
             
             // Fixed Top Header
             VStack(spacing: 0) {
                 fixedTopHeaderBar
+                    .responsiveContentWidth(1000)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
@@ -409,7 +411,7 @@ struct PlaceDiscoveryView: View {
                 }
             }
         }
-        .frame(width: UIScreen.main.bounds.width - 36, alignment: .leading)
+        .frame(maxWidth: .infinity, alignment: .leading)
     }
     
     // MARK: - Curated UNESCO & Heritage Picks
@@ -445,7 +447,7 @@ struct PlaceDiscoveryView: View {
                     }
                 }
             }
-            .frame(width: UIScreen.main.bounds.width - 36, alignment: .leading)
+            .frame(maxWidth: .infinity, alignment: .leading)
         }
     }
     

@@ -76,22 +76,25 @@ struct PlaceDetailView: View {
                         
                         Spacer().frame(height: 120)
                     }
-                    .frame(width: UIScreen.main.bounds.width - 32, alignment: .leading)
+                    .frame(maxWidth: .infinity, alignment: .leading)
                     .padding(.horizontal, 16)
                     .padding(.top, 16)
+                    .responsiveContentWidth(900)
                 }
-                .frame(width: UIScreen.main.bounds.width)
+                .frame(maxWidth: .infinity)
             }
             
             // Fixed Top Header
             VStack(spacing: 0) {
                 topHeaderBar
+                    .responsiveContentWidth(900)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
             
             // Sticky Instant Checkout Bar
             stickyCheckoutBar
+                .responsiveContentWidth(900)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
@@ -202,7 +205,8 @@ struct PlaceDetailView: View {
                                 Color.gray.opacity(0.3)
                             }
                         }
-                        .frame(width: UIScreen.main.bounds.width, height: 330)
+                        .frame(maxWidth: .infinity)
+                        .frame(height: DeviceLayout.isIPad ? 460 : 330)
                         .clipped()
                         
                         LinearGradient(
@@ -215,7 +219,8 @@ struct PlaceDetailView: View {
                 }
             }
             .tabViewStyle(.page(indexDisplayMode: .never))
-            .frame(width: UIScreen.main.bounds.width, height: 330)
+            .frame(maxWidth: .infinity)
+            .frame(height: DeviceLayout.isIPad ? 460 : 330)
             
             // Top Badges
             VStack {
@@ -294,7 +299,8 @@ struct PlaceDetailView: View {
             .padding(.horizontal, 16)
             .padding(.bottom, 12)
         }
-        .frame(width: UIScreen.main.bounds.width, height: 330)
+        .frame(maxWidth: .infinity)
+        .frame(height: DeviceLayout.isIPad ? 460 : 330)
     }
     
     // MARK: - 2. Place Header

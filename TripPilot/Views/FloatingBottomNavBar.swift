@@ -82,6 +82,8 @@ struct FloatingBottomNavBar: View {
                 .stroke(borderOutline, lineWidth: 1)
         )
         .shadow(color: Color.black.opacity(0.6), radius: 18, y: 8)
+        .frame(maxWidth: DeviceLayout.isIPad ? 500 : .infinity)
+        .frame(maxWidth: .infinity, alignment: .center)
     }
 }
 

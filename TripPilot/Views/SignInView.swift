@@ -408,6 +408,7 @@ struct SignInView: View {
                     .padding(.top, 20)
                     .padding(.bottom, 36)
                 }
+                .responsiveContentWidth(520)
             }
         }
         .navigationDestination(isPresented: $navigateToCreateAccount) {

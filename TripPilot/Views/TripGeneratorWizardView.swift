@@ -209,17 +209,20 @@ struct TripGeneratorWizardView: View {
                     }
                     .padding(.horizontal, 20)
                     .padding(.top, 76) // Space for fixed header
+                    .responsiveContentWidth(820)
                 }
                 
                 // Fixed Header Bar (Top)
                 VStack(spacing: 0) {
                     headerBarSection
+                        .responsiveContentWidth(820)
                     Spacer()
                 }
                 .ignoresSafeArea(edges: .top)
                 
                 // Fixed Bottom Action Bar
                 stickyBottomActionBar
+                    .responsiveContentWidth(820)
             }
             .navigationBarBackButtonHidden(true)
             .preferredColorScheme(.dark)

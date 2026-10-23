@@ -146,13 +146,16 @@ struct InteractiveMapView: View {
                     // 1. Top Header Bar
                     topHeaderBarSection
                         .padding(.top, 46)
+                        .responsiveContentWidth(1000)
                     
                     // 2. Native MapKit Area
                     nativeMapContainerArea
-                        .frame(height: 560)
+                        .frame(height: DeviceLayout.isIPad ? 680 : 560)
+                        .responsiveContentWidth(1000)
                     
                     // 3. Geofenced Landmark Discovery Sheet
                     landmarkDiscoverySheet
+                        .responsiveContentWidth(1000)
                     
                     Spacer().frame(height: 110)
                 }
@@ -431,7 +434,8 @@ struct InteractiveMapView: View {
                 }
             }
             .padding(.horizontal, 28)
-            .position(x: UIScreen.main.bounds.width / 2, y: 72)
+            .padding(.top, 16)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             
             // Right-Side Controls (Re-Center & 3D Pitch)
             VStack(spacing: 8) {
@@ -500,7 +504,9 @@ struct InteractiveMapView: View {
                 .overlay(RoundedRectangle(cornerRadius: 14).stroke(outlineVariant, lineWidth: 1))
                 .shadow(color: Color.black.opacity(0.5), radius: 8, y: 4)
             }
-            .position(x: UIScreen.main.bounds.width - 44, y: 195)
+            .padding(.top, 145)
+            .padding(.trailing, 28)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         }
     }
     
