@@ -47,6 +47,7 @@ struct ReceiptScannerExpenseLoggerView: View {
     private let outlineVariant = Color(red: 62/255, green: 72/255, blue: 79/255)          // #3e484f
     
     // Interactive State
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     @State private var scanLaserOffset: CGFloat = -110
     @State private var isPulsing: Bool = false
     @State private var selectedCategory: ExpenseCategoryOption = .dining
@@ -788,7 +789,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                                     .fill(LinearGradient(colors: [primarySky, secondaryMint], startPoint: .topLeading, endPoint: .bottomTrailing))
                                     .frame(width: 42, height: 42)
                                 
-                                Text("E")
+                                Text(authViewModel.userInitials)
                                     .font(.system(size: 17, weight: .bold, design: .rounded))
                                     .foregroundColor(.white)
                             }
@@ -808,7 +809,7 @@ struct ReceiptScannerExpenseLoggerView: View {
                         
                         VStack(alignment: .leading, spacing: 2) {
                             HStack(spacing: 6) {
-                                Text("Elena (Me)")
+                                Text("\(authViewModel.userFirstName) (Me)")
                                     .font(.system(size: 14, weight: .bold, design: .rounded))
                                     .foregroundColor(textOnSurface)
                                 

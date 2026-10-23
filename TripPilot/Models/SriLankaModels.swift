@@ -157,7 +157,7 @@ public struct SriLankaPlace: Identifiable, Hashable {
 }
 
 // MARK: - Trip Stop Model
-public struct TripStop: Identifiable, Hashable {
+public struct TripStop: Identifiable, Hashable, Codable {
     public let id: UUID
     public let time: String
     public let title: String
@@ -224,7 +224,7 @@ public struct TripStop: Identifiable, Hashable {
 }
 
 // MARK: - Trip Day Model
-public struct TripDay: Identifiable, Hashable {
+public struct TripDay: Identifiable, Hashable, Codable {
     public let id: UUID
     public let dayNumber: Int
     public let dayOfWeek: String
@@ -264,7 +264,7 @@ public struct TripDay: Identifiable, Hashable {
 }
 
 // MARK: - Generated Trip Model
-public struct GeneratedTrip: Identifiable, Hashable {
+public struct GeneratedTrip: Identifiable, Hashable, Codable {
     public let id: UUID
     public let title: String
     public let destinationRegion: String

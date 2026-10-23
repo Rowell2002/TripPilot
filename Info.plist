@@ -25,5 +25,10 @@
 	<string>TripPilot accesses your photo library to let you select travel moments for your polaroid album.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>TripPilot saves your created polaroid memories to your photo library.</string>
+	<key>UILaunchScreen</key>
+	<dict>
+		<key>UIColorName</key>
+		<string>LaunchBackground</string>
+	</dict>
 </dict>
 </plist>

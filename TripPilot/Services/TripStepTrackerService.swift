@@ -1,6 +1,9 @@
 import Foundation
 import SwiftUI
 import Combine
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 #if canImport(CoreMotion)
 import CoreMotion
 #endif
@@ -125,16 +128,29 @@ final class TripStepTrackerService: ObservableObject {
     #endif
     
     private let defaults = UserDefaults.standard
-    private let stepsKey = "tripPilot_todayRealSteps"
-    private let priorDaysKey = "tripPilot_priorDaysSteps"
-    private let lastDateKey = "tripPilot_lastStepDate"
-    private let goalKey = "tripPilot_dailyGoal"
+    
+    private var currentUserId: String {
+        AuthViewModel.shared.currentUserId
+    }
+    
+    private var stepsKey: String { "tripPilot_\(currentUserId)_todayRealSteps" }
+    private var priorDaysKey: String { "tripPilot_\(currentUserId)_priorDaysSteps" }
+    private var lastDateKey: String { "tripPilot_\(currentUserId)_lastStepDate" }
+    private var goalKey: String { "tripPilot_\(currentUserId)_dailyGoal" }
     
     private init() {
         cleanLegacyMockData()
         loadPersistedData()
         checkPedometerSupport()
         startTracking()
+        
+        NotificationCenter.default.addObserver(
+            forName: AuthViewModel.userDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.loadPersistedData()
+        }
     }
     
     // MARK: - Remove any older mock/fallback numbers
@@ -177,6 +193,8 @@ final class TripStepTrackerService: ObservableObject {
         if savedGoal > 0 {
             self.dailyGoal = savedGoal
         }
+        
+        syncToWidget()
     }
     
     private func persist() {
@@ -184,6 +202,27 @@ final class TripStepTrackerService: ObservableObject {
         defaults.set(priorDaysSteps, forKey: priorDaysKey)
         defaults.set(Date(), forKey: lastDateKey)
         defaults.set(dailyGoal, forKey: goalKey)
+        
+        syncToWidget()
+    }
+    
+    private func syncToWidget() {
+        let idea = currentTravelIdea
+        let widgetData = TripWidgetSharedData(
+            steps: todaySteps,
+            goal: dailyGoal,
+            distanceKm: distanceKm,
+            calories: activeCalories,
+            milestoneTitle: idea.title,
+            milestoneBadge: idea.badge,
+            milestoneIcon: idea.icon,
+            lastUpdated: Date()
+        )
+        widgetData.save()
+        
+        #if canImport(WidgetKit)
+        WidgetCenter.shared.reloadAllTimelines()
+        #endif
     }
     
     // MARK: - Pedometer Lifecycle

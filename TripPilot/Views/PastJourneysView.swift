@@ -18,6 +18,7 @@ struct PastJourneysView: View {
     @State private var navigateToBudget: Bool = false
     @State private var navigateToProfile: Bool = false
     @State private var navigateToAnalytics: Bool = false
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     
     // Theme Colors
     private let darkBackground = Color(red: 15/255, green: 19/255, blue: 28/255)       // #0f131c
@@ -431,7 +432,7 @@ struct PastJourneysView: View {
                     }
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Elena's Travel Passport")
+                        Text("\(authViewModel.userFirstName)'s Travel Passport")
                             .font(.system(size: 16, weight: .bold, design: .rounded))
                             .foregroundColor(textOnSurface)
                         
@@ -588,7 +589,7 @@ struct PastJourneysView: View {
                             Image(systemName: "star.fill")
                                 .font(.system(size: 10))
                                 .foregroundColor(primaryCyan)
-                            Text("Elena's Favorite")
+                            Text("\(authViewModel.userFirstName)'s Favorite")
                                 .font(.system(size: 10, weight: .semibold, design: .rounded))
                                 .foregroundColor(.white)
                             Text("5.0")

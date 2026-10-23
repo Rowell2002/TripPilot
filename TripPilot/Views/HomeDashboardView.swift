@@ -8,6 +8,7 @@ struct HomeDashboardView: View {
     @ObservedObject private var tripManager = TripManager.shared
     @ObservedObject private var stepTracker = TripStepTrackerService.shared
     @ObservedObject private var polaroidService = PolaroidGalleryService.shared
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     
     @State private var selectedTab: AppTab = .home
     @State private var isLivePulsing: Bool = false
@@ -117,17 +118,9 @@ struct HomeDashboardView: View {
                         polaroidGallerySection
                         
                         Spacer()
-                            .frame(height: 180)
-                            .id("polaroidBottom")
+                            .frame(height: 140)
                     }
                     .padding(.horizontal, 18)
-                }
-                .onAppear {
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        withAnimation(.easeInOut(duration: 0.6)) {
-                            scrollProxy.scrollTo("polaroidBottom", anchor: .bottom)
-                        }
-                    }
                 }
             }
             
@@ -294,7 +287,7 @@ struct HomeDashboardView: View {
                             .frame(width: 36, height: 36)
                             .overlay(Circle().stroke(skyBlue.opacity(0.8), lineWidth: 2))
                         
-                        Text("C")
+                        Text(authViewModel.userInitials)
                             .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                     }
@@ -307,7 +300,7 @@ struct HomeDashboardView: View {
     private var greetingWeatherSection: some View {
         VStack(alignment: .leading, spacing: 10) {
             VStack(alignment: .leading, spacing: 4) {
-                Text("Ayubowan, Chethana! 🇱🇰")
+                Text("Ayubowan, \(authViewModel.userFirstName)! 🇱🇰")
                     .font(.system(size: 24, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
                 

@@ -17,14 +17,15 @@ public struct PassportPDFData {
     public let verifiedDestinations: [String]
     public let badgesUnlocked: Int
     
-    public static let standard = PassportPDFData(
-        travelerName: "Elena Vance",
-        passportNumber: "LK-9824-CEYLON",
-        year: "2024",
-        countriesCount: 1,
-        distanceKm: "4,850 km",
-        itinerariesCount: 8,
-        carbonOffset: "100% Certified Offset",
+    public static var standard: PassportPDFData {
+        PassportPDFData(
+            travelerName: AuthViewModel.shared.userDisplayName,
+            passportNumber: "LK-\(abs(AuthViewModel.shared.currentUserId.hashValue) % 9000 + 1000)-CEYLON",
+            year: "2024",
+            countriesCount: 1,
+            distanceKm: "4,850 km",
+            itinerariesCount: max(1, TripManager.shared.savedTrips.count),
+            carbonOffset: "100% Certified Offset",
         verifiedDestinations: [
             "Sigiriya Rock Fortress (UNESCO Citadel)",
             "Kandy (Temple of the Sacred Tooth Relic)",
@@ -36,7 +37,8 @@ public struct PassportPDFData {
             "Colombo (Pettah Heritage & Galle Face Green)"
         ],
         badgesUnlocked: 24
-    )
+        )
+    }
 }
 
 public final class PassportPDFGenerator {
