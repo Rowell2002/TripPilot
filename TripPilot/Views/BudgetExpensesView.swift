@@ -58,6 +58,7 @@ struct BudgetExpensesView: View {
     private let fxRate: Double = 305.00 // 1 USD = 305 LKR (Central Bank of Sri Lanka)
     
     // Interactive State
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     @State private var selectedTab: AppTab = .budget
     @State private var isUSD: Bool = true
     @State private var showLogExpenseSheet: Bool = false
@@ -385,20 +386,22 @@ struct BudgetExpensesView: View {
                         .tracking(1.2)
                 }
                 
-                Spacer()
-                
-                // User Avatar Elena
-                AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuDb-R9RyzdwNRctHnbqddjU4N7mKMarUqir3UqzLA4HjDNG09Aj82ik5Z1r7nij7zDOHWjY0zodcVbu3DsW3CQvWFud_7eMalaLZEhe9y-o8-D3u7t_NExiyBopidw4pSIzYHWh8swveQg29oBNfmhS1FqxUt09-2vfzoM8V3XMdTdZoUQQm5CNGaFIzj7glDfI4hwA-cp3dsSgjG3LYtFIDaQtQD5jQb4Z5Qs8EVZSSWRmtleqKHWveA")) { phase in
-                    if let image = phase.image {
-                        image
-                            .resizable()
-                            .aspectRatio(contentMode: .fill)
-                    } else {
-                        Circle().fill(surfaceContainerHigh)
-                    }
+                // User Avatar
+                ZStack {
+                    Circle()
+                        .fill(
+                            LinearGradient(
+                                colors: [Color(red: 56/255, green: 189/255, blue: 248/255), Color(red: 68/255, green: 226/255, blue: 205/255)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 32, height: 32)
+                    
+                    Text(authViewModel.userInitials)
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
                 }
-                .frame(width: 32, height: 32)
-                .clipShape(Circle())
                 .overlay(
                     Circle().stroke(primarySky.opacity(0.4), lineWidth: 1.5)
                 )
@@ -1164,7 +1167,7 @@ struct BudgetExpensesView: View {
                     .overlay(Circle().stroke(Color.white.opacity(0.12), lineWidth: 1))
                     
                     VStack(alignment: .leading, spacing: 2) {
-                        Text("Elena Vance")
+                        Text("\(authViewModel.userFirstName) (You)")
                             .font(.system(size: 13, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                         
@@ -1491,6 +1494,7 @@ struct LogExpenseSheet: View {
 // MARK: - Submodal: Split Bill Sheet
 struct SplitBillSheet: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     let isUSD: Bool
     var onSplitRequested: (Double) -> Void
     
@@ -1539,7 +1543,7 @@ struct SplitBillSheet: View {
                             Text("Split Between")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
-                            Text("Elena, Marcus + Guests")
+                            Text("\(authViewModel.userFirstName), Marcus + Guests")
                                 .font(.system(size: 12))
                                 .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
                         }

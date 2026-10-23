@@ -14,9 +14,29 @@ public final class TripManager: ObservableObject {
     @Published public var currentTrip: GeneratedTrip
     @Published public var savedTrips: [GeneratedTrip] = []
     
-    private init() {
-        // Initial flagship Sri Lanka journey
-        let defaultTrip = SriLankaDataService.shared.generateCustomTrip(
+    private var currentUserId: String {
+        AuthViewModel.shared.currentUserId
+    }
+    
+    private var documentsDirectory: URL {
+        FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    }
+    
+    private var tripsDirectory: URL {
+        documentsDirectory.appendingPathComponent("TripPilotTrips", isDirectory: true)
+    }
+    
+    private var tripsFileURL: URL {
+        tripsDirectory.appendingPathComponent("trips_\(currentUserId).json")
+    }
+    
+    private struct UserTripsPayload: Codable {
+        let currentTripId: UUID
+        let trips: [GeneratedTrip]
+    }
+    
+    private static func makeStaticDefaultTrip() -> GeneratedTrip {
+        SriLankaDataService.shared.generateCustomTrip(
             destination: "Sigiriya, Ella & Galle",
             durationDays: 7,
             companion: "Couple (2)",
@@ -31,8 +51,57 @@ public final class TripManager: ObservableObject {
             ],
             startDate: Date()
         )
-        self.currentTrip = defaultTrip
-        self.savedTrips = [defaultTrip]
+    }
+    
+    private init() {
+        let initialTrip = Self.makeStaticDefaultTrip()
+        self.currentTrip = initialTrip
+        self.savedTrips = [initialTrip]
+        
+        loadUserTrips()
+        
+        NotificationCenter.default.addObserver(
+            forName: AuthViewModel.userDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.loadUserTrips()
+        }
+    }
+    
+    private func createFolderIfNeeded() {
+        let fileManager = FileManager.default
+        if !fileManager.fileExists(atPath: tripsDirectory.path) {
+            try? fileManager.createDirectory(at: tripsDirectory, withIntermediateDirectories: true, attributes: nil)
+        }
+    }
+    
+    public func loadUserTrips() {
+        createFolderIfNeeded()
+        let fileManager = FileManager.default
+        if fileManager.fileExists(atPath: tripsFileURL.path),
+           let data = try? Data(contentsOf: tripsFileURL),
+           let payload = try? JSONDecoder().decode(UserTripsPayload.self, from: data),
+           !payload.trips.isEmpty {
+            self.savedTrips = payload.trips
+            self.currentTrip = payload.trips.first(where: { $0.id == payload.currentTripId }) ?? payload.trips[0]
+        } else {
+            let defaultTrip = Self.makeStaticDefaultTrip()
+            self.currentTrip = defaultTrip
+            self.savedTrips = [defaultTrip]
+            persistUserTrips()
+        }
+    }
+    
+    public func persistUserTrips() {
+        createFolderIfNeeded()
+        let payload = UserTripsPayload(currentTripId: currentTrip.id, trips: savedTrips)
+        do {
+            let data = try JSONEncoder().encode(payload)
+            try data.write(to: tripsFileURL, options: .atomic)
+        } catch {
+            print("Failed to persist user trips: \(error)")
+        }
     }
     
     @discardableResult
@@ -58,11 +127,13 @@ public final class TripManager: ObservableObject {
         if !self.savedTrips.contains(where: { $0.id == newTrip.id }) {
             self.savedTrips.insert(newTrip, at: 0)
         }
+        persistUserTrips()
         return newTrip
     }
     
     public func setActiveTrip(_ trip: GeneratedTrip) {
         self.currentTrip = trip
+        persistUserTrips()
     }
     
     public func addCustomStop(
@@ -126,5 +197,6 @@ public final class TripManager: ObservableObject {
             totalEstimatedUSD: currentTrip.totalEstimatedUSD + (Double(entranceFeeLKR) / 305.0),
             days: updatedDays
         )
+        persistUserTrips()
     }
 }

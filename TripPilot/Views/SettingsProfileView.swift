@@ -82,6 +82,8 @@ struct SettingsProfileView: View {
     }
     
     // Interactive State
+    @ObservedObject private var authViewModel = AuthViewModel.shared
+    @ObservedObject private var tripManager = TripManager.shared
     @State private var selectedTab: AppTab = .profile
     @State private var isVIPIndicatorPulsing: Bool = false
     
@@ -232,14 +234,13 @@ struct SettingsProfileView: View {
         }
         .confirmationDialog("Sign Out of TripPilot?", isPresented: $showSignOutAlert, titleVisibility: .visible) {
             Button("Sign Out", role: .destructive) {
+                authViewModel.signOut()
                 showToast("Signed out successfully")
-                DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) {
-                    dismiss()
-                }
+                dismiss()
             }
             Button("Cancel", role: .cancel) { }
         } message: {
-            Text("Your offline guides and encrypted itineraries will remain securely backed up to iCloud.")
+            Text("Your offline guides and encrypted itineraries will remain securely backed up.")
         }
         .navigationDestination(isPresented: $navigateToItinerary) {
             DailyItineraryView()
@@ -335,7 +336,7 @@ struct SettingsProfileView: View {
                         .fill(surfaceContainerHigh)
                         .frame(width: 36, height: 36)
                     
-                    Text("EV")
+                    Text(authViewModel.userInitials)
                         .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundColor(primarySky)
                 }
@@ -371,7 +372,7 @@ struct SettingsProfileView: View {
                             )
                             .frame(width: 64, height: 64)
                         
-                        Text("EV")
+                        Text(authViewModel.userInitials)
                             .font(.system(size: 24, weight: .heavy, design: .rounded))
                             .foregroundColor(primaryTint)
                     }
@@ -393,7 +394,7 @@ struct SettingsProfileView: View {
                 // Name & VIP Status
                 VStack(alignment: .leading, spacing: 3) {
                     HStack(spacing: 5) {
-                        Text("Elena Vance")
+                        Text(authViewModel.userDisplayName)
                             .font(.system(size: 20, weight: .bold, design: .rounded))
                             .foregroundColor(textOnSurface)
                         
@@ -402,7 +403,7 @@ struct SettingsProfileView: View {
                             .foregroundColor(primarySky)
                     }
                     
-                    Text("elena.vance@icloud.com")
+                    Text(authViewModel.userEmail)
                         .font(.system(size: 12, weight: .regular, design: .rounded))
                         .foregroundColor(textVariant)
                     
@@ -454,7 +455,7 @@ struct SettingsProfileView: View {
                 HStack(spacing: 0) {
                     // Trips
                     VStack(spacing: 2) {
-                        Text("8")
+                        Text("\(tripManager.savedTrips.count)")
                             .font(.system(size: 20, weight: .heavy, design: .rounded))
                             .foregroundColor(textOnSurface)
                         
@@ -1045,7 +1046,7 @@ struct SettingsProfileView: View {
                         .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
                     
                     VStack(spacing: 4) {
-                        Text("Elena Vance • USA Passport")
+                        Text("\(authViewModel.userDisplayName) • Verified Passport")
                             .font(.system(size: 15, weight: .bold, design: .rounded))
                             .foregroundColor(textOnSurface)
                         

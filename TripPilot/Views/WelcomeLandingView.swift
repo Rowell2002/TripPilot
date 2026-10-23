@@ -151,6 +151,7 @@ public struct WelcomeLandingView: View {
             
             // Guest Bypass Button
             Button(action: {
+                authViewModel.setGuestSession()
                 navigateToHome = true
             }) {
                 HStack(spacing: 4) {

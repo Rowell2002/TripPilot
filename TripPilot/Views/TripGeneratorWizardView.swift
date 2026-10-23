@@ -107,6 +107,7 @@ struct TripGeneratorWizardView: View {
     private let outlineVariant = Color.white.opacity(0.12)
     
     // Interactive State
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     @State private var selectedDestination: String = "Sigiriya & Ella Highlands"
     @State private var destinationSubtitle: String = "Sri Lanka • Cultural Triangle to Hill Country"
     @State private var destinationFlag: String = "🇱🇰"
@@ -390,7 +391,7 @@ struct TripGeneratorWizardView: View {
             }
             
             // Title & Subtitle
-            Text("Where are we flying, Elena?")
+            Text("Where are we flying, \(authViewModel.userFirstName)?")
                 .font(.system(size: 26, weight: .heavy, design: .rounded))
                 .foregroundColor(.white)
                 .padding(.top, 4)
@@ -893,7 +894,7 @@ struct TripGeneratorWizardView: View {
                                         .foregroundColor(.white)
                                     
                                     if tier == .comfort {
-                                        Text("Elena's Choice")
+                                        Text("\(authViewModel.userFirstName)'s Choice")
                                             .font(.system(size: 10, weight: .heavy, design: .rounded))
                                             .foregroundColor(primaryContainer)
                                             .padding(.horizontal, 7)

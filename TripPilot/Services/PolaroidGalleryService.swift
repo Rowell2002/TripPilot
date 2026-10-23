@@ -8,15 +8,21 @@ final class PolaroidGalleryService: ObservableObject {
     
     @Published var moments: [PolaroidMoment] = []
     
-    private let folderName = "TripPilotPolaroids"
+    private let rootFolderName = "TripPilotPolaroids"
     private let jsonFileName = "moments_v1.json"
+    
+    private var currentUserId: String {
+        AuthViewModel.shared.currentUserId
+    }
     
     private var documentsDirectory: URL {
         FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     }
     
     private var polaroidsDirectory: URL {
-        documentsDirectory.appendingPathComponent(folderName, isDirectory: true)
+        documentsDirectory
+            .appendingPathComponent(rootFolderName, isDirectory: true)
+            .appendingPathComponent(currentUserId, isDirectory: true)
     }
     
     private var jsonFileURL: URL {
@@ -26,6 +32,15 @@ final class PolaroidGalleryService: ObservableObject {
     private init() {
         createFolderIfNeeded()
         loadMoments()
+        
+        NotificationCenter.default.addObserver(
+            forName: AuthViewModel.userDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.createFolderIfNeeded()
+            self?.loadMoments()
+        }
     }
     
     private func createFolderIfNeeded() {

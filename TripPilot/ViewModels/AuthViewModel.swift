@@ -15,24 +15,111 @@ public final class AuthViewModel: ObservableObject {
     
     @Published public var isAuthenticated: Bool = false
     @Published public var currentUser: User? = nil
+    @Published public var isGuestSession: Bool = false
     @Published public var isLoading: Bool = false
     @Published public var errorMessage: String? = nil
     @Published public var showErrorAlert: Bool = false
     @Published public var successMessage: String? = nil
     @Published public var showSuccessAlert: Bool = false
     
+    public static let userDidChangeNotification = Notification.Name("TripPilotUserDidChangeNotification")
+    
     private var authStateHandle: AuthStateDidChangeListenerHandle?
     
+    // MARK: - Dynamic User Identity Properties
+    public var currentUserId: String {
+        if let uid = currentUser?.uid, !uid.isEmpty {
+            return uid
+        }
+        if isGuestSession {
+            return "guest_user"
+        }
+        if let saved = UserDefaults.standard.string(forKey: "tripPilot_activeUserId"), !saved.isEmpty {
+            return saved
+        }
+        return "guest_user"
+    }
+    
+    public var userDisplayName: String {
+        if let name = currentUser?.displayName, !name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty {
+            return name.trimmingCharacters(in: .whitespacesAndNewlines)
+        }
+        let uid = currentUserId
+        if let customName = UserDefaults.standard.string(forKey: "tripPilot_name_\(uid)"), !customName.isEmpty {
+            return customName
+        }
+        if let email = currentUser?.email, !email.isEmpty {
+            let prefix = email.components(separatedBy: "@").first ?? ""
+            let parts = prefix.components(separatedBy: CharacterSet(charactersIn: "._-"))
+            let formatted = parts.map { $0.capitalized }.joined(separator: " ")
+            if !formatted.isEmpty { return formatted }
+        }
+        if isGuestSession {
+            return "Guest Traveler"
+        }
+        return "Traveler"
+    }
+    
+    public var userFirstName: String {
+        let fullName = userDisplayName
+        return fullName.components(separatedBy: " ").first ?? fullName
+    }
+    
+    public var userEmail: String {
+        if let email = currentUser?.email, !email.isEmpty {
+            return email
+        }
+        if isGuestSession {
+            return "guest@trippilot.app"
+        }
+        return "traveler@trippilot.app"
+    }
+    
+    public var userInitials: String {
+        let name = userDisplayName.trimmingCharacters(in: .whitespacesAndNewlines)
+        guard !name.isEmpty else { return "T" }
+        let words = name.components(separatedBy: .whitespaces).filter { !$0.isEmpty }
+        if words.count >= 2 {
+            let first = String(words[0].prefix(1)).uppercased()
+            let second = String(words[1].prefix(1)).uppercased()
+            return "\(first)\(second)"
+        } else if let firstWord = words.first {
+            return String(firstWord.prefix(1)).uppercased()
+        }
+        return "T"
+    }
+    
     public init() {
+        let savedActiveId = UserDefaults.standard.string(forKey: "tripPilot_activeUserId")
+        if savedActiveId == "guest_user" {
+            self.isGuestSession = true
+        } else if let id = savedActiveId, !id.isEmpty {
+            self.isAuthenticated = true
+        }
+        
         // If Firebase is configured, register auth state listener
         if FirebaseApp.app() != nil {
-            self.currentUser = Auth.auth().currentUser
-            self.isAuthenticated = Auth.auth().currentUser != nil
+            if let fbUser = Auth.auth().currentUser {
+                self.currentUser = fbUser
+                self.isAuthenticated = true
+                self.isGuestSession = false
+                UserDefaults.standard.set(fbUser.uid, forKey: "tripPilot_activeUserId")
+            }
             
             self.authStateHandle = Auth.auth().addStateDidChangeListener { [weak self] _, user in
                 Task { @MainActor in
-                    self?.currentUser = user
-                    self?.isAuthenticated = (user != nil)
+                    if let user = user {
+                        self?.currentUser = user
+                        self?.isAuthenticated = true
+                        self?.isGuestSession = false
+                        UserDefaults.standard.set(user.uid, forKey: "tripPilot_activeUserId")
+                    } else if self?.isGuestSession != true {
+                        if self?.isAuthenticated == true && self?.currentUser != nil {
+                            self?.currentUser = nil
+                            self?.isAuthenticated = false
+                        }
+                    }
+                    self?.notifyUserChanged()
                 }
             }
         }
@@ -42,6 +129,19 @@ public final class AuthViewModel: ObservableObject {
         if let handle = authStateHandle {
             Auth.auth().removeStateDidChangeListener(handle)
         }
+    }
+    
+    public func setGuestSession() {
+        self.isGuestSession = true
+        self.isAuthenticated = false
+        self.currentUser = nil
+        UserDefaults.standard.set("guest_user", forKey: "tripPilot_activeUserId")
+        notifyUserChanged()
+    }
+    
+    public func notifyUserChanged() {
+        NotificationCenter.default.post(name: Self.userDidChangeNotification, object: currentUserId)
+        objectWillChange.send()
     }
     
     // MARK: - Sign In with Apple
@@ -59,7 +159,10 @@ public final class AuthViewModel: ObservableObject {
             let result = try await AuthenticationService.shared.signInWithApple()
             self.currentUser = result.user
             self.isAuthenticated = true
+            self.isGuestSession = false
+            UserDefaults.standard.set(result.user.uid, forKey: "tripPilot_activeUserId")
             self.isLoading = false
+            notifyUserChanged()
         } catch {
             self.isLoading = false
             let nsError = error as NSError
@@ -86,7 +189,10 @@ public final class AuthViewModel: ObservableObject {
             let result = try await AuthenticationService.shared.signInWithGoogle()
             self.currentUser = result.user
             self.isAuthenticated = true
+            self.isGuestSession = false
+            UserDefaults.standard.set(result.user.uid, forKey: "tripPilot_activeUserId")
             self.isLoading = false
+            notifyUserChanged()
         } catch {
             self.isLoading = false
             let nsError = error as NSError
@@ -124,7 +230,10 @@ public final class AuthViewModel: ObservableObject {
             let result = try await AuthenticationService.shared.signInWithEmail(email: trimmedEmail, password: password)
             self.currentUser = result.user
             self.isAuthenticated = true
+            self.isGuestSession = false
+            UserDefaults.standard.set(result.user.uid, forKey: "tripPilot_activeUserId")
             self.isLoading = false
+            notifyUserChanged()
             return true
         } catch {
             self.isLoading = false
@@ -163,9 +272,13 @@ public final class AuthViewModel: ObservableObject {
         
         do {
             let result = try await AuthenticationService.shared.createUserWithEmail(email: trimmedEmail, password: password, fullName: trimmedName)
+            UserDefaults.standard.set(trimmedName, forKey: "tripPilot_name_\(result.user.uid)")
+            UserDefaults.standard.set(result.user.uid, forKey: "tripPilot_activeUserId")
             self.currentUser = result.user
             self.isAuthenticated = true
+            self.isGuestSession = false
             self.isLoading = false
+            notifyUserChanged()
             return true
         } catch {
             self.isLoading = false
@@ -222,6 +335,9 @@ public final class AuthViewModel: ObservableObject {
             try AuthenticationService.shared.signOut()
             self.currentUser = nil
             self.isAuthenticated = false
+            self.isGuestSession = false
+            UserDefaults.standard.removeObject(forKey: "tripPilot_activeUserId")
+            notifyUserChanged()
         } catch {
             setErrorMessage(error.localizedDescription)
         }

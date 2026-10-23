@@ -125,16 +125,29 @@ final class TripStepTrackerService: ObservableObject {
     #endif
     
     private let defaults = UserDefaults.standard
-    private let stepsKey = "tripPilot_todayRealSteps"
-    private let priorDaysKey = "tripPilot_priorDaysSteps"
-    private let lastDateKey = "tripPilot_lastStepDate"
-    private let goalKey = "tripPilot_dailyGoal"
+    
+    private var currentUserId: String {
+        AuthViewModel.shared.currentUserId
+    }
+    
+    private var stepsKey: String { "tripPilot_\(currentUserId)_todayRealSteps" }
+    private var priorDaysKey: String { "tripPilot_\(currentUserId)_priorDaysSteps" }
+    private var lastDateKey: String { "tripPilot_\(currentUserId)_lastStepDate" }
+    private var goalKey: String { "tripPilot_\(currentUserId)_dailyGoal" }
     
     private init() {
         cleanLegacyMockData()
         loadPersistedData()
         checkPedometerSupport()
         startTracking()
+        
+        NotificationCenter.default.addObserver(
+            forName: AuthViewModel.userDidChangeNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] _ in
+            self?.loadPersistedData()
+        }
     }
     
     // MARK: - Remove any older mock/fallback numbers
