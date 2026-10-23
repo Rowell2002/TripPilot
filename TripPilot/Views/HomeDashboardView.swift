@@ -7,11 +7,14 @@ struct HomeDashboardView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var tripManager = TripManager.shared
     @ObservedObject private var stepTracker = TripStepTrackerService.shared
+    @ObservedObject private var polaroidService = PolaroidGalleryService.shared
     
     @State private var selectedTab: AppTab = .home
     @State private var isLivePulsing: Bool = false
     @State private var showFlyoverMapModal: Bool = false
     @State private var showTripWizardModal: Bool = false
+    @State private var showPolaroidCaptureSheet: Bool = false
+    @State private var selectedPolaroidMoment: PolaroidMoment? = nil
     @State private var activeUtilityNotice: String? = nil
     
     // Navigation Triggers
@@ -107,15 +110,24 @@ struct HomeDashboardView: View {
                         // 5. Interactive Map Preview Widget
                         explorationMapWidget
                         
-                        // 6. Travel Statistics & Quick Budget
+                        // 6. Travel Statistics & Quick Budget (Compact side-by-side with Step Counter)
                         statsAndBudgetGrid
                         
-                        // 7. Trip Step Count Tracker & Activity Idea
-                        stepCountTrackerSection
+                        // 7. Special Moments Polaroid Journal Gallery
+                        polaroidGallerySection
                         
-                        Spacer().frame(height: 140)
+                        Spacer()
+                            .frame(height: 180)
+                            .id("polaroidBottom")
                     }
                     .padding(.horizontal, 18)
+                }
+                .onAppear {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        withAnimation(.easeInOut(duration: 0.6)) {
+                            scrollProxy.scrollTo("polaroidBottom", anchor: .bottom)
+                        }
+                    }
                 }
             }
             
@@ -173,6 +185,12 @@ struct HomeDashboardView: View {
         }
         .fullScreenCover(isPresented: $showGeofenceAudioGuide) {
             GeofencedAudioGuideDetailView(landmark: selectedGeofenceLandmark)
+        }
+        .sheet(isPresented: $showPolaroidCaptureSheet) {
+            PolaroidCaptureSheet()
+        }
+        .fullScreenCover(item: $selectedPolaroidMoment) { moment in
+            PolaroidDetailModalView(moment: moment)
         }
         .onChange(of: notificationManager.activeGeofenceAlert) { _, landmark in
             if let landmark = landmark {
@@ -708,6 +726,7 @@ struct HomeDashboardView: View {
     // MARK: - 6. Travel Stats & Budget Grid
     private var statsAndBudgetGrid: some View {
         HStack(spacing: 12) {
+            // Left: Trip Budget
             Button(action: {
                 navigateToBudget = true
             }) {
@@ -739,13 +758,13 @@ struct HomeDashboardView: View {
                             
                             Text("65%")
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
+                                .foregroundColor(slateLight)
                         }
                         
                         VStack(alignment: .leading, spacing: 2) {
                             Text("Rs. 420k")
                                 .font(.system(size: 16, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
+                                .foregroundColor(slateLight)
                             
                             Text("of Rs. 650k Cap")
                                 .font(.system(size: 10, weight: .medium))
@@ -769,45 +788,60 @@ struct HomeDashboardView: View {
             }
             .buttonStyle(.plain)
             
+            // Right: Trip Steps (Compact, matching Trip Budget!)
             Button(action: {
-                navigateToPlaceDiscovery = true
+                stepTracker.startTracking()
+                triggerNotice("🔄 Original steps: \(stepTracker.todaySteps) recorded")
             }) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
-                        Text("SRI LANKA VAULT")
+                        Text("TRIP STEPS")
                             .font(.system(size: 10, weight: .bold, design: .rounded))
                             .foregroundColor(slateMuted)
                             .tracking(0.6)
                         
                         Spacer()
                         
-                        Image(systemName: "bookmark.fill")
+                        Image(systemName: "figure.walk.motion")
                             .font(.system(size: 14))
                             .foregroundColor(primaryCyan)
                     }
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("\(SriLankaDataService.shared.places.count)")
-                            .font(.system(size: 24, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
+                    HStack(spacing: 10) {
+                        ZStack {
+                            Circle()
+                                .stroke(slateDark, lineWidth: 4)
+                                .frame(width: 44, height: 44)
+                            
+                            Circle()
+                                .trim(from: 0, to: CGFloat(max(0.01, stepTracker.goalProgress)))
+                                .stroke(primaryCyan, style: StrokeStyle(lineWidth: 4, lineCap: .round))
+                                .frame(width: 44, height: 44)
+                                .rotationEffect(.degrees(-90))
+                            
+                            Text(stepTracker.goalPercentText)
+                                .font(.system(size: 9.5, weight: .bold, design: .rounded))
+                                .foregroundColor(slateLight)
+                        }
                         
-                        Text("Curated Landmarks")
-                            .font(.system(size: 11, weight: .medium))
-                            .foregroundColor(slateMuted)
+                        VStack(alignment: .leading, spacing: 2) {
+                            Text("\(stepTracker.todaySteps)")
+                                .font(.system(size: 16, weight: .bold, design: .rounded))
+                                .foregroundColor(slateLight)
+                            
+                            Text("of \(stepTracker.dailyGoal / 1000)k Goal")
+                                .font(.system(size: 10, weight: .medium))
+                                .foregroundColor(slateMuted)
+                        }
                     }
                     
-                    HStack(spacing: -6) {
-                        emojiPill(emoji: "🦁", color: amberGold)
-                        emojiPill(emoji: "🚂", color: primaryCyan)
-                        emojiPill(emoji: "🐘", color: skyBlue)
-                        
-                        Text("+5")
-                            .font(.system(size: 10, weight: .bold, design: .rounded))
-                            .foregroundColor(slateLight)
-                            .frame(width: 24, height: 24)
-                            .background(slateDark)
-                            .clipShape(Circle())
-                    }
+                    Text(stepTracker.todaySteps > 0 ? "\(String(format: "%.1f", stepTracker.distanceKm)) km explored" : "Original pedometer")
+                        .font(.system(size: 10, weight: .bold, design: .rounded))
+                        .foregroundColor(skyBlue)
+                        .frame(maxWidth: .infinity)
+                        .padding(.vertical, 4)
+                        .background(surfaceCard)
+                        .clipShape(Capsule())
                 }
                 .padding(14)
                 .frame(maxWidth: .infinity, alignment: .leading)
@@ -819,219 +853,140 @@ struct HomeDashboardView: View {
         }
     }
     
-    private func emojiPill(emoji: String, color: Color) -> some View {
-        Text(emoji)
-            .font(.system(size: 11))
-            .frame(width: 24, height: 24)
-            .background(color.opacity(0.2))
-            .clipShape(Circle())
-    }
-    
-    // MARK: - 7. Trip Step Count Tracker
-    private var stepCountTrackerSection: some View {
-        VStack(alignment: .leading, spacing: 12) {
+    // MARK: - 7. Special Moments Polaroid Journal Gallery
+    private var polaroidGallerySection: some View {
+        VStack(alignment: .leading, spacing: 14) {
             // Section Header
-            HStack {
+            HStack(alignment: .center) {
                 HStack(spacing: 8) {
-                    Image(systemName: "figure.walk.motion")
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(primaryCyan)
+                    ZStack {
+                        Circle()
+                            .fill(primaryCyan.opacity(0.16))
+                            .frame(width: 32, height: 32)
+                            .overlay(Circle().stroke(primaryCyan.opacity(0.3), lineWidth: 1))
+                        
+                        Image(systemName: "camera.viewfinder")
+                            .font(.system(size: 15, weight: .bold))
+                            .foregroundColor(primaryCyan)
+                    }
                     
-                    Text("Trip Step Tracker")
-                        .font(.system(size: 17, weight: .bold, design: .rounded))
-                        .foregroundColor(slateLight)
+                    VStack(alignment: .leading, spacing: 2) {
+                        Text("Special Moments")
+                            .font(.system(size: 17, weight: .bold, design: .rounded))
+                            .foregroundColor(slateLight)
+                        
+                        Text("Ceylon Polaroid Memories")
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(slateMuted)
+                    }
                 }
                 
                 Spacer()
                 
-                // Live Motion Indicator
-                HStack(spacing: 5) {
-                    Circle()
-                        .fill(primaryCyan)
-                        .frame(width: 7, height: 7)
-                        .scaleEffect(isLivePulsing ? 1.3 : 0.8)
-                        .opacity(isLivePulsing ? 1.0 : 0.5)
-                        .animation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true), value: isLivePulsing)
-                    
-                    Text("LIVE MOTION")
-                        .font(.system(size: 10, weight: .heavy, design: .rounded))
-                        .foregroundColor(primaryCyan)
+                // "+ Snap Moment" Button
+                Button(action: {
+                    showPolaroidCaptureSheet = true
+                }) {
+                    HStack(spacing: 6) {
+                        Image(systemName: "camera.fill")
+                            .font(.system(size: 12, weight: .bold))
+                        Text("+ Snap Moment")
+                            .font(.system(size: 11.5, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(Color.black)
+                    .padding(.horizontal, 12)
+                    .padding(.vertical, 7)
+                    .background(
+                        LinearGradient(colors: [primaryCyan, skyBlue], startPoint: .leading, endPoint: .trailing)
+                    )
+                    .clipShape(Capsule())
+                    .shadow(color: primaryCyan.opacity(0.35), radius: 6, y: 2)
                 }
-                .padding(.horizontal, 9)
-                .padding(.vertical, 4)
-                .background(primaryCyan.opacity(0.12))
-                .clipShape(Capsule())
             }
             
-            // Primary Glass Card
-            VStack(spacing: 14) {
-                // Steps Count & Goal Ring
-                HStack(alignment: .center) {
-                    // Left: Steps count & goal
-                    VStack(alignment: .leading, spacing: 4) {
-                        Text("\(stepTracker.todaySteps.formatted())")
-                            .font(.system(size: 34, weight: .heavy, design: .rounded))
-                            .foregroundColor(slateLight)
+            // Horizontal Carousel of Polaroids
+            if polaroidService.moments.isEmpty {
+                Button(action: {
+                    showPolaroidCaptureSheet = true
+                }) {
+                    VStack(spacing: 12) {
+                        Image(systemName: "camera.badge.ellipsis")
+                            .font(.system(size: 34))
+                            .foregroundColor(primaryCyan)
                         
-                        Text("Steps Walked Today • Goal: \(stepTracker.dailyGoal.formatted())")
-                            .font(.system(size: 12, weight: .semibold, design: .rounded))
-                            .foregroundColor(slateMuted)
-                        
-                        HStack(spacing: 4) {
-                            Image(systemName: "suitcase.fill")
-                                .font(.system(size: 10))
-                            Text("Trip Total: \(stepTracker.tripTotalSteps.formatted()) steps (~\(String(format: "%.1f", stepTracker.tripDistanceKm)) km)")
-                                .font(.system(size: 11, weight: .semibold, design: .rounded))
+                        VStack(spacing: 3) {
+                            Text("No Moments Captured Yet")
+                                .font(.system(size: 15, weight: .bold, design: .rounded))
+                                .foregroundColor(slateLight)
+                            
+                            Text("Tap here with camera access to capture your first Sri Lankan travel polaroid!")
+                                .font(.system(size: 12, weight: .medium))
+                                .foregroundColor(slateMuted)
+                                .multilineTextAlignment(.center)
+                                .padding(.horizontal, 20)
                         }
-                        .foregroundColor(skyBlue)
-                        .padding(.top, 2)
                     }
-                    
-                    Spacer()
-                    
-                    // Right: Circular Progress Ring
-                    ZStack {
-                        // Background track
-                        Circle()
-                            .stroke(containerBorder, lineWidth: 8)
-                            .frame(width: 70, height: 70)
+                    .frame(maxWidth: .infinity)
+                    .padding(.vertical, 36)
+                    .background(surfaceDark)
+                    .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [6]))
+                            .foregroundColor(containerBorder)
+                    )
+                }
+                .buttonStyle(.plain)
+            } else {
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack(spacing: 16) {
+                        ForEach(polaroidService.moments) { moment in
+                            Button(action: {
+                                selectedPolaroidMoment = moment
+                            }) {
+                                PolaroidCardView(moment: moment, cardWidth: 175)
+                                    .rotationEffect(.degrees(moment.rotationDegrees))
+                                    .padding(.vertical, 8)
+                            }
+                            .buttonStyle(.plain)
+                        }
                         
-                        // Progress Arc
-                        Circle()
-                            .trim(from: 0, to: CGFloat(stepTracker.goalProgress))
-                            .stroke(
-                                LinearGradient(
-                                    colors: [primaryCyan, skyBlue],
-                                    startPoint: .topLeading,
-                                    endPoint: .bottomTrailing
-                                ),
-                                style: StrokeStyle(lineWidth: 8, lineCap: .round)
+                        // Trailing Snap New Slot
+                        Button(action: {
+                            showPolaroidCaptureSheet = true
+                        }) {
+                            VStack(spacing: 10) {
+                                ZStack {
+                                    Circle()
+                                        .fill(primaryCyan.opacity(0.12))
+                                        .frame(width: 48, height: 48)
+                                    
+                                    Image(systemName: "plus.circle.fill")
+                                        .font(.system(size: 26))
+                                        .foregroundColor(primaryCyan)
+                                }
+                                
+                                Text("Snap\nNew")
+                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                    .foregroundColor(slateLight)
+                                    .multilineTextAlignment(.center)
+                            }
+                            .frame(width: 140, height: 230)
+                            .background(surfaceDark.opacity(0.6))
+                            .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                    .strokeBorder(style: StrokeStyle(lineWidth: 1.5, dash: [5]))
+                                    .foregroundColor(containerBorder)
                             )
-                            .frame(width: 70, height: 70)
-                            .rotationEffect(.degrees(-90))
-                            .animation(.spring(response: 0.6, dampingFraction: 0.7), value: stepTracker.goalProgress)
-                        
-                        VStack(spacing: 1) {
-                            Text(stepTracker.goalPercentText)
-                                .font(.system(size: 14, weight: .heavy, design: .rounded))
-                                .foregroundColor(slateLight)
-                            
-                            Text("GOAL")
-                                .font(.system(size: 8, weight: .bold, design: .rounded))
-                                .foregroundColor(primaryCyan)
                         }
+                        .buttonStyle(.plain)
                     }
-                }
-                
-                Divider().background(containerBorder)
-                
-                // 3 Mini Stat Pills: Distance, Calories, Active Time
-                HStack(spacing: 8) {
-                    statPill(icon: "figure.walk", label: "Distance", value: "\(String(format: "%.2f", stepTracker.distanceKm)) km", color: primaryCyan)
-                    statPill(icon: "flame.fill", label: "Calories", value: "\(stepTracker.activeCalories) kcal", color: coralAccent)
-                    statPill(icon: "timer", label: "Active Time", value: "\(stepTracker.activeMinutes) min", color: amberGold)
-                }
-                
-                // "Small Idea" / Travel Activity Insight Box
-                let idea = stepTracker.currentTravelIdea
-                HStack(alignment: .top, spacing: 10) {
-                    Image(systemName: idea.icon)
-                        .font(.system(size: 16, weight: .bold))
-                        .foregroundColor(idea.accentColor)
-                        .frame(width: 36, height: 36)
-                        .background(idea.accentColor.opacity(0.16))
-                        .clipShape(Circle())
-                    
-                    VStack(alignment: .leading, spacing: 3) {
-                        HStack {
-                            Text(idea.title)
-                                .font(.system(size: 12, weight: .bold, design: .rounded))
-                                .foregroundColor(slateLight)
-                            
-                            Spacer()
-                            
-                            Text(idea.badge)
-                                .font(.system(size: 9, weight: .heavy, design: .rounded))
-                                .foregroundColor(idea.accentColor)
-                                .padding(.horizontal, 7)
-                                .padding(.vertical, 2)
-                                .background(idea.accentColor.opacity(0.15))
-                                .clipShape(Capsule())
-                        }
-                        
-                        Text(idea.description)
-                            .font(.system(size: 11, weight: .medium, design: .rounded))
-                            .foregroundColor(slateMuted)
-                            .fixedSize(horizontal: false, vertical: true)
-                    }
-                }
-                .padding(11)
-                .background(isDarkMode ? Color.white.opacity(0.04) : Color.black.opacity(0.03))
-                .cornerRadius(12)
-                .overlay(RoundedRectangle(cornerRadius: 12).stroke(containerBorder, lineWidth: 1))
-                
-                // Interactive Controls: Simulate Walk / Sync
-                HStack {
-                    Button(action: {
-                        stepTracker.simulateWalk(steps: 350)
-                        triggerNotice("🚶 Logged +350 steps on your Ceylon exploration!")
-                    }) {
-                        HStack(spacing: 5) {
-                            Image(systemName: "plus.circle.fill")
-                                .font(.system(size: 12, weight: .bold))
-                            Text("Simulate Walk (+350)")
-                                .font(.system(size: 11, weight: .bold, design: .rounded))
-                        }
-                        .foregroundColor(primaryCyan)
-                        .padding(.horizontal, 11)
-                        .padding(.vertical, 6)
-                        .background(primaryCyan.opacity(0.12))
-                        .clipShape(Capsule())
-                    }
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        stepTracker.startTracking()
-                        triggerNotice("🔄 Synced with motion pedometer data")
-                    }) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "arrow.clockwise")
-                                .font(.system(size: 11, weight: .semibold))
-                            Text(stepTracker.statusMessage)
-                                .font(.system(size: 10, weight: .semibold, design: .rounded))
-                        }
-                        .foregroundColor(slateMuted)
-                    }
+                    .padding(.horizontal, 4)
+                    .padding(.bottom, 6)
                 }
             }
-            .padding(16)
-            .background(surfaceCard)
-            .cornerRadius(20)
-            .overlay(RoundedRectangle(cornerRadius: 20).stroke(containerBorder, lineWidth: 1))
-            .shadow(color: isDarkMode ? Color.black.opacity(0.3) : Color.black.opacity(0.04), radius: 10, y: 4)
         }
-    }
-    
-    private func statPill(icon: String, label: String, value: String, color: Color) -> some View {
-        VStack(spacing: 3) {
-            HStack(spacing: 4) {
-                Image(systemName: icon)
-                    .font(.system(size: 10, weight: .bold))
-                    .foregroundColor(color)
-                Text(label)
-                    .font(.system(size: 10, weight: .semibold, design: .rounded))
-                    .foregroundColor(slateMuted)
-            }
-            Text(value)
-                .font(.system(size: 12, weight: .heavy, design: .rounded))
-                .foregroundColor(slateLight)
-        }
-        .frame(maxWidth: .infinity)
-        .padding(.vertical, 8)
-        .background(isDarkMode ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
-        .cornerRadius(10)
-        .overlay(RoundedRectangle(cornerRadius: 10).stroke(containerBorder, lineWidth: 1))
     }
     
     // MARK: - Helper Banner
