@@ -19,5 +19,11 @@
 	<string>683620871888-mds93f0dju65uc1a6qv0bbcd1qajhjur.apps.googleusercontent.com</string>
 	<key>NSMotionUsageDescription</key>
 	<string>TripPilot tracks your steps to display your active walking distance and exploration milestones during your journey.</string>
+	<key>NSCameraUsageDescription</key>
+	<string>TripPilot uses your camera to capture special travel memories and create polaroid snapshots of your trip.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>TripPilot accesses your photo library to let you select travel moments for your polaroid album.</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>TripPilot saves your created polaroid memories to your photo library.</string>
 </dict>
 </plist>

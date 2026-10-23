@@ -18,19 +18,28 @@ struct TravelStepIdea {
 final class TripStepTrackerService: ObservableObject {
     static let shared = TripStepTrackerService()
     
-    // MARK: - Published Properties
-    @Published var todaySteps: Int = 7420
-    @Published var tripTotalSteps: Int = 26850
+    // MARK: - Published Properties (Real Sensor Values Only)
+    @Published var todaySteps: Int = 0
+    @Published var tripTotalSteps: Int = 0
     @Published var dailyGoal: Int = 10000
     @Published var isPedometerAvailable: Bool = false
     @Published var isLiveTracking: Bool = false
     @Published var lastSyncTime: Date = Date()
-    @Published var statusMessage: String = "Live Motion Tracking"
+    @Published var statusMessage: String = "Initializing Motion Sensor..."
     
-    // Calculated Metric Estimates
+    // Real distance if measured by hardware pedometer
+    private var realTodayDistanceMeters: Double? = nil
+    
+    // Prior days of the ongoing trip
+    private var priorDaysSteps: Int = 0
+    
+    // Calculated Metric Estimates from real steps
     var distanceKm: Double {
+        if let meters = realTodayDistanceMeters, meters > 0 {
+            return meters / 1000.0
+        }
         // Average walking stride: ~0.76 meters per step
-        Double(todaySteps) * 0.00076
+        return Double(todaySteps) * 0.00076
     }
     
     var tripDistanceKm: Double {
@@ -38,7 +47,7 @@ final class TripStepTrackerService: ObservableObject {
     }
     
     var activeCalories: Int {
-        // Average ~0.04 calories burned per walking step
+        // Average ~0.041 calories burned per walking step
         Int(Double(todaySteps) * 0.041)
     }
     
@@ -58,10 +67,18 @@ final class TripStepTrackerService: ObservableObject {
     
     // MARK: - Dynamic Travel Idea & Comparisons
     var currentTravelIdea: TravelStepIdea {
-        if todaySteps < 2000 {
+        if todaySteps == 0 {
+            return TravelStepIdea(
+                title: "Ready to Explore Ceylon",
+                description: "Take your iPhone with you while exploring Sri Lanka. Real steps from Apple Motion will automatically map to iconic Ceylon milestones.",
+                icon: "figure.walk",
+                badge: "Trip Awaiting",
+                accentColor: Color(red: 68/255, green: 226/255, blue: 205/255)
+            )
+        } else if todaySteps < 2000 {
             return TravelStepIdea(
                 title: "Morning Ceylon Stroll",
-                description: "Just warming up! Climbing the ancient Sigiriya Lion Rock summit staircase is around 1,200 steps.",
+                description: "Warming up! Climbing the ancient Sigiriya Lion Rock summit staircase is around 1,200 steps.",
                 icon: "figure.walk",
                 badge: "Starting Out",
                 accentColor: Color(red: 68/255, green: 226/255, blue: 205/255)
@@ -70,7 +87,7 @@ final class TripStepTrackerService: ObservableObject {
             let sigiriyaTimes = max(1, todaySteps / 1200)
             return TravelStepIdea(
                 title: "Sigiriya Rock Conqueror",
-                description: "You've walked the equivalent of climbing the vertical Sigiriya Rock staircase (~1,200 steps) \(sigiriyaTimes) times today!",
+                description: "You've walked equivalent to climbing the vertical Sigiriya Rock staircase (~1,200 steps) \(sigiriyaTimes) times today!",
                 icon: "mountain.2.fill",
                 badge: "\(sigiriyaTimes)x Sigiriya",
                 accentColor: Color(red: 251/255, green: 191/255, blue: 36/255)
@@ -108,15 +125,23 @@ final class TripStepTrackerService: ObservableObject {
     #endif
     
     private let defaults = UserDefaults.standard
-    private let stepsKey = "tripPilot_todaySteps"
-    private let tripTotalKey = "tripPilot_tripTotalSteps"
+    private let stepsKey = "tripPilot_todayRealSteps"
+    private let priorDaysKey = "tripPilot_priorDaysSteps"
     private let lastDateKey = "tripPilot_lastStepDate"
     private let goalKey = "tripPilot_dailyGoal"
     
     private init() {
+        cleanLegacyMockData()
         loadPersistedData()
         checkPedometerSupport()
         startTracking()
+    }
+    
+    // MARK: - Remove any older mock/fallback numbers
+    private func cleanLegacyMockData() {
+        // Clear previous fallback keys if any existed
+        defaults.removeObject(forKey: "tripPilot_todaySteps")
+        defaults.removeObject(forKey: "tripPilot_tripTotalSteps")
     }
     
     // MARK: - Persistence
@@ -124,23 +149,29 @@ final class TripStepTrackerService: ObservableObject {
         let calendar = Calendar.current
         let today = calendar.startOfDay(for: Date())
         
-        if let savedDate = defaults.object(forKey: lastDateKey) as? Date,
-           calendar.isDate(savedDate, inSameDayAs: today) {
-            let savedSteps = defaults.integer(forKey: stepsKey)
-            if savedSteps > 0 {
-                self.todaySteps = savedSteps
+        let savedPrior = defaults.integer(forKey: priorDaysKey)
+        self.priorDaysSteps = max(0, savedPrior)
+        
+        if let savedDate = defaults.object(forKey: lastDateKey) as? Date {
+            if calendar.isDate(savedDate, inSameDayAs: today) {
+                self.todaySteps = defaults.integer(forKey: stepsKey)
+            } else {
+                // Day rollover: add yesterday's measured steps to prior days accumulator
+                let yesterdaySteps = defaults.integer(forKey: stepsKey)
+                self.priorDaysSteps += yesterdaySteps
+                defaults.set(self.priorDaysSteps, forKey: priorDaysKey)
+                
+                self.todaySteps = 0
+                defaults.set(0, forKey: stepsKey)
+                defaults.set(today, forKey: lastDateKey)
             }
         } else {
-            // New day: retain default realistic active travel count or carry over
             defaults.set(today, forKey: lastDateKey)
+            self.todaySteps = 0
+            defaults.set(0, forKey: stepsKey)
         }
         
-        let savedTripTotal = defaults.integer(forKey: tripTotalKey)
-        if savedTripTotal > 0 {
-            self.tripTotalSteps = savedTripTotal
-        } else {
-            defaults.set(self.tripTotalSteps, forKey: tripTotalKey)
-        }
+        self.tripTotalSteps = self.priorDaysSteps + self.todaySteps
         
         let savedGoal = defaults.integer(forKey: goalKey)
         if savedGoal > 0 {
@@ -150,7 +181,7 @@ final class TripStepTrackerService: ObservableObject {
     
     private func persist() {
         defaults.set(todaySteps, forKey: stepsKey)
-        defaults.set(tripTotalSteps, forKey: tripTotalKey)
+        defaults.set(priorDaysSteps, forKey: priorDaysKey)
         defaults.set(Date(), forKey: lastDateKey)
         defaults.set(dailyGoal, forKey: goalKey)
     }
@@ -160,77 +191,87 @@ final class TripStepTrackerService: ObservableObject {
         #if canImport(CoreMotion)
         if CMPedometer.isStepCountingAvailable() {
             self.isPedometerAvailable = true
+            self.statusMessage = "Apple Motion Sensor Ready"
         } else {
             self.isPedometerAvailable = false
+            self.statusMessage = "Motion Sensor Unavailable"
         }
         #else
         self.isPedometerAvailable = false
+        self.statusMessage = "Motion Sensor Unavailable"
         #endif
     }
     
     func startTracking() {
         #if canImport(CoreMotion)
         guard CMPedometer.isStepCountingAvailable() else {
-            self.isLiveTracking = true
+            self.isPedometerAvailable = false
+            self.isLiveTracking = false
+            self.statusMessage = "Motion Sensor Unavailable"
             return
         }
         
+        self.isPedometerAvailable = true
         let calendar = Calendar.current
         let startOfDay = calendar.startOfDay(for: Date())
         
-        // Query steps from midnight to now
+        // 1. Query original steps since start of day
         pedometer.queryPedometerData(from: startOfDay, to: Date()) { [weak self] data, error in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 if let data = data, error == nil {
-                    let steps = data.numberOfSteps.intValue
-                    if steps > 0 {
-                        let diff = steps - self.todaySteps
-                        self.todaySteps = steps
-                        if diff > 0 {
-                            self.tripTotalSteps += diff
-                        }
-                        self.persist()
+                    let actualSteps = data.numberOfSteps.intValue
+                    self.todaySteps = actualSteps
+                    if let dist = data.distance?.doubleValue {
+                        self.realTodayDistanceMeters = dist
                     }
-                    self.statusMessage = "Synced with Apple Motion"
+                    self.tripTotalSteps = self.priorDaysSteps + self.todaySteps
+                    self.lastSyncTime = Date()
+                    self.statusMessage = "Apple Motion Synced"
+                    self.isLiveTracking = true
+                    self.persist()
+                } else if let error = error {
+                    let nsError = error as NSError
+                    if nsError.domain == CMErrorDomain && nsError.code == Int(CMErrorMotionActivityNotAuthorized.rawValue) {
+                        self.statusMessage = "Motion Permission Required"
+                    } else {
+                        self.statusMessage = "Sync Failed"
+                    }
                 }
             }
         }
         
-        // Start continuous live updates
-        pedometer.startUpdates(from: Date()) { [weak self] data, error in
+        // 2. Start continuous live updates from start of day
+        // CMPedometerData provides cumulative steps accumulated since startOfDay
+        pedometer.startUpdates(from: startOfDay) { [weak self] data, error in
             DispatchQueue.main.async {
                 guard let self = self else { return }
                 if let data = data, error == nil {
-                    let liveSteps = data.numberOfSteps.intValue
-                    if liveSteps > 0 {
-                        self.todaySteps += liveSteps
-                        self.tripTotalSteps += liveSteps
-                        self.lastSyncTime = Date()
-                        self.persist()
+                    let actualSteps = data.numberOfSteps.intValue
+                    self.todaySteps = actualSteps
+                    if let dist = data.distance?.doubleValue {
+                        self.realTodayDistanceMeters = dist
                     }
+                    self.tripTotalSteps = self.priorDaysSteps + self.todaySteps
+                    self.lastSyncTime = Date()
+                    self.statusMessage = "Tracking Live Motion"
+                    self.isLiveTracking = true
+                    self.persist()
                 }
             }
         }
-        self.isLiveTracking = true
         #else
-        self.isLiveTracking = true
+        self.isPedometerAvailable = false
+        self.isLiveTracking = false
+        self.statusMessage = "Motion Sensor Unavailable"
         #endif
-    }
-    
-    // MARK: - User Actions
-    func simulateWalk(steps: Int = 350) {
-        withAnimation(.spring(response: 0.4, dampingFraction: 0.7)) {
-            todaySteps += steps
-            tripTotalSteps += steps
-            lastSyncTime = Date()
-            persist()
-        }
     }
     
     func resetToday() {
         withAnimation {
             todaySteps = 0
+            realTodayDistanceMeters = 0
+            tripTotalSteps = priorDaysSteps
             lastSyncTime = Date()
             persist()
         }

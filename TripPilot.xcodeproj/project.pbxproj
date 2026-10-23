@@ -277,6 +277,9 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We record your location when you complete a game session to show it on the map.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "TripPilot tracks your steps to display your active walking distance and exploration milestones during your journey.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TripPilot uses your camera to capture special travel memories and create polaroid snapshots of your trip.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "TripPilot accesses your photo library to let you select travel moments for your polaroid album.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "TripPilot saves your created polaroid memories to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -316,6 +319,9 @@
 				INFOPLIST_FILE = Info.plist;
 				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We record your location when you complete a game session to show it on the map.";
 				INFOPLIST_KEY_NSMotionUsageDescription = "TripPilot tracks your steps to display your active walking distance and exploration milestones during your journey.";
+				INFOPLIST_KEY_NSCameraUsageDescription = "TripPilot uses your camera to capture special travel memories and create polaroid snapshots of your trip.";
+				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "TripPilot accesses your photo library to let you select travel moments for your polaroid album.";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "TripPilot saves your created polaroid memories to your photo library.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
