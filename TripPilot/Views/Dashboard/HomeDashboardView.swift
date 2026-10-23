@@ -10,7 +10,6 @@ struct HomeDashboardView: View {
     @ObservedObject private var polaroidService = PolaroidGalleryService.shared
     @ObservedObject private var authViewModel = AuthViewModel.shared
     
-    @State private var selectedTab: AppTab = .home
     @State private var isLivePulsing: Bool = false
     @State private var showFlyoverMapModal: Bool = false
     @State private var showTripWizardModal: Bool = false
@@ -20,14 +19,11 @@ struct HomeDashboardView: View {
     
     // Navigation Triggers
     @State private var navigateToMyTrips: Bool = false
-    @State private var navigateToItinerary: Bool = false
-    @State private var navigateToInteractiveMap: Bool = false
     @State private var navigateToPlaceDiscovery: Bool = false
-    @State private var navigateToBudget: Bool = false
-    @State private var navigateToProfile: Bool = false
     
     // Notifications & Geofence Audio Guide
     @ObservedObject private var notificationManager = NotificationManager.shared
+    @ObservedObject private var budgetViewModel = BudgetExpensesViewModel.shared
     @State private var showNotificationsSheet: Bool = false
     @State private var showGeofenceAudioGuide: Bool = false
     @State private var selectedGeofenceLandmark: GeofenceLandmarkData = .defaultShibuya
@@ -141,20 +137,6 @@ struct HomeDashboardView: View {
                 }
             }
             
-            // 8. Floating Bottom Tab Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .itinerary {
-                    navigateToItinerary = true
-                } else if tab == .map {
-                    navigateToInteractiveMap = true
-                } else if tab == .budget {
-                    navigateToBudget = true
-                } else if tab == .profile {
-                    navigateToProfile = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
@@ -172,20 +154,8 @@ struct HomeDashboardView: View {
         .navigationDestination(isPresented: $navigateToMyTrips) {
             MyTripsHubView()
         }
-        .navigationDestination(isPresented: $navigateToItinerary) {
-            DailyItineraryView()
-        }
-        .navigationDestination(isPresented: $navigateToInteractiveMap) {
-            InteractiveMapView()
-        }
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
-        }
-        .navigationDestination(isPresented: $navigateToBudget) {
-            BudgetExpensesView()
-        }
-        .navigationDestination(isPresented: $navigateToProfile) {
-            SettingsProfileView()
         }
         .sheet(isPresented: $showNotificationsSheet) {
             NotificationsInboxSheet { landmark in
@@ -290,7 +260,7 @@ struct HomeDashboardView: View {
                 }
                 
                 Button(action: {
-                    navigateToProfile = true
+                    AppNavigationRouter.shared.switchTab(to: .profile)
                 }) {
                     ZStack {
                         Circle()
@@ -479,6 +449,10 @@ struct HomeDashboardView: View {
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
         .overlay(RoundedRectangle(cornerRadius: 20, style: .continuous).stroke(containerBorder, lineWidth: 1))
         .shadow(color: Color.black.opacity(0.5), radius: 14, y: 6)
+        .contentShape(Rectangle())
+        .onTapGesture {
+            AppNavigationRouter.shared.switchTab(to: .itinerary)
+        }
     }
     
     private func chipBadge(icon: String, text: String, iconColor: Color) -> some View {
@@ -530,7 +504,7 @@ struct HomeDashboardView: View {
                 Spacer()
                 
                 Button(action: {
-                    navigateToItinerary = true
+                    AppNavigationRouter.shared.switchTab(to: .itinerary)
                 }) {
                     HStack(spacing: 3) {
                         Text("Full Schedule")
@@ -664,7 +638,7 @@ struct HomeDashboardView: View {
             }
             
             Button(action: {
-                navigateToInteractiveMap = true
+                AppNavigationRouter.shared.switchTab(to: .map)
             }) {
                 ZStack(alignment: .bottom) {
                     AsyncImage(url: URL(string: "https://images.unsplash.com/photo-1544735716-392fe2489ffa?q=80&w=800&auto=format&fit=crop")) { phase in
@@ -738,7 +712,7 @@ struct HomeDashboardView: View {
         HStack(spacing: 12) {
             // Left: Trip Budget
             Button(action: {
-                navigateToBudget = true
+                AppNavigationRouter.shared.switchTab(to: .budget)
             }) {
                 VStack(alignment: .leading, spacing: 10) {
                     HStack {
@@ -761,28 +735,28 @@ struct HomeDashboardView: View {
                                 .frame(width: 44, height: 44)
                             
                             Circle()
-                                .trim(from: 0, to: 0.65)
+                                .trim(from: 0, to: max(CGFloat(budgetViewModel.utilizationPercentage), 0.02))
                                 .stroke(skyBlue, style: StrokeStyle(lineWidth: 4, lineCap: .round))
                                 .frame(width: 44, height: 44)
                                 .rotationEffect(.degrees(-90))
                             
-                            Text("65%")
+                            Text(budgetViewModel.utilizationPercentFormatted)
                                 .font(.system(size: 10, weight: .bold, design: .rounded))
                                 .foregroundColor(slateLight)
                         }
                         
                         VStack(alignment: .leading, spacing: 2) {
-                            Text("Rs. 420k")
+                            Text("Rs. \(budgetViewModel.totalSpentLKR / 1000)k")
                                 .font(.system(size: 16, weight: .bold, design: .rounded))
                                 .foregroundColor(slateLight)
                             
-                            Text("of Rs. 650k Cap")
+                            Text("of Rs. \(budgetViewModel.totalBudgetLKR / 1000)k Cap")
                                 .font(.system(size: 10, weight: .medium))
                                 .foregroundColor(slateMuted)
                         }
                     }
                     
-                    Text("Rs. 230,000 remaining")
+                    Text("Rs. \(budgetViewModel.remainingSafeToSpendLKR.formatted()) remaining")
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .foregroundColor(primaryCyan)
                         .frame(maxWidth: .infinity)

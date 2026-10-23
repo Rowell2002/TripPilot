@@ -14,7 +14,7 @@ struct ContentView: View {
     
     var body: some View {
         ZStack {
-            NavigationStack {
+            Group {
                 if !hasCompletedOnboarding {
                     AppOnboardingView {
                         withAnimation(.easeInOut(duration: 0.4)) {
@@ -22,9 +22,11 @@ struct ContentView: View {
                         }
                     }
                 } else if authViewModel.isAuthenticated || authViewModel.isGuestSession {
-                    HomeDashboardView()
+                    MainAppContainerView()
                 } else {
-                    WelcomeLandingView()
+                    NavigationStack {
+                        WelcomeLandingView()
+                    }
                 }
             }
             .fullScreenCover(item: $activeLandmark) { landmark in

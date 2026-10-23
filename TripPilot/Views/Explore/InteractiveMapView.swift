@@ -54,7 +54,6 @@ struct InteractiveMapView: View {
     private let outlineVariant = Color.white.opacity(0.12)
     
     // Interactive State
-    @State private var selectedTab: AppTab = .map
     @State private var selectedFilter: MapFilter = .todayRoute
     @State private var selectedDayIndex: Int = 0
     @State private var selectedTripStop: TripStop? = nil
@@ -68,11 +67,8 @@ struct InteractiveMapView: View {
     @State private var showGeofenceRings: Bool = true
     
     // Navigation Triggers
-    @State private var navigateToItinerary: Bool = false
     @State private var navigateToPlaceDiscovery: Bool = false
     @State private var navigateToPlaceDetail: Bool = false
-    @State private var navigateToBudget: Bool = false
-    @State private var navigateToProfile: Bool = false
     
     // Map Camera & Selected Place State
     @State private var cameraPosition: MapCameraPosition = .region(
@@ -162,37 +158,14 @@ struct InteractiveMapView: View {
             }
             .background(darkBackground.ignoresSafeArea())
             
-            // 4. Floating Glassmorphic Bottom Navigation Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .home {
-                    dismiss()
-                } else if tab == .itinerary {
-                    navigateToItinerary = true
-                } else if tab == .budget {
-                    navigateToBudget = true
-                } else if tab == .profile {
-                    navigateToProfile = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
-        .navigationDestination(isPresented: $navigateToItinerary) {
-            DailyItineraryView()
-        }
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
         }
         .navigationDestination(isPresented: $navigateToPlaceDetail) {
             PlaceDetailView(place: selectedPlace)
-        }
-        .navigationDestination(isPresented: $navigateToBudget) {
-            BudgetExpensesView()
-        }
-        .navigationDestination(isPresented: $navigateToProfile) {
-            SettingsProfileView()
         }
         .overlay(alignment: .top) {
             if let toast = toastMessage {
@@ -223,7 +196,7 @@ struct InteractiveMapView: View {
     private var topHeaderBarSection: some View {
         HStack(spacing: 12) {
             Button(action: {
-                dismiss()
+                AppNavigationRouter.shared.switchTab(to: .home)
             }) {
                 HStack(spacing: 6) {
                     Image(systemName: "chevron.left")

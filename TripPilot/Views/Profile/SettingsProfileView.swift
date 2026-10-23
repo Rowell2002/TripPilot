@@ -84,7 +84,6 @@ struct SettingsProfileView: View {
     // Interactive State
     @ObservedObject private var authViewModel = AuthViewModel.shared
     @ObservedObject private var tripManager = TripManager.shared
-    @State private var selectedTab: AppTab = .profile
     @State private var isVIPIndicatorPulsing: Bool = false
     
     // Toggles
@@ -107,10 +106,6 @@ struct SettingsProfileView: View {
     @State private var isTestingApi: Bool = false
     
     // Navigation destinations
-    @State private var navigateToHome: Bool = false
-    @State private var navigateToItinerary: Bool = false
-    @State private var navigateToMap: Bool = false
-    @State private var navigateToBudget: Bool = false
     @State private var navigateToAnalytics: Bool = false
     
     var body: some View {
@@ -185,20 +180,7 @@ struct SettingsProfileView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
             
-            // MARK: - Floating Glassmorphic Bottom Navigation Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .home {
-                    dismiss()
-                } else if tab == .itinerary {
-                    navigateToItinerary = true
-                } else if tab == .map {
-                    navigateToMap = true
-                } else if tab == .budget {
-                    navigateToBudget = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
+
             
             // Toast Notification Overlay
             if let notice = feedbackNotice {
@@ -250,15 +232,6 @@ struct SettingsProfileView: View {
         } message: {
             Text("Your offline guides and encrypted itineraries will remain securely backed up.")
         }
-        .navigationDestination(isPresented: $navigateToItinerary) {
-            DailyItineraryView()
-        }
-        .navigationDestination(isPresented: $navigateToMap) {
-            InteractiveMapView()
-        }
-        .navigationDestination(isPresented: $navigateToBudget) {
-            BudgetExpensesView()
-        }
         .navigationDestination(isPresented: $navigateToAnalytics) {
             TravelAnalyticsMilestonesView()
         }
@@ -271,7 +244,7 @@ struct SettingsProfileView: View {
             HStack(spacing: 8) {
                 // Back Button
                 Button(action: {
-                    dismiss()
+                    AppNavigationRouter.shared.switchTab(to: .home)
                 }) {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 14, weight: .bold))

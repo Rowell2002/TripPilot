@@ -6,7 +6,6 @@ import UIKit
 struct DailyItineraryView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var tripManager = TripManager.shared
-    @State private var selectedTab: AppTab = .itinerary
     @State private var selectedDateIndex: Int = 0
     @State private var showAudioStoryModal: Bool = false
     @State private var showReorderModal: Bool = false
@@ -14,9 +13,6 @@ struct DailyItineraryView: View {
     @State private var showDaySettingsModal: Bool = false
     @State private var activeNotice: String? = nil
     @State private var isAudioPlaying: Bool = true
-    @State private var navigateToInteractiveMap: Bool = false
-    @State private var navigateToBudget: Bool = false
-    @State private var navigateToProfile: Bool = false
     
     private var currentDay: TripDay {
         let days = tripManager.currentTrip.days
@@ -94,20 +90,6 @@ struct DailyItineraryView: View {
                 .responsiveContentWidth(920)
             }
             
-            // MARK: - Floating Glassmorphic Bottom Navigation Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .home {
-                    dismiss()
-                } else if tab == .map {
-                    navigateToInteractiveMap = true
-                } else if tab == .budget {
-                    navigateToBudget = true
-                } else if tab == .profile {
-                    navigateToProfile = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .preferredColorScheme(.dark)
@@ -122,15 +104,6 @@ struct DailyItineraryView: View {
         }
         .sheet(isPresented: $showDaySettingsModal) {
             daySettingsSheet
-        }
-        .navigationDestination(isPresented: $navigateToInteractiveMap) {
-            InteractiveMapView(initialDayIndex: selectedDateIndex)
-        }
-        .navigationDestination(isPresented: $navigateToBudget) {
-            BudgetExpensesView()
-        }
-        .navigationDestination(isPresented: $navigateToProfile) {
-            SettingsProfileView()
         }
         .overlay(alignment: .top) {
             if let notice = activeNotice {
@@ -160,7 +133,7 @@ struct DailyItineraryView: View {
             HStack(alignment: .center, spacing: 12) {
                 // Back Button
                 Button(action: {
-                    dismiss()
+                    AppNavigationRouter.shared.switchTab(to: .home)
                 }) {
                     ZStack {
                         Circle()
@@ -478,7 +451,7 @@ struct DailyItineraryView: View {
             
             // MapKit Interactive Exploration Button
             Button(action: {
-                navigateToInteractiveMap = true
+                AppNavigationRouter.shared.switchTab(to: .map)
             }) {
                 HStack(spacing: 10) {
                     ZStack {

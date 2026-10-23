@@ -3,39 +3,11 @@ import SwiftUI
 import UIKit
 #endif
 
-// MARK: - Models
-struct ExpenseTransaction: Identifiable {
-    let id = UUID()
-    let title: String
-    let subtitle: String
-    let category: String
-    let categoryColor: Color
-    let iconName: String
-    let timeAgo: String
-    let location: String
-    let amountUSD: Double
-    let amountLKR: Int
-}
-
-struct BudgetCategoryEnvelope: Identifiable {
-    let id = UUID()
-    let name: String
-    let detail: String
-    let iconName: String
-    let color: Color
-    let spentUSD: Double
-    let targetUSD: Double
-    let spentLKR: Int
-    let targetLKR: Int
-    
-    var progress: Double {
-        min(spentUSD / targetUSD, 1.0)
-    }
-}
-
-// MARK: - Main View
+// MARK: - Main Budget & Expenses View
 struct BudgetExpensesView: View {
     @Environment(\.dismiss) private var dismiss
+    @ObservedObject var viewModel: BudgetExpensesViewModel = .shared
+    @ObservedObject private var authViewModel = AuthViewModel.shared
     
     // Theme Colors
     private let darkBackground = Color(red: 0/255, green: 0/255, blue: 0/255)                  // #000000
@@ -53,111 +25,6 @@ struct BudgetExpensesView: View {
     private let purpleAccent = Color(red: 168/255, green: 85/255, blue: 247/255)             // #a855f7
     private let slateMuted = Color(red: 148/255, green: 163/255, blue: 184/255)              // slate-400
     private let outlineBorder = Color.white.opacity(0.08)
-    
-    // FX Rate
-    private let fxRate: Double = 305.00 // 1 USD = 305 LKR (Central Bank of Sri Lanka)
-    
-    // Interactive State
-    @ObservedObject private var authViewModel = AuthViewModel.shared
-    @State private var selectedTab: AppTab = .budget
-    @State private var isUSD: Bool = true
-    @State private var showLogExpenseSheet: Bool = false
-    @State private var showSplitBillSheet: Bool = false
-    @State private var showTripPickerSheet: Bool = false
-    @State private var activeNotice: String? = nil
-    @State private var isSettledWithMarcus: Bool = false
-    
-    // Navigation destinations
-    @State private var navigateToHome: Bool = false
-    @State private var navigateToItinerary: Bool = false
-    @State private var navigateToMap: Bool = false
-    @State private var navigateToReceiptScanner: Bool = false
-    @State private var navigateToProfile: Bool = false
-    
-    // Donut chart hover/selection
-    @State private var selectedDonutIndex: Int? = nil
-    
-    // Sample Transactions
-    @State private var transactions: [ExpenseTransaction] = [
-        ExpenseTransaction(
-            title: "Ministry of Crab Dinner",
-            subtitle: "Sri Lankan giant lagoon crab feast",
-            category: "Dining",
-            categoryColor: Color(red: 245/255, green: 158/255, blue: 11/255),
-            iconName: "fork.knife",
-            timeAgo: "Today, 1:45 PM",
-            location: "Old Dutch Hospital, Colombo",
-            amountUSD: 95.00,
-            amountLKR: 28975
-        ),
-        ExpenseTransaction(
-            title: "Sigiriya UNESCO Entry",
-            subtitle: "Ancient citadel & museum access",
-            category: "Culture",
-            categoryColor: Color(red: 52/255, green: 211/255, blue: 153/255),
-            iconName: "sparkles",
-            timeAgo: "Yesterday",
-            location: "Sigiriya, Central Province",
-            amountUSD: 36.00,
-            amountLKR: 10800
-        ),
-        ExpenseTransaction(
-            title: "Ella Scenic Blue Train",
-            subtitle: "Reserved Observation Saloon seat",
-            category: "Transit",
-            categoryColor: Color(red: 96/255, green: 165/255, blue: 250/255),
-            iconName: "tram.fill",
-            timeAgo: "Yesterday",
-            location: "Kandy → Ella Highlands",
-            amountUSD: 18.50,
-            amountLKR: 5640
-        ),
-        ExpenseTransaction(
-            title: "King Coconut & Egg Rotti",
-            subtitle: "Golden Thambili on the ramparts",
-            category: "Snacks",
-            categoryColor: Color(red: 245/255, green: 158/255, blue: 11/255),
-            iconName: "bag.fill",
-            timeAgo: "Oct 24",
-            location: "Galle Fort, Southern Coast",
-            amountUSD: 3.50,
-            amountLKR: 1050
-        )
-    ]
-    
-    // Sample Categories
-    private let categories: [BudgetCategoryEnvelope] = [
-        BudgetCategoryEnvelope(
-            name: "Food & Dining",
-            detail: "Rs. 229,480 spent of Rs. 366,000",
-            iconName: "fork.knife",
-            color: Color(red: 245/255, green: 158/255, blue: 11/255),
-            spentUSD: 752.40,
-            targetUSD: 1200.00,
-            spentLKR: 229480,
-            targetLKR: 366000
-        ),
-        BudgetCategoryEnvelope(
-            name: "Transit & Transport",
-            detail: "Expressways & Scenic Railway Pass",
-            iconName: "tram.fill",
-            color: Color(red: 37/255, green: 99/255, blue: 235/255),
-            spentUSD: 1588.00,
-            targetUSD: 1600.00,
-            spentLKR: 484340,
-            targetLKR: 488000
-        ),
-        BudgetCategoryEnvelope(
-            name: "Accommodations",
-            detail: "Heritance Kandalama & Galle Fort Villas",
-            iconName: "bed.double.fill",
-            color: Color(red: 56/255, green: 189/255, blue: 248/255),
-            spentUSD: 1340.00,
-            targetUSD: 1800.00,
-            spentLKR: 408700,
-            targetLKR: 549000
-        )
-    ]
     
     var body: some View {
         ZStack(alignment: .bottom) {
@@ -228,49 +95,21 @@ struct BudgetExpensesView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
             
-            // MARK: - Floating Glassmorphic Bottom Navigation Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .home {
-                    dismiss()
-                } else if tab == .itinerary {
-                    navigateToItinerary = true
-                } else if tab == .map {
-                    navigateToMap = true
-                } else if tab == .profile {
-                    navigateToProfile = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
         .preferredColorScheme(.dark)
-        .onAppear {
-            withAnimation(.easeInOut(duration: 1.4).repeatForever(autoreverses: true)) {
-                
-            }
-        }
-        .navigationDestination(isPresented: $navigateToItinerary) {
-            DailyItineraryView()
-        }
-        .navigationDestination(isPresented: $navigateToMap) {
-            InteractiveMapView()
-        }
-        .navigationDestination(isPresented: $navigateToReceiptScanner) {
-            ReceiptScannerExpenseLoggerView()
-        }
-        .navigationDestination(isPresented: $navigateToProfile) {
-            SettingsProfileView()
-        }
-        .sheet(isPresented: $showLogExpenseSheet) {
+        .sheet(isPresented: $viewModel.showLogExpenseSheet) {
             logExpenseModalSheet
         }
-        .sheet(isPresented: $showSplitBillSheet) {
+        .sheet(isPresented: $viewModel.showSplitBillSheet) {
             splitBillModalSheet
         }
+        .sheet(isPresented: $viewModel.showEditBudgetSheet) {
+            editBudgetModalSheet
+        }
         .overlay(alignment: .top) {
-            if let notice = activeNotice {
+            if let notice = viewModel.activeNotice {
                 Text(notice)
                     .font(.system(size: 13, weight: .semibold, design: .rounded))
                     .foregroundColor(.white)
@@ -295,7 +134,7 @@ struct BudgetExpensesView: View {
             // Top Navigation Row
             HStack {
                 Button(action: {
-                    dismiss()
+                    AppNavigationRouter.shared.switchTab(to: .home)
                 }) {
                     Image(systemName: "chevron.left")
                         .font(.system(size: 14, weight: .bold))
@@ -333,7 +172,7 @@ struct BudgetExpensesView: View {
                 
                 // Notifications button
                 Button(action: {
-                    triggerNotice("🔔 FX alert: LKR stable at ~305 per USD today")
+                    viewModel.triggerNotice("🔔 FX alert: LKR stable at ~305 per USD today")
                 }) {
                     ZStack(alignment: .topTrailing) {
                         Circle()
@@ -388,6 +227,8 @@ struct BudgetExpensesView: View {
                         .tracking(1.2)
                 }
                 
+                Spacer()
+                
                 // User Avatar
                 ZStack {
                     Circle()
@@ -432,13 +273,10 @@ struct BudgetExpensesView: View {
                         .font(.system(size: 12))
                         .foregroundColor(primarySky)
                     
-                    Text(TripManager.shared.currentTrip.title.isEmpty ? "Sri Lanka Island Tour 🇱🇰" : TripManager.shared.currentTrip.title)
+                    Text(viewModel.tripManager.currentTrip.title.isEmpty ? "Sri Lanka Island Tour 🇱🇰" : viewModel.tripManager.currentTrip.title)
                         .font(.system(size: 12, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
-                    
-                    Image(systemName: "chevron.down")
-                        .font(.system(size: 10, weight: .bold))
-                        .foregroundColor(slateMuted)
+                        .lineLimit(1)
                 }
                 .padding(.horizontal, 12)
                 .padding(.vertical, 6)
@@ -478,12 +316,10 @@ struct BudgetExpensesView: View {
                 
                 // Currency Switcher Button
                 Button(action: {
-                    withAnimation(.spring(response: 0.35, dampingFraction: 0.7)) {
-                        isUSD.toggle()
-                    }
+                    viewModel.toggleCurrency()
                 }) {
                     HStack(spacing: 6) {
-                        Text(isUSD ? "USD ($)" : "LKR (Rs.)")
+                        Text(viewModel.isUSD ? "USD ($)" : "LKR (Rs.)")
                             .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(primarySky)
                         
@@ -491,7 +327,7 @@ struct BudgetExpensesView: View {
                             .font(.system(size: 10, weight: .bold))
                             .foregroundColor(slateMuted)
                         
-                        Text(isUSD ? "LKR (Rs.)" : "USD ($)")
+                        Text(viewModel.isUSD ? "LKR (Rs.)" : "USD ($)")
                             .font(.system(size: 12, weight: .medium, design: .rounded))
                             .foregroundColor(slateMuted)
                     }
@@ -541,15 +377,15 @@ struct BudgetExpensesView: View {
                             .foregroundColor(slateMuted)
                             .tracking(0.6)
                         
-                        Text(isUSD ? "$2,319.50" : "Rs. 707,450")
-                            .font(.system(size: 36, weight: .heavy, design: .rounded))
+                        Text(viewModel.isUSD ? String(format: "$%.2f", viewModel.remainingSafeToSpendUSD) : "Rs. \(viewModel.remainingSafeToSpendLKR.formatted())")
+                            .font(.system(size: 34, weight: .heavy, design: .rounded))
                             .foregroundColor(.white)
                     }
                     
                     Spacer()
                     
                     VStack(alignment: .trailing, spacing: 4) {
-                        Text("64% Utilized")
+                        Text(viewModel.utilizationPercentFormatted + " Utilized")
                             .font(.system(size: 11, weight: .bold, design: .rounded))
                             .foregroundColor(primaryBlue)
                             .padding(.horizontal, 10)
@@ -561,7 +397,7 @@ struct BudgetExpensesView: View {
                             )
                             .shadow(color: primarySky.opacity(0.2), radius: 6)
                         
-                        Text("8 Days Remaining")
+                        Text("\(viewModel.remainingDaysCount) Days Remaining")
                             .font(.system(size: 10, weight: .medium, design: .rounded))
                             .foregroundColor(slateMuted)
                     }
@@ -571,27 +407,22 @@ struct BudgetExpensesView: View {
                 VStack(spacing: 6) {
                     GeometryReader { geo in
                         let width = geo.size.width
+                        let slices = viewModel.donutSlices
+                        
                         HStack(spacing: 2) {
-                            Capsule()
-                                .fill(royalBlue)
-                                .frame(width: width * 0.38)
-                                .shadow(color: royalBlue.opacity(0.6), radius: 4)
-                            Capsule()
-                                .fill(primarySky)
-                                .frame(width: width * 0.32)
-                                .shadow(color: primarySky.opacity(0.6), radius: 4)
-                            Capsule()
-                                .fill(amberGold)
-                                .frame(width: width * 0.18)
-                                .shadow(color: amberGold.opacity(0.6), radius: 4)
-                            Capsule()
-                                .fill(emeraldGreen)
-                                .frame(width: width * 0.08)
-                                .shadow(color: emeraldGreen.opacity(0.6), radius: 4)
-                            Capsule()
-                                .fill(purpleAccent)
-                                .frame(width: width * 0.04)
-                                .shadow(color: purpleAccent.opacity(0.6), radius: 4)
+                            if viewModel.totalSpentUSD <= 0 {
+                                Capsule()
+                                    .fill(surfaceContainer)
+                                    .frame(width: width)
+                            } else {
+                                ForEach(slices) { slice in
+                                    let sliceWidth = max(width * CGFloat(slice.percentage * viewModel.utilizationPercentage), 4)
+                                    Capsule()
+                                        .fill(slice.color)
+                                        .frame(width: sliceWidth)
+                                        .shadow(color: slice.color.opacity(0.5), radius: 3)
+                                }
+                            }
                         }
                     }
                     .frame(height: 10)
@@ -601,24 +432,32 @@ struct BudgetExpensesView: View {
                         Capsule().stroke(Color.white.opacity(0.08), lineWidth: 1)
                     )
                     
-                    // Spent vs Total Label
+                    // Spent vs Total Label with Edit Cap CTA
                     HStack {
                         HStack(spacing: 2) {
                             Text("Spent:")
                                 .foregroundColor(slateMuted)
-                            Text(isUSD ? "$4,180.50" : "Rs. 1,275,050")
+                            Text(viewModel.isUSD ? String(format: "$%.2f", viewModel.totalSpentUSD) : "Rs. \(viewModel.totalSpentLKR.formatted())")
                                 .foregroundColor(.white)
                                 .bold()
                         }
                         
                         Spacer()
                         
-                        HStack(spacing: 2) {
-                            Text("Total Cap:")
+                        HStack(spacing: 4) {
+                            Text("Cap:")
                                 .foregroundColor(slateMuted)
-                            Text(isUSD ? "$6,500.00" : "Rs. 1,982,500")
+                            Text(viewModel.isUSD ? String(format: "$%.2f", viewModel.totalBudgetUSD) : "Rs. \(viewModel.totalBudgetLKR.formatted())")
                                 .foregroundColor(.white)
                                 .bold()
+                            
+                            Button(action: {
+                                viewModel.showEditBudgetSheet = true
+                            }) {
+                                Image(systemName: "pencil.circle.fill")
+                                    .font(.system(size: 13, weight: .bold))
+                                    .foregroundColor(primarySky)
+                            }
                         }
                     }
                     .font(.system(size: 12, design: .rounded))
@@ -641,7 +480,7 @@ struct BudgetExpensesView: View {
                     
                     VStack(alignment: .leading, spacing: 1) {
                         HStack(spacing: 4) {
-                            Text(isUSD ? "$289.90" : "Rs. 88,420")
+                            Text(viewModel.isUSD ? String(format: "$%.2f", viewModel.dailySafePaceUSD) : "Rs. \(viewModel.dailySafePaceLKR.formatted())")
                                 .font(.system(size: 15, weight: .bold, design: .rounded))
                                 .foregroundColor(.white)
                             
@@ -654,12 +493,12 @@ struct BudgetExpensesView: View {
                     Spacer()
                     
                     HStack(spacing: 4) {
-                        Image(systemName: "arrow.down.right")
+                        Image(systemName: viewModel.paceStatus == "On Track" ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
                             .font(.system(size: 11, weight: .bold))
-                        Text("On Track")
+                        Text(viewModel.paceStatus)
                             .font(.system(size: 12, weight: .bold, design: .rounded))
                     }
-                    .foregroundColor(secondaryMint)
+                    .foregroundColor(viewModel.paceStatus == "On Track" ? secondaryMint : amberGold)
                 }
                 .padding(10)
                 .background(Color.black.opacity(0.4))
@@ -689,13 +528,13 @@ struct BudgetExpensesView: View {
     // MARK: - 3. Primary Actions (Log & Split)
     private var primaryActionsRow: some View {
         HStack(spacing: 12) {
-            // Log Expense Primary CTA (2/3 width)
+            // Log Expense Primary CTA (Direct manual amount entry)
             Button(action: {
-                navigateToReceiptScanner = true
+                viewModel.showLogExpenseSheet = true
             }) {
                 HStack(spacing: 8) {
-                    Image(systemName: "camera.fill")
-                        .font(.system(size: 16, weight: .bold))
+                    Image(systemName: "plus.circle.fill")
+                        .font(.system(size: 17, weight: .bold))
                     
                     Text("Log Expense")
                         .font(.system(size: 16, weight: .bold, design: .rounded))
@@ -716,7 +555,7 @@ struct BudgetExpensesView: View {
             
             // Split Group CTA (1/3 width)
             Button(action: {
-                showSplitBillSheet = true
+                viewModel.showSplitBillSheet = true
             }) {
                 HStack(spacing: 6) {
                     Image(systemName: "person.2.fill")
@@ -777,7 +616,7 @@ struct BudgetExpensesView: View {
                     .foregroundColor(slateMuted)
                     .tracking(0.6)
                 
-                if isSettledWithMarcus {
+                if viewModel.isSettledWithMarcus {
                     Text("Marcus is all settled up 🎉")
                         .font(.system(size: 13, weight: .bold, design: .rounded))
                         .foregroundColor(secondaryMint)
@@ -787,13 +626,13 @@ struct BudgetExpensesView: View {
                             .font(.system(size: 13, weight: .medium, design: .rounded))
                             .foregroundColor(.white)
                         
-                        Text(isUSD ? "$312.40" : "Rs. 95,280")
+                        Text(viewModel.isUSD ? "$78.00" : "Rs. 23,790")
                             .font(.system(size: 13, weight: .bold, design: .rounded))
                             .foregroundColor(secondaryMint)
                     }
                 }
                 
-                Text("Hotel Deposit • Heritance Kandalama Dambulla")
+                Text("Observation Saloon Train Seats • Ella")
                     .font(.system(size: 11, weight: .regular))
                     .foregroundColor(slateMuted)
             }
@@ -803,17 +642,12 @@ struct BudgetExpensesView: View {
             // Settle Up Button
             Button(action: {
                 withAnimation {
-                    isSettledWithMarcus.toggle()
-                    if isSettledWithMarcus {
-                        triggerNotice("✅ Marked $312.40 from Marcus as Settled!")
-                    } else {
-                        triggerNotice("Reopened Marcus group balance.")
-                    }
+                    viewModel.settleWithMarcus()
                 }
             }) {
-                Text(isSettledWithMarcus ? "Undo" : "Settle Up")
+                Text(viewModel.isSettledWithMarcus ? "Settled" : "Settle Up")
                     .font(.system(size: 11, weight: .bold, design: .rounded))
-                    .foregroundColor(isSettledWithMarcus ? slateMuted : primarySky)
+                    .foregroundColor(viewModel.isSettledWithMarcus ? slateMuted : primarySky)
                     .padding(.horizontal, 12)
                     .padding(.vertical, 8)
                     .background(surfaceContainer)
@@ -842,7 +676,7 @@ struct BudgetExpensesView: View {
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text("5 Active Allocation Buckets")
+                    Text("\(viewModel.categoryEnvelopes.count) Active Allocation Buckets")
                         .font(.system(size: 12, weight: .medium))
                         .foregroundColor(slateMuted)
                 }
@@ -850,7 +684,7 @@ struct BudgetExpensesView: View {
                 Spacer()
                 
                 Button(action: {
-                    triggerNotice("📊 Exporting PDF Budget Statement...")
+                    viewModel.triggerNotice("📊 Exporting PDF Budget Statement...")
                 }) {
                     ZStack {
                         Circle()
@@ -870,16 +704,8 @@ struct BudgetExpensesView: View {
             // Interactive Donut Chart Geometry
             ZStack {
                 // Outer Donut Ring
-                DonutChartView(
-                    slices: [
-                        DonutSlice(color: royalBlue, percentage: 0.38),
-                        DonutSlice(color: primarySky, percentage: 0.32),
-                        DonutSlice(color: amberGold, percentage: 0.18),
-                        DonutSlice(color: emeraldGreen, percentage: 0.08),
-                        DonutSlice(color: purpleAccent, percentage: 0.04)
-                    ]
-                )
-                .frame(width: 190, height: 190)
+                DonutChartView(slices: viewModel.donutSlices)
+                    .frame(width: 190, height: 190)
                 
                 // Donut Core Badge
                 VStack(spacing: 2) {
@@ -888,23 +714,26 @@ struct BudgetExpensesView: View {
                         .foregroundColor(slateMuted)
                         .tracking(0.8)
                     
-                    Text(isUSD ? "$4,180" : "Rs. 1,275,000")
+                    Text(viewModel.isUSD ? String(format: "$%.0f", viewModel.totalSpentUSD) : "Rs. \(viewModel.totalSpentLKR.formatted())")
                         .font(.system(size: 22, weight: .heavy, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text(isUSD ? "LKR 1,275,000" : "USD $4,180")
+                    Text(viewModel.isUSD ? "LKR \(viewModel.totalSpentLKR.formatted())" : String(format: "USD $%.2f", viewModel.totalSpentUSD))
                         .font(.system(size: 10, weight: .bold, design: .rounded))
                         .foregroundColor(secondaryMint)
                 }
             }
             .padding(.vertical, 6)
             
-            // Donut 2x2 Legend Grid
+            // Donut Legend Grid (Real Dynamic Slices)
             LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 8) {
-                legendItem(title: "Transit & Rail", percent: "38%", color: royalBlue)
-                legendItem(title: "Lodging", percent: "32%", color: primarySky)
-                legendItem(title: "Food & Dining", percent: "18%", color: amberGold)
-                legendItem(title: "Culture & Passes", percent: "8%", color: emeraldGreen)
+                ForEach(viewModel.donutSlices) { slice in
+                    legendItem(
+                        title: slice.name,
+                        percent: "\(Int(slice.percentage * 100))%",
+                        color: slice.color
+                    )
+                }
             }
         }
         .padding(18)
@@ -955,7 +784,7 @@ struct BudgetExpensesView: View {
                 Spacer()
                 
                 Button(action: {
-                    triggerNotice("🎯 Target budgets adjusted to safe thresholds")
+                    viewModel.showEditBudgetSheet = true
                 }) {
                     Text("MANAGE TARGETS")
                         .font(.system(size: 10, weight: .bold, design: .rounded))
@@ -966,7 +795,7 @@ struct BudgetExpensesView: View {
             .padding(.horizontal, 2)
             
             VStack(spacing: 10) {
-                ForEach(categories) { envelope in
+                ForEach(viewModel.categoryEnvelopes) { envelope in
                     categoryCard(envelope: envelope)
                 }
             }
@@ -1003,7 +832,7 @@ struct BudgetExpensesView: View {
                 Spacer()
                 
                 VStack(alignment: .trailing, spacing: 2) {
-                    Text(isUSD ? String(format: "$%.2f", envelope.spentUSD) : String(format: "Rs. %d", envelope.spentLKR))
+                    Text(viewModel.isUSD ? String(format: "$%.2f", envelope.spentUSD) : "Rs. \(envelope.spentLKR.formatted())")
                         .font(.system(size: 14, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
@@ -1011,7 +840,7 @@ struct BudgetExpensesView: View {
                     let leftLKR = max(envelope.targetLKR - envelope.spentLKR, 0)
                     let isTight = envelope.progress > 0.95
                     
-                    Text(isUSD ? String(format: "$%.2f left", leftUSD) : String(format: "Rs. %d left", leftLKR))
+                    Text(viewModel.isUSD ? String(format: "$%.2f left", leftUSD) : "Rs. \(leftLKR.formatted()) left")
                         .font(.system(size: 10.5, weight: .bold, design: .rounded))
                         .foregroundColor(isTight ? Color.red.opacity(0.9) : secondaryMint)
                 }
@@ -1050,10 +879,10 @@ struct BudgetExpensesView: View {
                         .font(.system(size: 16, weight: .bold, design: .rounded))
                         .foregroundColor(.white)
                     
-                    Text("\(transactions.count)")
+                    Text("\(viewModel.transactions.count)")
                         .font(.system(size: 11, weight: .bold, design: .rounded))
                         .foregroundColor(slateMuted)
-                        .frame(width: 20, height: 20)
+                        .frame(width: 22, height: 22)
                         .background(surfaceContainer)
                         .clipShape(Circle())
                         .overlay(
@@ -1064,33 +893,76 @@ struct BudgetExpensesView: View {
                 Spacer()
                 
                 Button(action: {
-                    triggerNotice("📜 Viewing all 48 trip transactions")
+                    viewModel.showLogExpenseSheet = true
                 }) {
-                    Text("VIEW ALL")
-                        .font(.system(size: 10, weight: .bold, design: .rounded))
-                        .foregroundColor(primarySky)
-                        .tracking(0.6)
+                    HStack(spacing: 4) {
+                        Image(systemName: "plus")
+                            .font(.system(size: 10, weight: .bold))
+                        Text("ADD EXPENSE")
+                            .font(.system(size: 10, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(primarySky)
+                    .tracking(0.6)
                 }
             }
             .padding(.horizontal, 2)
             
-            VStack(spacing: 0) {
-                ForEach(Array(transactions.enumerated()), id: \.element.id) { index, item in
-                    transactionRow(item: item)
+            if viewModel.transactions.isEmpty {
+                VStack(spacing: 12) {
+                    Image(systemName: "creditcard.and.123")
+                        .font(.system(size: 36))
+                        .foregroundColor(slateMuted.opacity(0.7))
+                        .padding(.top, 16)
                     
-                    if index < transactions.count - 1 {
-                        Divider()
-                            .background(Color.white.opacity(0.06))
-                            .padding(.leading, 56)
+                    Text("No expenses logged yet")
+                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                    
+                    Text("Enter your daily expenses to keep your Sri Lanka journey budget on track.")
+                        .font(.system(size: 12))
+                        .foregroundColor(slateMuted)
+                        .multilineTextAlignment(.center)
+                        .padding(.horizontal, 20)
+                    
+                    Button(action: {
+                        viewModel.showLogExpenseSheet = true
+                    }) {
+                        Text("Log First Expense")
+                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 16)
+                            .padding(.vertical, 8)
+                            .background(primarySky)
+                            .clipShape(Capsule())
+                    }
+                    .padding(.bottom, 16)
+                }
+                .frame(maxWidth: .infinity)
+                .background(surfaceContainerLow)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(outlineBorder, lineWidth: 1)
+                )
+            } else {
+                VStack(spacing: 0) {
+                    ForEach(Array(viewModel.transactions.enumerated()), id: \.element.id) { index, item in
+                        transactionRow(item: item)
+                        
+                        if index < viewModel.transactions.count - 1 {
+                            Divider()
+                                .background(Color.white.opacity(0.06))
+                                .padding(.leading, 56)
+                        }
                     }
                 }
+                .background(surfaceContainerLow)
+                .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 20, style: .continuous)
+                        .stroke(outlineBorder, lineWidth: 1)
+                )
             }
-            .background(surfaceContainerLow)
-            .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
-            .overlay(
-                RoundedRectangle(cornerRadius: 20, style: .continuous)
-                    .stroke(outlineBorder, lineWidth: 1)
-            )
         }
     }
     
@@ -1105,7 +977,7 @@ struct BudgetExpensesView: View {
                         Circle().stroke(item.categoryColor.opacity(0.35), lineWidth: 1)
                     )
                 
-                Image(systemName: item.iconName)
+                Image(systemName: item.categoryIcon)
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundColor(item.categoryColor)
             }
@@ -1126,19 +998,31 @@ struct BudgetExpensesView: View {
                 }
                 .font(.system(size: 10.5, weight: .medium, design: .rounded))
                 .foregroundColor(slateMuted)
+                .lineLimit(1)
             }
             
             Spacer()
             
             VStack(alignment: .trailing, spacing: 1) {
-                Text(isUSD ? String(format: "-$%.2f", item.amountUSD) : String(format: "-Rs. %d", item.amountLKR))
+                Text(viewModel.isUSD ? String(format: "-$%.2f", item.amountUSD) : "-Rs. \(item.amountLKR.formatted())")
                     .font(.system(size: 13.5, weight: .bold, design: .rounded))
                     .foregroundColor(.white)
                 
-                Text(isUSD ? String(format: "Rs. %d", item.amountLKR) : String(format: "$%.2f", item.amountUSD))
+                Text(viewModel.isUSD ? "Rs. \(item.amountLKR.formatted())" : String(format: "$%.2f", item.amountUSD))
                     .font(.system(size: 10.5, weight: .medium, design: .rounded))
                     .foregroundColor(slateMuted)
             }
+            
+            // Delete Action
+            Button(action: {
+                viewModel.deleteExpense(id: item.id)
+            }) {
+                Image(systemName: "trash")
+                    .font(.system(size: 12))
+                    .foregroundColor(slateMuted.opacity(0.6))
+                    .frame(width: 24, height: 24)
+            }
+            .buttonStyle(.plain)
         }
         .padding(14)
     }
@@ -1149,38 +1033,33 @@ struct BudgetExpensesView: View {
             Text("SHARED EXPENSE GROUP")
                 .font(.system(size: 10, weight: .bold, design: .rounded))
                 .foregroundColor(slateMuted)
-                .tracking(0.6)
+                .tracking(0.8)
                 .padding(.horizontal, 2)
             
-            HStack(spacing: 10) {
-                // Traveler 1: Elena
-                HStack(spacing: 10) {
-                    AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuDzeY-G7eFFeDZXXjVdI5eD-pIw0maVL-xQkO0y1byke7YFg-m3hsfjGHfnI9OquYqDmIitONJQL57oXzPkJ-yc00RbUlMedSM_U0ePwQTyvOGUbF5imyhs0OShQrrVVxo8z4I3KXWIEBS7NUlZ-_fRz82XybMk0eabc60bN9z3RcTLPp6joosgAOL9mmvOXSh5O6dXchXyjOQEpzZRBGwk1treoD5_jcfcnOfSx1TuwXlZUFTG4ZhzxQ")) { phase in
-                        if let image = phase.image {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
-                        } else {
-                            Circle().fill(surfaceContainerHigh)
-                        }
-                    }
-                    .frame(width: 36, height: 36)
-                    .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white.opacity(0.12), lineWidth: 1))
+            HStack(spacing: 12) {
+                // User Chip
+                HStack(spacing: 8) {
+                    Circle()
+                        .fill(primarySky)
+                        .frame(width: 28, height: 28)
+                        .overlay(
+                            Text(authViewModel.userInitials)
+                                .font(.system(size: 11, weight: .bold))
+                                .foregroundColor(.white)
+                        )
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("\(authViewModel.userFirstName) (You)")
-                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("You (\(authViewModel.userFirstName))")
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                         
-                        Text("Settled Up")
-                            .font(.system(size: 10.5, weight: .semibold, design: .rounded))
+                        Text("Owner • 100%")
+                            .font(.system(size: 10))
                             .foregroundColor(secondaryMint)
                     }
-                    
-                    Spacer()
                 }
-                .padding(10)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
                 .background(surfaceContainerLow)
                 .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .overlay(
@@ -1188,81 +1067,95 @@ struct BudgetExpensesView: View {
                         .stroke(outlineBorder, lineWidth: 1)
                 )
                 
-                // Traveler 2: Marcus
-                HStack(spacing: 10) {
-                    AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuDCdtLmCcKCN4Hp2T__jMT-pbLt2Dvsmn_2rebENeyOqp5bcXZ8VRcnx4MN2822LKbl71uz_m-IHyjNEt_vPltNhOMe1Eep1mftu-x4PuDlL4tJ5uosVluk2tNij0LXSJMK_jOjyFRK_vt9H0Bg-qCvw0jkvC4YC5lMvcp3z0PftpyaTtGX1vpd0Koz6NFQheGK0mBcwcCI8vzZbyxytBMMzetYbYbjMOs2xbMI4Qptu08cU3RE_ksqoA")) { phase in
+                // Marcus Vance Chip
+                HStack(spacing: 8) {
+                    AsyncImage(url: URL(string: "https://lh3.googleusercontent.com/aida-public/AB6AXuCrjrvhGFcSJU2Zd4Cz0JAA5kdEEqFJydlEqE1qQMBQIoKF84dHx5EruFawPjn8pH_DS6QLDWFcPTbi0QkJxaj1BR-r1o1xysi2haLa9XHpDAixQZ0FmOEBZwBpHor5o9AH36QAprlWSyKjqb1pfbzXJIjhj1n96OjCDUZj_tkDIxatbXGWrpaRghWBjIVEQ9gb59a0rGkIAYw54dfcdA-LW00mMamEHPm5OuHH6sFZn4IMNy2qZKYSqg")) { phase in
                         if let image = phase.image {
-                            image
-                                .resizable()
-                                .aspectRatio(contentMode: .fill)
+                            image.resizable().aspectRatio(contentMode: .fill)
                         } else {
                             Circle().fill(surfaceContainerHigh)
                         }
                     }
-                    .frame(width: 36, height: 36)
+                    .frame(width: 28, height: 28)
                     .clipShape(Circle())
-                    .overlay(Circle().stroke(Color.white.opacity(0.12), lineWidth: 1))
                     
-                    VStack(alignment: .leading, spacing: 2) {
-                        Text("Marcus Chen")
-                            .font(.system(size: 13, weight: .bold, design: .rounded))
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("Marcus V.")
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
                             .foregroundColor(.white)
                         
-                        Text(isSettledWithMarcus ? "Settled Up" : "Owes $312.40")
-                            .font(.system(size: 10.5, weight: .semibold, design: .rounded))
-                            .foregroundColor(isSettledWithMarcus ? secondaryMint : primaryBlue)
+                        Text("Travel Partner")
+                            .font(.system(size: 10))
+                            .foregroundColor(slateMuted)
                     }
-                    
-                    Spacer()
                 }
-                .padding(10)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 8)
                 .background(surfaceContainerLow)
                 .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
                 .overlay(
                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                         .stroke(outlineBorder, lineWidth: 1)
                 )
+                
+                Spacer()
+                
+                // Add Traveler Pill
+                Button(action: {
+                    viewModel.showSplitBillSheet = true
+                }) {
+                    Image(systemName: "person.badge.plus")
+                        .font(.system(size: 14, weight: .semibold))
+                        .foregroundColor(primarySky)
+                        .frame(width: 40, height: 44)
+                        .background(surfaceContainerLow)
+                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(outlineBorder, lineWidth: 1)
+                        )
+                }
             }
         }
     }
     
     // MARK: - Modals
     private var logExpenseModalSheet: some View {
-        LogExpenseSheet(isUSD: isUSD) { newExpense in
-            withAnimation {
-                transactions.insert(newExpense, at: 0)
-                triggerNotice("📸 Logged \(newExpense.title) (\(String(format: "$%.2f", newExpense.amountUSD)))!")
-            }
+        LogExpenseSheet(
+            fxRate: viewModel.fxRate,
+            initialIsUSD: viewModel.isUSD
+        ) { title, category, amount, inputIsUSD, location, date in
+            viewModel.addExpense(
+                title: title,
+                category: category,
+                amount: amount,
+                inputIsUSD: inputIsUSD,
+                location: location,
+                date: date
+            )
         }
     }
     
     private var splitBillModalSheet: some View {
-        SplitBillSheet(isUSD: isUSD) { amountPerPerson in
-            triggerNotice("👥 Bill split requested: $\(String(format: "%.2f", amountPerPerson)) per person")
+        SplitBillSheet(isUSD: viewModel.isUSD) { amountPerPerson in
+            viewModel.triggerNotice("👥 Bill split requested: $\(String(format: "%.2f", amountPerPerson)) per person")
         }
     }
     
-    private func triggerNotice(_ message: String) {
-        withAnimation {
-            activeNotice = message
-        }
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2.6) {
-            withAnimation {
-                if activeNotice == message {
-                    activeNotice = nil
-                }
-            }
+    private var editBudgetModalSheet: some View {
+        EditBudgetCapSheet(
+            currentCapUSD: viewModel.totalBudgetUSD,
+            fxRate: viewModel.fxRate,
+            isUSD: viewModel.isUSD
+        ) { newCapUSD in
+            viewModel.updateBudgetCap(newCapUSD: newCapUSD)
+        } onReset: {
+            viewModel.resetBudgetCapToTripDefault()
         }
     }
 }
 
-// MARK: - Donut Chart Helper Shape
-struct DonutSlice: Identifiable {
-    let id = UUID()
-    let color: Color
-    let percentage: Double
-}
-
+// MARK: - Donut Chart Helper Shapes
 struct DonutChartView: View {
     let slices: [DonutSlice]
     
@@ -1315,24 +1208,63 @@ struct DonutSliceShape: Shape {
     }
 }
 
-// MARK: - Submodal: Log Expense Sheet
+// MARK: - Submodal: Log Expense Sheet (No Scanner, Direct Amount Entry)
 struct LogExpenseSheet: View {
     @Environment(\.dismiss) private var dismiss
-    let isUSD: Bool
-    var onSave: (ExpenseTransaction) -> Void
+    let fxRate: Double
+    @State var inputIsUSD: Bool
+    var onSave: (String, String, Double, Bool, String, Date) -> Void
     
-    @State private var merchantName: String = ""
     @State private var amountText: String = ""
+    @State private var merchantName: String = ""
     @State private var selectedCategory: String = "Dining"
     @State private var location: String = "Colombo, Sri Lanka"
+    @State private var selectedDate: Date = Date()
     
-    private let categories = ["Dining", "Transit", "Culture", "Lodging", "Shopping"]
+    init(
+        fxRate: Double = 305.00,
+        initialIsUSD: Bool = true,
+        onSave: @escaping (String, String, Double, Bool, String, Date) -> Void
+    ) {
+        self.fxRate = fxRate
+        self._inputIsUSD = State(initialValue: initialIsUSD)
+        self.onSave = onSave
+    }
+    
+    private let categories: [(name: String, icon: String, color: Color)] = [
+        ("Dining", "fork.knife", Color(red: 245/255, green: 158/255, blue: 11/255)),
+        ("Transit", "tram.fill", Color(red: 37/255, green: 99/255, blue: 235/255)),
+        ("Lodging", "bed.double.fill", Color(red: 56/255, green: 189/255, blue: 248/255)),
+        ("Culture", "ticket.fill", Color(red: 16/255, green: 185/255, blue: 129/255)),
+        ("Shopping", "bag.fill", Color(red: 168/255, green: 85/255, blue: 247/255))
+    ]
+    
+    private let quickPresets = [
+        ("🍽️ Dinner", "Dining"),
+        ("🛺 Tuk-Tuk", "Transit"),
+        ("🏨 Hotel Stay", "Lodging"),
+        ("🏰 Citadel Ticket", "Culture"),
+        ("🍵 Ceylon Spices", "Shopping"),
+        ("🥥 Fresh Thambili", "Dining")
+    ]
+    
+    private var parsedAmount: Double {
+        Double(amountText.replacingOccurrences(of: ",", with: ".")) ?? 0.0
+    }
+    
+    private var convertedAmountString: String {
+        guard parsedAmount > 0 else { return "" }
+        if inputIsUSD {
+            let lkr = Int(parsedAmount * fxRate)
+            return "≈ Rs. \(lkr.formatted()) LKR"
+        } else {
+            let usd = parsedAmount / fxRate
+            return String(format: "≈ $%.2f USD", usd)
+        }
+    }
     
     private var isFormValid: Bool {
-        guard let amount = Double(amountText.replacingOccurrences(of: ",", with: ".")), amount > 0 else {
-            return false
-        }
-        return !merchantName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+        parsedAmount > 0 && !merchantName.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
     }
     
     var body: some View {
@@ -1342,26 +1274,97 @@ struct LogExpenseSheet: View {
                 
                 ScrollView {
                     VStack(spacing: 20) {
-                        // Amount Hero Input
-                        VStack(spacing: 6) {
-                            Text(isUSD ? "AMOUNT (USD)" : "AMOUNT (LKR)")
-                                .font(.system(size: 11, weight: .bold, design: .rounded))
-                                .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
-                                .tracking(1)
+                        // Amount Hero Card with Currency Toggle
+                        VStack(spacing: 12) {
+                            HStack {
+                                Text(inputIsUSD ? "AMOUNT IN US DOLLARS" : "AMOUNT IN SRI LANKAN RUPEES")
+                                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                                    .tracking(0.8)
+                                
+                                Spacer()
+                                
+                                // Currency Switcher Pill
+                                Button(action: {
+                                    withAnimation(.spring(response: 0.3, dampingFraction: 0.75)) {
+                                        inputIsUSD.toggle()
+                                    }
+                                }) {
+                                    HStack(spacing: 4) {
+                                        Text(inputIsUSD ? "USD ($)" : "LKR (Rs.)")
+                                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                                            .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
+                                        
+                                        Image(systemName: "arrow.2.squarepath")
+                                            .font(.system(size: 10))
+                                            .foregroundColor(.gray)
+                                    }
+                                    .padding(.horizontal, 10)
+                                    .padding(.vertical, 4)
+                                    .background(Color(red: 24/255, green: 34/255, blue: 52/255))
+                                    .clipShape(Capsule())
+                                    .overlay(
+                                        Capsule().stroke(Color.white.opacity(0.12), lineWidth: 1)
+                                    )
+                                }
+                            }
                             
-                            HStack(alignment: .firstTextBaseline, spacing: 4) {
-                                Text(isUSD ? "$" : "Rs. ")
+                            // Hero Amount Display & TextField
+                            HStack(alignment: .firstTextBaseline, spacing: 6) {
+                                Text(inputIsUSD ? "$" : "Rs.")
                                     .font(.system(size: 32, weight: .bold, design: .rounded))
                                     .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
                                 
                                 TextField("0.00", text: $amountText)
-                                    .font(.system(size: 44, weight: .heavy, design: .rounded))
+                                    .font(.system(size: 46, weight: .heavy, design: .rounded))
                                     .foregroundColor(.white)
                                     .keyboardType(.decimalPad)
                             }
-                            .frame(maxWidth: .infinity, alignment: .center)
+                            .frame(maxWidth: .infinity, alignment: .leading)
+                            
+                            // Live FX Conversion Preview
+                            if !convertedAmountString.isEmpty {
+                                HStack(spacing: 6) {
+                                    Circle()
+                                        .fill(Color(red: 68/255, green: 226/255, blue: 205/255))
+                                        .frame(width: 6, height: 6)
+                                    
+                                    Text("\(convertedAmountString) (at 305 FX rate)")
+                                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                                        .foregroundColor(Color(red: 68/255, green: 226/255, blue: 205/255))
+                                }
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            }
+                            
+                            // Quick Amount Increment Chips
+                            HStack(spacing: 8) {
+                                if inputIsUSD {
+                                    quickIncrementButton(label: "+$10", delta: 10)
+                                    quickIncrementButton(label: "+$25", delta: 25)
+                                    quickIncrementButton(label: "+$50", delta: 50)
+                                    quickIncrementButton(label: "+$100", delta: 100)
+                                } else {
+                                    quickIncrementButton(label: "+1k", delta: 1000)
+                                    quickIncrementButton(label: "+2.5k", delta: 2500)
+                                    quickIncrementButton(label: "+5k", delta: 5000)
+                                    quickIncrementButton(label: "+10k", delta: 10000)
+                                }
+                                
+                                Button(action: {
+                                    amountText = ""
+                                }) {
+                                    Text("Clear")
+                                        .font(.system(size: 11, weight: .bold, design: .rounded))
+                                        .foregroundColor(Color(red: 248/255, green: 113/255, blue: 113/255))
+                                        .padding(.horizontal, 10)
+                                        .padding(.vertical, 6)
+                                        .background(Color.white.opacity(0.06))
+                                        .clipShape(Capsule())
+                                }
+                            }
+                            .padding(.top, 4)
                         }
-                        .padding(20)
+                        .padding(18)
                         .background(Color(red: 17/255, green: 24/255, blue: 39/255))
                         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
                         .overlay(
@@ -1369,13 +1372,14 @@ struct LogExpenseSheet: View {
                                 .stroke(Color.white.opacity(0.1), lineWidth: 1)
                         )
                         
-                        // Merchant Name
-                        VStack(alignment: .leading, spacing: 6) {
-                            Text("MERCHANT / EXPENSE")
+                        // Merchant / Description
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("MERCHANT / EXPENSE DESCRIPTION")
                                 .font(.system(size: 11, weight: .bold, design: .rounded))
                                 .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                                .tracking(0.6)
                             
-                            TextField("e.g. Starbucks Reserve Roastery", text: $merchantName)
+                            TextField("e.g. Ministry of Crab, Kandy Blue Train...", text: $merchantName)
                                 .font(.system(size: 15))
                                 .foregroundColor(.white)
                                 .padding(14)
@@ -1384,95 +1388,146 @@ struct LogExpenseSheet: View {
                                 .overlay(
                                     RoundedRectangle(cornerRadius: 14, style: .continuous)
                                         .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                                )
-                        }
-                        
-                        // Category Selector
-                        VStack(alignment: .leading, spacing: 8) {
-                            Text("CATEGORY")
-                                .font(.system(size: 11, weight: .bold, design: .rounded))
-                                .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                                    )
                             
-                            HStack(spacing: 8) {
-                                ForEach(categories, id: \.self) { cat in
-                                    Button(action: {
-                                        selectedCategory = cat
-                                    }) {
-                                        Text(cat)
-                                            .font(.system(size: 12, weight: .bold, design: .rounded))
-                                            .foregroundColor(selectedCategory == cat ? .black : .white)
-                                            .padding(.horizontal, 14)
-                                            .padding(.vertical, 8)
-                                            .background(selectedCategory == cat ? Color(red: 56/255, green: 189/255, blue: 248/255) : Color(red: 24/255, green: 34/255, blue: 52/255))
-                                            .clipShape(Capsule())
+                            // Quick Presets
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(quickPresets, id: \.0) { preset in
+                                        Button(action: {
+                                            merchantName = preset.0.replacingOccurrences(of: "^[\\p{Emoji}\\s]+", with: "", options: .regularExpression)
+                                            selectedCategory = preset.1
+                                        }) {
+                                            Text(preset.0)
+                                                .font(.system(size: 12, weight: .medium, design: .rounded))
+                                                .foregroundColor(.white)
+                                                .padding(.horizontal, 10)
+                                                .padding(.vertical, 6)
+                                                .background(Color(red: 24/255, green: 34/255, blue: 52/255))
+                                                .clipShape(Capsule())
+                                                .overlay(
+                                                    Capsule().stroke(Color.white.opacity(0.08), lineWidth: 1)
+                                                )
+                                        }
                                     }
                                 }
                             }
                         }
                         
-                        // Receipt Scan Button
-                        Button(action: {}) {
-                            HStack(spacing: 8) {
-                                Image(systemName: "doc.text.viewfinder")
-                                    .font(.system(size: 16))
-                                Text("Scan Physical Receipt with Camera")
-                                    .font(.system(size: 13, weight: .semibold, design: .rounded))
+                        // Category Selector
+                        VStack(alignment: .leading, spacing: 8) {
+                            Text("CATEGORY ENVELOPE")
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                                .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                                .tracking(0.6)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach(categories, id: \.name) { cat in
+                                        let isSelected = selectedCategory == cat.name
+                                        Button(action: {
+                                            selectedCategory = cat.name
+                                        }) {
+                                            HStack(spacing: 6) {
+                                                Image(systemName: cat.icon)
+                                                    .font(.system(size: 12))
+                                                Text(cat.name)
+                                                    .font(.system(size: 12, weight: .bold, design: .rounded))
+                                                    .lineLimit(1)
+                                            }
+                                            .foregroundColor(isSelected ? .black : .white)
+                                            .padding(.horizontal, 14)
+                                            .padding(.vertical, 8)
+                                            .background(isSelected ? cat.color : Color(red: 24/255, green: 34/255, blue: 52/255))
+                                            .clipShape(Capsule())
+                                            .overlay(
+                                                Capsule().stroke(isSelected ? Color.clear : Color.white.opacity(0.08), lineWidth: 1)
+                                            )
+                                        }
+                                    }
+                                }
+                                .padding(.horizontal, 1)
                             }
-                            .foregroundColor(Color(red: 142/255, green: 213/255, blue: 255/255))
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 48)
-                            .background(Color(red: 17/255, green: 24/255, blue: 39/255))
-                            .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                    .stroke(Color(red: 56/255, green: 189/255, blue: 248/255).opacity(0.3), lineWidth: 1)
-                            )
                         }
-                        .padding(.top, 6)
+                        
+                        // Location & Date
+                        VStack(alignment: .leading, spacing: 12) {
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("LOCATION")
+                                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                                    .tracking(0.6)
+                                
+                                HStack(spacing: 8) {
+                                    Image(systemName: "mappin.circle.fill")
+                                        .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
+                                    
+                                    TextField("Location in Sri Lanka", text: $location)
+                                        .font(.system(size: 14))
+                                        .foregroundColor(.white)
+                                }
+                                .padding(12)
+                                .background(Color(red: 17/255, green: 24/255, blue: 39/255))
+                                .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+                                .overlay(
+                                    RoundedRectangle(cornerRadius: 12, style: .continuous)
+                                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                                )
+                            }
+                            
+                            VStack(alignment: .leading, spacing: 6) {
+                                Text("DATE")
+                                    .font(.system(size: 11, weight: .bold, design: .rounded))
+                                    .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                                    .tracking(0.6)
+                                
+                                DatePicker(
+                                    "",
+                                    selection: $selectedDate,
+                                    displayedComponents: [.date]
+                                )
+                                .datePickerStyle(.compact)
+                                .labelsHidden()
+                                .colorScheme(.dark)
+                            }
+                        }
                         
                         // Save Button
                         Button(action: {
-                            guard let amount = Double(amountText.replacingOccurrences(of: ",", with: ".")), amount > 0 else { return }
-                            let title = merchantName.trimmingCharacters(in: .whitespacesAndNewlines)
-                            guard !title.isEmpty else { return }
+                            guard isFormValid else { return }
                             
-                            let amountUSD = isUSD ? amount : (amount / 305.00)
-                            let amountLKR = isUSD ? Int(amount * 305.00) : Int(amount)
+                            #if canImport(UIKit)
+                            let generator = UIImpactFeedbackGenerator(style: .medium)
+                            generator.impactOccurred()
+                            #endif
                             
-                            let newExp = ExpenseTransaction(
-                                title: title,
-                                subtitle: "Logged in Sri Lanka",
-                                category: selectedCategory,
-                                categoryColor: Color(red: 245/255, green: 158/255, blue: 11/255),
-                                iconName: "fork.knife",
-                                timeAgo: "Just now",
-                                location: location,
-                                amountUSD: amountUSD,
-                                amountLKR: amountLKR
-                            )
-                            onSave(newExp)
+                            onSave(merchantName, selectedCategory, parsedAmount, inputIsUSD, location, selectedDate)
                             dismiss()
                         }) {
-                            Text("Save to Trip Budget")
-                                .font(.system(size: 16, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                                .frame(maxWidth: .infinity)
-                                .frame(height: 52)
-                                .background(
-                                    isFormValid ?
-                                    LinearGradient(
-                                        colors: [Color(red: 2/255, green: 132/255, blue: 199/255), Color(red: 56/255, green: 189/255, blue: 248/255)],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    ) :
-                                    LinearGradient(
-                                        colors: [Color.gray.opacity(0.3), Color.gray.opacity(0.3)],
-                                        startPoint: .leading,
-                                        endPoint: .trailing
-                                    )
+                            HStack(spacing: 8) {
+                                Image(systemName: "checkmark.circle.fill")
+                                    .font(.system(size: 17, weight: .bold))
+                                Text("Save to Trip Budget")
+                                    .font(.system(size: 16, weight: .bold, design: .rounded))
+                            }
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .background(
+                                isFormValid ?
+                                LinearGradient(
+                                    colors: [Color(red: 2/255, green: 132/255, blue: 199/255), Color(red: 56/255, green: 189/255, blue: 248/255)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                ) :
+                                LinearGradient(
+                                    colors: [Color.gray.opacity(0.3), Color.gray.opacity(0.3)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
                                 )
-                                .clipShape(Capsule())
-                                .shadow(color: isFormValid ? Color(red: 56/255, green: 189/255, blue: 248/255).opacity(0.35) : .clear, radius: 10, y: 4)
+                            )
+                            .clipShape(Capsule())
+                            .shadow(color: isFormValid ? Color(red: 56/255, green: 189/255, blue: 248/255).opacity(0.35) : .clear, radius: 10, y: 4)
                         }
                         .disabled(!isFormValid)
                         .padding(.top, 10)
@@ -1489,6 +1544,168 @@ struct LogExpenseSheet: View {
                 }
             }
             .preferredColorScheme(.dark)
+        }
+    }
+    
+    private func quickIncrementButton(label: String, delta: Double) -> some View {
+        Button(action: {
+            let current = parsedAmount
+            let newAmount = current + delta
+            if inputIsUSD {
+                amountText = String(format: "%.2f", newAmount)
+            } else {
+                amountText = "\(Int(newAmount))"
+            }
+        }) {
+            Text(label)
+                .font(.system(size: 11, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(Color(red: 24/255, green: 34/255, blue: 52/255))
+                .clipShape(Capsule())
+                .overlay(
+                    Capsule().stroke(Color.white.opacity(0.1), lineWidth: 1)
+                )
+        }
+    }
+}
+
+// MARK: - Submodal: Edit Budget Cap Sheet
+struct EditBudgetCapSheet: View {
+    @Environment(\.dismiss) private var dismiss
+    let currentCapUSD: Double
+    let fxRate: Double
+    let isUSD: Bool
+    var onSave: (Double) -> Void
+    var onReset: () -> Void
+    
+    @State private var capInput: String = ""
+    
+    init(
+        currentCapUSD: Double,
+        fxRate: Double,
+        isUSD: Bool,
+        onSave: @escaping (Double) -> Void,
+        onReset: @escaping () -> Void
+    ) {
+        self.currentCapUSD = currentCapUSD
+        self.fxRate = fxRate
+        self.isUSD = isUSD
+        self.onSave = onSave
+        self.onReset = onReset
+        self._capInput = State(initialValue: String(format: "%.0f", currentCapUSD))
+    }
+    
+    var body: some View {
+        NavigationStack {
+            ZStack {
+                Color.black.ignoresSafeArea()
+                
+                VStack(spacing: 24) {
+                    VStack(spacing: 8) {
+                        Text("TARGET TRIP BUDGET CAP")
+                            .font(.system(size: 11, weight: .bold, design: .rounded))
+                            .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                            .tracking(1)
+                        
+                        HStack(alignment: .firstTextBaseline, spacing: 4) {
+                            Text("$")
+                                .font(.system(size: 34, weight: .bold, design: .rounded))
+                                .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
+                            
+                            TextField("2500", text: $capInput)
+                                .font(.system(size: 44, weight: .heavy, design: .rounded))
+                                .foregroundColor(.white)
+                                .keyboardType(.numberPad)
+                        }
+                        
+                        if let capVal = Double(capInput), capVal > 0 {
+                            Text("≈ Rs. \(Int(capVal * fxRate).formatted()) LKR at 305 FX")
+                                .font(.system(size: 13, weight: .medium, design: .rounded))
+                                .foregroundColor(Color(red: 68/255, green: 226/255, blue: 205/255))
+                        }
+                    }
+                    .padding(20)
+                    .frame(maxWidth: .infinity)
+                    .background(Color(red: 17/255, green: 24/255, blue: 39/255))
+                    .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 20, style: .continuous)
+                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                    )
+                    
+                    // Quick Preset Buttons
+                    HStack(spacing: 10) {
+                        presetCapButton(label: "$1,500", val: 1500)
+                        presetCapButton(label: "$2,500", val: 2500)
+                        presetCapButton(label: "$3,500", val: 3500)
+                        presetCapButton(label: "$5,000", val: 5000)
+                    }
+                    
+                    // Reset to Trip Defaults
+                    Button(action: {
+                        onReset()
+                        dismiss()
+                    }) {
+                        Text("Reset to Itinerary Plan Default")
+                            .font(.system(size: 13, weight: .semibold, design: .rounded))
+                            .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
+                    }
+                    
+                    Spacer()
+                    
+                    // Save Button
+                    Button(action: {
+                        if let newCap = Double(capInput), newCap > 0 {
+                            onSave(newCap)
+                            dismiss()
+                        }
+                    }) {
+                        Text("Update Target Budget")
+                            .font(.system(size: 16, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                            .frame(maxWidth: .infinity)
+                            .frame(height: 52)
+                            .background(
+                                LinearGradient(
+                                    colors: [Color(red: 2/255, green: 132/255, blue: 199/255), Color(red: 56/255, green: 189/255, blue: 248/255)],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                )
+                            )
+                            .clipShape(Capsule())
+                    }
+                }
+                .padding(20)
+            }
+            .navigationTitle("Adjust Budget Cap")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Cancel") { dismiss() }
+                        .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
+                }
+            }
+            .preferredColorScheme(.dark)
+        }
+    }
+    
+    private func presetCapButton(label: String, val: Double) -> some View {
+        Button(action: {
+            capInput = "\(Int(val))"
+        }) {
+            Text(label)
+                .font(.system(size: 12, weight: .bold, design: .rounded))
+                .foregroundColor(.white)
+                .frame(maxWidth: .infinity)
+                .frame(height: 38)
+                .background(Color(red: 24/255, green: 34/255, blue: 52/255))
+                .clipShape(RoundedRectangle(cornerRadius: 10, style: .continuous))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 10, style: .continuous)
+                        .stroke(Color.white.opacity(0.1), lineWidth: 1)
+                )
         }
     }
 }
