@@ -97,6 +97,7 @@ struct SettingsProfileView: View {
     // Modals & Feedback
     @State private var showPassportQRSheet: Bool = false
     @State private var showSignOutAlert: Bool = false
+    @State private var showOnboardingTour: Bool = false
     @State private var feedbackNotice: String? = nil
     
     // Google Places API Configuration
@@ -233,6 +234,11 @@ struct SettingsProfileView: View {
         }
         .sheet(isPresented: $showApiKeySheet) {
             googlePlacesApiKeyModalSheet
+        }
+        .fullScreenCover(isPresented: $showOnboardingTour) {
+            AppOnboardingView {
+                showOnboardingTour = false
+            }
         }
         .confirmationDialog("Sign Out of TripPilot?", isPresented: $showSignOutAlert, titleVisibility: .visible) {
             Button("Sign Out", role: .destructive) {
@@ -903,6 +909,19 @@ struct SettingsProfileView: View {
                     value: "4.8 GB Used"
                 ) {
                     showToast("Offline package: Sri Lanka Island Pack (Sigiriya, Kandy, Galle & Highlands) downloaded")
+                }
+                
+                rowDivider
+                
+                // Replay Onboarding Tour
+                settingRowButton(
+                    icon: "sparkles.tv.fill",
+                    iconColor: primarySky,
+                    iconBg: primarySky.opacity(0.18),
+                    title: "Replay Onboarding Tour",
+                    value: "Interactive Walkthrough"
+                ) {
+                    showOnboardingTour = true
                 }
             }
             .background(surfaceContainer)
