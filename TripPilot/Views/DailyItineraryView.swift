@@ -91,6 +91,7 @@ struct DailyItineraryView: View {
                         .frame(height: 110)
                 }
                 .padding(.horizontal, 18)
+                .responsiveContentWidth(920)
             }
             
             // MARK: - Floating Glassmorphic Bottom Navigation Bar

@@ -116,6 +116,7 @@ struct MyTripsHubView: View {
                         .frame(height: 110)
                 }
                 .padding(.horizontal, 18)
+                .responsiveContentWidth(960)
             }
             
             // MARK: - Floating Glassmorphic Bottom Tab Bar

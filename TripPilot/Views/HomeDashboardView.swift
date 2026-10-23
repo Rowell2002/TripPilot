@@ -34,7 +34,12 @@ struct HomeDashboardView: View {
     
     // Theme Mode
     @Environment(\.colorScheme) private var systemColorScheme
+    @Environment(\.horizontalSizeClass) private var horizontalSizeClass
     @AppStorage("appSelectedTheme") private var appSelectedTheme: String = "Dark"
+    
+    private var isRegularLayout: Bool {
+        horizontalSizeClass == .regular || DeviceLayout.isIPad
+    }
     
     private var isDarkMode: Bool {
         switch appSelectedTheme {
@@ -99,28 +104,40 @@ struct HomeDashboardView: View {
                         navigationHeaderSection
                             .padding(.top, 8)
                         
-                        // 2. Personalized Greeting & Local Sri Lanka Weather
-                        greetingWeatherSection
-                        
-                        // 3. Hero Active Trip Card
-                        heroTripCard
-                        
-                        // 4. Today's Live Itinerary Timeline Widget
-                        todayScheduleWidget
-                        
-                        // 5. Interactive Map Preview Widget
-                        explorationMapWidget
-                        
-                        // 6. Travel Statistics & Quick Budget (Compact side-by-side with Step Counter)
-                        statsAndBudgetGrid
-                        
-                        // 7. Special Moments Polaroid Journal Gallery
-                        polaroidGallerySection
+                        if isRegularLayout {
+                            // iPad Two-Column Dashboard Layout
+                            HStack(alignment: .top, spacing: 20) {
+                                // Left Column
+                                VStack(spacing: 20) {
+                                    greetingWeatherSection
+                                    heroTripCard
+                                    todayScheduleWidget
+                                }
+                                .frame(maxWidth: .infinity, alignment: .top)
+                                
+                                // Right Column
+                                VStack(spacing: 20) {
+                                    explorationMapWidget
+                                    statsAndBudgetGrid
+                                    polaroidGallerySection
+                                }
+                                .frame(maxWidth: .infinity, alignment: .top)
+                            }
+                        } else {
+                            // iPhone Compact Single-Column Layout
+                            greetingWeatherSection
+                            heroTripCard
+                            todayScheduleWidget
+                            explorationMapWidget
+                            statsAndBudgetGrid
+                            polaroidGallerySection
+                        }
                         
                         Spacer()
                             .frame(height: 140)
                     }
                     .padding(.horizontal, 18)
+                    .responsiveContentWidth(1100)
                 }
             }
             

@@ -173,11 +173,13 @@ struct SettingsProfileView: View {
                         .frame(height: 110)
                 }
                 .padding(.horizontal, 16)
+                .responsiveContentWidth(780)
             }
             
             // MARK: - Fixed Top Translucent Header Bar
             VStack(spacing: 0) {
                 topHeaderBar
+                    .responsiveContentWidth(780)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)

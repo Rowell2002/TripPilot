@@ -530,6 +530,7 @@ struct CreateAccountView: View {
                     .padding(.top, 20)
                     .padding(.bottom, 36)
                 }
+                .responsiveContentWidth(540)
             }
         }
         .navigationDestination(isPresented: $navigateToHome) {

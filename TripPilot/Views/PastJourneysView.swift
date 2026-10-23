@@ -100,6 +100,7 @@ struct PastJourneysView: View {
                         .frame(height: 110)
                 }
                 .padding(.horizontal, 18)
+                .responsiveContentWidth(960)
             }
             
             // Floating Glassmorphic Bottom Navigation Bar

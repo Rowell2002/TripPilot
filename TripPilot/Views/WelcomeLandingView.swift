@@ -106,6 +106,7 @@ public struct WelcomeLandingView: View {
                     .padding(.top, 12)
                 }
             }
+            .responsiveContentWidth(560)
         }
         .preferredColorScheme(.dark)
         .onAppear {

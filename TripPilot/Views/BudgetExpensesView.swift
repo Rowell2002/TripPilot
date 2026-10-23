@@ -217,11 +217,13 @@ struct BudgetExpensesView: View {
                         .frame(height: 110)
                 }
                 .padding(.horizontal, 18)
+                .responsiveContentWidth(920)
             }
             
             // MARK: - Fixed Top Translucent Header Bar
             VStack(spacing: 0) {
                 topHeaderBar
+                    .responsiveContentWidth(920)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
