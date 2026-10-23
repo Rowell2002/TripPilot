@@ -1,6 +1,9 @@
 import Foundation
 import SwiftUI
 import Combine
+#if canImport(WidgetKit)
+import WidgetKit
+#endif
 #if canImport(CoreMotion)
 import CoreMotion
 #endif
@@ -190,6 +193,8 @@ final class TripStepTrackerService: ObservableObject {
         if savedGoal > 0 {
             self.dailyGoal = savedGoal
         }
+        
+        syncToWidget()
     }
     
     private func persist() {
@@ -197,6 +202,27 @@ final class TripStepTrackerService: ObservableObject {
         defaults.set(priorDaysSteps, forKey: priorDaysKey)
         defaults.set(Date(), forKey: lastDateKey)
         defaults.set(dailyGoal, forKey: goalKey)
+        
+        syncToWidget()
+    }
+    
+    private func syncToWidget() {
+        let idea = currentTravelIdea
+        let widgetData = TripWidgetSharedData(
+            steps: todaySteps,
+            goal: dailyGoal,
+            distanceKm: distanceKm,
+            calories: activeCalories,
+            milestoneTitle: idea.title,
+            milestoneBadge: idea.badge,
+            milestoneIcon: idea.icon,
+            lastUpdated: Date()
+        )
+        widgetData.save()
+        
+        #if canImport(WidgetKit)
+        WidgetCenter.shared.reloadAllTimelines()
+        #endif
     }
     
     // MARK: - Pedometer Lifecycle
