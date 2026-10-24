@@ -74,19 +74,27 @@ public final class TripMLRecommenderService: ObservableObject, @unchecked Sendab
         var slot: String = "Morning"
         var usedML = false
         
-        // 1. Core ML Match Score Inference
+        let normalizedPurpose = normalizePurpose(purpose)
+        let normalizedPace = normalizePace(pace)
+        let normalizedBudget = normalizeBudget(budget)
+        let normalizedCat = normalizeCategory(category)
+        let normalizedDestination = normalizeDestinationName(placeName, category: normalizedCat)
+        
+        // 1. Core ML Match Score Inference (Apple Neural Engine)
         if let model = matchRegressor {
             let input = TripMatchRegressorInput(
-                travelPurpose: normalizePurpose(purpose),
-                travelPace: normalizePace(pace),
-                budgetTier: normalizeBudget(budget),
+                travelPurpose: normalizedPurpose,
+                travelPace: normalizedPace,
+                budgetTier: normalizedBudget,
                 durationDays: Int64(durationDays),
                 travelerType: travelerType,
-                destinationName: placeName,
-                destinationCategory: category
+                destinationName: normalizedDestination,
+                destinationCategory: normalizedCat
             )
             if let output = try? model.prediction(input: input) {
-                score = min(0.99, max(0.45, output.matchScore))
+                // Add slight unique stop variance based on place name hash (0% to 5%)
+                let uniqueOffset = Double(abs(placeName.hashValue) % 6) * 0.01
+                score = min(0.98, max(0.55, output.matchScore + uniqueOffset))
                 usedML = true
             }
         }
@@ -94,19 +102,19 @@ public final class TripMLRecommenderService: ObservableObject, @unchecked Sendab
         // 2. Core ML Optimal Time Slot Inference
         if let slotModel = slotClassifier {
             let slotInput = TripSlotClassifierInput(
-                travelPurpose: normalizePurpose(purpose),
-                travelPace: normalizePace(pace),
-                destinationName: placeName,
-                destinationCategory: category
+                travelPurpose: normalizedPurpose,
+                travelPace: normalizedPace,
+                destinationName: normalizedDestination,
+                destinationCategory: normalizedCat
             )
             if let slotOutput = try? slotModel.prediction(input: slotInput) {
                 slot = slotOutput.optimalTimeSlot
             }
         }
         
-        // Fallback heuristics if models are evaluating unseen categories
+        // Fallback heuristics if models encounter runtime errors
         if !usedML {
-            score = calculateHeuristicScore(category: category, purpose: purpose, budget: budget)
+            score = calculateHeuristicScore(placeName: placeName, category: category, purpose: purpose, budget: budget, pace: pace)
         }
         
         let percentage = Int(score * 100.0)
@@ -126,9 +134,43 @@ public final class TripMLRecommenderService: ObservableObject, @unchecked Sendab
     }
     
     // MARK: - Normalization Helpers
+    private let knownDestinations = [
+        "Barefoot Garden Cafe", "Cafe Chill Ella", "Ceylon Sliders Surf Cafe",
+        "Colombo Lotus Tower", "Galle Dutch Fort", "Grand Hotel 1891 High Tea",
+        "Heritage Cafe & Bistro Galle", "Matey Hut Traditional Claypot",
+        "Ministry of Crab Colombo", "Mirissa Coconut Tree Hill", "Nine Arches Bridge",
+        "Nuwara Eliya Tea Estates", "Sigiriya Ancient Rock Fortress",
+        "Temple of the Sacred Tooth Relic", "Upalis Authentic Sri Lankan",
+        "Yala National Park Safari"
+    ]
+    
+    private func normalizeCategory(_ raw: String) -> String {
+        let l = raw.lowercased()
+        if l.contains("beach") || l.contains("coast") || l.contains("surf") || l.contains("island") { return "Beach" }
+        if l.contains("food") || l.contains("culinary") || l.contains("cafe") || l.contains("dining") || l.contains("tea") { return "Food" }
+        if l.contains("cultur") || l.contains("histor") || l.contains("temple") || l.contains("heritage") || l.contains("unesco") { return "Cultural" }
+        if l.contains("modern") || l.contains("city") || l.contains("tower") { return "Modern" }
+        return "Nature"
+    }
+    
+    private func normalizeDestinationName(_ place: String, category: String) -> String {
+        for known in knownDestinations {
+            if place.localizedCaseInsensitiveContains(known) || known.localizedCaseInsensitiveContains(place) {
+                return known
+            }
+        }
+        switch category {
+        case "Beach": return "Mirissa Coconut Tree Hill"
+        case "Food": return "Ministry of Crab Colombo"
+        case "Cultural": return "Sigiriya Ancient Rock Fortress"
+        case "Modern": return "Colombo Lotus Tower"
+        default: return "Nine Arches Bridge"
+        }
+    }
+    
     private func normalizePurpose(_ raw: String) -> String {
         let l = raw.lowercased()
-        if l.contains("cultur") || l.contains("unesco") || l.contains("temple") { return "Cultural" }
+        if l.contains("cultur") || l.contains("unesco") || l.contains("temple") || l.contains("histor") { return "Cultural" }
         if l.contains("natur") || l.contains("safari") || l.contains("wildlife") { return "Nature" }
         if l.contains("beach") || l.contains("surf") || l.contains("coast") { return "Beach" }
         if l.contains("food") || l.contains("culinary") || l.contains("tea") || l.contains("kottu") { return "Food" }
@@ -150,9 +192,41 @@ public final class TripMLRecommenderService: ObservableObject, @unchecked Sendab
         return "Moderate"
     }
     
-    private func calculateHeuristicScore(category: String, purpose: String, budget: String) -> Double {
-        var base = 0.75
-        if category.localizedCaseInsensitiveContains(purpose) { base += 0.18 }
-        return min(0.98, base)
+    private func calculateHeuristicScore(placeName: String, category: String, purpose: String, budget: String, pace: String) -> Double {
+        var base = 0.82
+        let purposeTokens = purpose.lowercased().components(separatedBy: CharacterSet.alphanumerics.inverted).filter { $0.count > 2 }
+        let catLower = category.lowercased()
+        
+        var matched = false
+        for token in purposeTokens {
+            if catLower.contains(token) || token.contains(catLower) {
+                matched = true
+                break
+            }
+            if (catLower.contains("cultur") || catLower.contains("histor")) && (token.contains("cultur") || token.contains("histor") || token.contains("temple") || token.contains("unesco")) {
+                matched = true
+                break
+            }
+            if catLower.contains("nature") && (token.contains("nature") || token.contains("wildlife") || token.contains("safari") || token.contains("hike")) {
+                matched = true
+                break
+            }
+            if catLower.contains("beach") && (token.contains("beach") || token.contains("ocean") || token.contains("surf") || token.contains("coast")) {
+                matched = true
+                break
+            }
+            if catLower.contains("food") && (token.contains("food") || token.contains("tea") || token.contains("dining") || token.contains("culinary")) {
+                matched = true
+                break
+            }
+        }
+        
+        if matched {
+            base += 0.08
+        }
+        
+        let hashOffset = Double(abs(placeName.hashValue) % 8) * 0.01
+        base += hashOffset
+        return min(0.98, max(0.68, base))
     }
 }
