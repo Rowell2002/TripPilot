@@ -88,7 +88,7 @@ struct SettingsProfileView: View {
     @State private var isVIPIndicatorPulsing: Bool = false
     
     // Toggles
-    @AppStorage("isFaceIDQuickUnlockEnabled") private var isFaceIDEnabled: Bool = true
+    @AppStorage("isFaceIDQuickUnlockEnabled") private var isFaceIDEnabled: Bool = false
     @State private var isSecureEnclaveSyncEnabled: Bool = true
     @State private var isItineraryAlertsEnabled: Bool = true
     @State private var isGeofencedAudioEnabled: Bool = true
@@ -208,6 +208,7 @@ struct SettingsProfileView: View {
         .toolbar(.hidden, for: .navigationBar)
         .preferredColorScheme(selectedTheme.colorScheme)
         .onAppear {
+            isFaceIDEnabled = BiometricLockManager.shared.isFaceIDEnabled
             withAnimation(.easeInOut(duration: 1.3).repeatForever(autoreverses: true)) {
                 isVIPIndicatorPulsing = true
             }
@@ -1334,44 +1335,20 @@ struct SettingsProfileView: View {
         .padding(.vertical, 12)
     }
     
-    // MARK: - Helper Methods
     private func handleFaceIDToggle(_ requestedValue: Bool) {
-        if requestedValue {
-            let context = LAContext()
-            context.localizedCancelTitle = "Cancel"
-            var error: NSError?
-            
-            if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
-                let reason = "Authenticate with Face ID to enable Quick Unlock for TripPilot"
-                context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, _ in
-                    DispatchQueue.main.async {
-                        triggerHapticFeedback()
-                        if success {
-                            withAnimation {
-                                isFaceIDEnabled = true
-                            }
-                            showToast("✅ Face ID Quick Unlock Enabled")
-                        } else {
-                            withAnimation {
-                                isFaceIDEnabled = false
-                            }
-                            showToast("⚠️ Face ID verification canceled")
-                        }
-                    }
+        BiometricLockManager.shared.setFaceIDProtection(enabled: requestedValue) { success in
+            withAnimation {
+                isFaceIDEnabled = requestedValue && success
+            }
+            if requestedValue {
+                if success {
+                    showToast("✅ Face ID Quick Unlock Enabled - App is protected")
+                } else {
+                    showToast("⚠️ Face ID verification canceled")
                 }
             } else {
-                triggerHapticFeedback()
-                withAnimation {
-                    isFaceIDEnabled = true
-                }
-                showToast("✅ Face ID Quick Unlock Enabled (Simulated Mode)")
+                showToast("🔒 Face ID Quick Unlock Disabled")
             }
-        } else {
-            triggerHapticFeedback()
-            withAnimation {
-                isFaceIDEnabled = false
-            }
-            showToast("🔒 Face ID Quick Unlock Disabled")
         }
     }
     private func testFaceIDAuthentication() {

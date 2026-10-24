@@ -615,6 +615,7 @@
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
 				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "TripPilot uses Face ID to securely lock and protect your travel itineraries, documents, and personal travel vault.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -660,6 +661,7 @@
 				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
 				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
 				INFOPLIST_KEY_NSCalendarsUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
+				INFOPLIST_KEY_NSFaceIDUsageDescription = "TripPilot uses Face ID to securely lock and protect your travel itineraries, documents, and personal travel vault.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
