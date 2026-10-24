@@ -7,7 +7,7 @@ import UIKit
 struct SignInView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var authViewModel = AuthViewModel.shared
-    @AppStorage("isFaceIDQuickUnlockEnabled") private var isFaceIDEnabled: Bool = true
+    @AppStorage("isFaceIDQuickUnlockEnabled") private var isFaceIDEnabled: Bool = false
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false

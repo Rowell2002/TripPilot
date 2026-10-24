@@ -192,21 +192,6 @@ struct TravelAnalyticsMilestonesView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
             
-            // MARK: - Floating Glassmorphic Bottom Navigation Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .home {
-                    dismiss()
-                } else if tab == .itinerary {
-                    navigateToItinerary = true
-                } else if tab == .map {
-                    navigateToMap = true
-                } else if tab == .budget {
-                    navigateToBudget = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
-            
             // Toast Notification Overlay
             if let notice = feedbackNotice {
                 VStack {

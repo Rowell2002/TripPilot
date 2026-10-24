@@ -1,10 +1,3 @@
-//
-//  TripCalendarSyncTests.swift
-//  TripPilotTests
-//
-//  Created for EventKit Calendar Sync & Upcoming Trips Verification.
-//
-
 import Testing
 import Foundation
 @testable import TripPilot
