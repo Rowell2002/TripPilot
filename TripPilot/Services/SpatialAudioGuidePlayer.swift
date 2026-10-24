@@ -139,6 +139,11 @@ public final class SpatialAudioGuidePlayer: NSObject, ObservableObject, AVSpeech
         }
     }
     
+    public func skip(seconds: Double) {
+        let newElapsed = max(0.0, min(totalDurationSeconds, elapsedSeconds + seconds))
+        seek(to: newElapsed / totalDurationSeconds)
+    }
+    
     public func jumpToChapter(_ chapter: AudioChapter) {
         self.currentChapterIndex = chapter.id
         self.elapsedSeconds = chapter.startSecond

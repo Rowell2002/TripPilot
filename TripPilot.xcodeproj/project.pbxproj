@@ -15,6 +15,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		E8TEST112FD53E720074F769 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 64E853B62FD53E720074F769 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 64E853BD2FD53E720074F769;
+			remoteInfo = TripPilot;
+		};
 		E8WIDGET112FD53E720074F769 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 64E853B62FD53E720074F769 /* Project object */;
@@ -37,11 +44,17 @@
 		};
 /* End PBXCopyFilesBuildPhase section */
 /* Begin PBXFileReference section */
+		E8TEST012FD53E720074F769 /* TripPilotTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TripPilotTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		E8WIDGET012FD53E720074F769 /* TripPilotWidget.appex */ = {isa = PBXFileReference; explicitFileType = wrapper.app-extension; includeInIndex = 0; path = TripPilotWidget.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		64E853BE2FD53E720074F769 /* TripPilot.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TripPilot.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		E8TEST022FD53E720074F769 /* TripPilotTests */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = TripPilotTests;
+			sourceTree = "<group>";
+		};
 		E8WIDGET022FD53E720074F769 /* TripPilotWidget */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
 			path = TripPilotWidget;
@@ -55,6 +68,13 @@
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		E8TEST042FD53E720074F769 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8WIDGET042FD53E720074F769 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -81,6 +101,7 @@
 			children = (
 				64E853C02FD53E720074F769 /* TripPilot */,
 				E8WIDGET022FD53E720074F769 /* TripPilotWidget */,
+				E8TEST022FD53E720074F769 /* TripPilotTests */,
 				64E853BF2FD53E720074F769 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -90,6 +111,7 @@
 			children = (
 				64E853BE2FD53E720074F769 /* TripPilot.app */,
 				E8WIDGET012FD53E720074F769 /* TripPilotWidget.appex */,
+				E8TEST012FD53E720074F769 /* TripPilotTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -97,6 +119,27 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		E8TEST062FD53E720074F769 /* TripPilotTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = E8TEST072FD53E720074F769 /* Build configuration list for PBXNativeTarget "TripPilotTests" */;
+			buildPhases = (
+				E8TEST032FD53E720074F769 /* Sources */,
+				E8TEST042FD53E720074F769 /* Frameworks */,
+				E8TEST052FD53E720074F769 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				E8TEST102FD53E720074F769 /* PBXTargetDependency */,
+			);
+			fileSystemSynchronizedGroups = (
+				E8TEST022FD53E720074F769 /* TripPilotTests */,
+			);
+			name = TripPilotTests;
+			productName = TripPilotTests;
+			productReference = E8TEST012FD53E720074F769 /* TripPilotTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 		E8WIDGET062FD53E720074F769 /* TripPilotWidget */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = E8WIDGET072FD53E720074F769 /* Build configuration list for PBXNativeTarget "TripPilotWidget" */;
@@ -156,6 +199,10 @@
 				LastSwiftUpdateCheck = 2650;
 				LastUpgradeCheck = 2650;
 				TargetAttributes = {
+					E8TEST062FD53E720074F769 = {
+						CreatedOnToolsVersion = 26.5;
+						TestTargetID = 64E853BD2FD53E720074F769;
+					};
 					E8WIDGET062FD53E720074F769 = {
 						CreatedOnToolsVersion = 26.5;
 					};					64E853BD2FD53E720074F769 = {
@@ -183,11 +230,19 @@
 			targets = (
 				64E853BD2FD53E720074F769 /* TripPilot */,
 				E8WIDGET062FD53E720074F769 /* TripPilotWidget */,
+				E8TEST062FD53E720074F769 /* TripPilotTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		E8TEST052FD53E720074F769 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8WIDGET052FD53E720074F769 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -205,6 +260,13 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		E8TEST032FD53E720074F769 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		E8WIDGET032FD53E720074F769 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -222,6 +284,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		E8TEST102FD53E720074F769 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 64E853BD2FD53E720074F769 /* TripPilot */;
+			targetProxy = E8TEST112FD53E720074F769 /* PBXContainerItemProxy */;
+		};
 		E8WIDGET102FD53E720074F769 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = E8WIDGET062FD53E720074F769 /* TripPilotWidget */;
@@ -229,6 +296,60 @@
 		};
 /* End PBXTargetDependency section */
 /* Begin XCBuildConfiguration section */
+		E8TEST082FD53E720074F769 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H8CNBKAZ8T;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NIBM.TripPilotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TripPilot.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TripPilot";
+			};
+			name = Debug;
+		};
+		E8TEST092FD53E720074F769 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = H8CNBKAZ8T;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 26.5;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = NIBM.TripPilotTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_APPROACHABLE_CONCURRENCY = YES;
+				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/TripPilot.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/TripPilot";
+			};
+			name = Release;
+		};
 		E8WIDGET082FD53E720074F769 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -491,6 +612,9 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "TripPilot uses your camera to capture special travel memories and create polaroid snapshots of your trip.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "TripPilot accesses your photo library to let you select travel moments for your polaroid album.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "TripPilot saves your created polaroid memories to your photo library.";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -533,6 +657,9 @@
 				INFOPLIST_KEY_NSCameraUsageDescription = "TripPilot uses your camera to capture special travel memories and create polaroid snapshots of your trip.";
 				INFOPLIST_KEY_NSPhotoLibraryUsageDescription = "TripPilot accesses your photo library to let you select travel moments for your polaroid album.";
 				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "TripPilot saves your created polaroid memories to your photo library.";
+				INFOPLIST_KEY_NSCalendarsFullAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
+				INFOPLIST_KEY_NSCalendarsWriteOnlyAccessUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
+				INFOPLIST_KEY_NSCalendarsUsageDescription = "TripPilot syncs your Sri Lanka travel itinerary and daily stops to your calendar so you can view upcoming trips.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchScreen_Generation = YES;
@@ -561,6 +688,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		E8TEST072FD53E720074F769 /* Build configuration list for PBXNativeTarget "TripPilotTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				E8TEST082FD53E720074F769 /* Debug */,
+				E8TEST092FD53E720074F769 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		E8WIDGET072FD53E720074F769 /* Build configuration list for PBXNativeTarget "TripPilotWidget" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

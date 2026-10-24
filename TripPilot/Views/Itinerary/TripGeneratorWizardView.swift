@@ -114,6 +114,7 @@ struct TripGeneratorWizardView: View {
     @State private var seasonText: String = "Tropical Sunshine & Mountain Mist"
     @State private var seasonBadge: String = "Year-Round Prime"
     
+    @State private var selectedStartDate: Date = Date()
     @State private var travelDatesText: String = "Upcoming 7 Days"
     @State private var travelDaysCount: Int = 7
     @State private var travelDurationText: String = "7 Days • 6 Nights"
@@ -259,6 +260,7 @@ struct TripGeneratorWizardView: View {
                 }
             }
             .onAppear {
+                updateDatesAndDuration()
                 withAnimation(.easeInOut(duration: 1.2).repeatForever(autoreverses: true)) {
                     isAiPulsing = true
                 }
@@ -1153,60 +1155,269 @@ struct TripGeneratorWizardView: View {
             ZStack {
                 darkBackground.ignoresSafeArea()
                 
-                VStack(spacing: 20) {
-                    HStack {
-                        Text("Select Trip Duration")
-                            .font(.system(size: 18, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                        Spacer()
-                        Button("Done") {
-                            showEditDatesSheet = false
+                ScrollView(.vertical, showsIndicators: false) {
+                    VStack(spacing: 20) {
+                        // Header
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Trip Dates & Duration")
+                                    .font(.system(size: 19, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                                Text("Choose your start date and exact duration")
+                                    .font(.system(size: 13, weight: .medium))
+                                    .foregroundColor(textOnSurfaceVariant)
+                            }
+                            Spacer()
+                            Button("Done") {
+                                showEditDatesSheet = false
+                            }
+                            .foregroundColor(primaryContainer)
+                            .font(.system(size: 15, weight: .bold, design: .rounded))
+                            .padding(.horizontal, 14)
+                            .padding(.vertical, 7)
+                            .background(primaryContainer.opacity(0.12))
+                            .clipShape(Capsule())
                         }
-                        .foregroundColor(primaryContainer)
-                        .font(.system(size: 16, weight: .bold))
-                    }
-                    .padding(.horizontal, 20)
-                    .padding(.top, 20)
-                    
-                    VStack(alignment: .leading, spacing: 14) {
-                        Text("How many days will you explore Sri Lanka?")
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(textOnSurfaceVariant)
+                        .padding(.horizontal, 20)
+                        .padding(.top, 18)
                         
-                        HStack(spacing: 10) {
-                            ForEach([3, 5, 7, 10, 14], id: \.self) { days in
-                                Button(action: {
-                                    travelDaysCount = days
-                                    travelDurationText = "\(days) Days • \(days - 1) Nights"
-                                    travelDatesText = "Next \(days) Days"
-                                }) {
-                                    Text("\(days)D")
+                        // 1. Trip Start Date Picker Card
+                        VStack(alignment: .leading, spacing: 12) {
+                            HStack {
+                                Label("TRIP START DATE", systemImage: "calendar.badge.clock")
+                                    .font(.system(size: 11.5, weight: .bold, design: .rounded))
+                                    .foregroundColor(secondaryMint)
+                                    .tracking(0.8)
+                                Spacer()
+                            }
+                            
+                            HStack(spacing: 12) {
+                                VStack(alignment: .leading, spacing: 3) {
+                                    Text("Starts From")
+                                        .font(.system(size: 12, weight: .medium))
+                                        .foregroundColor(textOnSurfaceVariant)
+                                    
+                                    let formatter: DateFormatter = {
+                                        let df = DateFormatter()
+                                        df.dateFormat = "EEEE, MMM d, yyyy"
+                                        return df
+                                    }()
+                                    Text(formatter.string(from: selectedStartDate))
                                         .font(.system(size: 15, weight: .bold, design: .rounded))
-                                        .foregroundColor(travelDaysCount == days ? .black : .white)
-                                        .frame(maxWidth: .infinity)
-                                        .frame(height: 44)
-                                        .background(travelDaysCount == days ? primaryContainer : surfaceContainerLow)
-                                        .clipShape(RoundedRectangle(cornerRadius: 12))
-                                        .overlay(
-                                            RoundedRectangle(cornerRadius: 12)
-                                                .stroke(travelDaysCount == days ? primaryContainer : outlineVariant, lineWidth: 1)
-                                        )
+                                        .foregroundColor(.white)
+                                }
+                                
+                                Spacer()
+                                
+                                DatePicker(
+                                    "",
+                                    selection: $selectedStartDate,
+                                    in: Calendar.current.startOfDay(for: Date())...,
+                                    displayedComponents: [.date]
+                                )
+                                .datePickerStyle(.compact)
+                                .labelsHidden()
+                                .tint(primaryContainer)
+                                .onChange(of: selectedStartDate) { _, _ in
+                                    updateDatesAndDuration()
+                                }
+                            }
+                            .padding(14)
+                            .background(surfaceContainer)
+                            .clipShape(RoundedRectangle(cornerRadius: 14))
+                            .overlay(RoundedRectangle(cornerRadius: 14).stroke(outlineVariant, lineWidth: 1))
+                            
+                            // Quick Date Shortcuts
+                            HStack(spacing: 8) {
+                                quickDateButton(title: "Today", date: Date())
+                                if let tomorrow = Calendar.current.date(byAdding: .day, value: 1, to: Date()) {
+                                    quickDateButton(title: "Tomorrow", date: tomorrow)
+                                }
+                                if let weekend = nextWeekendStart() {
+                                    quickDateButton(title: "This Weekend", date: weekend)
+                                }
+                                if let nextWeek = Calendar.current.date(byAdding: .day, value: 7, to: Date()) {
+                                    quickDateButton(title: "+1 Week", date: nextWeek)
                                 }
                             }
                         }
+                        .padding(16)
+                        .background(surfaceContainerLow)
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
+                        .padding(.horizontal, 20)
                         
-                        Text("Trip Duration: \(travelDurationText)")
-                            .font(.system(size: 14, weight: .semibold, design: .rounded))
-                            .foregroundColor(primaryCyan)
-                            .padding(.top, 8)
+                        // 2. Exact Number of Days Stepper Card
+                        VStack(alignment: .leading, spacing: 14) {
+                            HStack {
+                                Label("EXACT NUMBER OF DAYS", systemImage: "clock.badge.checkmark")
+                                    .font(.system(size: 11.5, weight: .bold, design: .rounded))
+                                    .foregroundColor(primaryCyan)
+                                    .tracking(0.8)
+                                Spacer()
+                                Text("\(travelDaysCount) Days Total")
+                                    .font(.system(size: 13, weight: .bold, design: .rounded))
+                                    .foregroundColor(primaryContainer)
+                            }
+                            
+                            // Interactive Plus/Minus Stepper Box
+                            HStack(spacing: 16) {
+                                Button(action: {
+                                    if travelDaysCount > 1 {
+                                        travelDaysCount -= 1
+                                        updateDatesAndDuration()
+                                    }
+                                }) {
+                                    Image(systemName: "minus")
+                                        .font(.system(size: 17, weight: .bold))
+                                        .foregroundColor(travelDaysCount > 1 ? .white : textOnSurfaceVariant.opacity(0.3))
+                                        .frame(width: 44, height: 44)
+                                        .background(travelDaysCount > 1 ? surfaceContainerHigh : surfaceContainer)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(outlineVariant, lineWidth: 1))
+                                }
+                                .disabled(travelDaysCount <= 1)
+                                
+                                Spacer()
+                                
+                                VStack(spacing: 2) {
+                                    Text("\(travelDaysCount)")
+                                        .font(.system(size: 34, weight: .heavy, design: .rounded))
+                                        .foregroundColor(.white)
+                                    Text(travelDurationText)
+                                        .font(.system(size: 13, weight: .semibold, design: .rounded))
+                                        .foregroundColor(secondaryMint)
+                                }
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    if travelDaysCount < 30 {
+                                        travelDaysCount += 1
+                                        updateDatesAndDuration()
+                                    }
+                                }) {
+                                    Image(systemName: "plus")
+                                        .font(.system(size: 17, weight: .bold))
+                                        .foregroundColor(travelDaysCount < 30 ? .white : textOnSurfaceVariant.opacity(0.3))
+                                        .frame(width: 44, height: 44)
+                                        .background(travelDaysCount < 30 ? primaryContainer : surfaceContainer)
+                                        .clipShape(Circle())
+                                        .overlay(Circle().stroke(outlineVariant, lineWidth: 1))
+                                }
+                                .disabled(travelDaysCount >= 30)
+                            }
+                            .padding(.vertical, 8)
+                            .padding(.horizontal, 16)
+                            .background(surfaceContainer)
+                            .clipShape(RoundedRectangle(cornerRadius: 16))
+                            .overlay(RoundedRectangle(cornerRadius: 16).stroke(outlineVariant, lineWidth: 1))
+                            
+                            // Popular Day Presets Chips
+                            Text("QUICK DAY PRESETS")
+                                .font(.system(size: 10.5, weight: .bold, design: .rounded))
+                                .foregroundColor(textOnSurfaceVariant)
+                                .padding(.top, 4)
+                            
+                            ScrollView(.horizontal, showsIndicators: false) {
+                                HStack(spacing: 8) {
+                                    ForEach([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 12, 14, 21, 30], id: \.self) { days in
+                                        Button(action: {
+                                            travelDaysCount = days
+                                            updateDatesAndDuration()
+                                        }) {
+                                            Text("\(days)D")
+                                                .font(.system(size: 13, weight: .bold, design: .rounded))
+                                                .foregroundColor(travelDaysCount == days ? .black : .white)
+                                                .padding(.horizontal, 14)
+                                                .padding(.vertical, 8)
+                                                .background(travelDaysCount == days ? primaryContainer : surfaceContainer)
+                                                .clipShape(Capsule())
+                                                .overlay(
+                                                    Capsule().stroke(travelDaysCount == days ? primaryContainer : outlineVariant, lineWidth: 1)
+                                                )
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                        .padding(16)
+                        .background(surfaceContainerLow)
+                        .clipShape(RoundedRectangle(cornerRadius: 18))
+                        .overlay(RoundedRectangle(cornerRadius: 18).stroke(outlineVariant, lineWidth: 1))
+                        .padding(.horizontal, 20)
+                        
+                        // 3. Computed Travel Window Summary
+                        HStack(spacing: 12) {
+                            Image(systemName: "airplane.departure")
+                                .font(.system(size: 18, weight: .bold))
+                                .foregroundColor(primaryCyan)
+                            
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("Calculated Itinerary Window")
+                                    .font(.system(size: 12, weight: .semibold, design: .rounded))
+                                    .foregroundColor(textOnSurfaceVariant)
+                                Text(travelDatesText)
+                                    .font(.system(size: 14, weight: .bold, design: .rounded))
+                                    .foregroundColor(.white)
+                            }
+                            
+                            Spacer()
+                        }
+                        .padding(14)
+                        .background(surfaceContainerHigh.opacity(0.6))
+                        .clipShape(RoundedRectangle(cornerRadius: 14))
+                        .overlay(RoundedRectangle(cornerRadius: 14).stroke(primaryContainer.opacity(0.3), lineWidth: 1))
+                        .padding(.horizontal, 20)
+                        
+                        Spacer(minLength: 24)
                     }
-                    .padding(.horizontal, 20)
-                    
-                    Spacer()
                 }
             }
         }
-        .presentationDetents([.height(260)])
+        .presentationDetents([.fraction(0.75), .large])
+    }
+    
+    private func quickDateButton(title: String, date: Date) -> some View {
+        let isSelected = Calendar.current.isDate(selectedStartDate, inSameDayAs: date)
+        return Button(action: {
+            selectedStartDate = date
+            updateDatesAndDuration()
+        }) {
+            Text(title)
+                .font(.system(size: 11.5, weight: .bold, design: .rounded))
+                .foregroundColor(isSelected ? .black : textOnSurface)
+                .padding(.horizontal, 10)
+                .padding(.vertical, 6)
+                .background(isSelected ? secondaryMint : surfaceContainer)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(isSelected ? secondaryMint : outlineVariant, lineWidth: 1))
+        }
+    }
+    
+    private func nextWeekendStart() -> Date? {
+        let calendar = Calendar.current
+        var comps = DateComponents()
+        comps.weekday = 7 // Saturday
+        return calendar.nextDate(after: Date(), matching: comps, matchingPolicy: .nextTime)
+    }
+    
+    private func updateDatesAndDuration() {
+        let nights = max(0, travelDaysCount - 1)
+        travelDurationText = "\(travelDaysCount) \(travelDaysCount == 1 ? "Day" : "Days") • \(nights) \(nights == 1 ? "Night" : "Nights")"
+        
+        let calendar = Calendar.current
+        let startFormatter = DateFormatter()
+        startFormatter.dateFormat = "MMM d, yyyy"
+        let startStr = startFormatter.string(from: selectedStartDate)
+        
+        if let endDate = calendar.date(byAdding: .day, value: max(0, travelDaysCount - 1), to: selectedStartDate) {
+            let endFormatter = DateFormatter()
+            endFormatter.dateFormat = "MMM d, yyyy"
+            travelDatesText = "\(startStr) – \(endFormatter.string(from: endDate))"
+        } else {
+            travelDatesText = startStr
+        }
     }
     
     private var tuneDestinationSheetView: some View {
@@ -1364,20 +1575,26 @@ struct TripGeneratorWizardView: View {
                 generationStage = "Core ML Itinerary Ready! Opening your Sri Lanka plan..."
                 
                 // GENERATE REAL DYNAMIC TRIP ACCORDING TO USER INPUT
-                TripManager.shared.generateAndSetActiveTrip(
+                let newTrip = TripManager.shared.generateAndSetActiveTrip(
                     destination: selectedDestination,
                     durationDays: travelDaysCount,
                     companion: selectedCompanion.rawValue,
                     pace: selectedPace.rawValue,
                     budget: selectedBudget.rawValue,
                     tags: selectedTags,
-                    startDate: Date()
+                    startDate: selectedStartDate
                 )
+                
+                // Automatically sync upcoming trip with Apple Calendar via EventKit
+                Task {
+                    await TripCalendarSyncService.shared.syncTripToCalendar(newTrip)
+                }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation {
                         isGenerating = false
-                        navigateToDailyItinerary = true
+                        dismiss()
+                        AppNavigationRouter.shared.switchTab(to: .itinerary)
                     }
                 }
             }

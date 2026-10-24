@@ -25,6 +25,8 @@
 	<string>TripPilot accesses your photo library to let you select travel moments for your polaroid album.</string>
 	<key>NSPhotoLibraryAddUsageDescription</key>
 	<string>TripPilot saves your created polaroid memories to your photo library.</string>
+	<key>NSFaceIDUsageDescription</key>
+	<string>TripPilot uses Face ID to securely authenticate and unlock your personalized travel itineraries and offline travel vault.</string>
 	<key>UILaunchScreen</key>
 	<dict>
 		<key>UIColorName</key>

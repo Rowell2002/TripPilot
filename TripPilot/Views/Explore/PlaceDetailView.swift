@@ -31,6 +31,7 @@ struct PlaceDetailView: View {
     private let outlineVariant = Color.white.opacity(0.08)
     
     // Interactive State
+    @ObservedObject private var bookmarkManager = BookmarkManager.shared
     @State private var currentSlide: Int = 0
     @State private var includeAudioGuide: Bool = true
     @State private var isAddedToItinerary: Bool = false
@@ -167,15 +168,32 @@ struct PlaceDetailView: View {
             
             Spacer()
             
-            Button(action: {
-                triggerToast("Place details & map coordinates copied")
-            }) {
-                Image(systemName: "square.and.arrow.up")
-                    .font(.system(size: 15, weight: .semibold))
-                    .foregroundColor(textOnSurfaceVariant)
-                    .frame(width: 40, height: 40)
-                    .background(surfaceContainerHigh.opacity(0.6))
-                    .clipShape(Circle())
+            HStack(spacing: 8) {
+                // Bookmark Toggle Button
+                Button(action: {
+                    bookmarkManager.toggleBookmark(place: place)
+                    let isSaved = bookmarkManager.isBookmarked(place: place)
+                    triggerToast(isSaved ? "Saved \(place.name) to Travel Vault" : "Removed \(place.name) from saved")
+                }) {
+                    Image(systemName: bookmarkManager.isBookmarked(place: place) ? "bookmark.fill" : "bookmark")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(bookmarkManager.isBookmarked(place: place) ? primaryContainer : textOnSurfaceVariant)
+                        .frame(width: 40, height: 40)
+                        .background(surfaceContainerHigh.opacity(0.6))
+                        .clipShape(Circle())
+                }
+                
+                // Share Button
+                Button(action: {
+                    triggerToast("Place details & map coordinates copied")
+                }) {
+                    Image(systemName: "square.and.arrow.up")
+                        .font(.system(size: 15, weight: .semibold))
+                        .foregroundColor(textOnSurfaceVariant)
+                        .frame(width: 40, height: 40)
+                        .background(surfaceContainerHigh.opacity(0.6))
+                        .clipShape(Circle())
+                }
             }
         }
         .padding(.horizontal, 16)

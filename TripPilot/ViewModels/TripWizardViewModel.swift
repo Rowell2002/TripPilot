@@ -17,6 +17,7 @@ final class TripWizardViewModel: ObservableObject {
     @Published var seasonText: String = "Tropical Sunshine & Mountain Mist"
     @Published var seasonBadge: String = "Year-Round Prime"
     
+    @Published var selectedStartDate: Date = Date()
     @Published var travelDatesText: String = "Upcoming 7 Days"
     @Published var travelDaysCount: Int = 7
     @Published var travelDurationText: String = "7 Days • 6 Nights"
@@ -137,7 +138,7 @@ final class TripWizardViewModel: ObservableObject {
                     pace: self.selectedPace.rawValue,
                     budget: self.selectedBudget.rawValue,
                     tags: self.selectedTags,
-                    startDate: Date()
+                    startDate: self.selectedStartDate
                 )
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {

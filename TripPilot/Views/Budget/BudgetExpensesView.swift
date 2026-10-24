@@ -61,7 +61,7 @@ struct BudgetExpensesView: View {
                     // MARK: - 2. High-Impact Safe-to-Spend Overview Card
                     safeToSpendOverviewCard
                     
-                    // MARK: - 3. Primary Interactive Actions (Log & Split)
+                    // MARK: - 3. Primary Interactive Action (Log Expense)
                     primaryActionsRow
                     
                     // MARK: - 4. Group Balance Settlement Banner
@@ -98,12 +98,8 @@ struct BudgetExpensesView: View {
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)
-        .preferredColorScheme(.dark)
         .sheet(isPresented: $viewModel.showLogExpenseSheet) {
             logExpenseModalSheet
-        }
-        .sheet(isPresented: $viewModel.showSplitBillSheet) {
-            splitBillModalSheet
         }
         .sheet(isPresented: $viewModel.showEditBudgetSheet) {
             editBudgetModalSheet
@@ -525,55 +521,30 @@ struct BudgetExpensesView: View {
         .shadow(color: Color.black.opacity(0.5), radius: 16, y: 6)
     }
     
-    // MARK: - 3. Primary Actions (Log & Split)
+    // MARK: - 3. Primary Action (Log Expense)
     private var primaryActionsRow: some View {
-        HStack(spacing: 12) {
-            // Log Expense Primary CTA (Direct manual amount entry)
-            Button(action: {
-                viewModel.showLogExpenseSheet = true
-            }) {
-                HStack(spacing: 8) {
-                    Image(systemName: "plus.circle.fill")
-                        .font(.system(size: 17, weight: .bold))
-                    
-                    Text("Log Expense")
-                        .font(.system(size: 16, weight: .bold, design: .rounded))
-                }
-                .foregroundColor(.white)
-                .frame(maxWidth: .infinity)
-                .frame(height: 52)
-                .background(
-                    LinearGradient(
-                        colors: [Color(red: 2/255, green: 132/255, blue: 199/255), Color(red: 14/255, green: 165/255, blue: 233/255), primarySky],
-                        startPoint: .leading,
-                        endPoint: .trailing
-                    )
-                )
-                .clipShape(Capsule())
-                .shadow(color: primarySky.opacity(0.35), radius: 12, y: 4)
+        Button(action: {
+            viewModel.showLogExpenseSheet = true
+        }) {
+            HStack(spacing: 8) {
+                Image(systemName: "plus.circle.fill")
+                    .font(.system(size: 17, weight: .bold))
+                
+                Text("Log Expense")
+                    .font(.system(size: 16, weight: .bold, design: .rounded))
             }
-            
-            // Split Group CTA (1/3 width)
-            Button(action: {
-                viewModel.showSplitBillSheet = true
-            }) {
-                HStack(spacing: 6) {
-                    Image(systemName: "person.2.fill")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(primarySky)
-                    
-                    Text("Split")
-                        .font(.system(size: 15, weight: .bold, design: .rounded))
-                        .foregroundColor(.white)
-                }
-                .frame(width: 100)
-                .frame(height: 52)
-                .background(surfaceContainerLow)
-                .clipShape(Capsule())
-                .overlay(
-                    Capsule().stroke(Color.white.opacity(0.12), lineWidth: 1)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .frame(height: 52)
+            .background(
+                LinearGradient(
+                    colors: [Color(red: 2/255, green: 132/255, blue: 199/255), Color(red: 14/255, green: 165/255, blue: 233/255), primarySky],
+                    startPoint: .leading,
+                    endPoint: .trailing
                 )
-            }
+            )
+            .clipShape(Capsule())
+            .shadow(color: primarySky.opacity(0.35), radius: 12, y: 4)
         }
     }
     
@@ -1099,22 +1070,6 @@ struct BudgetExpensesView: View {
                 )
                 
                 Spacer()
-                
-                // Add Traveler Pill
-                Button(action: {
-                    viewModel.showSplitBillSheet = true
-                }) {
-                    Image(systemName: "person.badge.plus")
-                        .font(.system(size: 14, weight: .semibold))
-                        .foregroundColor(primarySky)
-                        .frame(width: 40, height: 44)
-                        .background(surfaceContainerLow)
-                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 14, style: .continuous)
-                                .stroke(outlineBorder, lineWidth: 1)
-                        )
-                }
             }
         }
     }
@@ -1133,12 +1088,6 @@ struct BudgetExpensesView: View {
                 location: location,
                 date: date
             )
-        }
-    }
-    
-    private var splitBillModalSheet: some View {
-        SplitBillSheet(isUSD: viewModel.isUSD) { amountPerPerson in
-            viewModel.triggerNotice("👥 Bill split requested: $\(String(format: "%.2f", amountPerPerson)) per person")
         }
     }
     
@@ -1706,129 +1655,6 @@ struct EditBudgetCapSheet: View {
                     RoundedRectangle(cornerRadius: 10, style: .continuous)
                         .stroke(Color.white.opacity(0.1), lineWidth: 1)
                 )
-        }
-    }
-}
-
-// MARK: - Submodal: Split Bill Sheet
-struct SplitBillSheet: View {
-    @Environment(\.dismiss) private var dismiss
-    @ObservedObject private var authViewModel = AuthViewModel.shared
-    let isUSD: Bool
-    var onSplitRequested: (Double) -> Void
-    
-    @State private var totalBill: String = "240.00"
-    @State private var numberOfPeople: Int = 3
-    
-    private var perPersonAmount: Double {
-        let total = Double(totalBill) ?? 0.0
-        guard numberOfPeople > 0 else { return 0.0 }
-        return total / Double(numberOfPeople)
-    }
-    
-    var body: some View {
-        NavigationStack {
-            ZStack {
-                Color.black.ignoresSafeArea()
-                
-                VStack(spacing: 24) {
-                    // Calculation Card
-                    VStack(spacing: 8) {
-                        Text("EACH PERSON PAYS")
-                            .font(.system(size: 11, weight: .bold, design: .rounded))
-                            .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
-                            .tracking(1)
-                        
-                        Text(String(format: "$%.2f", perPersonAmount))
-                            .font(.system(size: 48, weight: .heavy, design: .rounded))
-                            .foregroundColor(Color(red: 68/255, green: 226/255, blue: 205/255))
-                        
-                        Text(String(format: "LKR Rs. %d per traveler", Int(perPersonAmount * 305.00)))
-                            .font(.system(size: 13, weight: .semibold, design: .rounded))
-                            .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
-                    }
-                    .padding(24)
-                    .frame(maxWidth: .infinity)
-                    .background(Color(red: 17/255, green: 24/255, blue: 39/255))
-                    .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 22, style: .continuous)
-                            .stroke(Color.white.opacity(0.1), lineWidth: 1)
-                    )
-                    
-                    // Stepper for number of people
-                    HStack {
-                        VStack(alignment: .leading, spacing: 2) {
-                            Text("Split Between")
-                                .font(.system(size: 15, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Text("\(authViewModel.userFirstName), Marcus + Guests")
-                                .font(.system(size: 12))
-                                .foregroundColor(Color(red: 148/255, green: 163/255, blue: 184/255))
-                        }
-                        
-                        Spacer()
-                        
-                        HStack(spacing: 14) {
-                            Button(action: {
-                                if numberOfPeople > 2 { numberOfPeople -= 1 }
-                            }) {
-                                Image(systemName: "minus.circle.fill")
-                                    .font(.system(size: 28))
-                                    .foregroundColor(numberOfPeople > 2 ? Color(red: 56/255, green: 189/255, blue: 248/255) : Color.gray.opacity(0.4))
-                            }
-                            
-                            Text("\(numberOfPeople)")
-                                .font(.system(size: 20, weight: .heavy, design: .rounded))
-                                .foregroundColor(.white)
-                                .frame(minWidth: 28)
-                            
-                            Button(action: {
-                                if numberOfPeople < 12 { numberOfPeople += 1 }
-                            }) {
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 28))
-                                    .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
-                            }
-                        }
-                    }
-                    .padding(16)
-                    .background(Color(red: 17/255, green: 24/255, blue: 39/255))
-                    .clipShape(RoundedRectangle(cornerRadius: 16, style: .continuous))
-                    
-                    Spacer()
-                    
-                    // Send Request Button
-                    Button(action: {
-                        onSplitRequested(perPersonAmount)
-                        dismiss()
-                    }) {
-                        Text("Send Split Request via Apple Pay")
-                            .font(.system(size: 16, weight: .bold, design: .rounded))
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 52)
-                            .background(
-                                LinearGradient(
-                                    colors: [Color(red: 37/255, green: 99/255, blue: 235/255), Color(red: 56/255, green: 189/255, blue: 248/255)],
-                                    startPoint: .leading,
-                                    endPoint: .trailing
-                                )
-                            )
-                            .clipShape(Capsule())
-                    }
-                }
-                .padding(20)
-            }
-            .navigationTitle("Split Group Bill")
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbar {
-                ToolbarItem(placement: .cancellationAction) {
-                    Button("Cancel") { dismiss() }
-                        .foregroundColor(Color(red: 56/255, green: 189/255, blue: 248/255))
-                }
-            }
-            .preferredColorScheme(.dark)
         }
     }
 }

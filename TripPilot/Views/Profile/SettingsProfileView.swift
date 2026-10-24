@@ -84,6 +84,7 @@ struct SettingsProfileView: View {
     // Interactive State
     @ObservedObject private var authViewModel = AuthViewModel.shared
     @ObservedObject private var tripManager = TripManager.shared
+    @ObservedObject private var bookmarkManager = BookmarkManager.shared
     @State private var isVIPIndicatorPulsing: Bool = false
     
     // Toggles
@@ -470,7 +471,7 @@ struct SettingsProfileView: View {
                     
                     // Saved
                     VStack(spacing: 2) {
-                        Text("324")
+                        Text("\(bookmarkManager.count)")
                             .font(.system(size: 20, weight: .heavy, design: .rounded))
                             .foregroundColor(primarySky)
                         
@@ -669,8 +670,14 @@ struct SettingsProfileView: View {
                     iconBg: secondaryMint.opacity(0.18),
                     title: "Face ID Quick Unlock",
                     subtitle: "Instant biometric sign-in & secure travel vault",
-                    isOn: $isFaceIDEnabled,
-                    tintColor: secondaryMint
+                    isOn: Binding(
+                        get: { isFaceIDEnabled },
+                        set: { requestedValue in
+                            handleFaceIDToggle(requestedValue)
+                        }
+                    ),
+                    tintColor: secondaryMint,
+                    customOnChange: { _ in }
                 )
                 
                 rowDivider
@@ -678,15 +685,16 @@ struct SettingsProfileView: View {
                 // Biometric Hardware Status
                 settingRowButton(
                     icon: "checkmark.shield.fill",
-                    iconColor: secondaryMint,
-                    iconBg: secondaryMint.opacity(0.18),
+                    iconColor: isFaceIDEnabled ? secondaryMint : textVariant,
+                    iconBg: (isFaceIDEnabled ? secondaryMint : textVariant).opacity(0.18),
                     title: "Biometric Hardware Status",
-                    value: isFaceIDEnabled ? "Ready (Face ID)" : "Disabled"
+                    value: isFaceIDEnabled ? "Ready (Face ID Active)" : "Disabled"
                 ) {
                     if isFaceIDEnabled {
                         testFaceIDAuthentication()
                     } else {
-                        showToast("Enable Face ID toggle above to activate instant unlock")
+                        triggerHapticFeedback()
+                        showToast("Turn ON Face ID toggle above to activate instant unlock")
                     }
                 }
                 
@@ -1283,7 +1291,8 @@ struct SettingsProfileView: View {
         title: String,
         subtitle: String,
         isOn: Binding<Bool>,
-        tintColor: Color
+        tintColor: Color,
+        customOnChange: ((Bool) -> Void)? = nil
     ) -> some View {
         HStack(spacing: 12) {
             ZStack {
@@ -1313,8 +1322,12 @@ struct SettingsProfileView: View {
                 .labelsHidden()
                 .tint(tintColor)
                 .onChange(of: isOn.wrappedValue) { _, newValue in
-                    triggerHapticFeedback()
-                    showToast("\(title): \(newValue ? "Enabled" : "Disabled")")
+                    if let customOnChange = customOnChange {
+                        customOnChange(newValue)
+                    } else {
+                        triggerHapticFeedback()
+                        showToast("\(title): \(newValue ? "Enabled" : "Disabled")")
+                    }
                 }
         }
         .padding(.horizontal, 14)
@@ -1322,6 +1335,45 @@ struct SettingsProfileView: View {
     }
     
     // MARK: - Helper Methods
+    private func handleFaceIDToggle(_ requestedValue: Bool) {
+        if requestedValue {
+            let context = LAContext()
+            context.localizedCancelTitle = "Cancel"
+            var error: NSError?
+            
+            if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+                let reason = "Authenticate with Face ID to enable Quick Unlock for TripPilot"
+                context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, _ in
+                    DispatchQueue.main.async {
+                        triggerHapticFeedback()
+                        if success {
+                            withAnimation {
+                                isFaceIDEnabled = true
+                            }
+                            showToast("✅ Face ID Quick Unlock Enabled")
+                        } else {
+                            withAnimation {
+                                isFaceIDEnabled = false
+                            }
+                            showToast("⚠️ Face ID verification canceled")
+                        }
+                    }
+                }
+            } else {
+                triggerHapticFeedback()
+                withAnimation {
+                    isFaceIDEnabled = true
+                }
+                showToast("✅ Face ID Quick Unlock Enabled (Simulated Mode)")
+            }
+        } else {
+            triggerHapticFeedback()
+            withAnimation {
+                isFaceIDEnabled = false
+            }
+            showToast("🔒 Face ID Quick Unlock Disabled")
+        }
+    }
     private func testFaceIDAuthentication() {
         let context = LAContext()
         var error: NSError?

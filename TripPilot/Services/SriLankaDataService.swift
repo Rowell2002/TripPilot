@@ -688,7 +688,7 @@ public final class SriLankaDataService {
         startDate: Date = Date()
     ) -> GeneratedTrip {
         let dest = destination.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty ? "Sri Lanka Highlights" : destination
-        let daysCount = max(1, min(14, durationDays))
+        let daysCount = max(1, min(30, durationDays))
         let nightsCount = max(0, daysCount - 1)
         
         let dateFormatter = DateFormatter()
