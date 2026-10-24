@@ -1,10 +1,3 @@
-//
-//  MainAppContainerView.swift
-//  TripPilot
-//
-//  Created for TripPilot - Unified Root Tab Navigation
-//
-
 import SwiftUI
 
 struct MainAppContainerView: View {

@@ -1,10 +1,3 @@
-//
-//  BookmarkManager.swift
-//  TripPilot
-//
-//  Created for persistent bookmarking and saved places management.
-//
-
 import SwiftUI
 import Combine
 

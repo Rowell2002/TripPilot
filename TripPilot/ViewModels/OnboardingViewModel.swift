@@ -1,10 +1,3 @@
-//
-//  OnboardingViewModel.swift
-//  TripPilot
-//
-//  Created for TripPilot - Professional Onboarding Experience
-//
-
 import SwiftUI
 import Combine
 

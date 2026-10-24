@@ -1,11 +1,3 @@
-//
-//  TripMLRecommenderService.swift
-//  TripPilot
-//
-//  On-device Machine Learning inference service for personalized itinerary recommendations
-//  using Apple Core ML (TripMatchRegressor & TripSlotClassifier).
-//
-
 import Foundation
 import CoreML
 import Combine

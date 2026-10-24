@@ -1,8 +1,3 @@
-//
-//  AuthViewModel.swift
-//  TripPilot
-//
-
 import Foundation
 import SwiftUI
 import Combine

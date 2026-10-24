@@ -1,10 +1,3 @@
-//
-//  SplashScreenView.swift
-//  TripPilot
-//
-//  Cinematic AI Travel Splash Screen Animation
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit

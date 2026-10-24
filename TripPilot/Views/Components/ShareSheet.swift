@@ -1,8 +1,3 @@
-//
-//  ShareSheet.swift
-//  TripPilot
-//
-
 import SwiftUI
 import UIKit
 

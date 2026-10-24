@@ -1,8 +1,3 @@
-//
-//  PassportPDFGenerator.swift
-//  TripPilot
-//
-
 import UIKit
 import PDFKit
 

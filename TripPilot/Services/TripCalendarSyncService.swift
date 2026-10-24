@@ -1,10 +1,3 @@
-//
-//  TripCalendarSyncService.swift
-//  TripPilot
-//
-//  Created for EventKit Calendar Sync & Upcoming Trips View.
-//
-
 import SwiftUI
 import Combine
 import EventKit

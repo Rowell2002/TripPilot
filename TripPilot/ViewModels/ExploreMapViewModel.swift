@@ -1,10 +1,3 @@
-//
-//  ExploreMapViewModel.swift
-//  TripPilot
-//
-//  Created for TripPilot - MVVM Architecture
-//
-
 import SwiftUI
 import MapKit
 import Combine

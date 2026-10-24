@@ -1,10 +1,3 @@
-//
-//  NotificationsInboxSheet.swift
-//  TripPilot
-//
-//  Created for In-App Notifications & Geofence Alert Triggering.
-//
-
 import SwiftUI
 
 public struct NotificationsInboxSheet: View {

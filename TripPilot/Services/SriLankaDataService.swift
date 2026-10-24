@@ -1,10 +1,3 @@
-//
-//  SriLankaDataService.swift
-//  TripPilot
-//
-//  Created for Sri Lanka specialized travel planning.
-//
-
 import Foundation
 import SwiftUI
 
