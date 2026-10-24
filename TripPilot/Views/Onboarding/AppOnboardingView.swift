@@ -1,10 +1,3 @@
-//
-//  AppOnboardingView.swift
-//  TripPilot
-//
-//  Created for TripPilot - Professional Onboarding Experience
-//
-
 import SwiftUI
 #if canImport(UIKit)
 import UIKit

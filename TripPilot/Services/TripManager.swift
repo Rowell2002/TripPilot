@@ -1,10 +1,3 @@
-//
-//  TripManager.swift
-//  TripPilot
-//
-//  Shared state manager for active Sri Lanka journeys.
-//
-
 import SwiftUI
 import Combine
 

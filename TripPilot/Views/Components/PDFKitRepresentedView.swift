@@ -1,8 +1,3 @@
-//
-//  PDFKitRepresentedView.swift
-//  TripPilot
-//
-
 import SwiftUI
 import PDFKit
 

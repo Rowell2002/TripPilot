@@ -1,10 +1,3 @@
-//
-//  NotificationManager.swift
-//  TripPilot
-//
-//  Created for TripPilot Geofenced Landmark Alerts & Audio Guide.
-//
-
 import SwiftUI
 import UserNotifications
 import Combine

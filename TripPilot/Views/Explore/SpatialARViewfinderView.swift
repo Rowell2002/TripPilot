@@ -1,10 +1,3 @@
-//
-//  SpatialARViewfinderView.swift
-//  TripPilot
-//
-//  Interactive Spatial 3D AR Viewfinder & Landmark Beacon Locator
-//
-
 import SwiftUI
 
 public struct SpatialARViewfinderView: View {

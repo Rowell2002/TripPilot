@@ -1,10 +1,3 @@
-//
-//  WelcomeLandingView.swift
-//  TripPilot
-//
-//  Created for TripPilot - Welcome & Onboarding Landing Experience
-//
-
 import SwiftUI
 
 public struct WelcomeLandingView: View {

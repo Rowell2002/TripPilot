@@ -1,11 +1,3 @@
-//
-//  GeofencedAudioGuideDetailView.swift
-//  TripPilot
-//
-//  Created for Stitch Screen ID: fdbc81d9199c40118b04f43c0fde063f
-//  Geofenced Landmark Alert & Audio Guide (Fully Functional)
-//
-
 import SwiftUI
 import MapKit
 import AVFoundation

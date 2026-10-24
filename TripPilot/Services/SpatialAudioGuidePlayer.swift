@@ -1,10 +1,3 @@
-//
-//  SpatialAudioGuidePlayer.swift
-//  TripPilot
-//
-//  Native TTS & Spatial Audio Guide Engine powered by AVFoundation
-//
-
 import Foundation
 import AVFoundation
 import Combine

@@ -1,10 +1,3 @@
-//
-//  AppLockView.swift
-//  TripPilot
-//
-//  Full-screen biometric Face ID lock screen displayed when the app is locked.
-//
-
 import SwiftUI
 import LocalAuthentication
 

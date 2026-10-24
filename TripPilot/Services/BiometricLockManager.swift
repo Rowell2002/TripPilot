@@ -1,11 +1,3 @@
-//
-//  BiometricLockManager.swift
-//  TripPilot
-//
-//  Manages biometric Face ID protection, application lock state on cold launch
-//  and background-to-foreground transitions.
-//
-
 import Foundation
 import SwiftUI
 import Combine

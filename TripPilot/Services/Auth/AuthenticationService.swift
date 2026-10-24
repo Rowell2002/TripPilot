@@ -1,8 +1,3 @@
-//
-//  AuthenticationService.swift
-//  TripPilot
-//
-
 import Foundation
 import UIKit
 import CryptoKit
