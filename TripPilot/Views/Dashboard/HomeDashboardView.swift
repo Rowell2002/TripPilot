@@ -13,6 +13,7 @@ struct HomeDashboardView: View {
     @State private var isLivePulsing: Bool = false
     @State private var showFlyoverMapModal: Bool = false
     @State private var showTripWizardModal: Bool = false
+    @State private var showCalendarViewSheet: Bool = false
     @State private var showPolaroidCaptureSheet: Bool = false
     @State private var selectedPolaroidMoment: PolaroidMoment? = nil
     @State private var activeUtilityNotice: String? = nil
@@ -155,6 +156,9 @@ struct HomeDashboardView: View {
         }
         .sheet(isPresented: $showTripWizardModal) {
             TripGeneratorWizardView()
+        }
+        .sheet(isPresented: $showCalendarViewSheet) {
+            UpcomingTripsCalendarView()
         }
         .navigationDestination(isPresented: $navigateToMyTrips) {
             MyTripsHubView()
@@ -371,15 +375,15 @@ struct HomeDashboardView: View {
     
     // MARK: - Trip Actions Row
     private var tripActionsRow: some View {
-        HStack(spacing: 10) {
+        HStack(spacing: 8) {
             Button(action: {
                 showTripWizardModal = true
             }) {
-                HStack(spacing: 6) {
+                HStack(spacing: 5) {
                     Image(systemName: "wand.and.stars")
-                        .font(.system(size: 13, weight: .bold))
-                    Text("Generate New Trip")
-                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                        .font(.system(size: 12, weight: .bold))
+                    Text("Generate")
+                        .font(.system(size: 12.5, weight: .bold, design: .rounded))
                 }
                 .foregroundColor(.black)
                 .frame(maxWidth: .infinity)
@@ -392,20 +396,38 @@ struct HomeDashboardView: View {
                     )
                 )
                 .clipShape(Capsule())
-                .shadow(color: skyBlue.opacity(0.35), radius: 8, y: 3)
+                .shadow(color: skyBlue.opacity(0.35), radius: 6, y: 2)
+            }
+            
+            Button(action: {
+                showCalendarViewSheet = true
+            }) {
+                HStack(spacing: 4) {
+                    Image(systemName: "calendar.badge.clock")
+                        .font(.system(size: 12, weight: .semibold))
+                        .foregroundColor(primaryCyan)
+                    Text("Calendar")
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
+                }
+                .foregroundColor(.white)
+                .padding(.horizontal, 12)
+                .frame(height: 42)
+                .background(surfaceCard)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(containerBorder, lineWidth: 1))
             }
             
             Button(action: {
                 navigateToMyTrips = true
             }) {
-                HStack(spacing: 5) {
+                HStack(spacing: 4) {
                     Image(systemName: "suitcase.fill")
-                        .font(.system(size: 12, weight: .semibold))
-                    Text("All Trips (\(tripManager.savedTrips.count))")
-                        .font(.system(size: 12.5, weight: .semibold, design: .rounded))
+                        .font(.system(size: 11, weight: .semibold))
+                    Text("All (\(tripManager.savedTrips.count))")
+                        .font(.system(size: 12, weight: .semibold, design: .rounded))
                 }
                 .foregroundColor(.white)
-                .padding(.horizontal, 14)
+                .padding(.horizontal, 12)
                 .frame(height: 42)
                 .background(surfaceCard)
                 .clipShape(Capsule())

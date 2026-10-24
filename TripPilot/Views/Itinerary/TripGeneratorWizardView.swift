@@ -1575,7 +1575,7 @@ struct TripGeneratorWizardView: View {
                 generationStage = "Core ML Itinerary Ready! Opening your Sri Lanka plan..."
                 
                 // GENERATE REAL DYNAMIC TRIP ACCORDING TO USER INPUT
-                TripManager.shared.generateAndSetActiveTrip(
+                let newTrip = TripManager.shared.generateAndSetActiveTrip(
                     destination: selectedDestination,
                     durationDays: travelDaysCount,
                     companion: selectedCompanion.rawValue,
@@ -1584,6 +1584,11 @@ struct TripGeneratorWizardView: View {
                     tags: selectedTags,
                     startDate: selectedStartDate
                 )
+                
+                // Automatically sync upcoming trip with Apple Calendar via EventKit
+                Task {
+                    await TripCalendarSyncService.shared.syncTripToCalendar(newTrip)
+                }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                     withAnimation {

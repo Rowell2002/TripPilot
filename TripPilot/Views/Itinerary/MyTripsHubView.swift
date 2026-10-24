@@ -13,6 +13,7 @@ struct MyTripsHubView: View {
     @State private var activeNotice: String? = nil
     @State private var showPlanJourneySheet: Bool = false
     @State private var showItinerarySheet: Bool = false
+    @State private var showCalendarSheet: Bool = false
     @State private var navigateToDailyItinerary: Bool = false
     @State private var navigateToTripGenerator: Bool = false
     @State private var navigateToInteractiveMap: Bool = false
@@ -162,6 +163,9 @@ struct MyTripsHubView: View {
         .sheet(isPresented: $showItinerarySheet) {
             itinerarySheetView
         }
+        .sheet(isPresented: $showCalendarSheet) {
+            UpcomingTripsCalendarView()
+        }
         .overlay(alignment: .top) {
             if let notice = activeNotice {
                 Text(notice)
@@ -242,8 +246,26 @@ struct MyTripsHubView: View {
             
             Spacer()
             
-            // Notifications & User Profile
-            HStack(spacing: 10) {
+            // Calendar, Notifications & User Profile
+            HStack(spacing: 8) {
+                Button(action: {
+                    showCalendarSheet = true
+                }) {
+                    ZStack {
+                        Circle()
+                            .fill(surfaceContainerLow)
+                            .frame(width: 38, height: 38)
+                            .overlay(
+                                Circle()
+                                    .stroke(outlineVariant, lineWidth: 1)
+                            )
+                        
+                        Image(systemName: "calendar.badge.clock")
+                            .font(.system(size: 14, weight: .bold))
+                            .foregroundColor(primaryCyan)
+                    }
+                }
+                
                 Button(action: {
                     triggerNotice("🔔 1 notification: Gate updated for JL 006")
                 }) {

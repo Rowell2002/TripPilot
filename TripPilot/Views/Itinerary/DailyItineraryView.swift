@@ -17,6 +17,7 @@ struct DailyItineraryView: View {
     @State private var stopSearchQuery: String = ""
     @State private var showDaySettingsModal: Bool = false
     @State private var showTripWizardModal: Bool = false
+    @State private var showCalendarViewSheet: Bool = false
     @State private var activeNotice: String? = nil
     
     // Day Settings Toggles with AppStorage
@@ -117,6 +118,9 @@ struct DailyItineraryView: View {
         }
         .sheet(isPresented: $showTripWizardModal) {
             TripGeneratorWizardView()
+        }
+        .sheet(isPresented: $showCalendarViewSheet) {
+            UpcomingTripsCalendarView()
         }
         .overlay(alignment: .top) {
             if let notice = activeNotice {
@@ -318,21 +322,41 @@ struct DailyItineraryView: View {
                 
                 Spacer()
                 
-                Button(action: {
-                    showDaySettingsModal = true
-                }) {
-                    ZStack {
-                        Circle()
-                            .fill(surfaceContainerLow)
-                            .frame(width: 38, height: 38)
-                            .overlay(
-                                Circle()
-                                    .stroke(outlineVariant, lineWidth: 1)
-                            )
-                        
-                        Image(systemName: "slider.horizontal.3")
-                            .font(.system(size: 15, weight: .semibold))
-                            .foregroundColor(textOnSurface)
+                HStack(spacing: 8) {
+                    Button(action: {
+                        showCalendarViewSheet = true
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(surfaceContainerLow)
+                                .frame(width: 38, height: 38)
+                                .overlay(
+                                    Circle()
+                                        .stroke(outlineVariant, lineWidth: 1)
+                                )
+                            
+                            Image(systemName: "calendar.badge.clock")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(skyBlue)
+                        }
+                    }
+                    
+                    Button(action: {
+                        showDaySettingsModal = true
+                    }) {
+                        ZStack {
+                            Circle()
+                                .fill(surfaceContainerLow)
+                                .frame(width: 38, height: 38)
+                                .overlay(
+                                    Circle()
+                                        .stroke(outlineVariant, lineWidth: 1)
+                                )
+                            
+                            Image(systemName: "slider.horizontal.3")
+                                .font(.system(size: 15, weight: .semibold))
+                                .foregroundColor(textOnSurface)
+                        }
                     }
                 }
             }
