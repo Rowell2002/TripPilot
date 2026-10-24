@@ -199,23 +199,6 @@ struct PlaceDiscoveryView: View {
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             .ignoresSafeArea(edges: .top)
-            
-            // Floating Navigation Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .home {
-                    dismiss()
-                } else if tab == .itinerary {
-                    navigateToItinerary = true
-                } else if tab == .map {
-                    navigateToMap = true
-                } else if tab == .budget {
-                    navigateToBudget = true
-                } else if tab == .profile {
-                    navigateToProfile = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
         }
         .navigationBarBackButtonHidden(true)
         .toolbar(.hidden, for: .navigationBar)

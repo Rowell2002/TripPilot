@@ -119,23 +119,6 @@ struct MyTripsHubView: View {
                 .padding(.horizontal, 18)
                 .responsiveContentWidth(960)
             }
-            
-            // MARK: - Floating Glassmorphic Bottom Tab Bar
-            FloatingBottomNavBar(selectedTab: $selectedTab) { tab in
-                if tab == .home {
-                    dismiss()
-                } else if tab == .itinerary {
-                    navigateToDailyItinerary = true
-                } else if tab == .map {
-                    navigateToInteractiveMap = true
-                } else if tab == .budget {
-                    navigateToBudget = true
-                } else if tab == .profile {
-                    navigateToProfile = true
-                }
-            }
-            .padding(.horizontal, 20)
-            .padding(.bottom, 8)
         }
         .navigationDestination(isPresented: $navigateToDailyItinerary) {
             DailyItineraryView()
