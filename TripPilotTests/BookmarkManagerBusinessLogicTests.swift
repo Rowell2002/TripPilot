@@ -2,7 +2,7 @@ import Testing
 import Foundation
 @testable import TripPilot
 
-@Suite("Bookmark & Saved Places Business Logic Suite")
+@Suite("Bookmark & Saved Places Business Logic Suite", .serialized)
 struct BookmarkManagerBusinessLogicTests {
     
     @Test("Persistent Bookmark Toggling by Place and Name")

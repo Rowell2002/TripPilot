@@ -42,35 +42,23 @@ struct TripManagerBusinessLogicTests {
         let manager = TripManager.shared
         
         let initialStopsCount = manager.currentTrip.days[0].stops.count
-        let customPlace = SriLankaPlace(
-            name: "Pidurangala Rock Sunrise",
-            sinhalaName: "පිදුරංගල පර්වතය",
-            district: "Matale",
-            province: "Central",
-            category: .nature,
-            rating: 4.9,
-            reviewCount: "12k",
-            description: "Panoramic sunset and sunrise view facing Sigiriya.",
-            highlights: ["Sunrise Panoramic View", "Ancient Reclining Buddha"],
-            entryFeeLKR: 1000,
-            entryFeeUSD: 3.5,
-            openingHours: "05:00 AM – 06:00 PM",
-            visitorTips: ["Bring torch for pre-dawn hike"],
-            latitude: 7.9620,
-            longitude: 80.7650,
-            imageUrls: []
-        )
         
-        manager.addCustomStop(dayNumber: 1, place: customPlace, time: "05:30 AM")
+        manager.addCustomStop(
+            title: "Pidurangala Rock Sunrise",
+            category: "Nature",
+            notes: "Panoramic sunset and sunrise view facing Sigiriya.",
+            entranceFeeLKR: 1000,
+            dayIndex: 0
+        )
         
         #expect(manager.currentTrip.days[0].stops.count == initialStopsCount + 1)
         let addedStop = manager.currentTrip.days[0].stops.last!
         #expect(addedStop.title == "Pidurangala Rock Sunrise")
-        #expect(addedStop.time == "05:30 AM")
+        #expect(addedStop.costLKR == 1000)
         
         // Clean up
         let lastIndex = manager.currentTrip.days[0].stops.count - 1
-        manager.deleteStop(at: lastIndex, in: 1)
+        manager.deleteStop(at: lastIndex, in: 0)
         #expect(manager.currentTrip.days[0].stops.count == initialStopsCount)
     }
     
@@ -85,14 +73,14 @@ struct TripManagerBusinessLogicTests {
         
         // Swap first two stops
         stops.swapAt(0, 1)
-        manager.updateStopsOrder(for: 1, newStops: stops)
+        manager.updateStopsOrder(for: 0, newStops: stops)
         
         #expect(manager.currentTrip.days[0].stops[0].title == secondTitle)
         #expect(manager.currentTrip.days[0].stops[1].title == firstTitle)
         
         // Restore order
         stops.swapAt(0, 1)
-        manager.updateStopsOrder(for: 1, newStops: stops)
+        manager.updateStopsOrder(for: 0, newStops: stops)
         #expect(manager.currentTrip.days[0].stops[0].title == firstTitle)
     }
 }

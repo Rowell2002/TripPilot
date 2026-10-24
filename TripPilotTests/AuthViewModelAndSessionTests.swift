@@ -31,8 +31,6 @@ struct AuthViewModelAndSessionTests {
     @Test("User Initials Formatting Algorithm")
     @MainActor
     func testUserInitialsFormatting() {
-        let auth = AuthViewModel.shared
-        
         // Two words -> First letter of each
         // e.g. "Chethana Rowell" -> "CR"
         let initials1 = calculateInitials(for: "Chethana Rowell")
@@ -83,6 +81,27 @@ struct AuthViewModelAndSessionTests {
         auth.showSuccessAlert = false
         #expect(auth.showErrorAlert == false)
         #expect(auth.showSuccessAlert == false)
+    }
+    
+    @Test("Face ID Quick Unlock Settings Persistence")
+    func testFaceIDQuickUnlockPersistence() {
+        let key = "isFaceIDQuickUnlockEnabled"
+        let previous = UserDefaults.standard.object(forKey: key)
+        defer {
+            if let previous = previous {
+                UserDefaults.standard.set(previous, forKey: key)
+            } else {
+                UserDefaults.standard.removeObject(forKey: key)
+            }
+        }
+        
+        // Toggle OFF
+        UserDefaults.standard.set(false, forKey: key)
+        #expect(UserDefaults.standard.bool(forKey: key) == false)
+        
+        // Toggle ON
+        UserDefaults.standard.set(true, forKey: key)
+        #expect(UserDefaults.standard.bool(forKey: key) == true)
     }
     
     // Helper replicating AuthViewModel's initials algorithm for pure testability

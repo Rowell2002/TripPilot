@@ -1,4 +1,5 @@
 import SwiftUI
+import LocalAuthentication
 #if canImport(UIKit)
 import UIKit
 #endif
@@ -6,6 +7,7 @@ import UIKit
 struct SignInView: View {
     @Environment(\.dismiss) private var dismiss
     @ObservedObject private var authViewModel = AuthViewModel.shared
+    @AppStorage("isFaceIDQuickUnlockEnabled") private var isFaceIDEnabled: Bool = true
     @State private var email: String = ""
     @State private var password: String = ""
     @State private var isPasswordVisible: Bool = false
@@ -368,6 +370,32 @@ struct SignInView: View {
                         }
                         .disabled(authViewModel.isLoading)
                         .padding(.top, 8)
+                        
+                        // Face ID Quick Unlock Option
+                        if isFaceIDEnabled {
+                            Button(action: {
+                                handleFaceIDSignIn()
+                            }) {
+                                HStack(spacing: 8) {
+                                    Image(systemName: "faceid")
+                                        .font(.system(size: 18, weight: .bold))
+                                        .foregroundColor(primaryCyan)
+                                    Text("Quick Unlock with Face ID")
+                                        .font(.system(size: 15, weight: .bold, design: .rounded))
+                                        .foregroundColor(.white)
+                                }
+                                .frame(maxWidth: .infinity)
+                                .frame(height: 52)
+                                .background(containerLow)
+                                .clipShape(Capsule())
+                                .overlay(
+                                    Capsule()
+                                        .stroke(primaryCyan.opacity(0.55), lineWidth: 1.5)
+                                )
+                                .shadow(color: primaryCyan.opacity(0.2), radius: 8, y: 3)
+                            }
+                            .padding(.top, 4)
+                        }
                     }
                     .padding(.horizontal, 20)
                     
@@ -504,6 +532,35 @@ struct SignInView: View {
             if success {
                 navigateToHome = true
             }
+        }
+    }
+    
+    private func handleFaceIDSignIn() {
+        let context = LAContext()
+        context.localizedCancelTitle = "Cancel"
+        var error: NSError?
+        
+        let reason = "Unlock and access your TripPilot travel vault with Face ID"
+        if context.canEvaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, error: &error) {
+            context.evaluatePolicy(.deviceOwnerAuthenticationWithBiometrics, localizedReason: reason) { success, _ in
+                DispatchQueue.main.async {
+                    if success {
+                        #if canImport(UIKit)
+                        let impact = UIImpactFeedbackGenerator(style: .medium)
+                        impact.impactOccurred()
+                        #endif
+                        authViewModel.setGuestSession()
+                        navigateToHome = true
+                    }
+                }
+            }
+        } else {
+            #if canImport(UIKit)
+            let impact = UIImpactFeedbackGenerator(style: .medium)
+            impact.impactOccurred()
+            #endif
+            authViewModel.setGuestSession()
+            navigateToHome = true
         }
     }
 }

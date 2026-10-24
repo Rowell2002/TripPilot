@@ -139,6 +139,10 @@ public final class AuthViewModel: ObservableObject {
         notifyUserChanged()
     }
     
+    public func continueAsGuest() {
+        setGuestSession()
+    }
+    
     public func notifyUserChanged() {
         NotificationCenter.default.post(name: Self.userDidChangeNotification, object: currentUserId)
         objectWillChange.send()

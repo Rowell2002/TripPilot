@@ -64,17 +64,20 @@ public final class BookmarkManager: ObservableObject {
         if let place = SriLankaDataService.shared.places.first(where: { $0.name == name }) {
             toggleBookmark(place: place)
         } else {
+            let synthId = "custom_" + name
             if bookmarkedNames.contains(name) {
                 bookmarkedNames.remove(name)
+                bookmarkedIds.remove(synthId)
             } else {
                 bookmarkedNames.insert(name)
+                bookmarkedIds.insert(synthId)
             }
             save()
         }
     }
     
     public var count: Int {
-        max(bookmarkedNames.count, bookmarkedIds.count)
+        bookmarkedNames.count
     }
     
     private func save() {
