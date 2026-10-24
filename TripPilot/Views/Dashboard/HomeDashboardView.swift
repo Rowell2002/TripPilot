@@ -240,31 +240,8 @@ struct HomeDashboardView: View {
             
             Spacer()
             
-            // New Trip, Notification & Profile
+            // Notification & Profile
             HStack(spacing: 8) {
-                Button(action: {
-                    showTripWizardModal = true
-                }) {
-                    HStack(spacing: 4) {
-                        Image(systemName: "wand.and.stars")
-                            .font(.system(size: 11, weight: .bold))
-                        Text("New Trip")
-                            .font(.system(size: 12, weight: .bold, design: .rounded))
-                    }
-                    .foregroundColor(Color.black)
-                    .padding(.horizontal, 10)
-                    .padding(.vertical, 7)
-                    .background(
-                        LinearGradient(
-                            colors: [skyBlue, primaryCyan],
-                            startPoint: .leading,
-                            endPoint: .trailing
-                        )
-                    )
-                    .clipShape(Capsule())
-                    .shadow(color: skyBlue.opacity(0.35), radius: 6, y: 2)
-                }
-                
                 Button(action: {
                     showNotificationsSheet = true
                 }) {

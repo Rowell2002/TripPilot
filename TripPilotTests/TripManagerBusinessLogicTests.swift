@@ -37,6 +37,37 @@ struct TripManagerBusinessLogicTests {
         }
     }
     
+    @Test("Custom Future Start Date and Exact Duration Selection")
+    func testCustomStartDateAndExactDuration() {
+        let manager = TripManager.shared
+        let calendar = Calendar.current
+        guard let futureStartDate = calendar.date(byAdding: .day, value: 14, to: Date()) else { return }
+        
+        let exactDays = 4
+        manager.generateAndSetActiveTrip(
+            destination: "Galle Fort & Southern Coast",
+            durationDays: exactDays,
+            companion: "Couple",
+            pace: "Relaxed",
+            budget: "Mid-range",
+            tags: ["🏄 Surfing & Coast", "🦀 Fresh Lagoon Seafood"],
+            startDate: futureStartDate
+        )
+        
+        let trip = manager.currentTrip
+        #expect(trip.durationDays == 4)
+        #expect(trip.days.count == 4)
+        
+        let startFormatter = DateFormatter()
+        startFormatter.dateFormat = "MMM d, yyyy"
+        #expect(trip.startDateString == startFormatter.string(from: futureStartDate))
+        
+        // Day 1 should match futureStartDate day of month
+        let dayFormatter = DateFormatter()
+        dayFormatter.dateFormat = "d"
+        #expect(trip.days.first?.dayOfMonth == dayFormatter.string(from: futureStartDate))
+    }
+    
     @Test("Custom Stop Addition to Trip Day")
     func testAddCustomStop() {
         let manager = TripManager.shared
