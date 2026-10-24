@@ -103,11 +103,14 @@ struct HomeDashboardView: View {
                         
                         if isRegularLayout {
                             // iPad Two-Column Dashboard Layout
+                            greetingWeatherSection
+                            planNewTripBannerSection
+                            
                             HStack(alignment: .top, spacing: 20) {
                                 // Left Column
                                 VStack(spacing: 20) {
-                                    greetingWeatherSection
                                     heroTripCard
+                                    tripActionsRow
                                     todayScheduleWidget
                                 }
                                 .frame(maxWidth: .infinity, alignment: .top)
@@ -123,7 +126,9 @@ struct HomeDashboardView: View {
                         } else {
                             // iPhone Compact Single-Column Layout
                             greetingWeatherSection
+                            planNewTripBannerSection
                             heroTripCard
+                            tripActionsRow
                             todayScheduleWidget
                             explorationMapWidget
                             statsAndBudgetGrid
@@ -235,9 +240,31 @@ struct HomeDashboardView: View {
             
             Spacer()
             
-            
-            // Notification & Profile
-            HStack(spacing: 10) {
+            // New Trip, Notification & Profile
+            HStack(spacing: 8) {
+                Button(action: {
+                    showTripWizardModal = true
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "wand.and.stars")
+                            .font(.system(size: 11, weight: .bold))
+                        Text("New Trip")
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(Color.black)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 7)
+                    .background(
+                        LinearGradient(
+                            colors: [skyBlue, primaryCyan],
+                            startPoint: .leading,
+                            endPoint: .trailing
+                        )
+                    )
+                    .clipShape(Capsule())
+                    .shadow(color: skyBlue.opacity(0.35), radius: 6, y: 2)
+                }
+                
                 Button(action: {
                     showNotificationsSheet = true
                 }) {
@@ -268,7 +295,7 @@ struct HomeDashboardView: View {
                     ZStack {
                         Circle()
                             .fill(
-                                LinearGradient(
+                            LinearGradient(
                                     colors: [Color(red: 56/255, green: 189/255, blue: 248/255), Color(red: 68/255, green: 226/255, blue: 205/255)],
                                     startPoint: .topLeading,
                                     endPoint: .bottomTrailing
@@ -282,6 +309,130 @@ struct HomeDashboardView: View {
                             .foregroundColor(.white)
                     }
                 }
+            }
+        }
+    }
+    
+    // MARK: - Plan New Trip Banner Card
+    private var planNewTripBannerSection: some View {
+        Button(action: {
+            showTripWizardModal = true
+        }) {
+            HStack(spacing: 12) {
+                ZStack {
+                    RoundedRectangle(cornerRadius: 14, style: .continuous)
+                        .fill(
+                            LinearGradient(
+                                colors: [skyBlue.opacity(0.25), primaryCyan.opacity(0.12)],
+                                startPoint: .topLeading,
+                                endPoint: .bottomTrailing
+                            )
+                        )
+                        .frame(width: 48, height: 48)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 14, style: .continuous)
+                                .stroke(primaryCyan.opacity(0.4), lineWidth: 1)
+                        )
+                    
+                    Image(systemName: "wand.and.stars")
+                        .font(.system(size: 20, weight: .bold))
+                        .foregroundColor(primaryCyan)
+                }
+                
+                VStack(alignment: .leading, spacing: 3) {
+                    HStack(spacing: 6) {
+                        Text("Generate a New Trip")
+                            .font(.system(size: 15.5, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        
+                        Text("AI ASSISTED")
+                            .font(.system(size: 8.5, weight: .heavy, design: .rounded))
+                            .tracking(0.6)
+                            .foregroundColor(.black)
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(primaryCyan)
+                            .clipShape(Capsule())
+                    }
+                    
+                    Text("Build a tailored Sri Lanka itinerary in seconds")
+                        .font(.system(size: 11.5, weight: .medium))
+                        .foregroundColor(slateMuted)
+                        .lineLimit(1)
+                }
+                
+                Spacer()
+                
+                Image(systemName: "chevron.right")
+                    .font(.system(size: 13, weight: .bold))
+                    .foregroundColor(primaryCyan)
+                    .padding(8)
+                    .background(Color.white.opacity(0.06))
+                    .clipShape(Circle())
+            }
+            .padding(.horizontal, 14)
+            .padding(.vertical, 12)
+            .background(
+                RoundedRectangle(cornerRadius: 18, style: .continuous)
+                    .fill(surfaceCard)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 18, style: .continuous)
+                            .stroke(
+                                LinearGradient(
+                                    colors: [primaryCyan.opacity(0.5), containerBorder],
+                                    startPoint: .leading,
+                                    endPoint: .trailing
+                                ),
+                                lineWidth: 1.2
+                            )
+                    )
+                    .shadow(color: primaryCyan.opacity(0.12), radius: 10, y: 4)
+            )
+        }
+        .buttonStyle(.plain)
+    }
+    
+    // MARK: - Trip Actions Row
+    private var tripActionsRow: some View {
+        HStack(spacing: 10) {
+            Button(action: {
+                showTripWizardModal = true
+            }) {
+                HStack(spacing: 6) {
+                    Image(systemName: "wand.and.stars")
+                        .font(.system(size: 13, weight: .bold))
+                    Text("Generate New Trip")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 42)
+                .background(
+                    LinearGradient(
+                        colors: [skyBlue, primaryCyan],
+                        startPoint: .leading,
+                        endPoint: .trailing
+                    )
+                )
+                .clipShape(Capsule())
+                .shadow(color: skyBlue.opacity(0.35), radius: 8, y: 3)
+            }
+            
+            Button(action: {
+                navigateToMyTrips = true
+            }) {
+                HStack(spacing: 5) {
+                    Image(systemName: "suitcase.fill")
+                        .font(.system(size: 12, weight: .semibold))
+                    Text("All Trips (\(tripManager.savedTrips.count))")
+                        .font(.system(size: 12.5, weight: .semibold, design: .rounded))
+                }
+                .foregroundColor(.white)
+                .padding(.horizontal, 14)
+                .frame(height: 42)
+                .background(surfaceCard)
+                .clipShape(Capsule())
+                .overlay(Capsule().stroke(containerBorder, lineWidth: 1))
             }
         }
     }
@@ -390,7 +541,7 @@ struct HomeDashboardView: View {
                             HStack(spacing: 4) {
                                 Image(systemName: "wand.and.stars")
                                     .font(.system(size: 11, weight: .bold))
-                                Text("Customize Trip")
+                                Text("New Trip")
                                     .font(.system(size: 11, weight: .bold, design: .rounded))
                             }
                             .foregroundColor(Color.black)

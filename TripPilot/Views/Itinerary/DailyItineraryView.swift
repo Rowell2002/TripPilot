@@ -16,6 +16,7 @@ struct DailyItineraryView: View {
     @State private var showAddStopModal: Bool = false
     @State private var stopSearchQuery: String = ""
     @State private var showDaySettingsModal: Bool = false
+    @State private var showTripWizardModal: Bool = false
     @State private var activeNotice: String? = nil
     
     // Day Settings Toggles with AppStorage
@@ -114,6 +115,9 @@ struct DailyItineraryView: View {
         .sheet(isPresented: $showDaySettingsModal) {
             daySettingsSheet
         }
+        .sheet(isPresented: $showTripWizardModal) {
+            TripGeneratorWizardView()
+        }
         .overlay(alignment: .top) {
             if let notice = activeNotice {
                 Text(notice)
@@ -196,8 +200,31 @@ struct DailyItineraryView: View {
                 
                 Spacer()
                 
-                // Right Actions: Notifications & Avatar
-                HStack(spacing: 10) {
+                // Right Actions: New Trip, Notifications & Avatar
+                HStack(spacing: 8) {
+                    Button(action: {
+                        showTripWizardModal = true
+                    }) {
+                        HStack(spacing: 4) {
+                            Image(systemName: "wand.and.stars")
+                                .font(.system(size: 11, weight: .bold))
+                            Text("New Trip")
+                                .font(.system(size: 12, weight: .bold, design: .rounded))
+                        }
+                        .foregroundColor(Color.black)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 7)
+                        .background(
+                            LinearGradient(
+                                colors: [skyBlue, tealAccent],
+                                startPoint: .leading,
+                                endPoint: .trailing
+                            )
+                        )
+                        .clipShape(Capsule())
+                        .shadow(color: skyBlue.opacity(0.35), radius: 6, y: 2)
+                    }
+                    
                     Button(action: {
                         triggerNotice("📍 Next scheduled stop: \(currentDay.stops.first?.title ?? "Sigiriya Lion Rock")")
                     }) {

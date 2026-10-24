@@ -65,6 +65,7 @@ struct InteractiveMapView: View {
     @State private var isRecenterPressed: Bool = false
     @State private var toastMessage: String? = nil
     @State private var showGeofenceRings: Bool = true
+    @State private var isSheetExpanded: Bool = true
     
     // Navigation Triggers
     @State private var navigateToPlaceDiscovery: Bool = false
@@ -137,29 +138,45 @@ struct InteractiveMapView: View {
     
     var body: some View {
         ZStack(alignment: .bottom) {
-            ScrollView(showsIndicators: false) {
-                VStack(spacing: 0) {
-                    // 1. Top Header Bar
-                    topHeaderBarSection
-                        .padding(.top, 46)
-                        .responsiveContentWidth(1000)
-                    
-                    // 2. Native MapKit Area
-                    nativeMapContainerArea
-                        .frame(height: DeviceLayout.isIPad ? 680 : 560)
-                        .responsiveContentWidth(1000)
-                    
-                    // 3. Geofenced Landmark Discovery Sheet
-                    landmarkDiscoverySheet
-                        .responsiveContentWidth(1000)
-                    
-                    Spacer().frame(height: 110)
-                }
-            }
-            .background(darkBackground.ignoresSafeArea())
+            // 1. Full-Bleed Edge-to-Edge Map (Zero Margins, Full Page)
+            fullPageMapView
+                .ignoresSafeArea()
             
+            // 2. Floating Top Header & Filters (with ambient gradient scrim)
+            VStack(spacing: 8) {
+                topHeaderBarSection
+                topSearchAndFilterSection
+            }
+            .padding(.horizontal, 16)
+            .safeAreaPadding(.top)
+            .padding(.bottom, 10)
+            .background(
+                LinearGradient(
+                    colors: [
+                        darkBackground.opacity(0.95),
+                        darkBackground.opacity(0.85),
+                        darkBackground.opacity(0.35),
+                        Color.clear
+                    ],
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+                .ignoresSafeArea(edges: .top)
+            )
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
+            
+            // 3. Floating Right-Side Controls (Re-Center & 3D Pitch)
+            floatingSideControls
+                .padding(.trailing, 16)
+                .padding(.top, 215)
+                .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
+            
+            // 4. Floating Bottom Discovery Card
+            floatingBottomDiscoveryCard
         }
         .navigationBarBackButtonHidden(true)
+        .toolbar(.hidden, for: .navigationBar)
+        .ignoresSafeArea()
         .navigationDestination(isPresented: $navigateToPlaceDiscovery) {
             PlaceDiscoveryView()
         }
@@ -173,12 +190,12 @@ struct InteractiveMapView: View {
                     .foregroundColor(.white)
                     .padding(.horizontal, 18)
                     .padding(.vertical, 10)
-                    .background(surfaceContainerHigh)
+                    .background(surfaceContainerHigh.opacity(0.95))
                     .clipShape(Capsule())
                     .overlay(Capsule().stroke(primaryContainer.opacity(0.4), lineWidth: 1))
                     .shadow(color: Color.black.opacity(0.7), radius: 12, y: 6)
                     .transition(.move(edge: .top).combined(with: .opacity))
-                    .padding(.top, 60)
+                    .padding(.top, 195)
                     .zIndex(100)
             }
         }
@@ -195,7 +212,11 @@ struct InteractiveMapView: View {
     private var topHeaderBarSection: some View {
         HStack(spacing: 12) {
             Button(action: {
-                AppNavigationRouter.shared.switchTab(to: .home)
+                if AppNavigationRouter.shared.selectedTab == .map {
+                    AppNavigationRouter.shared.switchTab(to: .home)
+                } else {
+                    dismiss()
+                }
             }) {
                 HStack(spacing: 6) {
                     Image(systemName: "chevron.left")
@@ -206,7 +227,7 @@ struct InteractiveMapView: View {
                 .foregroundColor(primaryCyan)
                 .padding(.horizontal, 12)
                 .padding(.vertical, 8)
-                .background(surfaceContainerLow)
+                .background(surfaceContainerLow.opacity(0.92))
                 .clipShape(Capsule())
                 .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
             }
@@ -225,7 +246,7 @@ struct InteractiveMapView: View {
                         .fill(secondaryMint)
                         .frame(width: 6, height: 6)
                         .shadow(color: secondaryMint.opacity(0.8), radius: isGpsRadarPulsing ? 4 : 1)
-                    Text(selectedFilter == .todayRoute ? "Active Day 1 Itinerary Route" : "\(displayPlaces.count) places mapped")
+                    Text(selectedFilter == .todayRoute ? "Active Day \(selectedDayIndex + 1) Route" : "\(displayPlaces.count) places mapped")
                         .font(.system(size: 11, weight: .medium))
                         .foregroundColor(textOnSurfaceVariant)
                 }
@@ -240,7 +261,7 @@ struct InteractiveMapView: View {
             }) {
                 ZStack {
                     Circle()
-                        .fill(showGeofenceRings ? secondaryMint.opacity(0.2) : surfaceContainerLow)
+                        .fill(showGeofenceRings ? secondaryMint.opacity(0.2) : surfaceContainerLow.opacity(0.92))
                         .frame(width: 38, height: 38)
                     
                     Image(systemName: showGeofenceRings ? "dot.radiowaves.left.and.right" : "dot.radiowaves.right")
@@ -250,236 +271,233 @@ struct InteractiveMapView: View {
                 .overlay(Circle().stroke(showGeofenceRings ? secondaryMint : outlineVariant, lineWidth: 1))
             }
         }
-        .padding(.horizontal, 16)
-        .padding(.bottom, 12)
     }
     
-    // MARK: - 2. Native MapKit Container Area
-    private var nativeMapContainerArea: some View {
-        ZStack {
-            // Modern Declarative SwiftUI Map
-            Map(position: $cameraPosition) {
-                UserAnnotation()
+    // MARK: - 2. Top Search, Day Switcher & Category Filter Chips
+    private var topSearchAndFilterSection: some View {
+        VStack(spacing: 8) {
+            // Search Bar
+            HStack(spacing: 10) {
+                Image(systemName: "magnifyingglass")
+                    .font(.system(size: 14, weight: .bold))
+                    .foregroundColor(primaryContainer)
                 
-                // 1. RENDER PLACES CATALOG (WHEN NOT IN ROUTE-ONLY MODE)
-                if selectedFilter != .todayRoute {
-                    ForEach(displayPlaces) { place in
-                        Annotation(place.name, coordinate: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)) {
-                            customPlacePin(place: place, isSelected: selectedPlace.id == place.id && selectedTripStop == nil)
-                        }
-                        
-                        // Visual Geofence Radius Circle (1.0 km)
-                        if showGeofenceRings {
-                            MapCircle(center: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude), radius: 1000)
-                                .foregroundStyle(
-                                    (place.category == .dining || place.category == .cafe ? coralOrange : primaryContainer)
-                                        .opacity(0.12)
-                                )
-                                .stroke(
-                                    place.category == .dining || place.category == .cafe ? coralOrange : primaryContainer,
-                                    lineWidth: selectedPlace.id == place.id ? 2.0 : 1.0
-                                )
-                        }
+                TextField("Search cafes, restaurants, or sights in Sri Lanka...", text: $searchText)
+                    .font(.system(size: 13, weight: .medium, design: .rounded))
+                    .foregroundColor(.white)
+                
+                if !searchText.isEmpty {
+                    Button(action: { searchText = "" }) {
+                        Image(systemName: "xmark.circle.fill")
+                            .font(.system(size: 14))
+                            .foregroundColor(textOnSurfaceVariant)
                     }
                 }
                 
-                // 2. RENDER ACTIVE DAY'S ITINERARY ROUTE (BREAKFAST, SIGHTS, LUNCH, SUNSET, DINNER)
-                if selectedFilter == .todayRoute || !todayRouteCoordinates.isEmpty {
-                    // Sequential Luminous Polyline
-                    MapPolyline(coordinates: todayRouteCoordinates)
-                        .stroke(
-                            LinearGradient(
-                                colors: [amberGold, coralOrange, primaryContainer, secondaryMint],
-                                startPoint: .topLeading,
-                                endPoint: .bottomTrailing
-                            ),
-                            style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round)
-                        )
-                    
-                    // Sequential Numbered & Semantic Stop Pins
-                    ForEach(Array(todayStops.enumerated()), id: \.element.id) { index, stop in
-                        if let coord = stop.coordinate {
-                            Annotation(stop.title, coordinate: coord) {
-                                orderedStopPin(stop: stop, stepNumber: index + 1)
-                            }
-                        }
-                    }
+                Button(action: {
+                    navigateToPlaceDiscovery = true
+                }) {
+                    Image(systemName: "safari.fill")
+                        .font(.system(size: 14))
+                        .foregroundColor(secondaryMint)
                 }
             }
-            .mapStyle(.standard(elevation: .realistic, emphasis: .muted, pointsOfInterest: .excludingAll))
-            .preferredColorScheme(.dark)
-            .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-            .overlay(RoundedRectangle(cornerRadius: 24, style: .continuous).stroke(outlineVariant, lineWidth: 1))
-            .padding(.horizontal, 16)
+            .padding(.horizontal, 14)
+            .frame(height: 42)
+            .background(surfaceContainerLow.opacity(0.92))
+            .clipShape(Capsule())
+            .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
+            .shadow(color: Color.black.opacity(0.4), radius: 8, y: 3)
             
-            // Floating Top Controls: Search, Day Switcher & Filter Chips
-            VStack(spacing: 8) {
-                // Search Bar
-                HStack(spacing: 10) {
-                    Image(systemName: "magnifyingglass")
-                        .font(.system(size: 15, weight: .bold))
-                        .foregroundColor(primaryContainer)
-                    
-                    TextField("Search cafes, restaurants, or sights in Sri Lanka...", text: $searchText)
-                        .font(.system(size: 13, weight: .medium, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Button(action: {
-                        navigateToPlaceDiscovery = true
-                    }) {
-                        Image(systemName: "safari.fill")
-                            .font(.system(size: 14))
-                            .foregroundColor(secondaryMint)
-                    }
-                }
-                .padding(.horizontal, 14)
-                .frame(height: 44)
-                .background(surfaceContainerLow.opacity(0.95))
-                .clipShape(Capsule())
-                .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
-                .shadow(color: Color.black.opacity(0.6), radius: 10, y: 4)
-                
-                // Day Selector Ribbon
-                if !tripManager.currentTrip.days.isEmpty {
-                    ScrollView(.horizontal, showsIndicators: false) {
-                        HStack(spacing: 7) {
-                            ForEach(0..<tripManager.currentTrip.days.count, id: \.self) { dayIdx in
-                                let day = tripManager.currentTrip.days[dayIdx]
-                                let isSelected = (selectedDayIndex == dayIdx) && (selectedFilter == .todayRoute)
-                                
-                                Button(action: {
-                                    withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
-                                        selectedDayIndex = dayIdx
-                                        selectedFilter = .todayRoute
-                                        selectedTripStop = nil
-                                        fitCameraToStops(day.stops)
-                                    }
-                                    triggerToast("Viewing Day \(day.dayNumber): \(day.region) itinerary")
-                                }) {
-                                    HStack(spacing: 5) {
-                                        Text("DAY \(day.dayNumber)")
-                                            .font(.system(size: 10, weight: .heavy, design: .rounded))
-                                            .foregroundColor(isSelected ? .black : primaryCyan)
-                                        
-                                        Text(day.region)
-                                            .font(.system(size: 11, weight: isSelected ? .bold : .medium, design: .rounded))
-                                            .foregroundColor(isSelected ? .black : .white)
-                                            .lineLimit(1)
-                                    }
-                                    .padding(.horizontal, 11)
-                                    .padding(.vertical, 6)
-                                    .background(isSelected ? primaryContainer : surfaceContainerLow.opacity(0.92))
-                                    .clipShape(Capsule())
-                                    .overlay(Capsule().stroke(isSelected ? primaryContainer : outlineVariant, lineWidth: 1))
-                                }
-                            }
-                        }
-                    }
-                }
-                
-                // Category Filter Chips Ribbon
+            // Day Selector Ribbon
+            if !tripManager.currentTrip.days.isEmpty {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack(spacing: 7) {
-                        ForEach(MapFilter.allCases) { filter in
+                        ForEach(0..<tripManager.currentTrip.days.count, id: \.self) { dayIdx in
+                            let day = tripManager.currentTrip.days[dayIdx]
+                            let isSelected = (selectedDayIndex == dayIdx) && (selectedFilter == .todayRoute)
+                            
                             Button(action: {
                                 withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
-                                    selectedFilter = filter
+                                    selectedDayIndex = dayIdx
+                                    selectedFilter = .todayRoute
                                     selectedTripStop = nil
-                                    handleFilterChange(filter)
+                                    isSheetExpanded = true
+                                    fitCameraToStops(day.stops)
                                 }
+                                triggerToast("Viewing Day \(day.dayNumber): \(day.region) itinerary")
                             }) {
                                 HStack(spacing: 5) {
-                                    Image(systemName: filter.iconName)
-                                        .font(.system(size: 11, weight: .bold))
-                                    Text(filter.rawValue)
-                                        .font(.system(size: 11.5, weight: selectedFilter == filter ? .bold : .medium, design: .rounded))
+                                    Text("DAY \(day.dayNumber)")
+                                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                                        .foregroundColor(isSelected ? .black : primaryCyan)
+                                    
+                                    Text(day.region)
+                                        .font(.system(size: 11, weight: isSelected ? .bold : .medium, design: .rounded))
+                                        .foregroundColor(isSelected ? .black : .white)
+                                        .lineLimit(1)
                                 }
-                                .foregroundColor(selectedFilter == filter ? Color(red: 0/255, green: 40/255, blue: 60/255) : textOnSurface)
                                 .padding(.horizontal, 11)
                                 .padding(.vertical, 6)
-                                .background(selectedFilter == filter ? primaryContainer : surfaceContainerLow.opacity(0.92))
+                                .background(isSelected ? primaryContainer : surfaceContainerLow.opacity(0.92))
                                 .clipShape(Capsule())
-                                .overlay(Capsule().stroke(selectedFilter == filter ? primaryContainer : outlineVariant, lineWidth: 1))
+                                .overlay(Capsule().stroke(isSelected ? primaryContainer : outlineVariant, lineWidth: 1))
                             }
                         }
                     }
                 }
             }
-            .padding(.horizontal, 28)
-            .padding(.top, 16)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .top)
             
-            // Right-Side Controls (Re-Center & 3D Pitch)
-            VStack(spacing: 8) {
-                VStack(spacing: 0) {
-                    Button(action: {
-                        withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
-                            isRecenterPressed = true
-                            if selectedFilter == .todayRoute {
-                                fitCameraToStops(todayStops)
-                            } else {
-                                cameraPosition = .region(
-                                    MKCoordinateRegion(
-                                        center: CLLocationCoordinate2D(latitude: 7.8731, longitude: 80.7718),
-                                        span: MKCoordinateSpan(latitudeDelta: 3.2, longitudeDelta: 3.2)
-                                    )
-                                )
+            // Category Filter Chips Ribbon
+            ScrollView(.horizontal, showsIndicators: false) {
+                HStack(spacing: 7) {
+                    ForEach(MapFilter.allCases) { filter in
+                        Button(action: {
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.75)) {
+                                selectedFilter = filter
+                                selectedTripStop = nil
+                                handleFilterChange(filter)
                             }
-                        }
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
-                            isRecenterPressed = false
-                        }
-                        triggerToast("Centered: \(activeDay?.region ?? "Sri Lanka")")
-                    }) {
-                        Image(systemName: "location.fill")
-                            .font(.system(size: 15, weight: .bold))
-                            .foregroundColor(primaryContainer)
-                            .frame(width: 40, height: 40)
-                            .scaleEffect(isRecenterPressed ? 0.85 : 1.0)
-                    }
-                    
-                    Rectangle().fill(outlineVariant).frame(width: 24, height: 1)
-                    
-                    Button(action: {
-                        withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) {
-                            is3DEnabled.toggle()
-                            let targetCoord = selectedTripStop?.coordinate ?? CLLocationCoordinate2D(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude)
-                            if is3DEnabled {
-                                cameraPosition = .camera(
-                                    MapCamera(
-                                        centerCoordinate: targetCoord,
-                                        distance: 12000,
-                                        heading: 25,
-                                        pitch: 52
-                                    )
-                                )
-                            } else {
-                                cameraPosition = .region(
-                                    MKCoordinateRegion(
-                                        center: targetCoord,
-                                        latitudinalMeters: 7000,
-                                        longitudinalMeters: 7000
-                                    )
-                                )
+                        }) {
+                            HStack(spacing: 5) {
+                                Image(systemName: filter.iconName)
+                                    .font(.system(size: 11, weight: .bold))
+                                Text(filter.rawValue)
+                                    .font(.system(size: 11.5, weight: selectedFilter == filter ? .bold : .medium, design: .rounded))
                             }
+                            .foregroundColor(selectedFilter == filter ? Color(red: 0/255, green: 40/255, blue: 60/255) : textOnSurface)
+                            .padding(.horizontal, 11)
+                            .padding(.vertical, 6)
+                            .background(selectedFilter == filter ? primaryContainer : surfaceContainerLow.opacity(0.92))
+                            .clipShape(Capsule())
+                            .overlay(Capsule().stroke(selectedFilter == filter ? primaryContainer : outlineVariant, lineWidth: 1))
                         }
-                        triggerToast(is3DEnabled ? "3D Elevation Active" : "Standard Top-Down")
-                    }) {
-                        Text(is3DEnabled ? "2D" : "3D")
-                            .font(.system(size: 13, weight: .heavy, design: .rounded))
-                            .foregroundColor(is3DEnabled ? secondaryMint : textOnSurface)
-                            .frame(width: 40, height: 40)
                     }
                 }
-                .background(surfaceContainerLow.opacity(0.95))
-                .clipShape(RoundedRectangle(cornerRadius: 14))
-                .overlay(RoundedRectangle(cornerRadius: 14).stroke(outlineVariant, lineWidth: 1))
-                .shadow(color: Color.black.opacity(0.5), radius: 8, y: 4)
             }
-            .padding(.top, 145)
-            .padding(.trailing, 28)
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topTrailing)
         }
+    }
+    
+    // MARK: - 3. Native MapKit Area (Full Screen & Full Bleed)
+    private var fullPageMapView: some View {
+        Map(position: $cameraPosition) {
+            UserAnnotation()
+            
+            // 1. RENDER PLACES CATALOG (WHEN NOT IN ROUTE-ONLY MODE)
+            if selectedFilter != .todayRoute {
+                ForEach(displayPlaces) { place in
+                    Annotation(place.name, coordinate: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude)) {
+                        customPlacePin(place: place, isSelected: selectedPlace.id == place.id && selectedTripStop == nil)
+                    }
+                    
+                    // Visual Geofence Radius Circle (1.0 km)
+                    if showGeofenceRings {
+                        MapCircle(center: CLLocationCoordinate2D(latitude: place.latitude, longitude: place.longitude), radius: 1000)
+                            .foregroundStyle(
+                                (place.category == .dining || place.category == .cafe ? coralOrange : primaryContainer)
+                                    .opacity(0.12)
+                            )
+                            .stroke(
+                                place.category == .dining || place.category == .cafe ? coralOrange : primaryContainer,
+                                lineWidth: selectedPlace.id == place.id ? 2.0 : 1.0
+                            )
+                    }
+                }
+            }
+            
+            // 2. RENDER ACTIVE DAY'S ITINERARY ROUTE (BREAKFAST, SIGHTS, LUNCH, SUNSET, DINNER)
+            if selectedFilter == .todayRoute || !todayRouteCoordinates.isEmpty {
+                // Sequential Luminous Polyline
+                MapPolyline(coordinates: todayRouteCoordinates)
+                    .stroke(
+                        LinearGradient(
+                            colors: [amberGold, coralOrange, primaryContainer, secondaryMint],
+                            startPoint: .topLeading,
+                            endPoint: .bottomTrailing
+                        ),
+                        style: StrokeStyle(lineWidth: 4, lineCap: .round, lineJoin: .round)
+                    )
+                
+                // Sequential Numbered & Semantic Stop Pins
+                ForEach(Array(todayStops.enumerated()), id: \.element.id) { index, stop in
+                    if let coord = stop.coordinate {
+                        Annotation(stop.title, coordinate: coord) {
+                            orderedStopPin(stop: stop, stepNumber: index + 1)
+                        }
+                    }
+                }
+            }
+        }
+        .mapStyle(.standard(elevation: .realistic, emphasis: .muted, pointsOfInterest: .excludingAll))
+        .preferredColorScheme(.dark)
+    }
+    
+    // MARK: - 4. Floating Right-Side Controls (Re-Center & 3D Pitch)
+    private var floatingSideControls: some View {
+        VStack(spacing: 0) {
+            Button(action: {
+                withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
+                    isRecenterPressed = true
+                    if selectedFilter == .todayRoute {
+                        fitCameraToStops(todayStops)
+                    } else {
+                        cameraPosition = .region(
+                            MKCoordinateRegion(
+                                center: CLLocationCoordinate2D(latitude: 7.8731, longitude: 80.7718),
+                                span: MKCoordinateSpan(latitudeDelta: 3.2, longitudeDelta: 3.2)
+                            )
+                        )
+                    }
+                }
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) {
+                    isRecenterPressed = false
+                }
+                triggerToast("Centered: \(activeDay?.region ?? "Sri Lanka")")
+            }) {
+                Image(systemName: "location.fill")
+                    .font(.system(size: 15, weight: .bold))
+                    .foregroundColor(primaryContainer)
+                    .frame(width: 40, height: 40)
+                    .scaleEffect(isRecenterPressed ? 0.85 : 1.0)
+            }
+            
+            Rectangle().fill(outlineVariant).frame(width: 24, height: 1)
+            
+            Button(action: {
+                withAnimation(.spring(response: 0.45, dampingFraction: 0.75)) {
+                    is3DEnabled.toggle()
+                    let targetCoord = selectedTripStop?.coordinate ?? CLLocationCoordinate2D(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude)
+                    if is3DEnabled {
+                        cameraPosition = .camera(
+                            MapCamera(
+                                centerCoordinate: targetCoord,
+                                distance: 12000,
+                                heading: 25,
+                                pitch: 52
+                            )
+                        )
+                    } else {
+                        cameraPosition = .region(
+                            MKCoordinateRegion(
+                                center: targetCoord,
+                                latitudinalMeters: 7000,
+                                longitudinalMeters: 7000
+                            )
+                        )
+                    }
+                }
+                triggerToast(is3DEnabled ? "3D Elevation Active" : "Standard Top-Down")
+            }) {
+                Text(is3DEnabled ? "2D" : "3D")
+                    .font(.system(size: 13, weight: .heavy, design: .rounded))
+                    .foregroundColor(is3DEnabled ? secondaryMint : textOnSurface)
+                    .frame(width: 40, height: 40)
+            }
+        }
+        .background(surfaceContainerLow.opacity(0.92))
+        .clipShape(RoundedRectangle(cornerRadius: 14))
+        .overlay(RoundedRectangle(cornerRadius: 14).stroke(outlineVariant, lineWidth: 1))
+        .shadow(color: Color.black.opacity(0.5), radius: 8, y: 4)
     }
     
     // MARK: - Custom Place Annotation Pin
@@ -492,6 +510,7 @@ struct InteractiveMapView: View {
             withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
                 selectedTripStop = nil
                 selectedPlace = place
+                isSheetExpanded = true
                 flyCamera(to: place)
             }
         }) {
@@ -554,6 +573,7 @@ struct InteractiveMapView: View {
         
         Button(action: {
             selectedTripStop = stop
+            isSheetExpanded = true
             if let coord = stop.coordinate {
                 withAnimation(.spring(response: 0.5, dampingFraction: 0.75)) {
                     cameraPosition = .region(
@@ -616,295 +636,390 @@ struct InteractiveMapView: View {
         }
     }
     
-    // MARK: - 3. Landmark & Stop Discovery Sheet
-    private var landmarkDiscoverySheet: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            Capsule()
-                .fill(Color.white.opacity(0.2))
-                .frame(width: 40, height: 5)
-                .frame(maxWidth: .infinity)
-                .padding(.top, 10)
-            
-            if let stop = selectedTripStop {
-                // ITINERARY STOP CARD (BREAKFAST, LUNCH, DINNER, SIGHT)
-                let catLower = stop.category.lowercased()
-                let isBreakfastOrCafe = catLower.contains("breakfast") || catLower.contains("cafe")
-                let isDining = catLower.contains("lunch") || catLower.contains("dining") || catLower.contains("dinner")
-                let themeColor = isBreakfastOrCafe ? amberGold : (isDining ? coralOrange : primaryContainer)
-                
-                // Header Category
-                HStack {
-                    HStack(spacing: 7) {
-                        Circle()
-                            .fill(themeColor)
-                            .frame(width: 7, height: 7)
-                        Text("ITINERARY STOP • \(stop.category.uppercased())")
-                            .font(.system(size: 10.5, weight: .heavy, design: .rounded))
-                            .tracking(0.6)
-                            .foregroundColor(themeColor)
-                    }
-                    .padding(.horizontal, 11)
-                    .padding(.vertical, 5)
-                    .background(themeColor.opacity(0.15))
-                    .clipShape(Capsule())
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        selectedTripStop = nil
-                    }) {
-                        Image(systemName: "xmark.circle.fill")
-                            .font(.system(size: 18))
-                            .foregroundColor(textOnSurfaceVariant)
-                    }
-                }
-                
-                // Title & Time
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(stop.title)
-                        .font(.system(size: 20, weight: .heavy, design: .rounded))
-                        .foregroundColor(.white)
-                    
-                    Text("\(stop.locationName) • \(stop.time) (\(stop.estimatedDuration))")
-                        .font(.system(size: 12.5, weight: .medium))
-                        .foregroundColor(textOnSurfaceVariant)
-                    
-                    HStack(spacing: 10) {
-                        HStack(spacing: 4) {
-                            Image(systemName: "banknote.fill")
-                                .font(.system(size: 11))
-                                .foregroundColor(secondaryMint)
-                            Text("Rs \(stop.costLKR.formatted()) ($ \(String(format: "%.1f", stop.costUSD)))")
-                                .font(.system(size: 12.5, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                        }
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 4)
-                        .background(surfaceContainerHigh)
-                        .clipShape(Capsule())
+    // MARK: - 5. Floating Bottom Discovery Card (Sheet & Collapsed Pill)
+    private var floatingBottomDiscoveryCard: some View {
+        VStack(spacing: 0) {
+            if isSheetExpanded {
+                VStack(alignment: .leading, spacing: 10) {
+                    // Header Bar with Drag Handle and Collapse Button
+                    HStack {
+                        Spacer()
+                        Capsule()
+                            .fill(Color.white.opacity(0.3))
+                            .frame(width: 36, height: 4)
+                        Spacer()
                         
-                        if !stop.highlight.isEmpty {
-                            Text(stop.highlight)
-                                .font(.system(size: 11.5, weight: .semibold, design: .rounded))
-                                .foregroundColor(themeColor)
-                                .padding(.horizontal, 8)
-                                .padding(.vertical, 4)
-                                .background(themeColor.opacity(0.12))
-                                .clipShape(Capsule())
-                        }
-                    }
-                    .padding(.top, 4)
-                }
-                
-                // Description & Dish / Visit notes
-                VStack(alignment: .leading, spacing: 6) {
-                    Text(isDining || isBreakfastOrCafe ? "CURATED MENU & AMBIANCE" : "ABOUT THIS EXPERIENCE")
-                        .font(.system(size: 10.5, weight: .bold, design: .rounded))
-                        .tracking(0.6)
-                        .foregroundColor(primaryCyan)
-                    
-                    Text(stop.description)
-                        .font(.system(size: 12.5, weight: .regular))
-                        .foregroundColor(textOnSurface)
-                        .lineSpacing(3)
-                }
-                .padding(12)
-                .background(surfaceContainerLow)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
-                
-                // Action Buttons (Apple Maps Navigation)
-                VStack(spacing: 10) {
-                    if let lat = stop.latitude, let lon = stop.longitude {
                         Button(action: {
-                            openInAppleMaps(latitude: lat, longitude: lon, name: stop.title)
-                        }) {
-                            HStack(spacing: 8) {
-                                Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
-                                    .font(.system(size: 15, weight: .bold))
-                                Text("Directions in Apple Maps")
-                                    .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                            withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                                isSheetExpanded = false
                             }
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 48)
-                            .background(
-                                LinearGradient(colors: [primaryContainer, secondaryMint], startPoint: .leading, endPoint: .trailing)
-                            )
-                            .clipShape(Capsule())
+                        }) {
+                            Image(systemName: "chevron.down.circle.fill")
+                                .font(.system(size: 18))
+                                .foregroundColor(textOnSurfaceVariant)
                         }
                     }
+                    .padding(.top, 10)
+                    .padding(.horizontal, 16)
+                    
+                    ScrollView(showsIndicators: false) {
+                        VStack(alignment: .leading, spacing: 14) {
+                            if let stop = selectedTripStop {
+                                itineraryStopCard(stop: stop)
+                            } else {
+                                placeCatalogCard
+                            }
+                        }
+                        .padding(.horizontal, 16)
+                        .padding(.bottom, 14)
+                    }
+                    .frame(maxHeight: DeviceLayout.isIPad ? 360 : 260)
                 }
+                .background(
+                    RoundedRectangle(cornerRadius: 24, style: .continuous)
+                        .fill(Color(red: 13/255, green: 17/255, blue: 23/255).opacity(0.96))
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 24, style: .continuous)
+                                .stroke(outlineVariant, lineWidth: 1)
+                        )
+                        .shadow(color: Color.black.opacity(0.6), radius: 16, y: 8)
+                )
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom).combined(with: .opacity),
+                    removal: .move(edge: .bottom).combined(with: .opacity)
+                ))
             } else {
-                // PLACE CATALOG CARD
-                HStack {
-                    HStack(spacing: 7) {
-                        Circle()
-                            .fill(selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint)
-                            .frame(width: 7, height: 7)
-                        Text("SMART GEOFENCE ACTIVE • \(selectedPlace.category.rawValue.uppercased())")
-                            .font(.system(size: 10.5, weight: .heavy, design: .rounded))
-                            .tracking(0.6)
-                            .foregroundColor(selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint)
+                // Collapsed Compact Pill
+                Button(action: {
+                    withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                        isSheetExpanded = true
                     }
-                    .padding(.horizontal, 11)
-                    .padding(.vertical, 5)
-                    .background((selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint).opacity(0.15))
-                    .clipShape(Capsule())
-                    
-                    Spacer()
-                    
-                    Button(action: {
-                        bookmarkManager.toggleBookmark(place: selectedPlace)
-                        let isSaved = bookmarkManager.isBookmarked(place: selectedPlace)
-                        triggerToast(isSaved ? "Saved \(selectedPlace.name) to Travel Vault" : "Removed from Favorites")
-                    }) {
-                        Image(systemName: bookmarkManager.isBookmarked(place: selectedPlace) ? "bookmark.fill" : "bookmark")
-                            .font(.system(size: 14, weight: .semibold))
-                            .foregroundColor(bookmarkManager.isBookmarked(place: selectedPlace) ? secondaryMint : textOnSurface)
-                            .frame(width: 34, height: 34)
-                            .background(surfaceContainerHigh)
-                            .clipShape(Circle())
-                    }
-                }
-                
-                // Title, District & Ratings
-                VStack(alignment: .leading, spacing: 4) {
-                    HStack(alignment: .firstTextBaseline) {
-                        Text(selectedPlace.name)
-                            .font(.system(size: 21, weight: .heavy, design: .rounded))
-                            .foregroundColor(.white)
+                }) {
+                    HStack(spacing: 10) {
+                        Image(systemName: selectedTripStop != nil ? "figure.walk.circle.fill" : "mappin.circle.fill")
+                            .font(.system(size: 16, weight: .bold))
+                            .foregroundColor(secondaryMint)
+                        
+                        VStack(alignment: .leading, spacing: 1) {
+                            Text(selectedTripStop?.title ?? selectedPlace.name)
+                                .font(.system(size: 13.5, weight: .bold, design: .rounded))
+                                .foregroundColor(.white)
+                                .lineLimit(1)
+                            
+                            Text(selectedTripStop != nil ? "\(selectedTripStop!.time) • \(selectedTripStop!.locationName)" : "\(selectedPlace.district) • \(String(format: "%.1f", selectedPlace.rating)) ★")
+                                .font(.system(size: 11, weight: .medium))
+                                .foregroundColor(textOnSurfaceVariant)
+                        }
                         
                         Spacer()
                         
-                        Text(selectedPlace.sinhalaName)
-                            .font(.system(size: 14, weight: .medium))
-                            .foregroundColor(primaryCyan)
-                    }
-                    
-                    Text("\(selectedPlace.district), \(selectedPlace.province) • \(selectedPlace.bestTimeToVisit)")
-                        .font(.system(size: 12.5, weight: .medium))
-                        .foregroundColor(textOnSurfaceVariant)
-                    
-                    HStack(spacing: 8) {
                         HStack(spacing: 4) {
-                            Image(systemName: "star.fill")
-                                .font(.system(size: 11))
-                                .foregroundColor(amberGold)
-                            Text(String(format: "%.1f", selectedPlace.rating))
-                                .font(.system(size: 12.5, weight: .bold, design: .rounded))
-                                .foregroundColor(.white)
-                            Text("(\(selectedPlace.reviewCount) reviews)")
-                                .font(.system(size: 11.5))
-                                .foregroundColor(textOnSurfaceVariant)
+                            Text("Details")
+                                .font(.system(size: 11, weight: .bold, design: .rounded))
+                            Image(systemName: "chevron.up")
+                                .font(.system(size: 11, weight: .bold))
                         }
-                        .padding(.horizontal, 9)
-                        .padding(.vertical, 4)
+                        .foregroundColor(primaryCyan)
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 5)
                         .background(surfaceContainerHigh)
                         .clipShape(Capsule())
-                        
-                        HStack(spacing: 5) {
-                            Circle()
-                                .fill(secondaryMint)
-                                .frame(width: 6, height: 6)
-                            Text(selectedPlace.openingHours)
-                                .font(.system(size: 12, weight: .semibold, design: .rounded))
-                                .foregroundColor(secondaryMint)
-                                .lineLimit(1)
-                        }
                     }
-                    .padding(.top, 4)
-                }
-                
-                // Signature Highlights / Dishes
-                VStack(alignment: .leading, spacing: 8) {
-                    Text(selectedPlace.category == .dining || selectedPlace.category == .cafe ? "SIGNATURE DISHES & SPECIALTIES" : "KEY HIGHLIGHTS")
-                        .font(.system(size: 10.5, weight: .bold, design: .rounded))
-                        .tracking(0.6)
-                        .foregroundColor(primaryCyan)
-                    
-                    ForEach(selectedPlace.highlights.prefix(3), id: \.self) { item in
-                        HStack(spacing: 8) {
-                            Image(systemName: selectedPlace.category == .dining || selectedPlace.category == .cafe ? "fork.knife.circle.fill" : "checkmark.circle.fill")
-                                .font(.system(size: 13))
-                                .foregroundColor(selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint)
-                            Text(item)
-                                .font(.system(size: 12, weight: .medium, design: .rounded))
-                                .foregroundColor(textOnSurface)
-                        }
-                    }
-                }
-                .padding(12)
-                .background(surfaceContainerLow)
-                .clipShape(RoundedRectangle(cornerRadius: 14))
-                
-                // Action Buttons
-                VStack(spacing: 10) {
-                    HStack(spacing: 10) {
-                        Button(action: {
-                            TripManager.shared.addCustomStop(
-                                title: selectedPlace.name,
-                                category: selectedPlace.category.rawValue,
-                                notes: selectedPlace.highlights.first ?? "Must-visit spot",
-                                entranceFeeLKR: selectedPlace.entranceFeeLKR,
-                                dayIndex: selectedDayIndex
-                            )
-                            triggerToast("Added \(selectedPlace.name) to Day \(selectedDayIndex + 1)!")
-                        }) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "plus.circle.fill")
-                                    .font(.system(size: 14, weight: .bold))
-                                Text("Add to Itinerary")
-                                    .font(.system(size: 13, weight: .bold, design: .rounded))
-                            }
-                            .foregroundColor(.black)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 46)
-                            .background(primaryContainer)
-                            .clipShape(Capsule())
-                        }
-                        
-                        Button(action: {
-                            openInAppleMaps(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude, name: selectedPlace.name)
-                        }) {
-                            HStack(spacing: 6) {
-                                Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
-                                    .font(.system(size: 14, weight: .bold))
-                                Text("Directions")
-                                    .font(.system(size: 13, weight: .bold, design: .rounded))
-                            }
-                            .foregroundColor(.white)
-                            .frame(maxWidth: .infinity)
-                            .frame(height: 46)
-                            .background(surfaceContainerHigh)
-                            .clipShape(Capsule())
+                    .padding(.horizontal, 14)
+                    .padding(.vertical, 9)
+                    .background(
+                        Capsule()
+                            .fill(Color(red: 13/255, green: 17/255, blue: 23/255).opacity(0.95))
                             .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
-                        }
-                    }
-                    
-                    Button(action: {
-                        navigateToPlaceDetail = true
-                    }) {
-                        HStack(spacing: 6) {
-                            Image(systemName: "info.circle.fill")
-                                .font(.system(size: 14, weight: .bold))
-                            Text("View Full Place Guide & Reviews")
-                                .font(.system(size: 13.5, weight: .bold, design: .rounded))
-                        }
+                            .shadow(color: Color.black.opacity(0.5), radius: 12, y: 4)
+                    )
+                }
+                .transition(.asymmetric(
+                    insertion: .move(edge: .bottom).combined(with: .opacity),
+                    removal: .move(edge: .bottom).combined(with: .opacity)
+                ))
+            }
+        }
+        .padding(.horizontal, 16)
+        .padding(.bottom, 82)
+        .responsiveContentWidth(680)
+    }
+    
+    // MARK: - Itinerary Stop Details
+    @ViewBuilder
+    private func itineraryStopCard(stop: TripStop) -> some View {
+        let catLower = stop.category.lowercased()
+        let isBreakfastOrCafe = catLower.contains("breakfast") || catLower.contains("cafe")
+        let isDining = catLower.contains("lunch") || catLower.contains("dining") || catLower.contains("dinner")
+        let themeColor = isBreakfastOrCafe ? amberGold : (isDining ? coralOrange : primaryContainer)
+        
+        // Header Category
+        HStack {
+            HStack(spacing: 7) {
+                Circle()
+                    .fill(themeColor)
+                    .frame(width: 7, height: 7)
+                Text("ITINERARY STOP • \(stop.category.uppercased())")
+                    .font(.system(size: 10.5, weight: .heavy, design: .rounded))
+                    .tracking(0.6)
+                    .foregroundColor(themeColor)
+            }
+            .padding(.horizontal, 11)
+            .padding(.vertical, 5)
+            .background(themeColor.opacity(0.15))
+            .clipShape(Capsule())
+            
+            Spacer()
+            
+            Button(action: {
+                withAnimation(.spring(response: 0.35, dampingFraction: 0.8)) {
+                    selectedTripStop = nil
+                }
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .font(.system(size: 18))
+                    .foregroundColor(textOnSurfaceVariant)
+            }
+        }
+        
+        // Title & Time
+        VStack(alignment: .leading, spacing: 4) {
+            Text(stop.title)
+                .font(.system(size: 19, weight: .heavy, design: .rounded))
+                .foregroundColor(.white)
+            
+            Text("\(stop.locationName) • \(stop.time) (\(stop.estimatedDuration))")
+                .font(.system(size: 12, weight: .medium))
+                .foregroundColor(textOnSurfaceVariant)
+            
+            HStack(spacing: 8) {
+                HStack(spacing: 4) {
+                    Image(systemName: "banknote.fill")
+                        .font(.system(size: 10.5))
                         .foregroundColor(secondaryMint)
-                        .frame(maxWidth: .infinity)
-                        .frame(height: 44)
-                        .background(surfaceContainerLow)
+                    Text("Rs \(stop.costLKR.formatted()) ($ \(String(format: "%.1f", stop.costUSD)))")
+                        .font(.system(size: 12, weight: .bold, design: .rounded))
+                        .foregroundColor(.white)
+                }
+                .padding(.horizontal, 9)
+                .padding(.vertical, 4)
+                .background(surfaceContainerHigh)
+                .clipShape(Capsule())
+                
+                if !stop.highlight.isEmpty {
+                    Text(stop.highlight)
+                        .font(.system(size: 11, weight: .semibold, design: .rounded))
+                        .foregroundColor(themeColor)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
+                        .background(themeColor.opacity(0.12))
                         .clipShape(Capsule())
+                }
+            }
+            .padding(.top, 2)
+        }
+        
+        // Description
+        VStack(alignment: .leading, spacing: 5) {
+            Text(isDining || isBreakfastOrCafe ? "CURATED MENU & AMBIANCE" : "ABOUT THIS EXPERIENCE")
+                .font(.system(size: 10, weight: .bold, design: .rounded))
+                .tracking(0.6)
+                .foregroundColor(primaryCyan)
+            
+            Text(stop.description)
+                .font(.system(size: 12, weight: .regular))
+                .foregroundColor(textOnSurface)
+                .lineSpacing(2.5)
+        }
+        .padding(10)
+        .background(surfaceContainerLow)
+        .clipShape(RoundedRectangle(cornerRadius: 12))
+        
+        // Navigation Button
+        if let lat = stop.latitude, let lon = stop.longitude {
+            Button(action: {
+                openInAppleMaps(latitude: lat, longitude: lon, name: stop.title)
+            }) {
+                HStack(spacing: 8) {
+                    Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
+                        .font(.system(size: 14, weight: .bold))
+                    Text("Directions in Apple Maps")
+                        .font(.system(size: 13, weight: .bold, design: .rounded))
+                }
+                .foregroundColor(.black)
+                .frame(maxWidth: .infinity)
+                .frame(height: 44)
+                .background(
+                    LinearGradient(colors: [primaryContainer, secondaryMint], startPoint: .leading, endPoint: .trailing)
+                )
+                .clipShape(Capsule())
+            }
+        }
+    }
+    
+    // MARK: - Place Catalog Details
+    private var placeCatalogCard: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            HStack {
+                HStack(spacing: 7) {
+                    Circle()
+                        .fill(selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint)
+                        .frame(width: 7, height: 7)
+                    Text("SMART GEOFENCE ACTIVE • \(selectedPlace.category.rawValue.uppercased())")
+                        .font(.system(size: 10, weight: .heavy, design: .rounded))
+                        .tracking(0.6)
+                        .foregroundColor(selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint)
+                }
+                .padding(.horizontal, 10)
+                .padding(.vertical, 4.5)
+                .background((selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint).opacity(0.15))
+                .clipShape(Capsule())
+                
+                Spacer()
+                
+                Button(action: {
+                    bookmarkManager.toggleBookmark(place: selectedPlace)
+                    let isSaved = bookmarkManager.isBookmarked(place: selectedPlace)
+                    triggerToast(isSaved ? "Saved \(selectedPlace.name) to Travel Vault" : "Removed from Favorites")
+                }) {
+                    Image(systemName: bookmarkManager.isBookmarked(place: selectedPlace) ? "bookmark.fill" : "bookmark")
+                        .font(.system(size: 13, weight: .semibold))
+                        .foregroundColor(bookmarkManager.isBookmarked(place: selectedPlace) ? secondaryMint : textOnSurface)
+                        .frame(width: 32, height: 32)
+                        .background(surfaceContainerHigh)
+                        .clipShape(Circle())
+                }
+            }
+            
+            // Title, District & Ratings
+            VStack(alignment: .leading, spacing: 3) {
+                HStack(alignment: .firstTextBaseline) {
+                    Text(selectedPlace.name)
+                        .font(.system(size: 19, weight: .heavy, design: .rounded))
+                        .foregroundColor(.white)
+                    
+                    Spacer()
+                    
+                    Text(selectedPlace.sinhalaName)
+                        .font(.system(size: 13, weight: .medium))
+                        .foregroundColor(primaryCyan)
+                }
+                
+                Text("\(selectedPlace.district), \(selectedPlace.province) • \(selectedPlace.bestTimeToVisit)")
+                    .font(.system(size: 12, weight: .medium))
+                    .foregroundColor(textOnSurfaceVariant)
+                
+                HStack(spacing: 8) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 10))
+                            .foregroundColor(amberGold)
+                        Text(String(format: "%.1f", selectedPlace.rating))
+                            .font(.system(size: 12, weight: .bold, design: .rounded))
+                            .foregroundColor(.white)
+                        Text("(\(selectedPlace.reviewCount))")
+                            .font(.system(size: 11))
+                            .foregroundColor(textOnSurfaceVariant)
+                    }
+                    .padding(.horizontal, 8)
+                    .padding(.vertical, 3.5)
+                    .background(surfaceContainerHigh)
+                    .clipShape(Capsule())
+                    
+                    HStack(spacing: 4) {
+                        Circle()
+                            .fill(secondaryMint)
+                            .frame(width: 5, height: 5)
+                        Text(selectedPlace.openingHours)
+                            .font(.system(size: 11.5, weight: .semibold, design: .rounded))
+                            .foregroundColor(secondaryMint)
+                            .lineLimit(1)
+                    }
+                }
+                .padding(.top, 2)
+            }
+            
+            // Signature Highlights / Dishes
+            VStack(alignment: .leading, spacing: 6) {
+                Text(selectedPlace.category == .dining || selectedPlace.category == .cafe ? "SIGNATURE DISHES & SPECIALTIES" : "KEY HIGHLIGHTS")
+                    .font(.system(size: 9.5, weight: .bold, design: .rounded))
+                    .tracking(0.6)
+                    .foregroundColor(primaryCyan)
+                
+                ForEach(selectedPlace.highlights.prefix(2), id: \.self) { item in
+                    HStack(spacing: 7) {
+                        Image(systemName: selectedPlace.category == .dining || selectedPlace.category == .cafe ? "fork.knife.circle.fill" : "checkmark.circle.fill")
+                            .font(.system(size: 12))
+                            .foregroundColor(selectedPlace.category == .dining || selectedPlace.category == .cafe ? coralOrange : secondaryMint)
+                        Text(item)
+                            .font(.system(size: 11.5, weight: .medium, design: .rounded))
+                            .foregroundColor(textOnSurface)
                     }
                 }
             }
+            .padding(10)
+            .background(surfaceContainerLow)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+            
+            // Action Buttons
+            HStack(spacing: 8) {
+                Button(action: {
+                    TripManager.shared.addCustomStop(
+                        title: selectedPlace.name,
+                        category: selectedPlace.category.rawValue,
+                        notes: selectedPlace.highlights.first ?? "Must-visit spot",
+                        entranceFeeLKR: selectedPlace.entranceFeeLKR,
+                        dayIndex: selectedDayIndex
+                    )
+                    triggerToast("Added \(selectedPlace.name) to Day \(selectedDayIndex + 1)!")
+                }) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "plus.circle.fill")
+                            .font(.system(size: 13, weight: .bold))
+                        Text("Add to Itinerary")
+                            .font(.system(size: 12.5, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(.black)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 42)
+                    .background(primaryContainer)
+                    .clipShape(Capsule())
+                }
+                
+                Button(action: {
+                    openInAppleMaps(latitude: selectedPlace.latitude, longitude: selectedPlace.longitude, name: selectedPlace.name)
+                }) {
+                    HStack(spacing: 5) {
+                        Image(systemName: "arrow.triangle.turn.up.right.diamond.fill")
+                            .font(.system(size: 13, weight: .bold))
+                        Text("Directions")
+                            .font(.system(size: 12.5, weight: .bold, design: .rounded))
+                    }
+                    .foregroundColor(.white)
+                    .frame(maxWidth: .infinity)
+                    .frame(height: 42)
+                    .background(surfaceContainerHigh)
+                    .clipShape(Capsule())
+                    .overlay(Capsule().stroke(outlineVariant, lineWidth: 1))
+                }
+            }
+            
+            Button(action: {
+                navigateToPlaceDetail = true
+            }) {
+                HStack(spacing: 6) {
+                    Image(systemName: "info.circle.fill")
+                        .font(.system(size: 13, weight: .bold))
+                    Text("View Full Place Guide & Reviews")
+                        .font(.system(size: 12.5, weight: .bold, design: .rounded))
+                }
+                .foregroundColor(secondaryMint)
+                .frame(maxWidth: .infinity)
+                .frame(height: 38)
+                .background(surfaceContainerLow)
+                .clipShape(Capsule())
+            }
         }
-        .padding(.horizontal, 18)
-        .padding(.bottom, 24)
-        .background(Color(red: 13/255, green: 17/255, blue: 23/255))
-        .clipShape(RoundedRectangle(cornerRadius: 28, style: .continuous))
-        .overlay(RoundedRectangle(cornerRadius: 28, style: .continuous).stroke(outlineVariant, lineWidth: 1))
-        .offset(y: -24)
     }
     
     // MARK: - Helpers
